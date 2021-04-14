@@ -9,5 +9,15 @@ File names should always cover the content of the file! DO NOT name files like "
 _test 	- files used for testing purpose
 _scene 	- scenes 
 _prefab - prefabs 
-_material - materials 
+_mat 	- materials 
 _mesh	- meshes 
+_texture- textures 
+
+_01 - multie textures of same type 
+_02
+_03
+
+
+# Example
+hunter_gun_metal_01_texture
+hunter_gun_prefab

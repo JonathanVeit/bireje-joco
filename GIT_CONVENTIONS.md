@@ -1,4 +1,4 @@
-# GIT GUIDE
+# GIT CONVENTIONS
 
 # Commit Conventions
 [+] added new files, added features
