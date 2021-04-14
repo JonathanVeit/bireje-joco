@@ -121,10 +121,13 @@ namespace BiReJeJoCo.Debugging
         // load commands
         protected override void LoadCommands()
         {
-        }
-
-        private void LoadEditorOnlyCommands() 
-        {
+            RegisterCommand(new DebugCommand<bool>("set_debug_stats", "Enables/Disables debug stats", "set_debug_stats <bool>", state =>
+            {
+                if (state == true)
+                    DebugStatsUI.Instance.Show();
+                else
+                    DebugStatsUI.Instance.Hide();
+            }));
         }
 
         // before opening the panel  
