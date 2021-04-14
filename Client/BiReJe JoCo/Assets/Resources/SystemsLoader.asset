@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899fc7a101e729342820904486a03829, type: 3}
+  m_Name: SystemsLoader
+  m_EditorClassIdentifier: 
+  InitializeAtStart: 1
+  SystemsToInitialize:
+  - Name: Tick System
+    SystemBehaviour: {fileID: 11500000, guid: 4f314ee7e97e88544a8a92ebde9c3c79, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Message Hub
+    SystemBehaviour: {fileID: 11500000, guid: 8fbc4bb2ffdc6854fb63c5db15b38664, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Debug Controller
+    SystemBehaviour: {fileID: 11500000, guid: 9c4138305805507489ea3fd4fe3d3d1e, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Pooling Manager
+    SystemBehaviour: {fileID: 11500000, guid: 23c101eaed6ac744ea05ebb2b4aebc6b, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Floating Element Manager
+    SystemBehaviour: {fileID: 11500000, guid: 02b0bf9ecabc6104d8ddb32df2c723c2, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JoVei.Base.TickSystem
 {
-    [CreateAssetMenu(fileName = "TickSystem Config", menuName = "JeJo/TickSystemConfig")]
+    [CreateAssetMenu(fileName = "TickSystem Config", menuName = "JoVei/TickSystemConfig")]
     public class TickSystemConfig : ScriptableObject
     {
         [SerializeField] [Range(0, 100)] float timeScale = 1;

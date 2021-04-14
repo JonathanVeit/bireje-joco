@@ -13,7 +13,7 @@ namespace JoVei.Base
     /// <summary>
     /// Creates and initializes all given Systems
     /// </summary>
-    [CreateAssetMenu(fileName = "SystemsLoader", menuName = "JeJo/SystemsLoader")]
+    [CreateAssetMenu(fileName = "SystemsLoader", menuName = "JoVei/SystemsLoader")]
     public class SystemsLoader : ScriptableObject, ISystemsLoader
     {
         public enum TargetPlattform { All , OnlyAndroid, OnlyIOS }
