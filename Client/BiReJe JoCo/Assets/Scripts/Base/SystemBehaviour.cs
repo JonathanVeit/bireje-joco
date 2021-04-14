@@ -1,20 +1,13 @@
-﻿namespace BiReJeJoCo
+﻿using JoVei.Base;
+
+namespace BiReJeJoCo
 {    
     /// <summary>
-    /// System behaviour with automated registration at tick system with default region
+    /// Our system behaviour with all additional systems that do not come from our code base
     /// </summary>
-    public class TickBehaviour : SystemBehaviour, JoVei.Base.ITickable
+    public class SystemBehaviour : BaseSystemBehaviour
     {
-        protected override void OnSystemsInitialized()
-        {
-            tickSystem.Register(this);
-        }
-
-        public virtual void Tick(float deltaTime) { }
-
-        protected override void OnBeforeDestroy()
-        {
-            tickSystem.Unregister(this);
-        }
+        public PhotonWrapper photonWrapper => DIContainer.GetImplementationFor<PhotonWrapper>();
+        public PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
     }
 }

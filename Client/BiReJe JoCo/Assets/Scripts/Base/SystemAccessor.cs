@@ -7,5 +7,7 @@ namespace BiReJeJoCo
     /// </summary>
     public class SystemAccessor : BaseSystemAccessor
     {
+        public PhotonWrapper photonWrapper => DIContainer.GetImplementationFor<PhotonWrapper>();
+        public PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
     }
 }

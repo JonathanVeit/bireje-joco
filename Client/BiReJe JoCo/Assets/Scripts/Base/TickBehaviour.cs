@@ -1,11 +1,20 @@
-﻿using JoVei.Base;
-
-namespace BiReJeJoCo
+﻿namespace BiReJeJoCo
 {    
     /// <summary>
-    /// Our system behaviour with all additional systems that do not come from our code base
+    /// System behaviour with automated registration at tick system with default region
     /// </summary>
-    public class SystemBehaviour : BaseSystemBehaviour
+    public class TickBehaviour : SystemBehaviour, JoVei.Base.ITickable
     {
+        protected override void OnSystemsInitialized()
+        {
+            tickSystem.Register(this);
+        }
+
+        public virtual void Tick(float deltaTime) { }
+
+        protected override void OnBeforeDestroy()
+        {
+            tickSystem.Unregister(this);
+        }
     }
 }
