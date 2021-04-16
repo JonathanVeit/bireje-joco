@@ -21,3 +21,12 @@ _03
 # Example
 hunter_gun_metal_01_texture
 hunter_gun_prefab
+
+# Code
+classes: MyNewClass
+methods : MyNewMethod
+variables : myNewVariable
+properties : MyNewProperty {get; set;}
+parameters : myNewParameter
+events: onMyNewEvent
+const/readonly: MY_NEW_READONLY

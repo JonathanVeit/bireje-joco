@@ -9,8 +9,7 @@ namespace BiReJeJoCo
     public class PhotonWrapper : MonoBehaviourPunCallbacks, IInitializable
     {
         public event Action OnConnectedToPhoton;
-        public event Action<DisconnectCause> OnDisconnectedFromPhoton;
-
+        public event Action<string> OnDisconnectedFromPhoton;
         public event Action OnConnectedToPhotonMaster;
 
         public event Action OnJoinedPhotonLobby;
@@ -18,16 +17,15 @@ namespace BiReJeJoCo
 
         public event Action OnCreatedPhotonRoom;
         public event Action<string> OnFailedToCreatePhotonRoom;
-
         public event Action<string> OnJoinedPhotonRoom;
         public event Action<string> OnJoinPhotonRoomFailed;
         public event Action OnLeftPhotonRoom;
 
         public bool IsConnectedToPhoton { get; private set; }
         public bool IsConnectedToMaster { get; private set; }
-        public bool IsInLobby { get; private set; }
-        public bool IsInRoom { get; private set; }
-        public string RoomName { get; private set; }
+        public bool IsInPhotonLobby { get; private set; }
+        public bool IsInPhotonRoom { get; private set; }
+        public string PhotonRoomName { get; private set; }
 
         #region Initialization
         public IEnumerator Initialize(object[] parameters)
@@ -39,7 +37,7 @@ namespace BiReJeJoCo
         public void CleanUp() { }
         #endregion
 
-        #region Connect To Photon
+        #region Connection
         public void ConnectToPhoton ()
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -58,13 +56,11 @@ namespace BiReJeJoCo
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            OnDisconnectedFromPhoton?.Invoke(cause);
+            OnDisconnectedFromPhoton?.Invoke(cause.ToString());
             IsConnectedToMaster = false;
             IsConnectedToPhoton = false;
         }
-        #endregion
-
-        #region Connect To Master
+    
         public override void OnConnectedToMaster()
         {
             OnConnectedToPhotonMaster?.Invoke();
@@ -72,7 +68,7 @@ namespace BiReJeJoCo
         }
         #endregion
 
-        #region Connect To Lobby
+        #region Lobby
         public void JoinLobby() 
         {
             PhotonNetwork.JoinLobby();
@@ -81,17 +77,17 @@ namespace BiReJeJoCo
         public override void OnJoinedLobby()
         {
             OnJoinedPhotonLobby?.Invoke();
-            IsInLobby = true;
+            IsInPhotonLobby = true;
         }
 
         public override void OnLeftLobby()
         {
             OnLeftPhotonLobby?.Invoke();
-            IsInLobby = false;
+            IsInPhotonLobby = false;
         }
         #endregion
 
-        #region Room Connection
+        #region Rooms
         public void CreateRoom(string roomName, int maxPlayers = 1, bool isVisible = true, bool isOpen = true)
         {
             var roomOptions = new RoomOptions()
@@ -121,22 +117,22 @@ namespace BiReJeJoCo
 
         public override void OnJoinedRoom()
         {
-            IsInRoom = true;
-            RoomName = PhotonNetwork.CurrentRoom.Name;
-            OnJoinedPhotonRoom?.Invoke(RoomName);
+            IsInPhotonRoom = true;
+            PhotonRoomName = PhotonNetwork.CurrentRoom.Name;
+            OnJoinedPhotonRoom?.Invoke(PhotonRoomName);
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
-            IsInRoom = false;
-            RoomName = null;
+            IsInPhotonRoom = false;
+            PhotonRoomName = null;
             OnJoinPhotonRoomFailed?.Invoke(message);
         }
 
         public override void OnLeftRoom()
         {
-            IsInRoom = false;
-            RoomName = null;
+            IsInPhotonRoom = false;
+            PhotonRoomName = null;
             OnLeftPhotonRoom?.Invoke();
         }
         #endregion

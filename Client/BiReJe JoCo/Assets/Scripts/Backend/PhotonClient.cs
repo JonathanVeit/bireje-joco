@@ -14,7 +14,7 @@ namespace BiReJeJoCo
             ConnectEvents();
 
             BuildConnection();
-            yield return new WaitUntil(() => photonWrapper.IsInLobby);
+            yield return new WaitUntil(() => photonWrapper.IsInPhotonLobby);
         }
 
         public void CleanUp()
@@ -56,7 +56,7 @@ namespace BiReJeJoCo
             photonWrapper.JoinLobby();
         }
 
-        private void OnDisconnected(Photon.Realtime.DisconnectCause cause)
+        private void OnDisconnected(string cause)
         {
             DebugHelper.PrintFormatted("<color=red>Disconnected from photon. Reason: {0}</color>.", cause);
         }
@@ -72,7 +72,7 @@ namespace BiReJeJoCo
         }
         #endregion
 
-        #region Room Management
+         #region Rooms
         public void HostRoom(string roomName, int playerAmount)
         {
             photonWrapper.CreateRoom(roomName, playerAmount);
