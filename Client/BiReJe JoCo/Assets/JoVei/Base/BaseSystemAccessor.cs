@@ -5,7 +5,7 @@
     /// </summary>
     public abstract class BaseSystemAccessor
     {
-        protected static ISystemsLoader systemsInitializer => DIContainer.GetImplementationFor<ISystemsLoader>();
+        protected static ISystemsLoader systemsLoader => DIContainer.GetImplementationFor<ISystemsLoader>();
         protected static TickSystem.ITickSystem tickSystem => DIContainer.GetImplementationFor<TickSystem.ITickSystem>();
         protected static Data.IGameDataManager gameDataManager => DIContainer.GetImplementationFor<Data.IGameDataManager>();
         protected static Data.IInstanceFactory instanceFactory => DIContainer.GetImplementationFor<Data.IInstanceFactory>();

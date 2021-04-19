@@ -30,11 +30,23 @@ MonoBehaviour:
     SystemBehaviour: {fileID: 11500000, guid: 23c101eaed6ac744ea05ebb2b4aebc6b, type: 3}
     InitializeOnPlatformsOptions: 0
     SerializedParameters: []
-  - Name: PhotonWrapper
+  - Name: Game Manager
+    SystemBehaviour: {fileID: 11500000, guid: a5295ae881be7ea4ab71a2b3d7a6bd96, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Photon Wrapper
     SystemBehaviour: {fileID: 11500000, guid: e9d9ea1772c4bfa4b84ed2ea77ff213a, type: 3}
     InitializeOnPlatformsOptions: 0
     SerializedParameters: []
-  - Name: PhotonClient
+  - Name: Photon Room Wrapper
+    SystemBehaviour: {fileID: 11500000, guid: 68b2d878dda482042abc6495963d1af7, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Photon Message Hub Loader
+    SystemBehaviour: {fileID: 11500000, guid: cd7a2c648ac29f54b83d4917e145863d, type: 3}
+    InitializeOnPlatformsOptions: 0
+    SerializedParameters: []
+  - Name: Photon Client
     SystemBehaviour: {fileID: 11500000, guid: e41bffb28ec0efa498fe75e9f538d291, type: 3}
     InitializeOnPlatformsOptions: 0
     SerializedParameters: []

@@ -1,29 +1,52 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using JoVei.Base;
 using JoVei.Base.Helper;
+using JoVei.Base.MessageSystem;
+using Photon.Pun;
+using UnityEngine;
+using Newtonsoft.Json;
 
-namespace JoVei.Base.MessageSystem
+namespace BiReJeJoCo.Backend
 {
-    /// <summary>
-    /// Implementation of IMessageHub
-    /// </summary>
-    public abstract class BaseMessageHub : BaseSystemAccessor, IMessageHub
+    public enum PhotonMessageTarget
     {
+        All,
+        Others,
+        MasterClient,
+        AllBuffered,
+        OthersBuffered,
+        AllViaServer,
+        AllBufferedViaServer
+    }
+
+    [RequireComponent(typeof(PhotonView))]
+    public class PhotonMessageHub : SystemBehaviour 
+    {
+        private void Awake()
+        {
+            DIContainer.RegisterImplementation<PhotonMessageHub>(this);
+            DontDestroyOnLoad(this);
+            photonView = GetComponent<PhotonView>();
+        }
+
+        private PhotonView photonView;
+
         /// <summary>
         /// All registered receivers with callback
         /// </summary>
-        public Dictionary<Type, List<MessageReceiver>> RegisteredReceiver { get; protected set; }
-        = new Dictionary<Type, List<MessageReceiver>>();
+        public Dictionary<string, List<MessageReceiver>> RegisteredReceiver { get; protected set; }
+        = new Dictionary<string, List<MessageReceiver>>();
 
         /// <summary>
         /// Register a new receiver for a certain message
         /// </summary>
-        public void RegisterReceiver<TMessage>(object receiver, Action<TMessage> callback)
-            where TMessage : IMessage
+        public void RegisterReceiver<TMessage>(object receiver, Action<PhotonMessage> callback)
+            where TMessage : PhotonMessage
         {
-            var type = typeof(TMessage);
-            
+            var type = typeof(TMessage).ToString();
+
             // new message
             if (!RegisteredReceiver.ContainsKey(type))
             {
@@ -39,10 +62,10 @@ namespace JoVei.Base.MessageSystem
         /// <summary>
         /// Unregister a receiver from a certain message
         /// </summary>
-        public void UnregisterReceiver<TMessage>(object receiver, Action<TMessage> callback)
-            where TMessage : IMessage
+        public void UnregisterReceiver<TMessage>(object receiver, Action<PhotonMessage> callback)
+            where TMessage : PhotonMessage
         {
-            var type = typeof(TMessage);
+            var type = typeof(TMessage).ToString();
 
             // search receiver
             var collection = RegisteredReceiver[type].FindAll(x => x.Receiver == receiver);
@@ -61,15 +84,15 @@ namespace JoVei.Base.MessageSystem
         /// Unregister a receiver from all messages of type
         /// </summary>
         public void UnregisterReceiver<TMessage>(object receiver)
-            where TMessage : IMessage
+            where TMessage : PhotonMessage
         {
-            var type = typeof(TMessage);
+            var type = typeof(TMessage).ToString();
 
             // all msg receivers
             var collection = RegisteredReceiver[type];
 
             // remove 
-            RemoveFromCollection(collection, (msgReceiver) => 
+            RemoveFromCollection(collection, (msgReceiver) =>
             {
                 return msgReceiver.Receiver.Equals(receiver);
             });
@@ -86,7 +109,7 @@ namespace JoVei.Base.MessageSystem
             // remove from all
             foreach (var curCollection in collections)
             {
-                RemoveFromCollection(curCollection, (msgReceiver) => 
+                RemoveFromCollection(curCollection, (msgReceiver) =>
                 {
                     return msgReceiver.Receiver.Equals(receiver);
                 });
@@ -97,41 +120,52 @@ namespace JoVei.Base.MessageSystem
         /// <summary>
         /// Shout message to all registered receivers
         /// </summary>
-        public void ShoutMessage<TMessage>(object sender, params object[] parameter)
-            where TMessage : IMessage
+        public void ShoutMessage<TMessage>(PhotonMessageTarget messageTarget, params object[] parameter)
+            where TMessage : PhotonMessage
         {
             // create message
             var msg = (TMessage)Activator.CreateInstance(typeof(TMessage), parameter);
 
-            ShoutMessage(sender, msg);
+            ShoutMessage(msg, messageTarget);
         }
 
         /// <summary>
         /// Shout message to all registered receivers
         /// </summary>
-        public void ShoutMessage<TMessage>(object sender, TMessage message)
-            where TMessage : IMessage
+        public void ShoutMessage<TMessage>(TMessage message, PhotonMessageTarget messageTarget)
+            where TMessage : PhotonMessage
         {
-            var type = message.GetType();
-            if (!RegisteredReceiver.ContainsKey(type)) return;
+            var type = message.GetType().ToString();
+            var serializedMessage = JsonConvert.SerializeObject(message, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
+
+            photonView.RPC("ShoutPhotonMessage", (RpcTarget) messageTarget, type, serializedMessage, photonConnectionWrapper.NickName);
+        }
+
+        [PunRPC]
+        private void ShoutPhotonMessage(string messageType, string serializedMessage, string senderNick)
+        {
+            if (!RegisteredReceiver.ContainsKey(messageType)) return;
 
             // create log
-            string log = string.Format("{0} shouts message <{1}> to ", sender, message.Name);
+            string log = string.Format("{0} shouts message <{1}> to ", senderNick, messageType);
+
+            var message = JsonConvert.DeserializeObject<PhotonMessage> (serializedMessage, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
 
             // call
-            foreach (var curMsgReceiver in RegisteredReceiver[type])
+            foreach (var curMsgReceiver in RegisteredReceiver[messageType])
             {
-                (curMsgReceiver.Callback as Action<TMessage>)?.Invoke(message);
+                curMsgReceiver.Callback?.Invoke(message);
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);
             }
 
-            // print log
-            if (WriteLog) DebugHelper.Print(UnityEngine.LogType.Log, log);
+            DebugHelper.Print(LogType.Log, log);
         }
 
-        #region Abstract Member
-        protected abstract bool WriteLog { get; }
-        #endregion
+        protected override void OnBeforeDestroy()
+        {
+            DIContainer.UnregisterImplementation<PhotonMessageHub>();
+            base.OnBeforeDestroy();
+        }
 
         #region Helper
         protected void RemoveFromCollection(List<MessageReceiver> collection, Func<MessageReceiver, bool> condition)
@@ -146,9 +180,9 @@ namespace JoVei.Base.MessageSystem
         public struct MessageReceiver
         {
             public object Receiver { get; private set; }
-            public object Callback { get; private set; }
+            public Action<PhotonMessage> Callback { get; private set; }
 
-            public MessageReceiver(object receiver, object callback)
+            public MessageReceiver(object receiver, Action<PhotonMessage> callback)
             {
                 Receiver = receiver;
                 Callback = callback;

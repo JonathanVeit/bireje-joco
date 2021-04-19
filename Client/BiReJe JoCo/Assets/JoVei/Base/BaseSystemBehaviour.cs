@@ -7,7 +7,7 @@ namespace JoVei.Base
     /// </summary>
     public abstract class BaseSystemBehaviour : MonoBehaviour
     {
-        protected static ISystemsLoader systemsInitializer => DIContainer.GetImplementationFor<ISystemsLoader>();
+        protected static ISystemsLoader systemsLoader => DIContainer.GetImplementationFor<ISystemsLoader>();
         protected static TickSystem.ITickSystem tickSystem => DIContainer.GetImplementationFor<TickSystem.ITickSystem>();
         protected static Data.IGameDataManager dataManager => DIContainer.GetImplementationFor<Data.IGameDataManager>();
         protected static Data.IInstanceFactory instanceFactory => DIContainer.GetImplementationFor<Data.IInstanceFactory>();
@@ -25,18 +25,18 @@ namespace JoVei.Base
 
         private void Start()
         {
-            if (systemsInitializer.Finished)
+            if (systemsLoader.Finished)
             {
                 StartInternal();
                 return;
             }
-            systemsInitializer.OnAllSystemsLoaded += StartInternal;
+            systemsLoader.OnAllSystemsLoaded += StartInternal;
         }
 
         private void StartInternal() 
         {
             IsReady = true;
-            systemsInitializer.OnAllSystemsLoaded -= StartInternal;
+            systemsLoader.OnAllSystemsLoaded -= StartInternal;
             OnSystemsInitialized();
         }
 

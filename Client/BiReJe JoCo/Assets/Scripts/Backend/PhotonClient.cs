@@ -3,8 +3,11 @@ using UnityEngine;
 using JoVei.Base;
 using JoVei.Base.Helper;
 
-namespace BiReJeJoCo
+namespace BiReJeJoCo.Backend
 {
+    /// <summary>
+    /// Photon client should be responsible for building the connection, hosting and joining rooms
+    /// </summary>
     public class PhotonClient : SystemAccessor, IInitializable
     {
         #region Initialization
@@ -14,7 +17,7 @@ namespace BiReJeJoCo
             ConnectEvents();
 
             BuildConnection();
-            yield return new WaitUntil(() => photonWrapper.IsInPhotonLobby);
+            yield return new WaitUntil(() => photonConnectionWrapper.IsInLobby);
         }
 
         public void CleanUp()
@@ -24,36 +27,40 @@ namespace BiReJeJoCo
 
         private void ConnectEvents()
         {
-            photonWrapper.OnConnectedToPhotonMaster += OnConnectedToMaster;
-            photonWrapper.OnDisconnectedFromPhoton += OnDisconnected;
-            photonWrapper.OnJoinedPhotonLobby += OnJoinedLobby;
-            photonWrapper.OnLeftPhotonLobby += OnLeftLobby;
-            photonWrapper.OnJoinedPhotonRoom += OnRoomJoined;
-            photonWrapper.OnJoinPhotonRoomFailed += OnJoinRoomFailed;
+            photonConnectionWrapper.onConnectedToMaster += OnConnectedToMaster;
+            photonConnectionWrapper.onDisconnected += OnDisconnected;
+            photonConnectionWrapper.onJoinedLobby += OnJoinedLobby;
+            photonConnectionWrapper.onLeftLobby += OnLeftLobby;
+
+            photonRoomWrapper.onJoinedRoom += OnRoomJoined;
+            photonRoomWrapper.onJoinRoomFailed += OnJoinRoomFailed;
+            photonRoomWrapper.onLeftRoom += OnLeftRoom;
         }
 
         private void DisconnectEvents()
         {
-            photonWrapper.OnConnectedToPhotonMaster -= OnConnectedToMaster;
-            photonWrapper.OnDisconnectedFromPhoton -= OnDisconnected;
-            photonWrapper.OnJoinedPhotonLobby -= OnJoinedLobby;
-            photonWrapper.OnLeftPhotonLobby -= OnLeftLobby;
-            photonWrapper.OnJoinedPhotonRoom -= OnRoomJoined;
-            photonWrapper.OnJoinPhotonRoomFailed -= OnJoinRoomFailed;
+            photonConnectionWrapper.onConnectedToMaster -= OnConnectedToMaster;
+            photonConnectionWrapper.onDisconnected -= OnDisconnected;
+            photonConnectionWrapper.onJoinedLobby -= OnJoinedLobby;
+            photonConnectionWrapper.onLeftLobby -= OnLeftLobby;
+
+            photonRoomWrapper.onJoinedRoom -= OnRoomJoined;
+            photonRoomWrapper.onJoinRoomFailed -= OnJoinRoomFailed;
+            photonRoomWrapper.onLeftRoom -= OnLeftRoom;
         }
         #endregion
 
         #region Connection
         public void BuildConnection()
         {
-            DebugHelper.PrintFormatted("Connecting to photon.");
-            photonWrapper.ConnectToPhoton();
+            DebugHelper.PrintFormatted("Building connecting to photon.");
+            photonConnectionWrapper.Connect();
         }
 
         private void OnConnectedToMaster()
         {
             DebugHelper.PrintFormatted("<color=green>Successfully connected to photon master.</color>");
-            photonWrapper.JoinLobby();
+            photonConnectionWrapper.JoinLobby();
         }
 
         private void OnDisconnected(string cause)
@@ -72,16 +79,23 @@ namespace BiReJeJoCo
         }
         #endregion
 
-         #region Rooms
+        #region Rooms
         public void HostRoom(string roomName, int playerAmount)
         {
-            photonWrapper.CreateRoom(roomName, playerAmount);
+            photonRoomWrapper.CreateRoom(roomName, playerAmount);
         }
 
         public void JoinRoom(string roomName)
         {
-            photonWrapper.JoinRoom(roomName);
+            photonRoomWrapper.JoinRoom(roomName);
         }
+
+
+        public void LeaveRoom()
+        {
+            photonRoomWrapper.LeaveRoom();
+        }
+
 
         private void OnRoomJoined(string roomName)
         {
@@ -91,6 +105,11 @@ namespace BiReJeJoCo
         private void OnJoinRoomFailed(string message)
         {
             DebugHelper.PrintFormatted("<color=red>Joining room failed. Reason: {0}.</color>", message);
+        }
+
+        private void OnLeftRoom()
+        {
+            DebugHelper.PrintFormatted("<color=red>Left room.</color>");
         }
         #endregion
     }

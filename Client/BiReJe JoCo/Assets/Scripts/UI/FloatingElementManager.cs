@@ -1,6 +1,6 @@
 using JoVei.Base.UI;
 
-namespace BiReJeJoCo
+namespace BiReJeJoCo.UI
 {
     /// <summary>
     /// Our implemenation for the FloatingElementManager

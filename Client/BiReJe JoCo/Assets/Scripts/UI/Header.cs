@@ -1,4 +1,4 @@
-﻿namespace BiReJeJoCo
+﻿namespace BiReJeJoCo.UI
 {
     /// <summary>
     /// Permanently visible ui header 

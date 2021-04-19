@@ -1,4 +1,4 @@
-﻿namespace BiReJeJoCo
+﻿namespace BiReJeJoCo.UI
 {
     /// <summary>
     /// Superclass of all elements related to UI

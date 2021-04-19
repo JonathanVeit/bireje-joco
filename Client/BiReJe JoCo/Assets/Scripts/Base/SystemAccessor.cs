@@ -7,7 +7,10 @@ namespace BiReJeJoCo
     /// </summary>
     public class SystemAccessor : BaseSystemAccessor
     {
-        public PhotonWrapper photonWrapper => DIContainer.GetImplementationFor<PhotonWrapper>();
-        public PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
+        protected static Backend.PhotonConnectionWrapper photonConnectionWrapper => DIContainer.GetImplementationFor<Backend.PhotonConnectionWrapper>();
+        protected static Backend.PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<Backend.PhotonRoomWrapper>();
+        protected static Backend.PhotonClient photonClient => DIContainer.GetImplementationFor<Backend.PhotonClient>();
+        protected static Backend.PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<Backend.PhotonMessageHub>();
+        protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();
     }
 }

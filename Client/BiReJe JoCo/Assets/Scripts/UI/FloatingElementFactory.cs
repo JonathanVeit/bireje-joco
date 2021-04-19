@@ -2,7 +2,7 @@
 using JoVei.Base.UI;
 using JoVei.Base.PoolingSystem;
 
-namespace BiReJeJoCo
+namespace BiReJeJoCo.UI
 {
     /// <summary>
     /// Our implementation for the FloatingElementFactory

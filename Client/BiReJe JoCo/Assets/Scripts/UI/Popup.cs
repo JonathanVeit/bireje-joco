@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BiReJeJoCo
+namespace BiReJeJoCo.UI
 {
     /// <summary>
     /// Can be shown & hided
