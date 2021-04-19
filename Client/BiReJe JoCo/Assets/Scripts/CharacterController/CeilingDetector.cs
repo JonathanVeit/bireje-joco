@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BiReJeJoCo;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ using UnityEngine;
 //It will continuously check all collision detected by the internal physics calculation;
 //If a collision qualifies as the character "hitting a ceiling" (based on surface normal), the result will be stored;
 //The 'AdvancedWalkerController' then can use that information to react to ceiling hits; 
-public class CeilingDetector : MonoBehaviour {
+public class CeilingDetector : SystemBehaviour {
 
 	bool ceilingWasHit = false;
 

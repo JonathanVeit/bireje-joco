@@ -94,36 +94,42 @@ namespace BiReJeJoCo.Character
 		//This function is called right after Awake(); It can be overridden by inheriting scripts;
 		protected virtual void Setup()
 		{
-		}
-
-		void Update()
-		{
-			HandleJumpKeyInput();
+			characterInput.onJumpIsPressed += HandleJumpKeyPressed;
+			characterInput.onJumpLetGo += HandleJumpKeyLetGo;
 		}
 
 
-        //Handle jump booleans for later use in FixedUpdate;
-        void HandleJumpKeyInput()
+        //Handle jump booleans;
+        void HandleJumpKeyPressed()
         {
-			Debug.Log("Jump");
-            bool _newJumpKeyPressedState = characterInput.GetJumpInput();
-			Debug.Log("Jump " + characterInput.GetJumpInput());
-			if (jumpKeyIsPressed == false && _newJumpKeyPressedState == true)
+			if (jumpKeyIsPressed == false)
                 jumpKeyWasPressed = true;
 
-            if (jumpKeyIsPressed == true && _newJumpKeyPressedState == false)
-            {
-                jumpKeyWasLetGo = true;
-                jumpInputIsLocked = false;
-            }
-
-            jumpKeyIsPressed = _newJumpKeyPressedState;
+            jumpKeyIsPressed = true;
         }
-		
 
-        void FixedUpdate()
+		void HandleJumpKeyLetGo()
+		{
+			
+			if (jumpKeyIsPressed == true)
+			{
+				jumpKeyWasLetGo = true;
+				jumpInputIsLocked = false;
+			}
+
+			jumpKeyIsPressed = false;
+		}
+
+
+		void FixedUpdate()
 		{
 			ControllerUpdate();
+		}
+
+		private void OnDestroy()
+		{
+			characterInput.onJumpIsPressed -= HandleJumpKeyPressed;
+			characterInput.onJumpLetGo -= HandleJumpKeyLetGo;
 		}
 
 		//Update controller;
@@ -219,19 +225,6 @@ namespace BiReJeJoCo.Character
 
 			return _velocity;
 		}
-
-		//JUMPING
-		/*
-		//Returns 'true' if the player presses the jump key;
-		protected virtual bool IsJumpKeyPressed()
-		{
-			//If no character input script is attached to this object, return;
-			if(characterInput == null)
-				return false;
-
-			return characterInput.IsJumpKeyPressed();
-		}
-		*/
 
 		//Determine current controller state based on current momentum and whether the controller is grounded (or not);
 		//Handle state transitions;

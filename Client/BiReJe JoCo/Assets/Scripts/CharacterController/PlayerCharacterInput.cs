@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 namespace BiReJeJoCo.Character
 {
-    public class PlayerCharacterInput : MonoBehaviour
+    public class PlayerCharacterInput : SystemBehaviour
     {
         private Vector2 moveInput;
         private Vector2 lookInput;
-        private bool jump;
+
+        public event Action onJumpIsPressed;
+        public event Action onJumpLetGo;
 
         //Thoughts
-        //key action  .started .performed .canceled
+        //key action  .started is called 2 times // .performed called 1; .canceled
 
         #region Set Input (PlayerInput Component)
         // assigns the new input system values to a vector and gives that vector back
@@ -31,13 +34,14 @@ namespace BiReJeJoCo.Character
 
         public void SetJumpInput(InputAction.CallbackContext inputValue)
         {
-            if (inputValue.started)
+            if (inputValue.performed)
             {
-                jump = true;
+                onJumpIsPressed?.Invoke();
             }
-            else
+
+            if (inputValue.canceled)
             {
-                jump = false;
+                onJumpLetGo?.Invoke();
             }
         }
 
@@ -81,10 +85,6 @@ namespace BiReJeJoCo.Character
         }
 		#endregion
 
-        public bool GetJumpInput()
-        {
-            return jump;
-        }
 	}
 }
 
