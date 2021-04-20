@@ -21,7 +21,6 @@ namespace BiReJeJoCo.UI
             photonRoomWrapper.onPlayerLeftRoom += RemoveMember;
 
             roomName.text = photonRoomWrapper.RoomName;
-
             foreach (var curPlayer in photonRoomWrapper.PlayerList.Values)
                 AddMember(curPlayer.NickName);
 
