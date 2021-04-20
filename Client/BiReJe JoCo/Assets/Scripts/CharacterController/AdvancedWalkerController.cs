@@ -26,6 +26,10 @@ namespace BiReJeJoCo.Character
 
 		//Movement speed;
 		public float movementSpeed = 7f;
+		private float movementSpeedSave;
+
+		// move speed * sprint  = new sprint speed
+		public float sprintMultiplyer = 1.2f;
 
 		//How fast the controller can change direction while in the air;
 		//Higher values result in more air control;
@@ -94,12 +98,20 @@ namespace BiReJeJoCo.Character
 		//This function is called right after Awake(); It can be overridden by inheriting scripts;
 		protected virtual void Setup()
 		{
+			//Save user set moveSpeed and sprint multiplyer for use later
+			movementSpeedSave = movementSpeed;
+
+			//Subscribe Jump Functions to character Input 
 			characterInput.onJumpIsPressed += HandleJumpKeyPressed;
 			characterInput.onJumpLetGo += HandleJumpKeyLetGo;
+
+			//Subscribe Sprint Functions to character Input
+			characterInput.onSprintIsPressed += HandleSrintKeyPressed;
+			characterInput.onSprintLetGo += HandleSrintKeyLetGo;
 		}
 
 
-        //Handle jump booleans;
+        //Handle jump booleans for On Press;
         void HandleJumpKeyPressed()
         {
 			if (jumpKeyIsPressed == false)
@@ -108,6 +120,7 @@ namespace BiReJeJoCo.Character
             jumpKeyIsPressed = true;
         }
 
+		//Handle jump booleans for letting go of the key;
 		void HandleJumpKeyLetGo()
 		{
 			
@@ -120,6 +133,18 @@ namespace BiReJeJoCo.Character
 			jumpKeyIsPressed = false;
 		}
 
+		//Multiplying movement speed with sprint multiplyer;
+		void HandleSrintKeyPressed()
+		{
+			movementSpeed *= sprintMultiplyer;
+		}
+
+		//Setting movement speed back to origin;
+		void HandleSrintKeyLetGo()
+		{
+			movementSpeed = movementSpeedSave;
+		}
+
 
 		void FixedUpdate()
 		{
@@ -130,6 +155,9 @@ namespace BiReJeJoCo.Character
 		{
 			characterInput.onJumpIsPressed -= HandleJumpKeyPressed;
 			characterInput.onJumpLetGo -= HandleJumpKeyLetGo;
+
+			characterInput.onSprintIsPressed -= HandleSrintKeyPressed;
+			characterInput.onSprintLetGo -= HandleSrintKeyLetGo;
 		}
 
 		//Update controller;

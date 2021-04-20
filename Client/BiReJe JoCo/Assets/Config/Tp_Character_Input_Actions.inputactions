@@ -22,9 +22,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Ability_01",
+                    "name": "Jumping",
                     "type": "Button",
                     "id": "0853c5ea-40cb-421f-9907-c47166eeeace",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Sprinting",
+                    "type": "Button",
+                    "id": "fd14a497-3a66-4887-acef-0617dbc0e7f1",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -38,7 +46,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Ability_01",
+                    "action": "Jumping",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -49,7 +57,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Ability_01",
+                    "action": "Jumping",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -138,6 +146,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "LookAround",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "748ecac0-b0a9-4c13-bf97-2db79ab6edba",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Sprinting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9753891-6c37-4156-ba3a-16f08f6749c1",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Sprinting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

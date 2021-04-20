@@ -11,8 +11,13 @@ namespace BiReJeJoCo.Character
         private Vector2 moveInput;
         private Vector2 lookInput;
 
+        // Jump actions
         public event Action onJumpIsPressed;
         public event Action onJumpLetGo;
+
+        //Sprint actions
+        public event Action onSprintIsPressed;
+        public event Action onSprintLetGo;
 
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
@@ -42,6 +47,19 @@ namespace BiReJeJoCo.Character
             if (inputValue.canceled)
             {
                 onJumpLetGo?.Invoke();
+            }
+        }
+
+        public void SetSprintInput(InputAction.CallbackContext inputValue)
+        {
+            if (inputValue.performed)
+            {
+                onSprintIsPressed?.Invoke();
+            }
+
+            if (inputValue.canceled)
+            {
+                onSprintLetGo?.Invoke();
             }
         }
 
