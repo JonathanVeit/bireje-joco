@@ -158,7 +158,7 @@ namespace BiReJeJoCo.Backend
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);
             }
 
-            DebugHelper.Print(LogType.Log, log);
+            if (globalVariables.GetVar<bool>("debugMode")) DebugHelper.Print(LogType.Log, log);
         }
 
         protected override void OnBeforeDestroy()

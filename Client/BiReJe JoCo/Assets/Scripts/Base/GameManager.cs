@@ -19,12 +19,12 @@ namespace BiReJeJoCo
 
         public void OpenMainMenu() 
         {
-            SceneManager.LoadScene("main_menu");
+            SceneManager.LoadScene("main_menu_scene");
         }
 
-        public void OpenRoomMenu()
+        public void OpenLobby()
         {
-            SceneManager.LoadScene("room_menu");
+            SceneManager.LoadScene("lobby_scene");
         }
 
         public void Quit()

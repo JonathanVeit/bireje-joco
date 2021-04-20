@@ -1,6 +1,7 @@
 using JoVei.Base;
+using JoVei.Base.MessageSystem;
 using Photon.Pun;
-using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Realtime;
@@ -9,21 +10,13 @@ namespace BiReJeJoCo.Backend
 {
     public class PhotonRoomWrapper : MonoBehaviourPunCallbacks, IInitializable
     {
-        public event Action onRoomCreated;
-        public event Action<string> onFailedToCreateRoom;
-
-        public event Action<string> onJoinedRoom;
-        public event Action<string> onJoinRoomFailed;
-        public event Action onLeftRoom;
-
-        public event Action<string> onPlayerEnteredRoom;
-        public event Action<string> onPlayerLeftRoom;
-
         public bool IsInRoom { get; private set; }
         public bool IsHost { get => PhotonNetwork.LocalPlayer.IsMasterClient; }
         public string RoomName { get; private set; }
         public int PlayerCount { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.PlayerCount : 0; }
-        public Dictionary<int, Player> PlayerList { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Players : null; }
+        public List<Photon.Realtime.Player> PlayerList { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Players.Values.ToList() : null; }
+
+        private IMessageHub messageHub => DIContainer.GetImplementationFor<IMessageHub>();
 
         #region Initialization
         public IEnumerator Initialize(object[] parameters)
@@ -43,18 +36,19 @@ namespace BiReJeJoCo.Backend
                 MaxPlayers = (byte)maxPlayers,
                 IsVisible = isVisible,
                 IsOpen = isOpen,
+                PublishUserId = true,
             };
 
             PhotonNetwork.CreateRoom(roomName, roomOptions);
         }
         public override void OnCreatedRoom()
         {
-            onRoomCreated?.Invoke();
+            messageHub.ShoutMessage(this, new OnLobbyCreatedMsg());
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            onFailedToCreateRoom?.Invoke(message);
+            messageHub.ShoutMessage(this, new OnFailedToHostLobbyMsg(message));
         }
 
 
@@ -68,17 +62,24 @@ namespace BiReJeJoCo.Backend
         {
             IsInRoom = true;
             RoomName = PhotonNetwork.CurrentRoom.Name;
-            onJoinedRoom?.Invoke(RoomName);
+
+            messageHub.ShoutMessage(this, new OnJoinedLobbyMsg(RoomName));
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
             IsInRoom = false;
             RoomName = null;
-            onJoinRoomFailed?.Invoke(message);
+
+            messageHub.ShoutMessage(this, new OnJoinLobbyFailedMsg(message));
         }
 
-        
+        // switch scene
+        public void LoadLevel(string levelName) 
+        {
+            PhotonNetwork.LoadLevel(levelName);
+        }
+
         // leave room 
         public void LeaveRoom()
         {
@@ -89,19 +90,20 @@ namespace BiReJeJoCo.Backend
         {
             IsInRoom = false;
             RoomName = null;
-            onLeftRoom?.Invoke();
+
+            messageHub.ShoutMessage(this, new OnLeftLobbyMsg());
         }
 
         
         // other player join / leave
-        public override void OnPlayerEnteredRoom(Player newPlayer)
+        public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
         {
-            onPlayerEnteredRoom?.Invoke(newPlayer.NickName);
+            messageHub.ShoutMessage(this, new OnPlayerJoinedLobbyMsg(newPlayer.UserId));
         }
 
-        public override void OnPlayerLeftRoom(Player otherPlayer)
+        public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
-            onPlayerLeftRoom?.Invoke(otherPlayer.NickName);
+            messageHub.ShoutMessage(this, new OnPlayerLeftLobbyMsg(otherPlayer.UserId));
         }
     }
 }

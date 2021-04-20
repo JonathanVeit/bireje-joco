@@ -1,10 +1,9 @@
 ﻿using JoVei.Base;
 using JoVei.Base.Helper;
-using JoVei.Base.Backend;
-using JoVei.Base.Data;
 using JoVei.Base.UI;
 using UnityEngine;
-using System.IO;
+using BiReJeJoCo.Backend;
+using Newtonsoft.Json;
 
 namespace BiReJeJoCo.Debugging
 {
@@ -121,12 +120,28 @@ namespace BiReJeJoCo.Debugging
         // load commands
         protected override void LoadCommands()
         {
-            RegisterCommand(new DebugCommand<bool>("set_debug_stats", "Enables/Disables debug stats", "set_debug_stats <bool>", state =>
+            globalVariables.SetVar("debugMode", false);
+
+            RegisterCommand(new DebugCommand<bool>("set_debug_mode", "Enables/Disables debug stats", "set_debug_mode <bool>", mode =>
             {
-                if (state == true)
+                globalVariables.SetVar("debugMode", mode);
+
+                if (mode == true)
                     DebugStatsUI.Instance.Show();
                 else
                     DebugStatsUI.Instance.Hide();
+            }));
+
+            RegisterCommand(new DebugCommand("log_player", "Logs all player serialized in room", "log_player", () =>
+            {
+                var result = string.Empty;
+
+                foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
+                {
+                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() {  }) + "\n";
+                }
+
+                DebugHelper.Print(result);
             }));
         }
 

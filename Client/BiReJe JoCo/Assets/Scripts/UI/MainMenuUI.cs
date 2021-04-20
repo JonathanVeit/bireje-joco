@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using JoVei.Base.UI;
 
 namespace BiReJeJoCo.UI
 {
@@ -12,26 +11,25 @@ namespace BiReJeJoCo.UI
 
         protected override void OnSystemsInitialized()
         {
-            photonRoomWrapper.onJoinedRoom += OnRoomJoined;
-            photonRoomWrapper.onJoinRoomFailed += OnJoinRoomFailed;
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
 
             playerNickNameInput.text = System.Guid.NewGuid().ToString();
-            photonConnectionWrapper.NickName = playerNickNameInput.text;
         }
 
         protected override void OnBeforeDestroy()
         {
-            photonRoomWrapper.onJoinedRoom -= OnRoomJoined;
-            photonRoomWrapper.onJoinRoomFailed -= OnJoinRoomFailed;
+            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
+            messageHub.UnregisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
         }
 
-        private void OnRoomJoined(string roomName)
+        private void OnRoomJoined(OnJoinedLobbyMsg msg)
         {
-            gameManager.OpenRoomMenu();
+            gameManager.OpenLobby();
             loadingOverlay.gameObject.SetActive(false);
         }
 
-        private void OnJoinRoomFailed(string reason)
+        private void OnJoinRoomFailed(OnJoinLobbyFailedMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
         }
