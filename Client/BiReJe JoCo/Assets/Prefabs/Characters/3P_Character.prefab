@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480456209983}
-  m_LocalRotation: {x: 0.00223008, y: 0.9225285, z: -0.3858857, w: 0.005331404}
+  m_LocalRotation: {x: 0.0022300798, y: 0.9225285, z: -0.3858857, w: 0.005331403}
   m_LocalPosition: {x: -0.03467357, y: 5.7, z: 2.9997997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -534,7 +534,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404481114022363}
-  m_LocalRotation: {x: 0.00223008, y: 0.9225285, z: -0.3858857, w: 0.005331404}
+  m_LocalRotation: {x: 0.0022300808, y: 0.92252856, z: -0.3858857, w: 0.005331405}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   colliderHeight: 2
   colliderThickness: 1
   colliderOffset: {x: 0, y: 0.5, z: 0}
-  sensorType: 0
+  sensorType: 2
   isInDebugMode: 0
   sensorArrayRows: 1
   sensorArrayRayCount: 5
@@ -1408,6 +1408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 7
+  sprintMultiplyer: 1.2
   airControlRate: 2
   jumpSpeed: 5.75
   jumpDuration: 0.2
@@ -1415,7 +1416,7 @@ MonoBehaviour:
   groundFriction: 100
   gravity: 30
   slideGravity: 5
-  slopeLimit: 80
+  slopeLimit: 50
   useLocalMomentum: 1
   cameraTransform: {fileID: 4522404480456209980}
 --- !u!114 &4522404481329450004
@@ -1519,6 +1520,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 5c48a9be-203d-4a18-b019-43f831e3fccf
     m_ActionName: Ui/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4522404481329450004}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSprintInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fd14a497-3a66-4887-acef-0617dbc0e7f1
+    m_ActionName: Player/Sprinting[/Keyboard/leftShift,/DualShock4GamepadHID/leftShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
