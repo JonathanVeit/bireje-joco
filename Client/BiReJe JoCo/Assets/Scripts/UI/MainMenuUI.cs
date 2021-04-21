@@ -60,7 +60,7 @@ namespace BiReJeJoCo.UI
         public void HostRoom()
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
-            photonClient.HostRoom(roomNameInput.text, 3);
+            photonClient.HostRoom(roomNameInput.text, 10);
             loadingOverlay.gameObject.SetActive(true);
         }
 

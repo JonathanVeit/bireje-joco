@@ -19,7 +19,7 @@ namespace BiReJeJoCo.UI
         protected override void OnSystemsInitialized()
         {
             playerManager.onPlayerAdded += AddMemberListEntry;
-            playerManager.onPlayerRemoved += RemoeMemberListEntry;
+            playerManager.onPlayerRemoved += RemoveMemberListEntry;
 
             lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
@@ -31,7 +31,7 @@ namespace BiReJeJoCo.UI
         protected override void OnBeforeDestroy()
         {
             playerManager.onPlayerAdded -= AddMemberListEntry;
-            playerManager.onPlayerRemoved -= RemoeMemberListEntry;
+            playerManager.onPlayerRemoved -= RemoveMemberListEntry;
         }
 
         private void AddMemberListEntry(Player player) 
@@ -41,7 +41,7 @@ namespace BiReJeJoCo.UI
             memberEntries.Add(player.NickName, entry);
         }
 
-        private void RemoeMemberListEntry(Player player)
+        private void RemoveMemberListEntry(Player player)
         {
             var entry = memberEntries[player.NickName];
             memberEntries.Remove(player.NickName);
