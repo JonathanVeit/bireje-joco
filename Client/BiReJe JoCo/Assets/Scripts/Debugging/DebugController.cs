@@ -172,6 +172,11 @@ namespace BiReJeJoCo.Debugging
                     localPlayer.IsHost)
                     photonRoomWrapper.LoadLevel(value);
             }));
+
+            RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
+            {
+                QualitySettings.SetQualityLevel(value);
+            }));
         }
 
         private static void SetGlobalVariables()
