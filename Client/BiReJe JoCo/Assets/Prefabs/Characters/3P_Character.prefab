@@ -175,7 +175,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480608869084}
-  m_LocalRotation: {x: 0.0023979538, y: 0.9098338, z: -0.41493267, w: 0.005258056}
+  m_LocalRotation: {x: 0.002397939, y: 0.9098338, z: -0.41493267, w: 0.005258024}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1216,7 +1216,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482295260262}
-  m_LocalRotation: {x: 0.0023400683, y: 0.91433567, z: -0.404916, w: 0.005284079}
+  m_LocalRotation: {x: 0.002340048, y: 0.91433567, z: -0.404916, w: 0.005284034}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1586,9 +1586,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a4483ea754ca6043a5118a42cf7f9fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  lerpSpeed: 20
-  smoothDampTime: 0.02
+  target: {fileID: 4526797666797266487}
+  lerpSpeed: 200
+  smoothDampTime: 0.04
   extrapolatePosition: 0
   updateType: 1
   smoothType: 1
