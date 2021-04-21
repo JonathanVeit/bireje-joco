@@ -1,6 +1,5 @@
 ﻿using JoVei.Base;
 using JoVei.Base.Helper;
-using JoVei.Base.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using BiReJeJoCo.Backend;
@@ -167,7 +166,7 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand<string>("load_scene_together", "Load another game scene in lobby (game_scene, game_scene_2, game_scene_3 ...)", "load_scene_together <string>", (value) =>
+            RegisterCommand(new DebugCommand<string>("load_scene_sync", "Load another game scene in the current lobby (game_scene, game_scene_2, game_scene_3 ...)", "load_scene_sync <string>", (value) =>
             {
                 if (photonRoomWrapper.IsInRoom && 
                     localPlayer.IsHost)
