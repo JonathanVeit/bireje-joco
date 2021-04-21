@@ -29,9 +29,16 @@ namespace BiReJeJoCo.Debugging
         {
             if (Keyboard.current[Key.LeftCtrl].IsPressed() &&
                 Keyboard.current[Key.D].wasPressedThisFrame)
-            { 
+            {
                 ToggleVisibility();
             }
+
+            if (Keyboard.current[Key.Enter].wasPressedThisFrame)
+            {
+                RunCommand(curInput);
+                curInput = string.Empty;
+            }
+
             //else if (Input.touchCount > 1)
             //{
             //    if (Input.GetTouch(0).deltaPosition.x > 1 && Input.GetTouch(1).deltaPosition.x < -1 ||

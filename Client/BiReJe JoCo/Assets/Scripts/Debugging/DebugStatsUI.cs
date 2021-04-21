@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using JoVei.Base;
+using Photon.Pun;
 
-namespace JoVei.Base.UI
+namespace BiReJeJoCo.Debugging
 {
     /// <summary>
     /// Simple ui class to display some stats
@@ -13,10 +15,12 @@ namespace JoVei.Base.UI
         [Header("UI Elements")]
         [SerializeField] Text fpsTF;
         [SerializeField] Text averageFpsTF;
+        [SerializeField] Text pingTF;
 
         [Header("Settings")]
         [SerializeField] [Range(0, 1)] float FPSUpdateRate = 0.5f;
         [SerializeField] [Range(1, 60)] float averageFPSUpdateRate = 30f;
+        [SerializeField] [Range(0, 1)] float pingUpdateRate = 0.5f;
 
         private static bool isVisible;
         private static List<float> fpsCache
@@ -40,6 +44,7 @@ namespace JoVei.Base.UI
 
             StartCoroutine(CO_UpdateFPS());
             StartCoroutine(CO_UpdateAverageFPS());
+            StartCoroutine(CO_UpdatePing());
         }
 
         public void Hide()
@@ -80,6 +85,17 @@ namespace JoVei.Base.UI
             }
         }
 
+        private IEnumerator CO_UpdatePing()
+        {
+            var waiter = new WaitForSeconds(pingUpdateRate);
+
+            while (true)
+            {
+                UpdatePing();
+                yield return waiter;
+            }
+        }
+
         private void UpdateFPS()
         {
             var fps = (1 / Time.deltaTime);
@@ -95,6 +111,11 @@ namespace JoVei.Base.UI
 
             averageFpsTF.text = "~" + sum.ToString("F1") + " fps";
             fpsCache.Clear();
+        }
+
+        private void UpdatePing() 
+        {
+            pingTF.text = PhotonNetwork.GetPing().ToString();
         }
         #endregion
     }
