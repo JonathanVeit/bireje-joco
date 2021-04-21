@@ -20,7 +20,7 @@ namespace BiReJeJoCo
 
         protected override void OnBeforeDestroy()
         {
-            DisconnectEvents();
+            DIContainer.UnregisterImplementation<MatchHandler>();
         }
 
         private void ConnectEvents()
@@ -28,13 +28,6 @@ namespace BiReJeJoCo
             photonMessageHub.RegisterReceiver<StartGamePhoMsg>(this, OnStartGame);
             photonMessageHub.RegisterReceiver<PauseGamePhoMsg>(this, OnPauseGame);
             photonMessageHub.RegisterReceiver<ContinueGamePhoMsg>(this, OnContinuetGame);
-        }
-
-        private void DisconnectEvents()
-        {
-            photonMessageHub.UnregisterReceiver<StartGamePhoMsg>(this, OnStartGame);
-            photonMessageHub.UnregisterReceiver<PauseGamePhoMsg>(this, OnPauseGame);
-            photonMessageHub.UnregisterReceiver<ContinueGamePhoMsg>(this, OnContinuetGame);
         }
         #endregion
 

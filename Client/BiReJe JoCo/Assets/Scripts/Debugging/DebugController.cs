@@ -25,6 +25,9 @@ namespace BiReJeJoCo.Debugging
         private Vector2 scroll;
         private bool setFocus;
 
+        private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
+        private Player localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
+
         protected override void Update()
         {
             if (Keyboard.current[Key.LeftCtrl].IsPressed() &&
@@ -38,20 +41,6 @@ namespace BiReJeJoCo.Debugging
                 RunCommand(curInput);
                 curInput = string.Empty;
             }
-
-            //else if (Input.touchCount > 1)
-            //{
-            //    if (Input.GetTouch(0).deltaPosition.x > 1 && Input.GetTouch(1).deltaPosition.x < -1 ||
-            //        Input.GetTouch(0).deltaPosition.x < -1 && Input.GetTouch(1).deltaPosition.x > 1)
-            //    {
-            //        ToggleVisibility();
-            //    }
-
-            //    if (Input.GetKeyDown(KeyCode.Return))
-            //{
-            //    RunCommand(curInput);
-            //    curInput = string.Empty;
-            //}
         }
 
         private void OnGUI()
@@ -176,6 +165,13 @@ namespace BiReJeJoCo.Debugging
             RegisterCommand(new DebugCommand<float>("rotation_sync_speed", "Set the overall rotation synchroniziation speed", "rotation_sync_speed <float>", (value) =>
             {
                 globalVariables.SetVar("rot_sync_speed", value);
+            }));
+
+            RegisterCommand(new DebugCommand<string>("load_scene_together", "Load another game scene in lobby (game_scene, game_scene_2, game_scene_3 ...)", "load_scene_together <string>", (value) =>
+            {
+                if (photonRoomWrapper.IsInRoom && 
+                    localPlayer.IsHost)
+                    photonRoomWrapper.LoadLevel(value);
             }));
         }
 

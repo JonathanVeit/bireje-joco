@@ -19,27 +19,27 @@ MonoBehaviour:
     border: 0
     scale: 1
   regions:
-  - id: Update
+  - id: update
     type: 0
     border: 0
     scale: 1
-  - id: FixeDUpdate
+  - id: fixed_update
     type: 1
     border: 0
     scale: 1
-  - id: LateUpdate
+  - id: late_update
     type: 2
     border: 0
     scale: 1
-  - id: UpdateFrameWise
+  - id: update_framewise
     type: 3
     border: 0
     scale: 1
-  - id: FixedUpdateFramewise
+  - id: fixed_update_framewise
     type: 4
     border: 0
     scale: 1
-  - id: LateUpdateFramewise
+  - id: late_update_framewise
     type: 5
     border: 0
     scale: 1

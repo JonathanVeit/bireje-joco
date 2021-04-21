@@ -5,16 +5,16 @@ namespace BiReJeJoCo.Tools
 {
     public class SceneQuickAccess : EditorWindow
     {
-        [MenuItem("Tools/Scenes/Main Menu")]
-        public static void OpenMainScene()
-        {
-            EditorSceneManager.OpenScene("Assets/Scenes/main_menu_scene.unity");
-        }
-
         [MenuItem("Tools/Scenes/Loading")]
         public static void OpenLoginScene()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/loading_scene.unity");
+        }
+
+        [MenuItem("Tools/Scenes/Main Menu")]
+        public static void OpenMainScene()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/main_menu_scene.unity");
         }
 
         [MenuItem("Tools/Scenes/Lobby")]

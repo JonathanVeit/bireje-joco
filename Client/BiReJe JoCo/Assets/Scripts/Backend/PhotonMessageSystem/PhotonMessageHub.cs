@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using JoVei.Base;
 using JoVei.Base.Helper;
-using JoVei.Base.MessageSystem;
 using Photon.Pun;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -164,7 +163,6 @@ namespace BiReJeJoCo.Backend
         protected override void OnBeforeDestroy()
         {
             DIContainer.UnregisterImplementation<PhotonMessageHub>();
-            base.OnBeforeDestroy();
         }
 
         #region Helper
