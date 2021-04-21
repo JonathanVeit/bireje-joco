@@ -2,6 +2,7 @@
 using JoVei.Base.Helper;
 using JoVei.Base.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
 
@@ -26,13 +27,24 @@ namespace BiReJeJoCo.Debugging
 
         protected override void Update()
         {
-            base.Update();
-
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                RunCommand(curInput);
-                curInput = string.Empty;
+            if (Keyboard.current[Key.LeftCtrl].IsPressed() &&
+                Keyboard.current[Key.D].wasPressedThisFrame)
+            { 
+                ToggleVisibility();
             }
+            //else if (Input.touchCount > 1)
+            //{
+            //    if (Input.GetTouch(0).deltaPosition.x > 1 && Input.GetTouch(1).deltaPosition.x < -1 ||
+            //        Input.GetTouch(0).deltaPosition.x < -1 && Input.GetTouch(1).deltaPosition.x > 1)
+            //    {
+            //        ToggleVisibility();
+            //    }
+
+            //    if (Input.GetKeyDown(KeyCode.Return))
+            //{
+            //    RunCommand(curInput);
+            //    curInput = string.Empty;
+            //}
         }
 
         private void OnGUI()
@@ -144,16 +156,27 @@ namespace BiReJeJoCo.Debugging
                 DebugHelper.Print(result);
             }));
 
-            RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall synchroniziation speed", "movement_sync_speed <float>", (value) =>
+            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (value) =>
+            {
+                Cursor.lockState = value? CursorLockMode.Locked : CursorLockMode.None;
+            }));
+
+            RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall movement synchroniziation speed", "movement_sync_speed <float>", (value) =>
             {
                 globalVariables.SetVar("move_sync_speed", value);
+            }));
+
+            RegisterCommand(new DebugCommand<float>("rotation_sync_speed", "Set the overall rotation synchroniziation speed", "rotation_sync_speed <float>", (value) =>
+            {
+                globalVariables.SetVar("rot_sync_speed", value);
             }));
         }
 
         private static void SetGlobalVariables()
         {
             globalVariables.SetVar("debug_mode", false);
-            globalVariables.SetVar<float>("move_sync_speed", 1);
+            globalVariables.SetVar<float>("move_sync_speed", 1); 
+            globalVariables.SetVar<float>("rot_sync_speed", 1); 
         }
 
         // before opening the panel  

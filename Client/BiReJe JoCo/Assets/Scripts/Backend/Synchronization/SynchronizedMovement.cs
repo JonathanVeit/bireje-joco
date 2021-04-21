@@ -6,7 +6,10 @@ namespace BiReJeJoCo.Backend
     public class SynchronizedMovement : TickBehaviour, IPunObservable
     {
         [SerializeField] MovementSynchType syncType;
-        [SerializeField] float syncSpeed = 5;
+        [SerializeField] Transform positionTarget;
+        [SerializeField] Transform rotationTarget;
+        [SerializeField] float positionSyncSpeed = 9;
+        [SerializeField] float rotationSyncSpeed = 9;
 
         private PhotonView pv;
 
@@ -16,6 +19,9 @@ namespace BiReJeJoCo.Backend
         #region Initialization
         protected override void OnSystemsInitialized()
         {
+            if (rotationTarget == null) rotationTarget = GetComponent<Transform>();
+            if (positionTarget == null) positionTarget = GetComponent<Transform>();
+
             base.OnSystemsInitialized();
             pv = GetComponent<PhotonView>();
 
@@ -44,8 +50,8 @@ namespace BiReJeJoCo.Backend
             if (stream.IsWriting)
             {
                 //We own this player: send the others our data
-                stream.SendNext(transform.position);
-                stream.SendNext(transform.rotation);
+                stream.SendNext(positionTarget.position);
+                stream.SendNext(rotationTarget.rotation);
             }
             else
             {
@@ -61,26 +67,24 @@ namespace BiReJeJoCo.Backend
 
             if (syncType == MovementSynchType.Lerp)
             {
-                LerpPosition(syncSpeed * globalVariables.GetVar<float>("move_sync_speed"), deltaTime);
+                LerpPosition(positionSyncSpeed * globalVariables.GetVar<float>("move_sync_speed"), deltaTime);
             } 
             else if (syncType == MovementSynchType.MoveTowards)
             {
-                MoveTowardsPosition(syncSpeed * globalVariables.GetVar<float>("move_sync_speed"), deltaTime);
+                MoveTowardsPosition(rotationSyncSpeed * globalVariables.GetVar<float>("rot_sync_speed"), deltaTime);
             }
         }
 
         private void LerpPosition(float speed, float deltaTime)
         {
-            //Update remote player (smooth this, this looks good, at the cost of some accuracy)
-            transform.position = Vector3.Lerp(transform.position, targetPlayerPos, deltaTime * speed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetPlayerRot, deltaTime * speed);
+            positionTarget.position = Vector3.Lerp(positionTarget.position, targetPlayerPos, deltaTime * speed);
+            rotationTarget.rotation = Quaternion.Lerp(rotationTarget.rotation, targetPlayerRot, deltaTime * speed);
         }
 
         private void MoveTowardsPosition(float speed, float deltaTime)
         {
-            //Update remote player (smooth this, this looks good, at the cost of some accuracy)
-            transform.position = Vector3.MoveTowards(transform.position, targetPlayerPos, deltaTime * speed);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetPlayerRot, deltaTime * speed);
+            positionTarget.position = Vector3.MoveTowards(positionTarget.position, targetPlayerPos, deltaTime * speed);
+            rotationTarget.rotation = Quaternion.RotateTowards(rotationTarget.rotation, targetPlayerRot, deltaTime * speed);
         }
     }
 }

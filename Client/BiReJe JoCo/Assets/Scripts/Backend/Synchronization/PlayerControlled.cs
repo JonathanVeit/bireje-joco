@@ -9,7 +9,7 @@ namespace BiReJeJoCo.Backend
         public PhotonView PhotonView { get; private set; }
         public Player Player { get; private set; }
 
-        protected override void OnSystemsInitialized()
+        private void Awake()
         {
             PhotonView = GetComponent<PhotonView>();
             Player = playerManager.GetPlayer(PhotonView.Controller.UserId);

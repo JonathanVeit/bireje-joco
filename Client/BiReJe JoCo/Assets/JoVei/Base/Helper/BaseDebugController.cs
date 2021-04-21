@@ -30,7 +30,7 @@ namespace JoVei.Base.Helper
             }
         }
 
-        private void ToggleVisibility() 
+        protected void ToggleVisibility() 
         {
             if (DebugPanelIsOpen)
             {

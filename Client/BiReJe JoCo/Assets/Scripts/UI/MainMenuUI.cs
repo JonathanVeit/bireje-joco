@@ -37,7 +37,6 @@ namespace BiReJeJoCo.UI
         private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
             gameManager.OpenLobby();
-            loadingOverlay.gameObject.SetActive(false);
         }
 
         private void OnHostLobbyFailed(OnFailedToHostLobbyMsg msg)
