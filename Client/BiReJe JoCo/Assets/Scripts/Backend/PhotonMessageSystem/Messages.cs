@@ -1,25 +1,25 @@
 ﻿namespace BiReJeJoCo.Backend
 {
     /// <summary>
-    /// Fired when a player successfully loaded the game scene
+    /// Fired by the host to start the game 
     /// </summary>
-    public class OnPlayerLoadedGameMsg : PhotonMessage
-    {
-        public string playerId { get; private set; }
-
-        public OnPlayerLoadedGameMsg(string playerId)
-        {
-            this.playerId = playerId;    
-        }
-    }
-
-
-    public class StartGameMsg : PhotonMessage
+    public class StartGamePhoMsg : PhotonMessage
     {
         
     }
 
-    public class PauseGameMsg : PhotonMessage
+    /// <summary>
+    /// Fired by the host to pause the game 
+    /// </summary>
+    public class PauseGamePhoMsg : PhotonMessage
+    {
+
+    }
+
+    /// <summary>
+    /// Fired by the host to continue the game 
+    /// </summary>
+    public class ContinueGamePhoMsg : PhotonMessage
     {
 
     }

@@ -1,6 +1,5 @@
 ﻿using JoVei.Base;
 using JoVei.Base.Helper;
-using Photon.Pun;
 using UnityEngine;
 using System.Collections;
 
@@ -26,13 +25,13 @@ namespace BiReJeJoCo.Backend
 
         private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            if (!photonRoomWrapper.IsHost) return;
+            if (!localPlayer.IsHost) return;
 
             var result = Resources.LoadAll<PhotonMessageHub>("");
 
             if (result.Length > 0)
             {
-                currentMessageHub = PhotonNetwork.Instantiate(result[0].name, Vector2.zero, Quaternion.identity);
+                currentMessageHub = photonRoomWrapper.Instantiate(result[0].name, Vector3.zero, Quaternion.identity);
             }
             else
             {
@@ -42,9 +41,9 @@ namespace BiReJeJoCo.Backend
 
         private void OnLeftLobby(OnLeftLobbyMsg msg) 
         {
-            if (!photonRoomWrapper.IsHost) return;
+            if (!localPlayer.IsHost) return;
 
-            PhotonNetwork.Destroy(currentMessageHub);
+            photonRoomWrapper.Destroy(currentMessageHub);
         }
     }
 }

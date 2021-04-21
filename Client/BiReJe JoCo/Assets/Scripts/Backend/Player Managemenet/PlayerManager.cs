@@ -50,12 +50,21 @@ namespace BiReJeJoCo.Backend
         private Dictionary<string, Player> allPlayer
             = new Dictionary<string, Player>();
         private string localPlayerId;
-
         
         public LocalPlayer LocalPlayer => GetPlayer(localPlayerId) as LocalPlayer;
+        
         public Player GetPlayer(string id)
         {
             return allPlayer[id];
+        }
+        public Player GetPlayer(int actorNumber)
+        {
+            foreach (var curPlayer in allPlayer.Values)
+            {
+                if (curPlayer.NumberInRoom == actorNumber) 
+                    return curPlayer;
+            }
+            return null;
         }
         public Player[] GetAllPlayer()
         {

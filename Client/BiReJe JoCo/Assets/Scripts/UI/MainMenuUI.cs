@@ -11,25 +11,41 @@ namespace BiReJeJoCo.UI
 
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
+            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
 
-            playerNickNameInput.text = System.Guid.NewGuid().ToString();
+            if (PlayerPrefs.HasKey("nickname"))
+            {
+                playerNickNameInput.text = PlayerPrefs.GetString("nickname");
+                photonConnectionWrapper.NickName = PlayerPrefs.GetString("nickname");
+            }
+            else
+            {
+                playerNickNameInput.text = System.Guid.NewGuid().ToString();
+                photonConnectionWrapper.NickName = playerNickNameInput.text;
+            }
         }
 
         protected override void OnBeforeDestroy()
         {
-            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
-            messageHub.UnregisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
+            messageHub.UnregisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
+            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.UnregisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
 
-        private void OnRoomJoined(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
             gameManager.OpenLobby();
             loadingOverlay.gameObject.SetActive(false);
         }
 
-        private void OnJoinRoomFailed(OnJoinLobbyFailedMsg msg)
+        private void OnHostLobbyFailed(OnFailedToHostLobbyMsg msg)
+        {
+            loadingOverlay.gameObject.SetActive(false);
+        }
+
+        private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
         }
@@ -38,6 +54,8 @@ namespace BiReJeJoCo.UI
         public void SetNickName(string name) 
         {
             photonConnectionWrapper.NickName = name;
+
+            PlayerPrefs.SetString("nickname", name);
         }
 
         public void HostRoom()

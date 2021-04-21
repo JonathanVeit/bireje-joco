@@ -1,5 +1,6 @@
 using PhotonPlayer = Photon.Realtime.Player;
-using ExitGames.Client.Photon;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine;
 
 namespace BiReJeJoCo.Backend
 {
@@ -7,26 +8,34 @@ namespace BiReJeJoCo.Backend
     {
         public LocalPlayer(PhotonPlayer player) : base(player)
         {
-            var properties = new Hashtable()
+            InitializeProperties();
+            ConnectToEvents();
+        }
+
+        private void InitializeProperties()
+        {
+            var properties = new PhotonHashTable()
             {
                 { "State", PlayerState.Free }
             };
 
             rootPlayer.SetCustomProperties(properties);
-
-            ConnectToEvents();
         }
 
         private void ConnectToEvents()
         {
             messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
-
-            messageHub.RegisterReceiver<OnLoadedGameMsg>(this, OnGameLoaded);
+            messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
 
+        private void SpawnPlayerCharacter() 
+        {
+            string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
+            photonRoomWrapper.Instantiate(prefabId, Vector3.zero, Quaternion.identity);
+        }
 
-        #region Messages
+        #region Events
         private void OnJoinedLobby(OnJoinLobbyFailedMsg msg)
         {
             UpdateState(PlayerState.Lobby);
@@ -37,8 +46,9 @@ namespace BiReJeJoCo.Backend
             UpdateState(PlayerState.Free);
         }
 
-        private void OnGameLoaded(OnLoadedGameMsg msg)
+        private void OnGameSceneLoaded(OnLoadedGameSceneMsg msg)
         {
+            SpawnPlayerCharacter();
             UpdateState(PlayerState.Ready);
         }
         #endregion

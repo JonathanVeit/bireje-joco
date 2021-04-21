@@ -1,3 +1,4 @@
+using UnityEngine;
 using JoVei.Base;
 using JoVei.Base.MessageSystem;
 using Photon.Pun;
@@ -11,7 +12,6 @@ namespace BiReJeJoCo.Backend
     public class PhotonRoomWrapper : MonoBehaviourPunCallbacks, IInitializable
     {
         public bool IsInRoom { get; private set; }
-        public bool IsHost { get => PhotonNetwork.LocalPlayer.IsMasterClient; }
         public string RoomName { get; private set; }
         public int PlayerCount { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.PlayerCount : 0; }
         public List<Photon.Realtime.Player> PlayerList { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Players.Values.ToList() : null; }
@@ -104,6 +104,22 @@ namespace BiReJeJoCo.Backend
         public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
             messageHub.ShoutMessage(this, new OnPlayerLeftLobbyMsg(otherPlayer.UserId));
+        }
+
+        // instantiation
+        public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation, bool asRoomObject = false)
+        {
+            if (asRoomObject)
+            {
+                return PhotonNetwork.InstantiateRoomObject(prefabId, position, rotation);
+            }
+
+            return PhotonNetwork.Instantiate(prefabId, position, rotation);
+        }
+
+        public void Destroy(GameObject target)
+        {
+            PhotonNetwork.Destroy(target);
         }
     }
 }

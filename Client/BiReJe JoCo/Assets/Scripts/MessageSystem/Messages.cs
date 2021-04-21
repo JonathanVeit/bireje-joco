@@ -60,7 +60,7 @@ namespace BiReJeJoCo
     }
     #endregion
 
-    public class OnLoadedGameMsg : BaseMessage
+    public class OnLoadedGameSceneMsg : BaseMessage
     {
     }
 }

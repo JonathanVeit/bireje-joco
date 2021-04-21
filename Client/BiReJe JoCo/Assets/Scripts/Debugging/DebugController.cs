@@ -120,11 +120,11 @@ namespace BiReJeJoCo.Debugging
         // load commands
         protected override void LoadCommands()
         {
-            globalVariables.SetVar("debugMode", false);
+            SetGlobalVariables();
 
-            RegisterCommand(new DebugCommand<bool>("set_debug_mode", "Enables/Disables debug stats", "set_debug_mode <bool>", mode =>
+            RegisterCommand(new DebugCommand<bool>("debug_mode", "Enables/Disables debug stats", "debug_mode <bool>", mode =>
             {
-                globalVariables.SetVar("debugMode", mode);
+                globalVariables.SetVar("debug_mode", mode);
 
                 if (mode == true)
                     DebugStatsUI.Instance.Show();
@@ -138,11 +138,22 @@ namespace BiReJeJoCo.Debugging
 
                 foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
                 {
-                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() {  }) + "\n";
+                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() { }) + "\n";
                 }
 
                 DebugHelper.Print(result);
             }));
+
+            RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall synchroniziation speed", "movement_sync_speed <float>", (value) =>
+            {
+                globalVariables.SetVar("move_sync_speed", value);
+            }));
+        }
+
+        private static void SetGlobalVariables()
+        {
+            globalVariables.SetVar("debug_mode", false);
+            globalVariables.SetVar<float>("move_sync_speed", 1);
         }
 
         // before opening the panel  

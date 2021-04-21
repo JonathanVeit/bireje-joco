@@ -15,6 +15,6 @@ namespace JoVei.Base.MessageSystem
 
         public void CleanUp() { }
 
-        protected override bool WriteLog { get { return globalVariables.GetVar<bool>("debugMode"); } }
+        protected override bool WriteLog { get { return globalVariables.GetVar<bool>("debug_mode"); } }
     }
 }

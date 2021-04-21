@@ -25,7 +25,7 @@ namespace BiReJeJoCo.UI
             foreach (var curPlayer in playerManager.GetAllPlayer())
                 AddMemberListEntry(curPlayer);
 
-            startButton.gameObject.SetActive(playerManager.LocalPlayer.IsHost);
+            startButton.gameObject.SetActive(localPlayer.IsHost);
         }
 
         protected override void OnBeforeDestroy()
