@@ -5,7 +5,7 @@ using JoVei.Base.UI;
 namespace BiReJeJoCo.UI
 {
     [System.Serializable]
-    public class RoomMemberEntry : UIElement
+    public class LobbyMemberEntry : UIElement
     {
         [SerializeField] Text memberName;
 

@@ -147,7 +147,7 @@ namespace BiReJeJoCo.Backend
             if (!RegisteredReceiver.ContainsKey(messageType)) return;
 
             // create log
-            string log = string.Format("{0} shouts message <{1}> to ", senderNick, messageType);
+            string log = string.Format("{0} shouts <color=blue>message</color> <{1}> to ", senderNick, messageType);
 
             var message = JsonConvert.DeserializeObject<PhotonMessage> (serializedMessage, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
 
@@ -158,7 +158,7 @@ namespace BiReJeJoCo.Backend
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);
             }
 
-            DebugHelper.Print(LogType.Log, log);
+            if (globalVariables.GetVar<bool>("debug_mode")) DebugHelper.Print(LogType.Log, log);
         }
 
         protected override void OnBeforeDestroy()

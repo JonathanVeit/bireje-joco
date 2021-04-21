@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Character
 {
@@ -9,9 +8,8 @@ namespace BiReJeJoCo.Character
     {
         [SerializeField] private GameObject cam;
         [SerializeField] private GameObject cinemachineObject;
-        [SerializeField] private GameObject characterController;
-
-
+        [SerializeField] private Rigidbody rb;
+        [SerializeField] List<MonoBehaviour> componentsToDisable;
 
         protected override void OnSystemsInitialized()
         {
@@ -20,17 +18,16 @@ namespace BiReJeJoCo.Character
 
         void Setup()
         {
-            //TODO
-            //disables not needed components if not local player
-            /*
-            if (!localPlayer)
+            if (!GetComponent<PlayerControlled> ().Player.IsLocalPlayer)
             {
                 cam.SetActive(false);
                 cinemachineObject.SetActive(false);
-            }
-            */
-        }
 
+                foreach(var curComponent in componentsToDisable)
+                    curComponent.enabled = false;
+                rb.isKinematic = true;
+            }
+        }
     }
 
 }

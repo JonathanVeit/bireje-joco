@@ -1,6 +1,5 @@
 ﻿using JoVei.Base;
 using JoVei.Base.Helper;
-using Photon.Pun;
 using UnityEngine;
 using System.Collections;
 
@@ -12,27 +11,27 @@ namespace BiReJeJoCo.Backend
 
         public IEnumerator Initialize(object[] parameters)
         {
-            photonRoomWrapper.onJoinedRoom += OnJoinedRoom;
-            photonRoomWrapper.onLeftRoom += OnLeftRoom;
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
 
             yield return null;
         }
 
-        public void CleanUp() 
+        public void CleanUp()
         {
-            photonRoomWrapper.onJoinedRoom -= OnJoinedRoom;
-            photonRoomWrapper.onLeftRoom -= OnLeftRoom;
+            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.UnregisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
         }
 
-        private void OnJoinedRoom(string roomName)
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            if (!photonRoomWrapper.IsHost) return;
+            if (!localPlayer.IsHost) return;
 
             var result = Resources.LoadAll<PhotonMessageHub>("");
 
             if (result.Length > 0)
             {
-                currentMessageHub = PhotonNetwork.Instantiate(result[0].name, Vector2.zero, Quaternion.identity);
+                currentMessageHub = photonRoomWrapper.Instantiate(result[0].name, Vector3.zero, Quaternion.identity);
             }
             else
             {
@@ -40,11 +39,11 @@ namespace BiReJeJoCo.Backend
             }
         }
 
-        private void OnLeftRoom() 
+        private void OnLeftLobby(OnLeftLobbyMsg msg) 
         {
-            if (!photonRoomWrapper.IsHost) return;
+            if (!localPlayer.IsHost) return;
 
-            PhotonNetwork.Destroy(currentMessageHub);
+            photonRoomWrapper.Destroy(currentMessageHub);
         }
     }
 }

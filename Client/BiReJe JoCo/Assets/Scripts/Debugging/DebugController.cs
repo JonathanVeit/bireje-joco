@@ -1,10 +1,10 @@
 ﻿using JoVei.Base;
 using JoVei.Base.Helper;
-using JoVei.Base.Backend;
-using JoVei.Base.Data;
 using JoVei.Base.UI;
 using UnityEngine;
-using System.IO;
+using UnityEngine.InputSystem;
+using BiReJeJoCo.Backend;
+using Newtonsoft.Json;
 
 namespace BiReJeJoCo.Debugging
 {
@@ -27,13 +27,31 @@ namespace BiReJeJoCo.Debugging
 
         protected override void Update()
         {
-            base.Update();
+            if (Keyboard.current[Key.LeftCtrl].IsPressed() &&
+                Keyboard.current[Key.D].wasPressedThisFrame)
+            {
+                ToggleVisibility();
+            }
 
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Keyboard.current[Key.Enter].wasPressedThisFrame)
             {
                 RunCommand(curInput);
                 curInput = string.Empty;
             }
+
+            //else if (Input.touchCount > 1)
+            //{
+            //    if (Input.GetTouch(0).deltaPosition.x > 1 && Input.GetTouch(1).deltaPosition.x < -1 ||
+            //        Input.GetTouch(0).deltaPosition.x < -1 && Input.GetTouch(1).deltaPosition.x > 1)
+            //    {
+            //        ToggleVisibility();
+            //    }
+
+            //    if (Input.GetKeyDown(KeyCode.Return))
+            //{
+            //    RunCommand(curInput);
+            //    curInput = string.Empty;
+            //}
         }
 
         private void OnGUI()
@@ -121,13 +139,51 @@ namespace BiReJeJoCo.Debugging
         // load commands
         protected override void LoadCommands()
         {
-            RegisterCommand(new DebugCommand<bool>("set_debug_stats", "Enables/Disables debug stats", "set_debug_stats <bool>", state =>
+            SetGlobalVariables();
+
+            RegisterCommand(new DebugCommand<bool>("debug_mode", "Enables/Disables debug stats", "debug_mode <bool>", mode =>
             {
-                if (state == true)
+                globalVariables.SetVar("debug_mode", mode);
+
+                if (mode == true)
                     DebugStatsUI.Instance.Show();
                 else
                     DebugStatsUI.Instance.Hide();
             }));
+
+            RegisterCommand(new DebugCommand("log_player", "Logs all player serialized in room", "log_player", () =>
+            {
+                var result = string.Empty;
+
+                foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
+                {
+                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() { }) + "\n";
+                }
+
+                DebugHelper.Print(result);
+            }));
+
+            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (value) =>
+            {
+                Cursor.lockState = value? CursorLockMode.Locked : CursorLockMode.None;
+            }));
+
+            RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall movement synchroniziation speed", "movement_sync_speed <float>", (value) =>
+            {
+                globalVariables.SetVar("move_sync_speed", value);
+            }));
+
+            RegisterCommand(new DebugCommand<float>("rotation_sync_speed", "Set the overall rotation synchroniziation speed", "rotation_sync_speed <float>", (value) =>
+            {
+                globalVariables.SetVar("rot_sync_speed", value);
+            }));
+        }
+
+        private static void SetGlobalVariables()
+        {
+            globalVariables.SetVar("debug_mode", false);
+            globalVariables.SetVar<float>("move_sync_speed", 1); 
+            globalVariables.SetVar<float>("rot_sync_speed", 1); 
         }
 
         // before opening the panel  
