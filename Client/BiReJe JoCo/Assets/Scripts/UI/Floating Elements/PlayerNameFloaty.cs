@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BiReJeJoCo.UI
 {
-    public class PlayerNameFloaty : BaseFloatingElement
+    public class PlayerNameFloaty : FloatingElement
     {
         [SerializeField] Text playerName;
 

@@ -24,6 +24,7 @@ namespace BiReJeJoCo.Backend
 
         /// TODO: move somewhere
         [SerializeField] Transform floatingElementTarget;
+        [SerializeField] MeshRenderer floatingElementMesh;
         private PlayerNameFloaty nameFloaty;
 
         private void SpawnFloaty()
@@ -31,6 +32,7 @@ namespace BiReJeJoCo.Backend
             var config = new FloatingElementConfig("player_character_name", DIContainer.GetImplementationFor<GameUI> ().floatingElementGrid, floatingElementTarget);
             nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
             nameFloaty.Initialize(Player.NickName);
+            nameFloaty.SetVisibleMesh(floatingElementMesh);
         }
 
         protected override void OnBeforeDestroy()

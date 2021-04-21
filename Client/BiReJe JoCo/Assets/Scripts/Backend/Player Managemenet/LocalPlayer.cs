@@ -32,7 +32,8 @@ namespace BiReJeJoCo.Backend
         private void SpawnPlayerCharacter() 
         {
             string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
-            photonRoomWrapper.Instantiate(prefabId, Vector3.zero, Quaternion.identity);
+            var randomPos = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+            photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
         }
 
         #region Events
