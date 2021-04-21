@@ -25,7 +25,7 @@ namespace BiReJeJoCo.Debugging
         private bool setFocus;
 
         private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
-        private Player localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
+        private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
 
         protected override void Update()
         {
@@ -129,7 +129,7 @@ namespace BiReJeJoCo.Debugging
         {
             SetGlobalVariables();
 
-            RegisterCommand(new DebugCommand<bool>("debug_mode", "Enables/Disables debug stats", "debug_mode <bool>", mode =>
+            RegisterCommand(new DebugCommand<bool>("debug_mode", "Enable/Disable debug mode", "debug_mode <bool>", mode =>
             {
                 globalVariables.SetVar("debug_mode", mode);
 
@@ -166,7 +166,7 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand<string>("load_scene_sync", "Load another game scene in the current lobby (game_scene, game_scene_2, game_scene_3 ...)", "load_scene_sync <string>", (value) =>
+            RegisterCommand(new DebugCommand<string>("load_scene_sync", "Load another game scene in the current lobby", "load_scene_sync <string>", (value) =>
             {
                 if (photonRoomWrapper.IsInRoom && 
                     localPlayer.IsHost)
@@ -176,6 +176,13 @@ namespace BiReJeJoCo.Debugging
             RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
             {
                 QualitySettings.SetQualityLevel(value);
+            }));
+
+            RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>
+            {
+                var mover = localPlayer.PlayerCharacter.GetComponentInChildren<Character.Mover>();
+                mover.transform.position = new Vector3(0, 2, 0);
+                mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
         }
 

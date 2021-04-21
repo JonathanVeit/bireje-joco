@@ -6,12 +6,13 @@ namespace BiReJeJoCo.Backend
 {
     public class LocalPlayer : Player
     {
+        #region Initalization
         public LocalPlayer(PhotonPlayer player) : base(player)
         {
             InitializeProperties();
             ConnectToEvents();
         }
-
+        
         private void InitializeProperties()
         {
             var properties = new PhotonHashTable()
@@ -21,20 +22,24 @@ namespace BiReJeJoCo.Backend
 
             rootPlayer.SetCustomProperties(properties);
         }
-
+        
         private void ConnectToEvents()
         {
             messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
             messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
+        #endregion
+
+        public GameObject PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
         {
             string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
             var randomPos = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
-            photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
+            PlayerCharacter = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
         }
+
 
         #region Events
         private void OnJoinedLobby(OnJoinLobbyFailedMsg msg)
