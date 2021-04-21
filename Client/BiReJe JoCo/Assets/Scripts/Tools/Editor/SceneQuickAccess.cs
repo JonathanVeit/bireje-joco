@@ -8,20 +8,25 @@ namespace BiReJeJoCo.Tools
         [MenuItem("Tools/Scenes/Main Menu")]
         public static void OpenMainScene()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/main_menu.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/main_menu_scene.unity");
         }
 
-        [MenuItem("Tools/Scenes/Login")]
+        [MenuItem("Tools/Scenes/Loading")]
         public static void OpenLoginScene()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/login_scene.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/loading_scene.unity");
         }
 
-
-        [MenuItem("Tools/Scenes/Room Menu")]
+        [MenuItem("Tools/Scenes/Lobby")]
         public static void OpenRoomMenu()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/room_menu.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/lobby_scene.unity");
+        }
+
+        [MenuItem("Tools/Scenes/Game")]
+        public static void OpenGameScene()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/game_scene.unity");
         }
 
         [MenuItem("Tools/Scenes/Testing")]

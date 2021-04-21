@@ -27,26 +27,18 @@ namespace BiReJeJoCo.Backend
 
         private void ConnectEvents()
         {
-            photonConnectionWrapper.onConnectedToMaster += OnConnectedToMaster;
-            photonConnectionWrapper.onDisconnected += OnDisconnected;
-            photonConnectionWrapper.onJoinedLobby += OnJoinedLobby;
-            photonConnectionWrapper.onLeftLobby += OnLeftLobby;
+            messageHub.RegisterReceiver<OnConnectedToPhotonMasterMsg>(this, OnConnectedToMaster);
+            messageHub.RegisterReceiver<OnDisconnectedFromPhotonMsg>(this, OnDisconnected);
+            messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
+            messageHub.RegisterReceiver<OnLeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
 
-            photonRoomWrapper.onJoinedRoom += OnRoomJoined;
-            photonRoomWrapper.onJoinRoomFailed += OnJoinRoomFailed;
-            photonRoomWrapper.onLeftRoom += OnLeftRoom;
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
+            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
         }
 
         private void DisconnectEvents()
         {
-            photonConnectionWrapper.onConnectedToMaster -= OnConnectedToMaster;
-            photonConnectionWrapper.onDisconnected -= OnDisconnected;
-            photonConnectionWrapper.onJoinedLobby -= OnJoinedLobby;
-            photonConnectionWrapper.onLeftLobby -= OnLeftLobby;
-
-            photonRoomWrapper.onJoinedRoom -= OnRoomJoined;
-            photonRoomWrapper.onJoinRoomFailed -= OnJoinRoomFailed;
-            photonRoomWrapper.onLeftRoom -= OnLeftRoom;
         }
         #endregion
 
@@ -57,25 +49,25 @@ namespace BiReJeJoCo.Backend
             photonConnectionWrapper.Connect();
         }
 
-        private void OnConnectedToMaster()
+        private void OnConnectedToMaster(OnConnectedToPhotonMasterMsg msg)
         {
             DebugHelper.PrintFormatted("<color=green>Successfully connected to photon master.</color>");
             photonConnectionWrapper.JoinLobby();
         }
 
-        private void OnDisconnected(string cause)
+        private void OnDisconnected(OnDisconnectedFromPhotonMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Disconnected from photon. Reason: {0}</color>.", cause);
+            DebugHelper.PrintFormatted("<color=red>Disconnected from photon. Reason: {0}</color>.", msg.Param1);
         }
 
-        private void OnJoinedLobby()
+        private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Joined default lobby.</color>");
+            DebugHelper.PrintFormatted("<color=green>Joined default photon lobby.</color>");
         }
 
-        private void OnLeftLobby()
+        private void OnLeftPhotonLobby(OnLeftPhotonLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Left default lobby</color>");
+            DebugHelper.PrintFormatted("<color=red>Left default photon lobby</color>");
         }
         #endregion
 
@@ -90,24 +82,23 @@ namespace BiReJeJoCo.Backend
             photonRoomWrapper.JoinRoom(roomName);
         }
 
-
         public void LeaveRoom()
         {
             photonRoomWrapper.LeaveRoom();
         }
 
 
-        private void OnRoomJoined(string roomName)
+        private void OnRoomJoined(OnJoinedLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Joined room: {0}.</color>", roomName);
+            DebugHelper.PrintFormatted("<color=green>Joined room: {0}.</color>", msg.Param1);
         }
 
-        private void OnJoinRoomFailed(string message)
+        private void OnJoinRoomFailed(OnJoinLobbyFailedMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Joining room failed. Reason: {0}.</color>", message);
+            DebugHelper.PrintFormatted("<color=red>Joining room failed. Reason: {0}.</color>", msg.Param1);
         }
 
-        private void OnLeftRoom()
+        private void OnLeftRoom(OnLeftLobbyMsg msg)
         {
             DebugHelper.PrintFormatted("<color=red>Left room.</color>");
         }
