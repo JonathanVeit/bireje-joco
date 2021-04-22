@@ -108,6 +108,7 @@ namespace BiReJeJoCo.Character
 			//Subscribe Sprint Functions to character Input
 			characterInput.onSprintIsPressed += HandleSrintKeyPressed;
 			characterInput.onSprintLetGo += HandleSrintKeyLetGo;
+
 		}
 
 
@@ -150,6 +151,7 @@ namespace BiReJeJoCo.Character
 		{
 			ControllerUpdate();
 		}
+
 
 		private void OnDestroy()
 		{
