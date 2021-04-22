@@ -56,7 +56,7 @@ namespace BiReJeJoCo.UI
 
         public void LeaveRoom() 
         {
-            photonClient.LeaveRoom();
+            photonClient.LeaveLobby();
             gameManager.OpenMainMenu();
         }
         #endregion

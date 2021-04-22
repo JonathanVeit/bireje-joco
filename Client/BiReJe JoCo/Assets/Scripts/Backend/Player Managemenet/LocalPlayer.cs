@@ -17,22 +17,23 @@ namespace BiReJeJoCo.Backend
         {
             var properties = new PhotonHashTable()
             {
-                { "State", PlayerState.Free }
+                { "State", PlayerState.Free },
+                { "Role", PlayerRole.None }
             };
 
-            rootPlayer.SetCustomProperties(properties);
+            photonPlayer.SetCustomProperties(properties);
         }
         
         private void ConnectToEvents()
         {
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
-
+       
         public GameObject PlayerCharacter { get; private set; }
-
+        
         private void SpawnPlayerCharacter() 
         {
             string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
@@ -42,30 +43,41 @@ namespace BiReJeJoCo.Backend
 
 
         #region Events
-        private void OnJoinedLobby(OnJoinLobbyFailedMsg msg)
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            UpdateState(PlayerState.Lobby);
+            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator);
         }
 
-        private void OnLeftRoom(OnLeftLobbyMsg msg) 
+        private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg) 
         {
-            UpdateState(PlayerState.Free);
+            UpdateProperties("State", PlayerState.Free, "Role", PlayerRole.None);
         }
 
         private void OnGameSceneLoaded(OnLoadedGameSceneMsg msg)
         {
             SpawnPlayerCharacter();
-            UpdateState(PlayerState.Ready);
+            UpdateProperty("State", PlayerState.Ready);
         }
         #endregion
 
         #region Helper
-        private void UpdateState(PlayerState state)
+        private void UpdateProperty(string key, object value)
         {
-            var properties = rootPlayer.CustomProperties;
+            UpdateProperties(key, value);
+        }
 
-            properties["State"] = state;
-            rootPlayer.SetCustomProperties(properties);
+        private void UpdateProperties(params object[] keyValuePairs)
+        {
+            if (keyValuePairs.Length % 2 != 0)
+                throw new System.ArgumentException($"Cannot update properties. Missing value for key {keyValuePairs[keyValuePairs.Length-1]}");
+
+            var properties = photonPlayer.CustomProperties;
+            for (int i = 0; i < keyValuePairs.Length; i += 2)
+            {
+                properties[keyValuePairs[i]] = keyValuePairs[i+1];
+            }
+
+            photonPlayer.SetCustomProperties(properties);
         }
         #endregion
     }

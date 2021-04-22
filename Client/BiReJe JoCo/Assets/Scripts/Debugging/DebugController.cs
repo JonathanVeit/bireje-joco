@@ -184,6 +184,11 @@ namespace BiReJeJoCo.Debugging
                 mover.transform.position = new Vector3(0, 2, 0);
                 mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
+
+            RegisterCommand(new DebugCommand("spawn_sphere", "Spawn a sphere in the center of the scene", "spawn_sphere", () =>
+            {
+                photonRoomWrapper.Instantiate("sphere", Vector3.up, Quaternion.identity);
+            }));
         }
 
         private static void SetGlobalVariables()
