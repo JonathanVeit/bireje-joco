@@ -14,5 +14,7 @@ namespace BiReJeJoCo
         protected static Backend.PlayerManager playerManager => DIContainer.GetImplementationFor<Backend.PlayerManager>();
         protected static Backend.LocalPlayer localPlayer => playerManager.LocalPlayer;
         protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();
+
+        protected static UI.GameUI gameUI => DIContainer.GetImplementationFor<UI.GameUI>();
     }
 }

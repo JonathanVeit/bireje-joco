@@ -1,26 +1,48 @@
 ﻿namespace BiReJeJoCo.Backend
 {
     /// <summary>
-    /// Fired by the host to start the game 
+    /// Fired by the host to start the match 
     /// </summary>
-    public class StartGamePhoMsg : PhotonMessage
+    public class StartMatchPhoMsg : PhotonMessage
     {
         
     }
 
     /// <summary>
-    /// Fired by the host to pause the game 
+    /// Fired by the host to pause the match 
     /// </summary>
-    public class PauseGamePhoMsg : PhotonMessage
+    public class PausePausePhoMsg : PhotonMessage
     {
 
     }
 
     /// <summary>
-    /// Fired by the host to continue the game 
+    /// Fired by the host to continue the match 
     /// </summary>
-    public class ContinueGamePhoMsg : PhotonMessage
+    public class ContinueMatchPhoMsg : PhotonMessage
     {
 
+    }
+
+    /// <summary>
+    /// Fired by the host to end the match
+    /// </summary>
+    public class EndMatchPhoMsg : PhotonMessage
+    {
+        
+    }
+
+    /// <summary>
+    /// Fired by the host to quit the match
+    /// </summary>
+    public class QuitMatchPhoMsg : PhotonMessage
+    {
+        public bool leaveLobby;
+
+        public QuitMatchPhoMsg() { }
+        public QuitMatchPhoMsg(bool leaveLobby)
+        {
+            this.leaveLobby = leaveLobby;
+        }
     }
 }

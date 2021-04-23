@@ -28,7 +28,6 @@ namespace BiReJeJoCo.UI
         {
             if (visibleRenderer != null)
             {
-                Debug.Log(transform.gameObject.activeSelf.ToString() + " " + visibleRenderer.isVisible.ToString());
                 if (transform.gameObject.activeSelf != visibleRenderer.isVisible)
                     transform.gameObject.SetActive(visibleRenderer.isVisible);
             }

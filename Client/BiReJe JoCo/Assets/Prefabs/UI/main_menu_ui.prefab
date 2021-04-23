@@ -886,7 +886,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8330495789585505229}
         m_TargetAssemblyTypeName: BiReJeJoCo.UI.MainMenuUI, Assembly-CSharp
-        m_MethodName: HostRoom
+        m_MethodName: HostLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1840,7 +1840,7 @@ GameObject:
   - component: {fileID: 3853366524519196185}
   - component: {fileID: 2376064469674219149}
   m_Layer: 5
-  m_Name: join_room_button
+  m_Name: join_lobby_button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1950,7 +1950,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8330495789585505229}
         m_TargetAssemblyTypeName: BiReJeJoCo.UI.MainMenuUI, Assembly-CSharp
-        m_MethodName: JoinRoom
+        m_MethodName: JoinLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

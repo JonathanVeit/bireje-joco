@@ -16,12 +16,10 @@ namespace BiReJeJoCo.UI
         private Dictionary<string, LobbyMemberEntry> memberEntries
             = new Dictionary<string, LobbyMemberEntry>();
 
+        #region Initialization
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
-            messageHub.RegisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
-
+            ConnectEvents();
             lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
                 AddMemberListEntry(curPlayer);
@@ -31,11 +29,24 @@ namespace BiReJeJoCo.UI
 
         protected override void OnBeforeDestroy()
         {
-            messageHub.UnregisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
-            messageHub.UnregisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
-            messageHub.UnregisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            base.OnBeforeDestroy();
+            DisconnectEvents();
         }
 
+        private void ConnectEvents()
+        {
+            messageHub.RegisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
+            messageHub.RegisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
+            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+        }
+
+        private void DisconnectEvents() 
+        {
+            messageHub.UnregisterReceiver(this);
+        }
+        #endregion
+
+        #region UI 
         private void AddMemberListEntry(Player player)
         {
             var entry = memberList.Add();
@@ -49,6 +60,7 @@ namespace BiReJeJoCo.UI
             memberEntries.Remove(player.NickName);
             memberList.Remove(entry);
         }
+        #endregion
 
         #region Events
         private void OnAddedPlayer(OnAddedPlayerMsg msg) 
@@ -73,7 +85,7 @@ namespace BiReJeJoCo.UI
             photonRoomWrapper.LoadLevel("game_scene");
         }
 
-        public void LeaveRoom() 
+        public void LeaveLobby() 
         {
             photonClient.LeaveLobby();
         }

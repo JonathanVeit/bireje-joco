@@ -45,14 +45,14 @@ namespace JoVei.Base.MessageSystem
             var type = typeof(TMessage);
 
             // search receiver
-            var collection = RegisteredReceiver[type].FindAll(x => x.Receiver == receiver);
+            var collection = RegisteredReceiver[type];
 
             // remove 
             foreach (var curMsgReceiver in collection.ToArray())
             {
                 RemoveFromCollection(collection, (msgReceiver) =>
                 {
-                    return msgReceiver.Callback.Equals(callback);
+                    return msgReceiver.Receiver == receiver && msgReceiver.Callback.Equals(callback);
                 });
             }
         }
@@ -119,7 +119,7 @@ namespace JoVei.Base.MessageSystem
             string log = string.Format("{0} shouts message <{1}> to ", sender, message.Name);
 
             // call
-            foreach (var curMsgReceiver in RegisteredReceiver[type])
+            foreach (var curMsgReceiver in RegisteredReceiver[type].ToArray())
             {
                 (curMsgReceiver.Callback as Action<TMessage>)?.Invoke(message);
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);

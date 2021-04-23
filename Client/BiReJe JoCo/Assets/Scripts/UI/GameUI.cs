@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using JoVei.Base;
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.UI
 {
@@ -8,19 +9,31 @@ namespace BiReJeJoCo.UI
     {
         public Transform floatingElementGrid;
         [SerializeField] GameObject menuGO;
+        [SerializeField] GameObject endMatchButton;
+        [SerializeField] GameObject loadingOverlay;
 
+        #region Inizialization
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
             DIContainer.RegisterImplementation<GameUI>(this);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            endMatchButton.SetActive(localPlayer.IsHost);
+            
+            ConnectEvents();
+        }
+        
+        private void ConnectEvents()
+        {
+            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
+            photonMessageHub.RegisterReceiver<EndMatchPhoMsg>(this, OnFinishMatch);
+            photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
         }
 
-        protected override void OnBeforeDestroy()
+        private void DisconnectEvents()
         {
-            base.OnBeforeDestroy();
-            DIContainer.UnregisterImplementation<GameUI>();
+            photonMessageHub.UnregisterReceiver(this);
         }
+        #endregion
 
         public override void Tick(float deltaTime)
         {
@@ -41,10 +54,19 @@ namespace BiReJeJoCo.UI
         }
 
         #region Events
-        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        private void OnMatchStart(PhotonMessage msg)
         {
-            messageHub.UnregisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
-            gameManager.OpenMainMenu();
+            loadingOverlay.gameObject.SetActive(false);
+        }
+
+        private void OnFinishMatch(PhotonMessage msg)
+        { 
+        }
+
+        private void OnQuitMatch(PhotonMessage msg)
+        {
+            DIContainer.UnregisterImplementation<GameUI>();
+            DisconnectEvents();
         }
         #endregion
 
@@ -54,9 +76,9 @@ namespace BiReJeJoCo.UI
             ToggleMenu();
         }
 
-        public void Leave() 
+        public void EndMatch()
         {
-            photonRoomWrapper.LeaveRoom();
+            photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(true), PhotonMessageTarget.AllViaServer);
         }
         #endregion
     }

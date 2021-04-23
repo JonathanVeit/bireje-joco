@@ -76,14 +76,14 @@ namespace BiReJeJoCo.Backend
             var code = messageFactory.GetMessageCode(new TMessage());
 
             // search receiver
-            var collection = RegisteredReceiver[code].FindAll(x => x.Receiver == receiver);
+            var collection = RegisteredReceiver[code];
 
             // remove 
             foreach (var curMsgReceiver in collection.ToArray())
             {
                 RemoveFromCollection(collection, (msgReceiver) =>
                 {
-                    return msgReceiver.Callback.Equals(callback);
+                    return msgReceiver.Receiver == receiver && msgReceiver.Callback.Equals(callback);
                 });
             }
         }
@@ -179,7 +179,7 @@ namespace BiReJeJoCo.Backend
             var message = messageFactory.DeserializeMessage(serializedMessage, code);
             string log = string.Format("{0} shouts <color=blue>message</color> <{1}> to ", info.Sender.NickName, message.GetType().Name);
 
-            foreach (var curMsgReceiver in RegisteredReceiver[code])
+            foreach (var curMsgReceiver in RegisteredReceiver[code].ToArray())
             {
                 curMsgReceiver.Callback?.Invoke(message);
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);

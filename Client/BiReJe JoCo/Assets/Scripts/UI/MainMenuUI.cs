@@ -9,11 +9,10 @@ namespace BiReJeJoCo.UI
         [SerializeField] InputField playerNickNameInput;
         [SerializeField] InputField roomNameInput;
 
+        #region Initialization
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            ConnectEvents();
 
             if (PlayerPrefs.HasKey("nickname"))
             {
@@ -29,19 +28,31 @@ namespace BiReJeJoCo.UI
 
         protected override void OnBeforeDestroy()
         {
-            messageHub.UnregisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
-            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.UnregisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            DisconnectEvents();
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void ConnectEvents()
         {
-            gameManager.OpenLobby();
+            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
+
+        private void DisconnectEvents()
+        {
+            messageHub.UnregisterReceiver(this);
+        }
+        #endregion
 
         private void OnHostLobbyFailed(OnFailedToHostLobbyMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
+        }
+
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        {
+            if (localPlayer.IsHost)
+                gameManager.OpenLobby();
         }
 
         private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
@@ -56,14 +67,14 @@ namespace BiReJeJoCo.UI
             PlayerPrefs.SetString("nickname", name);
         }
 
-        public void HostRoom()
+        public void HostLobby()
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
             photonClient.HostLobby(roomNameInput.text, 10);
             loadingOverlay.gameObject.SetActive(true);
         }
 
-        public void JoinRoom() 
+        public void JoinLobby() 
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
 

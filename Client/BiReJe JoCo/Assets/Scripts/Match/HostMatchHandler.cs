@@ -16,7 +16,7 @@ namespace BiReJeJoCo
         {
             if (!startedMatch && AllPlayerReady())
             {
-                photonMessageHub.ShoutMessage(new StartGamePhoMsg(), PhotonMessageTarget.AllViaServer);
+                photonMessageHub.ShoutMessage(new StartMatchPhoMsg(), PhotonMessageTarget.AllViaServer);
                 startedMatch = true;
             }
         }

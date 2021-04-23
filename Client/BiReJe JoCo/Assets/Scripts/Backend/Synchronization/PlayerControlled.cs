@@ -1,11 +1,10 @@
 using UnityEngine;
 using Photon.Pun;
-using BiReJeJoCo.UI;
-using JoVei.Base;
-using JoVei.Base.UI;
+using System.Linq;
 
 namespace BiReJeJoCo.Backend
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(PhotonView))]
     public class PlayerControlled : SystemBehaviour
     {
@@ -17,28 +16,28 @@ namespace BiReJeJoCo.Backend
             PhotonView = GetComponent<PhotonView>();
             Player = playerManager.GetPlayer(PhotonView.Controller.UserId);
 
-            if (!Player.IsLocalPlayer)
-                SpawnFloaty();
+            Initialize();
         }
 
-
-        /// TODO: move somewhere
-        [SerializeField] Transform floatingElementTarget;
-        [SerializeField] MeshRenderer floatingElementMesh;
-        private PlayerNameFloaty nameFloaty;
-
-        private void SpawnFloaty()
+        private void Initialize()
         {
-            var config = new FloatingElementConfig("player_character_name", DIContainer.GetImplementationFor<GameUI> ().floatingElementGrid, floatingElementTarget);
-            nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
-            nameFloaty.Initialize(Player.NickName);
-            nameFloaty.SetVisibleMesh(floatingElementMesh);
+            var componentsToInitialize = LoadControlledComponents();
+
+            foreach (var curComponent in componentsToInitialize)
+            {
+                curComponent.Initialize(Player);
+            }
         }
 
-        protected override void OnBeforeDestroy()
+        private IPlayerControlled[] LoadControlledComponents()
         {
-            // TODO: should be called before destroy 
-            floatingManager.DestroyElement(nameFloaty);
+            var components = GetComponents<IPlayerControlled>().ToList();
+            foreach (var curComponet in GetComponentsInChildren<IPlayerControlled>())
+            {
+                components.Add(curComponet);
+            }
+
+            return components.ToArray();
         }
     }
 }

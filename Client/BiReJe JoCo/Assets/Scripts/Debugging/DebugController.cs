@@ -24,9 +24,12 @@ namespace BiReJeJoCo.Debugging
         private Vector2 scroll;
         private bool setFocus;
 
+        #region Get Systems 
         private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
+        private PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
         private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
         private PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
+        #endregion
 
         protected override void Update()
         {
@@ -178,11 +181,20 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand<string>("load_scene_sync", "Load another game scene in the current lobby", "load_scene_sync <string>", (value) =>
+            RegisterCommand(new DebugCommand<string>("switch_lobby_scene", "Load another game scene in the current lobby", "switch_lobby_scene <string>", (value) =>
             {
-                if (photonRoomWrapper.IsInRoom && 
-                    localPlayer.IsHost)
+                System.Action<PhotonMessage> callback = (x) =>
+                {
                     photonRoomWrapper.LoadLevel(value);
+                };
+                callback += (x) => { photonMessageHub.UnregisterReceiver(this); };
+                photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, callback);
+
+                if (photonRoomWrapper.IsInRoom &&
+                    localPlayer.IsHost)
+                {
+                    photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(false), PhotonMessageTarget.AllViaServer);
+                }
             }));
 
             RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>

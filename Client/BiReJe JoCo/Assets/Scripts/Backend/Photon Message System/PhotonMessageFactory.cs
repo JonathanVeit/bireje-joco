@@ -16,12 +16,16 @@ namespace BiReJeJoCo.Backend
             switch (code)
             {
                 case 1:
-                    return JsonConvert.DeserializeObject<StartGamePhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<StartMatchPhoMsg>(serializedMessage);
                 case 2:
-                    return JsonConvert.DeserializeObject<PauseGamePhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<PausePausePhoMsg>(serializedMessage);
                 case 3:
-                    return JsonConvert.DeserializeObject<ContinueGamePhoMsg>(serializedMessage);
-
+                    return JsonConvert.DeserializeObject<ContinueMatchPhoMsg>(serializedMessage);
+                case 4:
+                    return JsonConvert.DeserializeObject<EndMatchPhoMsg>(serializedMessage);
+                case 5:
+                    return JsonConvert.DeserializeObject<QuitMatchPhoMsg>(serializedMessage);
+              
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing messages of code { code }");
             }
@@ -31,13 +35,17 @@ namespace BiReJeJoCo.Backend
         {
             switch (msg)
             {
-                case StartGamePhoMsg casted:
+                case StartMatchPhoMsg casted:
                     return 1;
-                case PauseGamePhoMsg casted:
+                case PausePausePhoMsg casted:
                     return 2;
-                case ContinueGamePhoMsg casted:
+                case ContinueMatchPhoMsg casted:
                     return 3;
-
+                case EndMatchPhoMsg casted:
+                    return 4;
+                case QuitMatchPhoMsg casted:
+                    return 5;
+             
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing mesasges of type { msg.GetType().Name }");
             }
