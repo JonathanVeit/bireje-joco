@@ -5,7 +5,6 @@ using JoVei.Base;
 using JoVei.Base.Helper;
 using Photon.Pun;
 using UnityEngine;
-using Newtonsoft.Json;
 
 namespace BiReJeJoCo.Backend
 {

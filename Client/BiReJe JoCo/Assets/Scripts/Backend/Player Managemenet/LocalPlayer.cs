@@ -42,6 +42,11 @@ namespace BiReJeJoCo.Backend
         }
 
 
+        public void SetNickName(string name)
+        {
+            PhotonPlayer.NickName = name;
+        }
+
         #region Events
         private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {

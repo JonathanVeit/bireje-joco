@@ -12,7 +12,7 @@ namespace BiReJeJoCo
         protected static Backend.PhotonClient photonClient => DIContainer.GetImplementationFor<Backend.PhotonClient>();
         protected static Backend.PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<Backend.PhotonMessageHub>();
         protected static Backend.PlayerManager playerManager => DIContainer.GetImplementationFor<Backend.PlayerManager>();
-        protected static Backend.Player localPlayer => playerManager.LocalPlayer;
+        protected static Backend.LocalPlayer localPlayer => playerManager.LocalPlayer;
         protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();
     }
 }

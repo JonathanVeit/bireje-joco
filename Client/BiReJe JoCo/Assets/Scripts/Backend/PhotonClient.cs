@@ -72,14 +72,14 @@ namespace BiReJeJoCo.Backend
         #endregion
 
         #region Rooms
-        public void HostLobby(string roomName, int playerAmount)
+        public void HostLobby(string lobbyName, int playerAmount)
         {
-            photonRoomWrapper.CreateRoom(roomName, playerAmount);
+            photonRoomWrapper.CreateRoom(lobbyName, playerAmount);
         }
 
-        public void JoinLobby(string roomName)
+        public void JoinLobby(string lobbyName)
         {
-            photonRoomWrapper.JoinRoom(roomName);
+            photonRoomWrapper.JoinRoom(lobbyName);
         }
 
         public void LeaveLobby()

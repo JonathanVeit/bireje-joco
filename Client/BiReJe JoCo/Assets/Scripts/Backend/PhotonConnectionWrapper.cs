@@ -8,8 +8,6 @@ namespace BiReJeJoCo.Backend
 {
     public class PhotonConnectionWrapper : MonoBehaviourPunCallbacks, IInitializable
     {
-        public string NickName { get => PhotonNetwork.NickName; set { PhotonNetwork.NickName = value; } }
-
         public bool IsConnected { get; private set; }
         public bool IsConnectedToMaster { get; private set; }
         public bool IsInLobby { get; private set; }

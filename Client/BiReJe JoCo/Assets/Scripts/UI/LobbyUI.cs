@@ -18,8 +18,9 @@ namespace BiReJeJoCo.UI
 
         protected override void OnSystemsInitialized()
         {
-            playerManager.onPlayerAdded += AddMemberListEntry;
-            playerManager.onPlayerRemoved += RemoveMemberListEntry;
+            messageHub.RegisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
+            messageHub.RegisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
+            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
 
             lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
@@ -30,11 +31,12 @@ namespace BiReJeJoCo.UI
 
         protected override void OnBeforeDestroy()
         {
-            playerManager.onPlayerAdded -= AddMemberListEntry;
-            playerManager.onPlayerRemoved -= RemoveMemberListEntry;
+            messageHub.UnregisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
+            messageHub.UnregisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
+            messageHub.UnregisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
         }
 
-        private void AddMemberListEntry(Player player) 
+        private void AddMemberListEntry(Player player)
         {
             var entry = memberList.Add();
             entry.Initialize(player.NickName);
@@ -48,6 +50,23 @@ namespace BiReJeJoCo.UI
             memberList.Remove(entry);
         }
 
+        #region Events
+        private void OnAddedPlayer(OnAddedPlayerMsg msg) 
+        {
+            AddMemberListEntry(msg.Param1);
+        }
+
+        private void OnRemovedPlayer(OnRemovedPlayerMsg msg)
+        {
+            RemoveMemberListEntry(msg.Param1);
+        }
+
+        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        {
+            gameManager.OpenMainMenu();
+        }
+        #endregion
+
         #region UI Inputs
         public void StartGame()
         {
@@ -57,7 +76,6 @@ namespace BiReJeJoCo.UI
         public void LeaveRoom() 
         {
             photonClient.LeaveLobby();
-            gameManager.OpenMainMenu();
         }
         #endregion
     }

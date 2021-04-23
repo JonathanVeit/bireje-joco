@@ -26,6 +26,7 @@ namespace BiReJeJoCo.Debugging
 
         private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
         private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
+        private PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
 
         protected override void Update()
         {
@@ -151,10 +152,21 @@ namespace BiReJeJoCo.Debugging
                 DebugHelper.Print(result);
             }));
 
-            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (value) =>
+            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
             {
-                Cursor.lockState = value? CursorLockMode.Locked : CursorLockMode.None;
+                Cursor.lockState = name? CursorLockMode.Locked : CursorLockMode.None;
             }));
+
+            RegisterCommand(new DebugCommand<string>("load_scene", "Load a scene by its name", "load_scene <string>", (name) =>
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(name);
+            }));
+
+            RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
+            {
+                QualitySettings.SetQualityLevel(value);
+            }));
+
 
             RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall movement synchroniziation speed", "movement_sync_speed <float>", (value) =>
             {
@@ -173,11 +185,6 @@ namespace BiReJeJoCo.Debugging
                     photonRoomWrapper.LoadLevel(value);
             }));
 
-            RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
-            {
-                QualitySettings.SetQualityLevel(value);
-            }));
-
             RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>
             {
                 var mover = localPlayer.PlayerCharacter.GetComponentInChildren<Character.Mover>();
@@ -188,6 +195,23 @@ namespace BiReJeJoCo.Debugging
             RegisterCommand(new DebugCommand("spawn_sphere", "Spawn a sphere in the center of the scene", "spawn_sphere", () =>
             {
                 photonRoomWrapper.Instantiate("sphere", Vector3.up, Quaternion.identity);
+            }));
+
+
+
+            RegisterCommand(new DebugCommand<string, int>("host_lobby", "Host a new a lobby with name and max player amount", "host_lobby <name> <int>", (name, playerAmount) =>
+            {
+                photonClient.HostLobby(name, playerAmount);
+            }));
+
+            RegisterCommand(new DebugCommand<string>("join_lobby", "Join a lobby by its name", "join_lobby <name>", (name) =>
+            {
+                photonClient.JoinLobby(name);
+            }));
+
+            RegisterCommand(new DebugCommand("leave_lobby", "Leave the current lobby", "leave_lobby", () =>
+            {
+                photonClient.LeaveLobby();
             }));
         }
 

@@ -44,9 +44,6 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        public event Action<Player> onPlayerAdded;
-        public event Action<Player> onPlayerRemoved;
-
         private Dictionary<string, Player> allPlayer
             = new Dictionary<string, Player>();
         private string localPlayerId;
@@ -101,15 +98,14 @@ namespace BiReJeJoCo.Backend
             }
 
             allPlayer.Add(newPlayer.Id, newPlayer);
-
-            onPlayerAdded?.Invoke(newPlayer);
+            messageHub.ShoutMessage<OnAddedPlayerMsg>(this, new OnAddedPlayerMsg(newPlayer));
         }
 
         private void UnregisterPlayer(string playerId)
         {
             var tmp = allPlayer[playerId];
             allPlayer.Remove(playerId);
-            onPlayerRemoved?.Invoke(tmp);
+            messageHub.ShoutMessage<OnRemovedPlayerMsg>(this, new OnRemovedPlayerMsg(tmp));
         }
 
         #region Photon Events

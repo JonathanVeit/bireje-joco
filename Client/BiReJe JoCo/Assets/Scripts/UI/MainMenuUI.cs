@@ -18,12 +18,12 @@ namespace BiReJeJoCo.UI
             if (PlayerPrefs.HasKey("nickname"))
             {
                 playerNickNameInput.text = PlayerPrefs.GetString("nickname");
-                photonConnectionWrapper.NickName = PlayerPrefs.GetString("nickname");
+                localPlayer.SetNickName(PlayerPrefs.GetString("nickname"));
             }
             else
             {
                 playerNickNameInput.text = System.Guid.NewGuid().ToString();
-                photonConnectionWrapper.NickName = playerNickNameInput.text;
+                localPlayer.SetNickName(playerNickNameInput.text);
             }
         }
 
@@ -52,8 +52,7 @@ namespace BiReJeJoCo.UI
         #region UI Inputs
         public void SetNickName(string name) 
         {
-            photonConnectionWrapper.NickName = name;
-
+            localPlayer.SetNickName(name);
             PlayerPrefs.SetString("nickname", name);
         }
 
