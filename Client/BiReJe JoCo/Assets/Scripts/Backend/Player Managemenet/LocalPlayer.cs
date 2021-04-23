@@ -18,10 +18,10 @@ namespace BiReJeJoCo.Backend
             var properties = new PhotonHashTable()
             {
                 { "State", PlayerState.Free },
-                { "Role", PlayerRole.None }
+                { "Role", PlayerRole.None}
             };
 
-            photonPlayer.SetCustomProperties(properties);
+            PhotonPlayer.SetCustomProperties(properties);
         }
         
         private void ConnectToEvents()
@@ -31,9 +31,9 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
-       
+
         public GameObject PlayerCharacter { get; private set; }
-        
+
         private void SpawnPlayerCharacter() 
         {
             string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
@@ -71,13 +71,13 @@ namespace BiReJeJoCo.Backend
             if (keyValuePairs.Length % 2 != 0)
                 throw new System.ArgumentException($"Cannot update properties. Missing value for key {keyValuePairs[keyValuePairs.Length-1]}");
 
-            var properties = photonPlayer.CustomProperties;
+            var properties = PhotonPlayer.CustomProperties;
             for (int i = 0; i < keyValuePairs.Length; i += 2)
             {
                 properties[keyValuePairs[i]] = keyValuePairs[i+1];
             }
 
-            photonPlayer.SetCustomProperties(properties);
+            PhotonPlayer.SetCustomProperties(properties);
         }
         #endregion
     }

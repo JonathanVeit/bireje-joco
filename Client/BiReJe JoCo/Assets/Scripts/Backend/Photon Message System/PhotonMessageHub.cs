@@ -23,51 +23,61 @@ namespace BiReJeJoCo.Backend
     [RequireComponent(typeof(PhotonView))]
     public class PhotonMessageHub : SystemBehaviour 
     {
+        private PhotonView photonView;
+        private PhotonMessageFactory messageFactory;
+
+        #region Initialization
         private void Awake()
         {
             DIContainer.RegisterImplementation<PhotonMessageHub>(this);
             DontDestroyOnLoad(this);
+            
             photonView = GetComponent<PhotonView>();
+            messageFactory = new PhotonMessageFactory();
         }
 
-        private PhotonView photonView;
+        protected override void OnBeforeDestroy()
+        {
+            DIContainer.UnregisterImplementation<PhotonMessageHub>();
+        }
+        #endregion
 
         /// <summary>
         /// All registered receivers with callback
         /// </summary>
-        public Dictionary<string, List<MessageReceiver>> RegisteredReceiver { get; protected set; }
-        = new Dictionary<string, List<MessageReceiver>>();
+        public Dictionary<byte, List<MessageReceiver>> RegisteredReceiver { get; protected set; }
+        = new Dictionary<byte, List<MessageReceiver>>();
+
 
         /// <summary>
         /// Register a new receiver for a certain message
         /// </summary>
         public void RegisterReceiver<TMessage>(object receiver, Action<PhotonMessage> callback)
-            where TMessage : PhotonMessage
+            where TMessage : PhotonMessage, new()
         {
-            var type = typeof(TMessage).ToString();
+            var code = messageFactory.GetMessageCode(new TMessage());
 
             // new message
-            if (!RegisteredReceiver.ContainsKey(type))
+            if (!RegisteredReceiver.ContainsKey(code))
             {
-                RegisteredReceiver.Add(type, new List<MessageReceiver>());
+                RegisteredReceiver.Add(code, new List<MessageReceiver>());
             }
 
             // add receiver
             var msgReceiver = new MessageReceiver(receiver, callback);
-            RegisteredReceiver[type].Add(msgReceiver);
+            RegisteredReceiver[code].Add(msgReceiver);
         }
-
 
         /// <summary>
         /// Unregister a receiver from a certain message
         /// </summary>
         public void UnregisterReceiver<TMessage>(object receiver, Action<PhotonMessage> callback)
-            where TMessage : PhotonMessage
+            where TMessage : PhotonMessage, new()
         {
-            var type = typeof(TMessage).ToString();
+            var code = messageFactory.GetMessageCode(new TMessage());
 
             // search receiver
-            var collection = RegisteredReceiver[type].FindAll(x => x.Receiver == receiver);
+            var collection = RegisteredReceiver[code].FindAll(x => x.Receiver == receiver);
 
             // remove 
             foreach (var curMsgReceiver in collection.ToArray())
@@ -83,12 +93,12 @@ namespace BiReJeJoCo.Backend
         /// Unregister a receiver from all messages of type
         /// </summary>
         public void UnregisterReceiver<TMessage>(object receiver)
-            where TMessage : PhotonMessage
+            where TMessage : PhotonMessage, new()
         {
-            var type = typeof(TMessage).ToString();
+            var code = messageFactory.GetMessageCode(new TMessage());
 
             // all msg receivers
-            var collection = RegisteredReceiver[type];
+            var collection = RegisteredReceiver[code];
 
             // remove 
             RemoveFromCollection(collection, (msgReceiver) =>
@@ -134,35 +144,49 @@ namespace BiReJeJoCo.Backend
         public void ShoutMessage<TMessage>(TMessage message, PhotonMessageTarget messageTarget)
             where TMessage : PhotonMessage
         {
-            var type = message.GetType().ToString();
-            var serializedMessage = JsonConvert.SerializeObject(message, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
-
-            photonView.RPC("ShoutPhotonMessage", (RpcTarget) messageTarget, type, serializedMessage, photonConnectionWrapper.NickName);
+            var code = messageFactory.SerializeMessage(message, out string serializedMessage);
+            photonView.RPC("ShoutPhotonMessage", (RpcTarget) messageTarget, serializedMessage, code);
         }
 
-        [PunRPC]
-        private void ShoutPhotonMessage(string messageType, string serializedMessage, string senderNick)
+
+        /// <summary>
+        /// Shout message to a specific player
+        /// </summary>
+        public void ShoutMessage<TMessage>(Player player, params object[] parameter)
+            where TMessage : PhotonMessage
         {
-            if (!RegisteredReceiver.ContainsKey(messageType)) return;
+            // create message
+            var msg = (TMessage)Activator.CreateInstance(typeof(TMessage), parameter);
 
-            // create log
-            string log = string.Format("{0} shouts <color=blue>message</color> <{1}> to ", senderNick, messageType);
+            ShoutMessage(msg, player);
+        }
 
-            var message = JsonConvert.DeserializeObject<PhotonMessage> (serializedMessage, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
+        /// <summary>
+        /// Shout message to a specific player
+        /// </summary>
+        public void ShoutMessage<TMessage>(TMessage message, Player player)
+            where TMessage : PhotonMessage
+        {
+            var code = messageFactory.SerializeMessage(message, out string serializedMessage);
+            photonView.RPC("ShoutPhotonMessage", player.PhotonPlayer, serializedMessage, code);
+        }
 
-            // call
-            foreach (var curMsgReceiver in RegisteredReceiver[messageType])
+
+        [PunRPC]
+        private void ShoutPhotonMessage(string serializedMessage, byte code, PhotonMessageInfo info)
+        {
+            if (!RegisteredReceiver.ContainsKey(code)) return;
+
+            var message = messageFactory.DeserializeMessage(serializedMessage, code);
+            string log = string.Format("{0} shouts <color=blue>message</color> <{1}> to ", info.Sender.NickName, message.GetType().Name);
+
+            foreach (var curMsgReceiver in RegisteredReceiver[code])
             {
                 curMsgReceiver.Callback?.Invoke(message);
                 log += string.Format("\n-> {0}", curMsgReceiver.Receiver.GetType().Name);
             }
 
             if (globalVariables.GetVar<bool>("debug_mode")) DebugHelper.Print(LogType.Log, log);
-        }
-
-        protected override void OnBeforeDestroy()
-        {
-            DIContainer.UnregisterImplementation<PhotonMessageHub>();
         }
 
         #region Helper
