@@ -71,6 +71,19 @@ namespace BiReJeJoCo.Backend
             return allPlayer.Values.ToArray();
         }
 
+        public bool HasPlayer(string id)
+        {
+            return allPlayer.ContainsKey(id);
+        }
+        public bool HasPlayer(int actorNumber)
+        {
+            foreach (var curPlayer in allPlayer.Values)
+            {
+                if (curPlayer.NumberInRoom == actorNumber)
+                    return true;
+            }
+            return false;
+        }
 
         private void RegisterPlayer(PhotonPlayer forPlayer, bool isLocal = false)
         {

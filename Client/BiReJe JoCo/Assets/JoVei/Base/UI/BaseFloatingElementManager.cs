@@ -109,7 +109,7 @@ namespace JoVei.Base.UI
         #region Behaviour
         protected abstract IFloatingElementFactory CreateFactory();
 
-        protected virtual void FixedUpdate()
+        protected virtual void Update()
         {
             for (int i = 0; i < Elements.Count; i++)
             {
