@@ -38,7 +38,7 @@ namespace BiReJeJoCo
         protected override void OnDefineMatchRoles(PhotonMessage msg)
         {
             base.OnDefineMatchRoles(msg);
-            photonRoomWrapper.LoadLevel("game_scene");
+            photonRoomWrapper.LoadLevel("game_scene_5");
         }
         #endregion
 

@@ -8,7 +8,6 @@ namespace BiReJeJoCo.Character
 	//It also moves any controllers on top along with it;
 	public class MovingPlatform : SystemBehaviour
 	{
-
 		//Movement speed;
 		public float movementSpeed = 10f;
 
