@@ -5,32 +5,32 @@ namespace BiReJeJoCo.Backend
 {
     public class Player : SystemAccessor
     { 
-        public bool IsLocalPlayer => PhotonPlayer.IsLocal;
-        public bool IsHost => PhotonPlayer.IsMasterClient;
+        public bool IsLocalPlayer => photonPlayer.IsLocal;
+        public bool IsHost => photonPlayer.IsMasterClient;
         public PlayerState State => LoadPlayerState();
 
         public PlayerRole Role => LoadPlayerRole();
-        public string NickName => PhotonPlayer.NickName;
-        public string Id => PhotonPlayer.UserId;
-        public int NumberInRoom => PhotonPlayer.ActorNumber;
+        public string NickName => photonPlayer.NickName;
+        public string Id => photonPlayer.UserId;
+        public int NumberInRoom => photonPlayer.ActorNumber;
 
-        public PhotonPlayer PhotonPlayer { get; private set; }
+        protected PhotonPlayer photonPlayer;
 
         public Player(PhotonPlayer player) 
         {
-            PhotonPlayer = player;
+            photonPlayer = player;
         }
 
         #region Helper
         private PlayerState LoadPlayerState() 
         {
-            var rawState = PhotonPlayer.CustomProperties["State"].ToString();
+            var rawState = photonPlayer.CustomProperties["State"].ToString();
             return (PlayerState) Enum.Parse(typeof(PlayerState), rawState);
         }
 
         private PlayerRole LoadPlayerRole()
         {
-            var rawState = PhotonPlayer.CustomProperties["Role"].ToString();
+            var rawState = photonPlayer.CustomProperties["Role"].ToString();
             return (PlayerRole)Enum.Parse(typeof(PlayerRole), rawState);
         }
         #endregion

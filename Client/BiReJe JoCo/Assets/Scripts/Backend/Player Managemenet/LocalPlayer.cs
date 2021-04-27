@@ -1,5 +1,6 @@
 using PhotonPlayer = Photon.Realtime.Player;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace BiReJeJoCo.Backend
@@ -21,7 +22,7 @@ namespace BiReJeJoCo.Backend
                 { "Role", PlayerRole.None}
             };
 
-            PhotonPlayer.SetCustomProperties(properties);
+            photonPlayer.SetCustomProperties(properties);
         }
         
         private void ConnectToEvents()
@@ -32,6 +33,7 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
+        [JsonIgnore] 
         public GameObject PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
@@ -41,10 +43,14 @@ namespace BiReJeJoCo.Backend
             PlayerCharacter = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
         }
 
-
         public void SetNickName(string name)
         {
-            PhotonPlayer.NickName = name;
+            photonPlayer.NickName = name;
+        }
+
+        public void SetRole(PlayerRole role)
+        {
+            UpdateProperty("Role", role);
         }
 
         #region Events
@@ -76,13 +82,13 @@ namespace BiReJeJoCo.Backend
             if (keyValuePairs.Length % 2 != 0)
                 throw new System.ArgumentException($"Cannot update properties. Missing value for key {keyValuePairs[keyValuePairs.Length-1]}");
 
-            var properties = PhotonPlayer.CustomProperties;
+            var properties = photonPlayer.CustomProperties;
             for (int i = 0; i < keyValuePairs.Length; i += 2)
             {
                 properties[keyValuePairs[i]] = keyValuePairs[i+1];
             }
 
-            PhotonPlayer.SetCustomProperties(properties);
+            photonPlayer.SetCustomProperties(properties);
         }
         #endregion
     }

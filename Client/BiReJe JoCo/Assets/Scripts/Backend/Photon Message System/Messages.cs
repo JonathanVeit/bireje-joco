@@ -1,5 +1,30 @@
-﻿namespace BiReJeJoCo.Backend
+﻿using System.Collections.Generic;
+
+namespace BiReJeJoCo.Backend
 {
+    /// <summary>
+    /// Fired by the host to inform each player that the match is beeing prepared (lobby -> game)
+    /// </summary>
+    public class PrepareMatchStartPhoMsg : PhotonMessage
+    {
+
+    }
+
+    /// <summary>
+    /// Fired by the host to inform each player about the match rules, roles etc.
+    /// </summary>
+    public class DefineMatchRulesPhoMsg : PhotonMessage
+    {
+        public Dictionary<int, PlayerRole> roles;
+
+        public DefineMatchRulesPhoMsg() { }
+
+        public DefineMatchRulesPhoMsg(Dictionary<int, PlayerRole> roles)
+        {
+            this.roles = roles;
+        }
+    }
+
     /// <summary>
     /// Fired by the host to start the match 
     /// </summary>

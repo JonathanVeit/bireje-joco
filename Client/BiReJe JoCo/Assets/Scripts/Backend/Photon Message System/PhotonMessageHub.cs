@@ -28,9 +28,9 @@ namespace BiReJeJoCo.Backend
         #region Initialization
         private void Awake()
         {
+            GameObject.DontDestroyOnLoad(this);
             DIContainer.RegisterImplementation<PhotonMessageHub>(this);
-            DontDestroyOnLoad(this);
-            
+
             photonView = GetComponent<PhotonView>();
             messageFactory = new PhotonMessageFactory();
         }
@@ -167,7 +167,7 @@ namespace BiReJeJoCo.Backend
             where TMessage : PhotonMessage
         {
             var code = messageFactory.SerializeMessage(message, out string serializedMessage);
-            photonView.RPC("ShoutPhotonMessage", player.PhotonPlayer, serializedMessage, code);
+            photonView.RPC("ShoutPhotonMessage", photonRoomWrapper.PlayerList.Find(x => x.UserId == player.Id), serializedMessage, code);
         }
 
 

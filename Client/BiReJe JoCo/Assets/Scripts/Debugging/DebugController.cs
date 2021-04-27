@@ -149,10 +149,16 @@ namespace BiReJeJoCo.Debugging
 
                 foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
                 {
-                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() { }) + "\n";
+                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() {  ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
                 }
 
                 DebugHelper.Print(result);
+            }));
+
+
+            RegisterCommand(new DebugCommand("log_match_handler", "Logs the serialized match handler", "log_match_handler", () =>
+            {
+                DebugHelper.Print(JsonConvert.SerializeObject(DIContainer.GetImplementationFor<MatchHandler>()));
             }));
 
             RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
@@ -230,8 +236,6 @@ namespace BiReJeJoCo.Debugging
         private static void SetGlobalVariables()
         {
             globalVariables.SetVar("debug_mode", false);
-            globalVariables.SetVar<float>("move_sync_speed", 1); 
-            globalVariables.SetVar<float>("rot_sync_speed", 1); 
         }
 
         // before opening the panel  

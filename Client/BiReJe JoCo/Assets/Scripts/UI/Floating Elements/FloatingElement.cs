@@ -24,7 +24,7 @@ namespace BiReJeJoCo.UI
             visibleRenderer = renderer;
         }
 
-        public void Tick (float deltaTime)
+        public virtual void Tick (float deltaTime)
         {
             if (visibleRenderer != null)
             {

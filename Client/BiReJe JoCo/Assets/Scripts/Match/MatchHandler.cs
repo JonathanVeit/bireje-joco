@@ -1,6 +1,7 @@
 using JoVei.Base;
 using BiReJeJoCo.Backend;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BiReJeJoCo
 {
@@ -12,31 +13,49 @@ namespace BiReJeJoCo
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
-            State = MatchState.WaitingForPlayer;
-
+            State = MatchState.InLobby;
             DIContainer.RegisterImplementation<MatchHandler>(this);
-            messageHub.ShoutMessage(this, new OnLoadedGameSceneMsg());
+            messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
+        }
+
+        protected virtual void OnLoadedLobbyScene(OnLoadedLobbySceneMsg msg)
+        {
+            messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
             ConnectEvents();
         }
 
-        private void ConnectEvents()
-        {
+        protected virtual void ConnectEvents()
+        {           
+            photonMessageHub.RegisterReceiver<DefineMatchRulesPhoMsg>(this, OnDefineMatchRoles);
             photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnStartGame);
             photonMessageHub.RegisterReceiver<PausePausePhoMsg>(this, OnPauseGame);
             photonMessageHub.RegisterReceiver<ContinueMatchPhoMsg>(this, OnContinuetGame);
             photonMessageHub.RegisterReceiver<EndMatchPhoMsg>(this, OnEndMatch);
             photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
 
+            messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnLoadedGameScene);
             messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
         }
 
-        private void DisonnectEvents()
+        protected virtual void DisconnectEvents()
         {
             photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
         #region Events
+        protected virtual void OnLoadedGameScene(OnLoadedGameSceneMsg msg) 
+        {
+            State = MatchState.WaitingForPlayer;
+        }
+
+        protected virtual void OnDefineMatchRoles(PhotonMessage msg)
+        {
+            var castedMsg = msg as DefineMatchRulesPhoMsg;
+            localPlayer.SetRole(castedMsg.roles[localPlayer.NumberInRoom]);
+            Debug.Log("Match rules defined");
+        }
+
         protected virtual void OnStartGame(PhotonMessage msg) 
         {
             State = MatchState.Running;
@@ -65,16 +84,17 @@ namespace BiReJeJoCo
         {
             var casted = msg as QuitMatchPhoMsg;
 
-            DisonnectEvents();
-            DIContainer.UnregisterImplementation<MatchHandler>();
+            DisconnectEvents();
             if (casted.leaveLobby) photonClient.LeaveLobby();
             Debug.Log($"Match is quitted. Leave Lobby = {casted.leaveLobby}");
         }
 
         private void OnLeftLobby(OnLeftLobbyMsg msg)
         {
+            DIContainer.UnregisterImplementation<MatchHandler>();
             messageHub.UnregisterReceiver(this);
             gameManager.OpenMainMenu();
+            Destroy(this.gameObject);
         }
         #endregion
     }

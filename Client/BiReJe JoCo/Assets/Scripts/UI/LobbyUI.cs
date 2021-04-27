@@ -19,12 +19,13 @@ namespace BiReJeJoCo.UI
         #region Initialization
         protected override void OnSystemsInitialized()
         {
-            ConnectEvents();
             lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
                 AddMemberListEntry(curPlayer);
 
             startButton.gameObject.SetActive(localPlayer.IsHost);
+
+            messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
         }
 
         protected override void OnBeforeDestroy()
@@ -33,11 +34,18 @@ namespace BiReJeJoCo.UI
             DisconnectEvents();
         }
 
+        private void OnLobbySceneLoaded(OnLoadedLobbySceneMsg msg)
+        {
+            messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
+            ConnectEvents();
+        }
+
         private void ConnectEvents()
         {
             messageHub.RegisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
             messageHub.RegisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
             messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
         }
 
         private void DisconnectEvents() 
@@ -77,12 +85,17 @@ namespace BiReJeJoCo.UI
         {
             gameManager.OpenMainMenu();
         }
+
+        private void OnPrepareMatchStart(PhotonMessage msg)
+        {
+            loadingOverlay.SetActive(true);
+        }
         #endregion
 
         #region UI Inputs
         public void StartGame()
         {
-            photonRoomWrapper.LoadLevel("game_scene");
+            (matchHandler as HostMatchHandler).StartMatch();
         }
 
         public void LeaveLobby() 

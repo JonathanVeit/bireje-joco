@@ -90,17 +90,17 @@ namespace BiReJeJoCo.Backend
 
         private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Joined room: {0}.</color>", msg.Param1);
+            DebugHelper.PrintFormatted("<color=green>Joined game lobby: {0}.</color>", msg.Param1);
         }
 
         private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Joining room failed. Reason: {0}.</color>", msg.Param1);
+            DebugHelper.PrintFormatted("<color=red>Joining game lobby failed. Reason: {0}.</color>", msg.Param1);
         }
 
         private void OnLeftLobby(OnLeftLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Left room.</color>");
+            DebugHelper.PrintFormatted("<color=red>Left game lobby.</color>");
         }
         #endregion
     }

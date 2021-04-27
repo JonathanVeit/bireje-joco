@@ -1,6 +1,6 @@
 namespace BiReJeJoCo.Backend
 {
-    public interface IPlayerControlled
+    public interface IPlayerObserved
     {
         void Initialize(Player player);
     }

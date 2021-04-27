@@ -41,6 +41,11 @@ namespace BiReJeJoCo
         public OnJoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
     }
 
+    public class OnLoadedLobbySceneMsg : BaseMessage
+    {
+
+    }
+
     public class OnJoinLobbyFailedMsg : Message<string>
     {
         public OnJoinLobbyFailedMsg(string lobbyName) : base(lobbyName) { }
