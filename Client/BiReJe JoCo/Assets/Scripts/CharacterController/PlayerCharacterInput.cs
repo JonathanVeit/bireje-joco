@@ -33,6 +33,12 @@ namespace BiReJeJoCo.Character
         {
             //lock cursor
             Cursor.lockState = CursorLockMode.Locked;
+
+            //Register what to do when game menu is being opened
+            messageHub.RegisterReceiver<OnGameMenuOpenedMsg>(this, ReceiveGameMenuOpened);
+
+            //Register what to do when game menu being closed
+            messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, ReceiveGameMenuClosed);
         }
 
         #region Set Input (PlayerInput Component)
@@ -159,6 +165,20 @@ namespace BiReJeJoCo.Character
         {
             //CharacterInput is being set active
             messageHub.ShoutMessage(this, new OnGameMenuClosedMsg());
+            Cursor.lockState = CursorLockMode.Locked;
+            characterInputIsActive = true;
+        }
+        
+        void ReceiveGameMenuOpened(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
+        {
+            moveInput = Vector2.zero;
+            lookInput = Vector2.zero;
+            characterInputIsActive = false;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        void ReceiveGameMenuClosed(OnGameMenuClosedMsg onGameMenuOpenedMsg)
+        {
             Cursor.lockState = CursorLockMode.Locked;
             characterInputIsActive = true;
         }

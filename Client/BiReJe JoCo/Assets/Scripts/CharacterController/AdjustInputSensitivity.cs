@@ -35,6 +35,10 @@ namespace BiReJeJoCo.Character
 
             //Register what to do when game menu being closed
             messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, HandleGameMenuClosed);
+
+            //save axis values
+            xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
+            yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
         }
 
         public void OnControlsChanged(PlayerInput playerInput)
