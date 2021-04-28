@@ -27,8 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480456209983}
-  m_LocalRotation: {x: 0.0022300798, y: 0.9225285, z: -0.3858857, w: 0.005331403}
-  m_LocalPosition: {x: -0.03467357, y: 5.7, z: 2.9997997}
+  m_LocalRotation: {x: 0.1801921, y: 0.77747, z: -0.25706992, w: 0.5449645}
+  m_LocalPosition: {x: -3.5102906, y: 8.94607, z: 1.2737048}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481413435625}
@@ -175,7 +175,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480608869084}
-  m_LocalRotation: {x: 0.002397939, y: 0.9098338, z: -0.41493267, w: 0.005258024}
+  m_LocalRotation: {x: 0.19606546, y: 0.7696128, z: -0.27971557, w: 0.5394569}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5.7, z: -3}
+  m_FollowOffset: {x: 0, y: 5.3460693, z: -3.7342286}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5.7, z: -3}
+  m_FollowOffset: {x: 0, y: 5.3460693, z: -3.7342286}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -534,7 +534,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404481114022363}
-  m_LocalRotation: {x: 0.0022300808, y: 0.92252856, z: -0.3858857, w: 0.005331405}
+  m_LocalRotation: {x: 0.17616966, y: 0.7793441, z: -0.25133133, w: 0.54627806}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 5.7, z: -3}
+  m_FollowOffset: {x: 0, y: 5.3460693, z: -3.7342286}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -1081,7 +1081,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482127453853}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03467357, y: 5.7, z: 2.9997997}
+  m_LocalPosition: {x: -3.5102904, y: 5.3460693, z: 1.2737048}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4522404481114022362}
@@ -1129,7 +1129,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 1.37
+    Value: 0.9093862
     m_SpeedMode: 1
     m_MaxSpeed: 0.001
     m_AccelTime: 0.2
@@ -1279,7 +1279,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482295260262}
-  m_LocalRotation: {x: 0.0023400697, y: 0.91433567, z: -0.40491596, w: 0.0052840826}
+  m_LocalRotation: {x: 0.19062725, y: 0.77238846, z: -0.27195704, w: 0.54140264}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1472,9 +1472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7
-  sprintMultiplyer: 1.2
-  airControlRate: 2
+  movementSpeed: 8.2
+  sprintMultiplyer: 1.35
+  airControlRate: 15
   jumpSpeed: 5.75
   jumpDuration: 0.2
   airFriction: 0.5
@@ -1603,8 +1603,8 @@ MonoBehaviour:
     m_ActionName: Player/Sprinting[/Keyboard/leftShift,/DualShock4GamepadHID/leftShoulder]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4522404481329450004}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+      - m_Target: {fileID: 4034748907492520522, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.GameUI, Assembly-CSharp
         m_MethodName: SetMenuInput
         m_Mode: 0
         m_Arguments:
