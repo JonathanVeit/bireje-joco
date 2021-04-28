@@ -91,21 +91,6 @@ namespace BiReJeJoCo.Character
             }
         }
 
-        public void SetMenuInput(InputAction.CallbackContext inputValue)
-        {
-            if (inputValue.performed)
-            {
-                if (characterInputIsActive)
-                {
-                    HandleGameMenuOpened();
-                }
-                else
-                {
-                    HandleGameMenuClosed();
-                }
-            }
-        }
-
         #endregion
 
         public void AdjustSensitivityController()
@@ -146,25 +131,6 @@ namespace BiReJeJoCo.Character
         }
         #endregion
 
-
-        //Stop player actions when menu is open
-        void HandleGameMenuOpened()
-        {
-            //CharacterInput is being set inactive
-            messageHub.ShoutMessage(this, new OnGameMenuOpenedMsg());
-            moveInput = Vector2.zero;
-            lookInput = Vector2.zero;
-            characterInputIsActive = false;
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-
-        void HandleGameMenuClosed()
-        {
-            //CharacterInput is being set active
-            messageHub.ShoutMessage(this, new OnGameMenuClosedMsg());
-            Cursor.lockState = CursorLockMode.Locked;
-            characterInputIsActive = true;
-        }
         
         void ReceiveGameMenuOpened(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
         {
