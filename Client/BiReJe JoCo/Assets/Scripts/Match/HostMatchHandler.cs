@@ -33,12 +33,13 @@ namespace BiReJeJoCo
             }
 
             photonMessageHub.ShoutMessage(new DefineMatchRulesPhoMsg(playerRoles), PhotonMessageTarget.AllViaServer);
+            LogMatchMessage("Match rules defined");
         }
 
         protected override void OnDefineMatchRoles(PhotonMessage msg)
         {
             base.OnDefineMatchRoles(msg);
-            photonRoomWrapper.LoadLevel("game_scene_5");
+            photonRoomWrapper.LoadLevel("game_scene");
         }
         #endregion
 

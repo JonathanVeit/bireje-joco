@@ -57,13 +57,10 @@ namespace BiReJeJoCo
             if (scene.name.StartsWith("game_"))
             {
                 StartCoroutine(ShoutMessageDelayed<OnLoadedGameSceneMsg>(new OnLoadedGameSceneMsg(), 5));
-                Debug.Log("Game scene loaded");
             }
-            Debug.Log(scene.name);
             if (scene.name.StartsWith("lobby_"))
             {
-                StartCoroutine(ShoutMessageDelayed<OnLoadedLobbySceneMsg>(new OnLoadedLobbySceneMsg(),5));
-                Debug.Log("Lobby scene loaded");
+                StartCoroutine(ShoutMessageDelayed<OnLoadedLobbySceneMsg>(new OnLoadedLobbySceneMsg(), 5));
             }
         }
 
@@ -75,8 +72,7 @@ namespace BiReJeJoCo
             else
                 matchHandlerPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("match_handler");
 
-            var matchHandler= Instantiate(matchHandlerPrefab);
-            DontDestroyOnLoad(matchHandler);
+            Instantiate(matchHandlerPrefab);
         }
         #endregion
 

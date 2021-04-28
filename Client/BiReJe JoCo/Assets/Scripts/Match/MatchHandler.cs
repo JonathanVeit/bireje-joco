@@ -14,12 +14,14 @@ namespace BiReJeJoCo
         {
             base.OnSystemsInitialized();
             State = MatchState.InLobby;
+            DontDestroyOnLoad(this);
             DIContainer.RegisterImplementation<MatchHandler>(this);
             messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
         }
 
         protected virtual void OnLoadedLobbyScene(OnLoadedLobbySceneMsg msg)
         {
+            LogMatchMessage("Loaded lobby scene");
             messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
             ConnectEvents();
         }
@@ -27,9 +29,9 @@ namespace BiReJeJoCo
         protected virtual void ConnectEvents()
         {           
             photonMessageHub.RegisterReceiver<DefineMatchRulesPhoMsg>(this, OnDefineMatchRoles);
-            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnStartGame);
-            photonMessageHub.RegisterReceiver<PausePausePhoMsg>(this, OnPauseGame);
-            photonMessageHub.RegisterReceiver<ContinueMatchPhoMsg>(this, OnContinuetGame);
+            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnStartMatch);
+            photonMessageHub.RegisterReceiver<PausePausePhoMsg>(this, OnPauseMatch);
+            photonMessageHub.RegisterReceiver<ContinueMatchPhoMsg>(this, OnContinueMatch);
             photonMessageHub.RegisterReceiver<EndMatchPhoMsg>(this, OnEndMatch);
             photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
 
@@ -53,31 +55,31 @@ namespace BiReJeJoCo
         {
             var castedMsg = msg as DefineMatchRulesPhoMsg;
             localPlayer.SetRole(castedMsg.roles[localPlayer.NumberInRoom]);
-            Debug.Log("Match rules defined");
+            LogMatchMessage("Match rules synchronized");
         }
 
-        protected virtual void OnStartGame(PhotonMessage msg) 
+        protected virtual void OnStartMatch(PhotonMessage msg) 
         {
             State = MatchState.Running;
-            Debug.Log("Match started");
+            LogMatchMessage("Match started");
         }
 
-        protected virtual void OnPauseGame(PhotonMessage msg)
+        protected virtual void OnPauseMatch(PhotonMessage msg)
         {
             State = MatchState.Paused;
-            Debug.Log("Match paused");
+            LogMatchMessage("Match paused");
         }
 
-        protected virtual void OnContinuetGame(PhotonMessage msg)
+        protected virtual void OnContinueMatch(PhotonMessage msg)
         {
             State = MatchState.Running;
-            Debug.Log("Match continued");
+            LogMatchMessage("Match continued");
         }
 
 
         private void OnEndMatch(PhotonMessage msg)
         {
-            Debug.Log("Match ended");
+            LogMatchMessage("Match ended");
         }
 
         private void OnQuitMatch(PhotonMessage msg)
@@ -86,7 +88,8 @@ namespace BiReJeJoCo
 
             DisconnectEvents();
             if (casted.leaveLobby) photonClient.LeaveLobby();
-            Debug.Log($"Match is quitted. Leave Lobby = {casted.leaveLobby}");
+
+            LogMatchMessage($"Match is quitted. Leave Lobby = {casted.leaveLobby}");
         }
 
         private void OnLeftLobby(OnLeftLobbyMsg msg)
@@ -95,6 +98,13 @@ namespace BiReJeJoCo
             messageHub.UnregisterReceiver(this);
             gameManager.OpenMainMenu();
             Destroy(this.gameObject);
+        }
+        #endregion
+
+        #region Helper
+        protected void LogMatchMessage(string message)
+        {
+            Debug.Log($"<color=green>[MatchHandler]</color> {message}");
         }
         #endregion
     }

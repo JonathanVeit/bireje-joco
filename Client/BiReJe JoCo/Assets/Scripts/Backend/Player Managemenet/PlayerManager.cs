@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,6 +48,7 @@ namespace BiReJeJoCo.Backend
         private string localPlayerId;
 
         public LocalPlayer LocalPlayer => GetPlayer(localPlayerId) as LocalPlayer;
+        public Player Host => FindHost();
 
         public Player GetPlayer(string id)
         {
@@ -142,6 +142,17 @@ namespace BiReJeJoCo.Backend
             foreach (var curPlayer in photonRoomWrapper.PlayerList)
             {
                 if (curPlayer.UserId == playerId)
+                    return curPlayer;
+            }
+
+            return null;
+        }
+
+        private Player FindHost() 
+        {
+            foreach (var curPlayer in allPlayer.Values)
+            {
+                if (curPlayer.IsHost)
                     return curPlayer;
             }
 

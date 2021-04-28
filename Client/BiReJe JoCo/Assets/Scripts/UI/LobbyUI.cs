@@ -19,12 +19,7 @@ namespace BiReJeJoCo.UI
         #region Initialization
         protected override void OnSystemsInitialized()
         {
-            lobbyName.text = photonRoomWrapper.RoomName;
-            foreach (var curPlayer in playerManager.GetAllPlayer())
-                AddMemberListEntry(curPlayer);
-
             startButton.gameObject.SetActive(localPlayer.IsHost);
-
             messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
         }
 
@@ -36,6 +31,10 @@ namespace BiReJeJoCo.UI
 
         private void OnLobbySceneLoaded(OnLoadedLobbySceneMsg msg)
         {
+            lobbyName.text = photonRoomWrapper.RoomName;
+            foreach (var curPlayer in playerManager.GetAllPlayer())
+                AddMemberListEntry(curPlayer);
+
             messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             ConnectEvents();
         }

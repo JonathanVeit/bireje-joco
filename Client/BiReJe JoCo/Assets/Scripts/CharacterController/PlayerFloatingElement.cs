@@ -31,18 +31,14 @@ namespace BiReJeJoCo.Character
 
         private void SpawnFloaty()
         {
-            var config = new FloatingElementConfig("player_character_name", gameUI.floatingElementGrid, floatingElementTarget);
-            nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
-            nameFloaty.Initialize(player.NickName);
-            nameFloaty.SetVisibleMesh(floatingElementMesh);
-
-            if (player.Role == PlayerRole.Hunted)
+            if (player.Role == PlayerRole.Hunter && 
+                localPlayer.Role == PlayerRole.Hunter)
             {
-                nameFloaty.ShowHealthBar(playerHealth);
-            }
-            else
-            {
-                nameFloaty.HideHealthbar();
+                var config = new FloatingElementConfig("player_character_name", gameUI.floatingElementGrid, floatingElementTarget);
+                nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
+                nameFloaty.Initialize(player.NickName);
+                nameFloaty.SetVisibleMesh(floatingElementMesh);
+                //nameFloaty.ShowHealthBar(playerHealth);
             }
         }
 
@@ -50,6 +46,11 @@ namespace BiReJeJoCo.Character
         {
             floatingManager.DestroyElement(nameFloaty);
             photonMessageHub.UnregisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
+        }
+
+        protected override void OnBeforeDestroy()
+        {
+            syncVarHub.UnregisterSyncVar(playerHealth);
         }
     }
 }

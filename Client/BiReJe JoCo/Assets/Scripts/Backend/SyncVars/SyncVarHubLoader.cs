@@ -35,7 +35,8 @@ namespace BiReJeJoCo.Backend
 
         private void OnLeftLobby(OnLeftLobbyMsg msg)
         {
-            GameObject.Destroy(syncVarHub.gameObject);
+            if (syncVarHub != null)
+                GameObject.Destroy(syncVarHub.gameObject);
         }
     }
 }

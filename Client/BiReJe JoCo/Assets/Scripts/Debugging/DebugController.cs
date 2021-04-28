@@ -149,16 +149,18 @@ namespace BiReJeJoCo.Debugging
 
                 foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
                 {
-                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() {  ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
+                    result += JsonConvert.SerializeObject(curPlayer, 
+                        Formatting.Indented, 
+                        new JsonSerializerSettings() {  ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
                 }
 
                 DebugHelper.Print(result);
             }));
 
 
-            RegisterCommand(new DebugCommand("log_match_handler", "Logs the serialized match handler", "log_match_handler", () =>
+            RegisterCommand(new DebugCommand("log_match_state", "Logs the serialized match state", "log_match_state", () =>
             {
-                DebugHelper.Print(JsonConvert.SerializeObject(DIContainer.GetImplementationFor<MatchHandler>()));
+                DebugHelper.Print($"MatchState = {DIContainer.GetImplementationFor<MatchHandler>().State.ToString()}");
             }));
 
             RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
