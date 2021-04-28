@@ -82,6 +82,7 @@ namespace BiReJeJoCo.Debugging
 
             var inputStyle = new GUIStyle();
             inputStyle.fontSize = (int) consoleHeight - 10;
+            inputStyle.normal.textColor = Color.white;
 
             var buttonStyle = new GUIStyle();
             buttonStyle.fontSize = buttonCaptionSize;
