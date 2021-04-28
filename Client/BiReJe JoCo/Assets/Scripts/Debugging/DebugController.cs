@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BiReJeJoCo.Debugging
 {
@@ -24,6 +25,9 @@ namespace BiReJeJoCo.Debugging
         private Vector2 scroll;
         private bool setFocus;
 
+        protected List<string> History { get; private set; } = new List<string>();
+        protected int HistoryIndex { get; private set; }
+
         #region Get Systems 
         private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
         private PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
@@ -38,12 +42,35 @@ namespace BiReJeJoCo.Debugging
                 Keyboard.current[Key.D].wasPressedThisFrame)
             {
                 ToggleVisibility();
+                HistoryIndex = History.Count - 1;
             }
 
-            if (Keyboard.current[Key.Enter].wasPressedThisFrame)
+            if (DebugPanelIsOpen)
             {
-                RunCommand(curInput);
-                curInput = string.Empty;
+                if (Keyboard.current[Key.Enter].wasPressedThisFrame)
+                {
+                    RunCommand(curInput);
+                    if (History.Count == 0 && Commands.Find(x => curInput.Contains(x.Id)) != null || 
+                        History[History.Count - 1] != curInput && Commands.Find(x => curInput.Contains (x.Id)) != null)
+                        History.Add(curInput);
+
+                    HistoryIndex = History.Count - 1;
+                    curInput = string.Empty;
+                }
+
+                if (History.Count > 0)
+                {
+                    if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
+                    {
+                        curInput = History[HistoryIndex];
+                        HistoryIndex = Mathf.Clamp(--HistoryIndex, 0, int.MaxValue);
+                    }
+                    else if (Keyboard.current[Key.DownArrow].wasPressedThisFrame)
+                    {
+                        HistoryIndex = Mathf.Clamp(++HistoryIndex, 0, History.Count - 1);
+                        curInput = History[HistoryIndex];
+                    }
+                }
             }
         }
 
