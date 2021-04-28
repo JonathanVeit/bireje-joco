@@ -50,6 +50,7 @@ namespace BiReJeJoCo.UI
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+            photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
@@ -94,7 +95,7 @@ namespace BiReJeJoCo.UI
         #region UI Inputs
         public void StartGame()
         {
-            (matchHandler as HostMatchHandler).StartMatch();
+            (matchHandler as HostMatchHandler).StartMatch("game_scene");
         }
 
         public void LeaveLobby() 

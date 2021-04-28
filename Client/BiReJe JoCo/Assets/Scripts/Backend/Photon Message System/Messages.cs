@@ -7,7 +7,14 @@ namespace BiReJeJoCo.Backend
     /// </summary>
     public class PrepareMatchStartPhoMsg : PhotonMessage
     {
+        public string matchScene;
 
+        public PrepareMatchStartPhoMsg() { }
+
+        public PrepareMatchStartPhoMsg(string matchScene)
+        {
+            this.matchScene = matchScene;
+        }
     }
 
     /// <summary>
@@ -15,13 +22,13 @@ namespace BiReJeJoCo.Backend
     /// </summary>
     public class DefineMatchRulesPhoMsg : PhotonMessage
     {
-        public Dictionary<int, PlayerRole> roles;
+        public MatchConfig config;
 
         public DefineMatchRulesPhoMsg() { }
 
-        public DefineMatchRulesPhoMsg(Dictionary<int, PlayerRole> roles)
+        public DefineMatchRulesPhoMsg(MatchConfig config)
         {
-            this.roles = roles;
+            this.config = config;
         }
     }
 

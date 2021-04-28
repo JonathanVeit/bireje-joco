@@ -1,5 +1,6 @@
 using BiReJeJoCo.Backend;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BiReJeJoCo
 {
@@ -16,34 +17,81 @@ namespace BiReJeJoCo
         #endregion
 
         #region Lobby
-        public void StartMatch() 
+        public void StartMatch(string match_scene) 
         {
-            photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(), PhotonMessageTarget.AllViaServer);
+            photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(match_scene), PhotonMessageTarget.AllViaServer);
         }
 
         private void OnPrepareMatchStart(PhotonMessage msg)
         {
-            var allPlayer = playerManager.GetAllPlayer();
-            var huntedIndex = UnityEngine.Random.Range(0, allPlayer.Length);
+            var castedMsg = msg as PrepareMatchStartPhoMsg;
+            var config = CreateMatchConfig(castedMsg.matchScene);
 
+            photonMessageHub.ShoutMessage(new DefineMatchRulesPhoMsg(config), PhotonMessageTarget.AllViaServer);
+            LogMatchMessage("Match rules defined");
+        }
+
+        private MatchConfig CreateMatchConfig(string matchScene) 
+        {
+            // roles 
+            var allPlayer = playerManager.GetAllPlayer().ToList();
+            
+            // define hunted 
+            var hunted = allPlayer[UnityEngine.Random.Range(0, allPlayer.Count)];
+            var hunter = new List<Player>(allPlayer);
+            hunter.Remove(hunted);
+
+            // save roles
             var playerRoles = new Dictionary<int, PlayerRole>();
-            for (int i = 0; i < allPlayer.Length; i++)
+            playerRoles.Add(hunted.NumberInRoom, PlayerRole.Hunted);
+
+            for (int i = 0; i < hunter.Count; i++)
             {
-                playerRoles.Add(allPlayer[i].NumberInRoom, i == huntedIndex ? PlayerRole.Hunted : PlayerRole.Hunter);
+                playerRoles.Add(hunter[i].NumberInRoom, PlayerRole.Hunter);
             }
 
-            photonMessageHub.ShoutMessage(new DefineMatchRulesPhoMsg(playerRoles), PhotonMessageTarget.AllViaServer);
-            LogMatchMessage("Match rules defined");
+            // spawn points
+            var spawnPoints = new Dictionary<int, int>();
+            var mapConfig = MapConfigMapping.GetMapping().GetElementForKey(matchScene);
+            
+            // hunted 
+            int huntedSpawnPoint = mapConfig.GetRandomHuntedSpawnPointIndex();
+            spawnPoints.Add(hunted.NumberInRoom, huntedSpawnPoint);
+
+            // hunter 
+            var hunterSpawnPoints = mapConfig.GetRandomHunterSpawnPointIndex(hunter.Count);
+            for (int i = 0; i < hunter.Count; i++)
+            {
+                spawnPoints.Add(hunter[i].NumberInRoom, hunterSpawnPoints[i]);
+            }
+
+            // create match config 
+            var config = new MatchConfig()
+            {
+                matchScene = matchScene,
+                roles = playerRoles,
+                spawnPos = spawnPoints,
+            };
+
+            return config;
         }
 
         protected override void OnDefineMatchRoles(PhotonMessage msg)
         {
+            var castedMsg = msg as DefineMatchRulesPhoMsg;
             base.OnDefineMatchRoles(msg);
-            photonRoomWrapper.LoadLevel("game_scene");
+
+            LoadLevel(castedMsg.config.matchScene);
         }
         #endregion
 
         #region Match
+        protected override void OnLoadedGameScene(OnLoadedGameSceneMsg msg)
+        {
+            base.OnLoadedGameScene(msg);
+            startedMatch = false;
+        }
+
         public override void Tick(float deltaTime)
         {
             if (State == MatchState.WaitingForPlayer) 
@@ -69,7 +117,27 @@ namespace BiReJeJoCo
 
             return true;
         }
+
+
+        public void RestartMatch(string scene_name)
+        {
+            System.Action<PhotonMessage> callback = (x) =>
+            {
+                LogMatchMessage("Restart match");
+                StartMatch(scene_name);
+            };
+            callback += (x) => { photonMessageHub.UnregisterReceiver<QuitMatchPhoMsg>(this, callback); };
+            photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, callback);
+
+            photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(false), PhotonMessageTarget.AllViaServer);
+        }
         #endregion
 
+        #region Helper
+        private void LoadLevel(string level_name)
+        {
+            photonRoomWrapper.LoadLevel(level_name);
+        }
+        #endregion
     }
 }

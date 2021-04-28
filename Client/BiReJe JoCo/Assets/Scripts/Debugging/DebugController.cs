@@ -29,6 +29,7 @@ namespace BiReJeJoCo.Debugging
         private PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
         private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
         private PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
+        private MatchHandler matchHandler => DIContainer.GetImplementationFor<MatchHandler>();
         #endregion
 
         protected override void Update()
@@ -160,7 +161,12 @@ namespace BiReJeJoCo.Debugging
 
             RegisterCommand(new DebugCommand("log_match_state", "Logs the serialized match state", "log_match_state", () =>
             {
-                DebugHelper.Print($"MatchState = {DIContainer.GetImplementationFor<MatchHandler>().State.ToString()}");
+                DebugHelper.Print($"MatchState = {matchHandler.State}");
+            }));
+            
+            RegisterCommand(new DebugCommand("log_match_config", "Logs the serialized match config", "log_match_config", () =>
+            {
+                DebugHelper.Print($"MatchState = { JsonConvert.SerializeObject(matchHandler.MatchConfig)}");
             }));
 
             RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
@@ -191,17 +197,10 @@ namespace BiReJeJoCo.Debugging
 
             RegisterCommand(new DebugCommand<string>("switch_lobby_scene", "Load another game scene in the current lobby", "switch_lobby_scene <string>", (value) =>
             {
-                System.Action<PhotonMessage> callback = (x) =>
-                {
-                    photonRoomWrapper.LoadLevel(value);
-                };
-                callback += (x) => { photonMessageHub.UnregisterReceiver(this); };
-                photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, callback);
-
                 if (photonRoomWrapper.IsInRoom &&
                     localPlayer.IsHost)
                 {
-                    photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(false), PhotonMessageTarget.AllViaServer);
+                //(matchHandler as HostMatchHandler).SwitchLobbyScene(value);
                 }
             }));
 
@@ -212,9 +211,15 @@ namespace BiReJeJoCo.Debugging
                 mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
 
-            RegisterCommand(new DebugCommand("spawn_sphere", "Spawn a sphere in the center of the scene", "spawn_sphere", () =>
+            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match in the current scene", "restart_match <string>", (value) =>
             {
-                photonRoomWrapper.Instantiate("sphere", Vector3.up, Quaternion.identity);
+                var hostMatchHandler = (matchHandler as HostMatchHandler);
+                if (hostMatchHandler.State == MatchState.Running &&
+                    photonRoomWrapper.IsInRoom &&
+                    localPlayer.IsHost)
+                {
+                    (matchHandler as HostMatchHandler).RestartMatch(value);
+                }
             }));
 
 

@@ -8,6 +8,7 @@ namespace BiReJeJoCo
     public class MatchHandler : TickBehaviour
     {
         public MatchState State { get; protected set; }
+        public MatchConfig MatchConfig { get; protected set; }
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -41,6 +42,7 @@ namespace BiReJeJoCo
 
         protected virtual void DisconnectEvents()
         {
+            Debug.Log(123);
             photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
@@ -54,7 +56,9 @@ namespace BiReJeJoCo
         protected virtual void OnDefineMatchRoles(PhotonMessage msg)
         {
             var castedMsg = msg as DefineMatchRulesPhoMsg;
-            localPlayer.SetRole(castedMsg.roles[localPlayer.NumberInRoom]);
+            MatchConfig = castedMsg.config;
+
+            localPlayer.SetRole(castedMsg.config.roles[localPlayer.NumberInRoom]);
             LogMatchMessage("Match rules synchronized");
         }
 
@@ -77,22 +81,25 @@ namespace BiReJeJoCo
         }
 
 
-        private void OnEndMatch(PhotonMessage msg)
+        protected virtual void OnEndMatch(PhotonMessage msg)
         {
             LogMatchMessage("Match ended");
         }
 
-        private void OnQuitMatch(PhotonMessage msg)
+        protected virtual void OnQuitMatch(PhotonMessage msg)
         {
             var casted = msg as QuitMatchPhoMsg;
 
-            DisconnectEvents();
-            if (casted.leaveLobby) photonClient.LeaveLobby();
+            if (casted.leaveLobby)
+            {
+                DisconnectEvents();
+                photonClient.LeaveLobby();
+            }
 
             LogMatchMessage($"Match is quitted. Leave Lobby = {casted.leaveLobby}");
         }
 
-        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        protected virtual void OnLeftLobby(OnLeftLobbyMsg msg)
         {
             DIContainer.UnregisterImplementation<MatchHandler>();
             messageHub.UnregisterReceiver(this);

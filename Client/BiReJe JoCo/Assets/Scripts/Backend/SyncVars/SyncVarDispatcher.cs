@@ -46,6 +46,7 @@ namespace BiReJeJoCo.Backend
             if (observedVariables.ContainsKey(syncVar.UniqueId.Value))
             {
                 observedVariables.Remove(syncVar.UniqueId.Value);
+                syncedVariables.Remove(syncVar.UniqueId.Value);
                 return true;
             }
 
