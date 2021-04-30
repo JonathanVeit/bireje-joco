@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,15 +43,13 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        public event Action<Player> onPlayerAdded;
-        public event Action<Player> onPlayerRemoved;
-
         private Dictionary<string, Player> allPlayer
             = new Dictionary<string, Player>();
         private string localPlayerId;
-        
+
         public LocalPlayer LocalPlayer => GetPlayer(localPlayerId) as LocalPlayer;
-        
+        public Player Host => FindHost();
+
         public Player GetPlayer(string id)
         {
             return allPlayer[id];
@@ -101,15 +98,14 @@ namespace BiReJeJoCo.Backend
             }
 
             allPlayer.Add(newPlayer.Id, newPlayer);
-
-            onPlayerAdded?.Invoke(newPlayer);
+            messageHub.ShoutMessage<OnAddedPlayerMsg>(this, new OnAddedPlayerMsg(newPlayer));
         }
 
         private void UnregisterPlayer(string playerId)
         {
             var tmp = allPlayer[playerId];
             allPlayer.Remove(playerId);
-            onPlayerRemoved?.Invoke(tmp);
+            messageHub.ShoutMessage<OnRemovedPlayerMsg>(this, new OnRemovedPlayerMsg(tmp));
         }
 
         #region Photon Events
@@ -146,6 +142,17 @@ namespace BiReJeJoCo.Backend
             foreach (var curPlayer in photonRoomWrapper.PlayerList)
             {
                 if (curPlayer.UserId == playerId)
+                    return curPlayer;
+            }
+
+            return null;
+        }
+
+        private Player FindHost() 
+        {
+            foreach (var curPlayer in allPlayer.Values)
+            {
+                if (curPlayer.IsHost)
                     return curPlayer;
             }
 

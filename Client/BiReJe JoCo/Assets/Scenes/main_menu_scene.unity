@@ -339,10 +339,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 892310429, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
-      propertyPath: m_Text
-      value: host lobby
-      objectReference: {fileID: 0}
     - target: {fileID: 1063203341, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -383,10 +379,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1652393672, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
-      propertyPath: m_Name
-      value: host_lobby_button
-      objectReference: {fileID: 0}
     - target: {fileID: 1652393673, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -407,6 +399,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1652393674, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HostLobby
+      objectReference: {fileID: 0}
     - target: {fileID: 1763273209, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -427,9 +423,9 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2326207681233809417, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
-      propertyPath: m_Name
-      value: lobby_name_input
+    - target: {fileID: 2376064469674219149, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: JoinLobby
       objectReference: {fileID: 0}
     - target: {fileID: 2574991292896234183, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchorMax.y
@@ -450,10 +446,6 @@ PrefabInstance:
     - target: {fileID: 2574991292896234183, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3351459572218474282, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
-      propertyPath: m_Text
-      value: join lobby
       objectReference: {fileID: 0}
     - target: {fileID: 6422290286709784120, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
       propertyPath: m_AnchorMax.y
@@ -563,9 +555,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8796641724508575218, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
-      propertyPath: m_Text
-      value: Enter lobby name...
+    - target: {fileID: 9030090371414867044, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}
+      propertyPath: m_Name
+      value: join_lobby_button
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46fd7d5be0365be49ac6c82bcf504513, type: 3}

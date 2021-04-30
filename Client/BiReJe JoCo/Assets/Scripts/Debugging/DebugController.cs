@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BiReJeJoCo.Debugging
 {
@@ -24,8 +25,16 @@ namespace BiReJeJoCo.Debugging
         private Vector2 scroll;
         private bool setFocus;
 
+        protected List<string> History { get; private set; } = new List<string>();
+        protected int HistoryIndex { get; private set; }
+
+        #region Get Systems 
         private PhotonRoomWrapper photonRoomWrapper => DIContainer.GetImplementationFor<PhotonRoomWrapper>();
+        private PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
         private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
+        private PhotonClient photonClient => DIContainer.GetImplementationFor<PhotonClient>();
+        private MatchHandler matchHandler => DIContainer.GetImplementationFor<MatchHandler>();
+        #endregion
 
         protected override void Update()
         {
@@ -33,12 +42,35 @@ namespace BiReJeJoCo.Debugging
                 Keyboard.current[Key.D].wasPressedThisFrame)
             {
                 ToggleVisibility();
+                HistoryIndex = History.Count - 1;
             }
 
-            if (Keyboard.current[Key.Enter].wasPressedThisFrame)
+            if (DebugPanelIsOpen)
             {
-                RunCommand(curInput);
-                curInput = string.Empty;
+                if (Keyboard.current[Key.Enter].wasPressedThisFrame)
+                {
+                    RunCommand(curInput);
+                    if (History.Count == 0 && Commands.Find(x => curInput.Contains(x.Id)) != null || 
+                        History[History.Count - 1] != curInput && Commands.Find(x => curInput.Contains (x.Id)) != null)
+                        History.Add(curInput);
+
+                    HistoryIndex = History.Count - 1;
+                    curInput = string.Empty;
+                }
+
+                if (History.Count > 0)
+                {
+                    if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
+                    {
+                        curInput = History[HistoryIndex];
+                        HistoryIndex = Mathf.Clamp(--HistoryIndex, 0, int.MaxValue);
+                    }
+                    else if (Keyboard.current[Key.DownArrow].wasPressedThisFrame)
+                    {
+                        HistoryIndex = Mathf.Clamp(++HistoryIndex, 0, History.Count - 1);
+                        curInput = History[HistoryIndex];
+                    }
+                }
             }
         }
 
@@ -50,6 +82,7 @@ namespace BiReJeJoCo.Debugging
 
             var inputStyle = new GUIStyle();
             inputStyle.fontSize = (int) consoleHeight - 10;
+            inputStyle.normal.textColor = Color.white;
 
             var buttonStyle = new GUIStyle();
             buttonStyle.fontSize = buttonCaptionSize;
@@ -145,16 +178,40 @@ namespace BiReJeJoCo.Debugging
 
                 foreach (var curPlayer in DIContainer.GetImplementationFor<PlayerManager>().GetAllPlayer())
                 {
-                    result += JsonConvert.SerializeObject(curPlayer, Formatting.Indented, new JsonSerializerSettings() { }) + "\n";
+                    result += JsonConvert.SerializeObject(curPlayer, 
+                        Formatting.Indented, 
+                        new JsonSerializerSettings() {  ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
                 }
 
                 DebugHelper.Print(result);
             }));
 
-            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (value) =>
+
+            RegisterCommand(new DebugCommand("log_match_state", "Logs the serialized match state", "log_match_state", () =>
             {
-                Cursor.lockState = value? CursorLockMode.Locked : CursorLockMode.None;
+                DebugHelper.Print($"MatchState = {matchHandler.State}");
             }));
+            
+            RegisterCommand(new DebugCommand("log_match_config", "Logs the serialized match config", "log_match_config", () =>
+            {
+                DebugHelper.Print($"MatchState = { JsonConvert.SerializeObject(matchHandler.MatchConfig)}");
+            }));
+
+            RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
+            {
+                Cursor.lockState = name? CursorLockMode.Locked : CursorLockMode.None;
+            }));
+
+            RegisterCommand(new DebugCommand<string>("load_scene", "Load a scene by its name", "load_scene <string>", (name) =>
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(name);
+            }));
+
+            RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
+            {
+                QualitySettings.SetQualityLevel(value);
+            }));
+
 
             RegisterCommand(new DebugCommand<float>("movement_sync_speed", "Set the overall movement synchroniziation speed", "movement_sync_speed <float>", (value) =>
             {
@@ -166,31 +223,49 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand<string>("load_scene_sync", "Load another game scene in the current lobby", "load_scene_sync <string>", (value) =>
-            {
-                if (photonRoomWrapper.IsInRoom && 
-                    localPlayer.IsHost)
-                    photonRoomWrapper.LoadLevel(value);
-            }));
-
-            RegisterCommand(new DebugCommand<int>("set_quality", "Set unity quality", "set_quality <int>", (value) =>
-            {
-                QualitySettings.SetQualityLevel(value);
-            }));
-
             RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>
             {
                 var mover = localPlayer.PlayerCharacter.GetComponentInChildren<Character.Mover>();
                 mover.transform.position = new Vector3(0, 2, 0);
                 mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
+
+            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match in the current scene", "restart_match <string>", (value) =>
+            {
+                var hostMatchHandler = (matchHandler as HostMatchHandler);
+                if (hostMatchHandler.State == MatchState.Running &&
+                    photonRoomWrapper.IsInRoom &&
+                    localPlayer.IsHost)
+                {
+                    (matchHandler as HostMatchHandler).RestartMatch(value);
+                }
+                else
+                {
+                    Debug.Log($"command 'restart_match' is denied. Player is not host.");
+                }
+            }));
+
+
+
+            RegisterCommand(new DebugCommand<string, int>("host_lobby", "Host a new a lobby with name and max player amount", "host_lobby <name> <int>", (name, playerAmount) =>
+            {
+                photonClient.HostLobby(name, playerAmount);
+            }));
+
+            RegisterCommand(new DebugCommand<string>("join_lobby", "Join a lobby by its name", "join_lobby <name>", (name) =>
+            {
+                photonClient.JoinLobby(name);
+            }));
+
+            RegisterCommand(new DebugCommand("leave_lobby", "Leave the current lobby", "leave_lobby", () =>
+            {
+                photonClient.LeaveLobby();
+            }));
         }
 
         private static void SetGlobalVariables()
         {
             globalVariables.SetVar("debug_mode", false);
-            globalVariables.SetVar<float>("move_sync_speed", 1); 
-            globalVariables.SetVar<float>("rot_sync_speed", 1); 
         }
 
         // before opening the panel  

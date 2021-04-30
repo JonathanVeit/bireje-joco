@@ -1,4 +1,5 @@
 ﻿using JoVei.Base.MessageSystem;
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo
 {
@@ -40,6 +41,11 @@ namespace BiReJeJoCo
         public OnJoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
     }
 
+    public class OnLoadedLobbySceneMsg : BaseMessage
+    {
+
+    }
+
     public class OnJoinLobbyFailedMsg : Message<string>
     {
         public OnJoinLobbyFailedMsg(string lobbyName) : base(lobbyName) { }
@@ -57,6 +63,16 @@ namespace BiReJeJoCo
     public class OnPlayerLeftLobbyMsg : Message<string>
     {
         public OnPlayerLeftLobbyMsg(string playerId) : base(playerId) { }
+    }
+
+    public class OnAddedPlayerMsg : Message<Player>
+    {
+        public OnAddedPlayerMsg(Player player) : base(player) { }
+    }
+
+    public class OnRemovedPlayerMsg : Message<Player>
+    {
+        public OnRemovedPlayerMsg(Player player) : base(player) { }
     }
     #endregion
 

@@ -127,6 +127,8 @@ namespace JoVei.Base.UI
                 return;
             }
 
+            if (Camera.main == null) return;
+
             // update position
             element.FloatyRoot.transform.position = Camera.main.WorldToScreenPoint(element.Config.Target.position) + (Vector3)element.Config.Offset;
         }

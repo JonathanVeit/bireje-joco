@@ -1,5 +1,6 @@
 using PhotonPlayer = Photon.Realtime.Player;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace BiReJeJoCo.Backend
@@ -17,55 +18,86 @@ namespace BiReJeJoCo.Backend
         {
             var properties = new PhotonHashTable()
             {
-                { "State", PlayerState.Free }
+                { "State", PlayerState.Free },
+                { "Role", PlayerRole.None}
             };
 
-            rootPlayer.SetCustomProperties(properties);
+            photonPlayer.SetCustomProperties(properties);
         }
         
         private void ConnectToEvents()
         {
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
 
+        [JsonIgnore] 
         public GameObject PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
         {
             string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
-            var randomPos = new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+
+            var scene = matchHandler.MatchConfig.matchScene;
+            var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];
+            var randomPos = Vector3.zero;
+            
+            if (Role == PlayerRole.Hunted)
+                randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHuntedSpawnPoint (posIndex);
+            else if (Role == PlayerRole.Hunter)
+                randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHunterSpawnPoint(posIndex);
+
             PlayerCharacter = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
         }
 
-
-        #region Events
-        private void OnJoinedLobby(OnJoinLobbyFailedMsg msg)
+        public void SetNickName(string name)
         {
-            UpdateState(PlayerState.Lobby);
+            photonPlayer.NickName = name;
         }
 
-        private void OnLeftRoom(OnLeftLobbyMsg msg) 
+        public void SetRole(PlayerRole role)
         {
-            UpdateState(PlayerState.Free);
+            UpdateProperty("Role", role);
+        }
+
+        #region Events
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        {
+            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator);
+        }
+
+        private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg) 
+        {
+            UpdateProperties("State", PlayerState.Free, "Role", PlayerRole.None);
         }
 
         private void OnGameSceneLoaded(OnLoadedGameSceneMsg msg)
         {
             SpawnPlayerCharacter();
-            UpdateState(PlayerState.Ready);
+            UpdateProperty("State", PlayerState.Ready);
         }
         #endregion
 
         #region Helper
-        private void UpdateState(PlayerState state)
+        private void UpdateProperty(string key, object value)
         {
-            var properties = rootPlayer.CustomProperties;
+            UpdateProperties(key, value);
+        }
 
-            properties["State"] = state;
-            rootPlayer.SetCustomProperties(properties);
+        private void UpdateProperties(params object[] keyValuePairs)
+        {
+            if (keyValuePairs.Length % 2 != 0)
+                throw new System.ArgumentException($"Cannot update properties. Missing value for key {keyValuePairs[keyValuePairs.Length-1]}");
+
+            var properties = photonPlayer.CustomProperties;
+            for (int i = 0; i < keyValuePairs.Length; i += 2)
+            {
+                properties[keyValuePairs[i]] = keyValuePairs[i+1];
+            }
+
+            photonPlayer.SetCustomProperties(properties);
         }
         #endregion
     }

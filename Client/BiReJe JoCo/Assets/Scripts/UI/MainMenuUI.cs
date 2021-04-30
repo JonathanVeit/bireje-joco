@@ -9,39 +9,50 @@ namespace BiReJeJoCo.UI
         [SerializeField] InputField playerNickNameInput;
         [SerializeField] InputField roomNameInput;
 
+        #region Initialization
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            ConnectEvents();
 
             if (PlayerPrefs.HasKey("nickname"))
             {
                 playerNickNameInput.text = PlayerPrefs.GetString("nickname");
-                photonConnectionWrapper.NickName = PlayerPrefs.GetString("nickname");
+                localPlayer.SetNickName(PlayerPrefs.GetString("nickname"));
             }
             else
             {
                 playerNickNameInput.text = System.Guid.NewGuid().ToString();
-                photonConnectionWrapper.NickName = playerNickNameInput.text;
+                localPlayer.SetNickName(playerNickNameInput.text);
             }
         }
 
         protected override void OnBeforeDestroy()
         {
-            messageHub.UnregisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
-            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.UnregisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            DisconnectEvents();
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void ConnectEvents()
         {
-            gameManager.OpenLobby();
+            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
+
+        private void DisconnectEvents()
+        {
+            messageHub.UnregisterReceiver(this);
+        }
+        #endregion
 
         private void OnHostLobbyFailed(OnFailedToHostLobbyMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
+        }
+
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        {
+            if (localPlayer.IsHost)
+                gameManager.OpenLobby();
         }
 
         private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
@@ -52,23 +63,22 @@ namespace BiReJeJoCo.UI
         #region UI Inputs
         public void SetNickName(string name) 
         {
-            photonConnectionWrapper.NickName = name;
-
+            localPlayer.SetNickName(name);
             PlayerPrefs.SetString("nickname", name);
         }
 
-        public void HostRoom()
+        public void HostLobby()
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
-            photonClient.HostRoom(roomNameInput.text, 10);
+            photonClient.HostLobby(roomNameInput.text, 10);
             loadingOverlay.gameObject.SetActive(true);
         }
 
-        public void JoinRoom() 
+        public void JoinLobby() 
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
 
-            photonClient.JoinRoom(roomNameInput.text);
+            photonClient.JoinLobby(roomNameInput.text);
             loadingOverlay.gameObject.SetActive(true);
         }
 

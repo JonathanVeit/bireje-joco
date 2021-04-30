@@ -1,5 +1,4 @@
 ﻿using JoVei.Base;
-using JoVei.Base.Helper;
 using UnityEngine;
 using System.Collections;
 
@@ -27,11 +26,11 @@ namespace BiReJeJoCo.Backend
 
             if (result.Length > 0)
             {
-                photonRoomWrapper.Instantiate(result[0].name, Vector3.zero, Quaternion.identity, true);
+                photonRoomWrapper.Instantiate(result[0].name, Vector3.zero, Quaternion.identity, true);           
             }
             else
             {
-                DebugHelper.Print("PhotonMessageHubLoader cannot find PhotonMessageHub prefab in resources.");
+                Debug.LogError("Cannot find PhotonMessageHub prefab in resources.");
             }
         }
     }

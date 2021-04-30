@@ -2,9 +2,10 @@ namespace BiReJeJoCo.Backend
 {
     public enum PlayerState
     {
-        Nono = 0,
+        None = 0,
         Free = 1,
         Lobby = 2,
-        Ready = 3,
+        Loading = 3,
+        Ready = 4,
     }
 }

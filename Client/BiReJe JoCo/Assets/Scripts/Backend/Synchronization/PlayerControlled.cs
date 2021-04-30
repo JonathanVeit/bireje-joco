@@ -1,44 +1,84 @@
 using UnityEngine;
 using Photon.Pun;
-using BiReJeJoCo.UI;
-using JoVei.Base;
-using JoVei.Base.UI;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace BiReJeJoCo.Backend
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(PhotonView))]
     public class PlayerControlled : SystemBehaviour
     {
         public PhotonView PhotonView { get; private set; }
         public Player Player { get; private set; }
 
+        private List<IPlayerObserved> observedComponents;
+        private Dictionary<byte, ISyncVar> observedVariables;
+        private Dictionary<byte, string> variableCache;
+
         private void Awake()
         {
             PhotonView = GetComponent<PhotonView>();
             Player = playerManager.GetPlayer(PhotonView.Controller.UserId);
 
-            if (!Player.IsLocalPlayer)
-                SpawnFloaty();
+            FindObserved();
+            InitializeComponents();
+            InitializeVariables();
+
+            this.gameObject.name = $"({Player.NickName}) Player Character";
         }
 
-
-        /// TODO: move somewhere
-        [SerializeField] Transform floatingElementTarget;
-        [SerializeField] MeshRenderer floatingElementMesh;
-        private PlayerNameFloaty nameFloaty;
-
-        private void SpawnFloaty()
+        private void InitializeComponents()
         {
-            var config = new FloatingElementConfig("player_character_name", DIContainer.GetImplementationFor<GameUI> ().floatingElementGrid, floatingElementTarget);
-            nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
-            nameFloaty.Initialize(Player.NickName);
-            nameFloaty.SetVisibleMesh(floatingElementMesh);
+            foreach (var curComponent in observedComponents)
+            {
+                curComponent.Initialize(this);
+            }
         }
 
-        protected override void OnBeforeDestroy()
+        private void InitializeVariables() 
         {
-            // TODO: should be called before destroy 
-            floatingManager.DestroyElement(nameFloaty);
+            foreach (var curVariable in observedVariables.Values)
+            {
+                syncVarHub.RegisterSyncVar(Player, curVariable);
+            }
+        }
+
+        private void FindObserved()
+        {
+            observedComponents = new List<IPlayerObserved>();
+            observedVariables = new Dictionary<byte, ISyncVar>();
+            variableCache = new Dictionary<byte, string>();
+
+            foreach (var curComponet in GetComponentsInChildren<IPlayerObserved>())
+            {
+                if (!observedComponents.Contains(curComponet))
+                    observedComponents.Add(curComponet);
+
+                FindObservedField(curComponet);
+            }
+        }
+
+        private void FindObservedField(IPlayerObserved component)
+        {
+            var fields = component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (var curField in fields)
+            {
+                if (!curField.FieldType.GetInterfaces().Contains(typeof(ISyncVar)))
+                    continue;
+
+                var syncVar = curField.GetValue(component) as ISyncVar;
+
+                if (!syncVar.UniqueId.HasValue)
+                {
+                    Debug.LogError($"Field {curField.Name} of component {(component as Component).name} is not initalized and cannot be observed");
+                    continue;
+                }
+
+                observedVariables.Add(syncVar.UniqueId.Value, syncVar);
+            }
         }
     }
 }

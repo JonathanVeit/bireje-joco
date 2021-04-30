@@ -32,9 +32,9 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<OnLeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
 
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnRoomJoined);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinRoomFailed);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
         }
 
         private void DisconnectEvents()
@@ -45,62 +45,62 @@ namespace BiReJeJoCo.Backend
         #region Connection
         public void BuildConnection()
         {
-            DebugHelper.PrintFormatted("Building connecting to photon.");
+            DebugHelper.PrintFormatted("<color=green>[Photon Clien].</color> Building connecting to photon.");
             photonConnectionWrapper.Connect();
         }
 
         private void OnConnectedToMaster(OnConnectedToPhotonMasterMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Successfully connected to photon master.</color>");
+            DebugHelper.PrintFormatted("<color=green>[Photon Clien]</color> Successfully connected to photon master.");
             photonConnectionWrapper.JoinLobby();
         }
 
         private void OnDisconnected(OnDisconnectedFromPhotonMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Disconnected from photon. Reason: {0}</color>.", msg.Param1);
+            DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Disconnected from photon. Reason: {0}.", msg.Param1);
         }
 
         private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Joined default photon lobby.</color>");
+            DebugHelper.PrintFormatted("<color=green>[Photon Clien]</color> Joined default photon lobby.");
         }
 
         private void OnLeftPhotonLobby(OnLeftPhotonLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Left default photon lobby</color>");
+            DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Left default photon lobby.");
         }
         #endregion
 
         #region Rooms
-        public void HostRoom(string roomName, int playerAmount)
+        public void HostLobby(string lobbyName, int playerAmount)
         {
-            photonRoomWrapper.CreateRoom(roomName, playerAmount);
+            photonRoomWrapper.CreateRoom(lobbyName, playerAmount);
         }
 
-        public void JoinRoom(string roomName)
+        public void JoinLobby(string lobbyName)
         {
-            photonRoomWrapper.JoinRoom(roomName);
+            photonRoomWrapper.JoinRoom(lobbyName);
         }
 
-        public void LeaveRoom()
+        public void LeaveLobby()
         {
             photonRoomWrapper.LeaveRoom();
         }
 
 
-        private void OnRoomJoined(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=green>Joined room: {0}.</color>", msg.Param1);
+            DebugHelper.PrintFormatted("<color=green>[Photon Clien]</color> Joined game lobby: {0}.", msg.Param1);
         }
 
-        private void OnJoinRoomFailed(OnJoinLobbyFailedMsg msg)
+        private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Joining room failed. Reason: {0}.</color>", msg.Param1);
+            DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Joining game lobby failed. Reason: {0}.", msg.Param1);
         }
 
-        private void OnLeftRoom(OnLeftLobbyMsg msg)
+        private void OnLeftLobby(OnLeftLobbyMsg msg)
         {
-            DebugHelper.PrintFormatted("<color=red>Left room.</color>");
+            DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Left game lobby.");
         }
         #endregion
     }

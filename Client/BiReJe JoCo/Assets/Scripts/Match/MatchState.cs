@@ -3,8 +3,9 @@ namespace BiReJeJoCo
     public enum MatchState
     {
         None    = 0,
-        WaitingForPlayer = 1,
-        Running = 2,
-        Paused  = 3,
+        InLobby = 1,
+        WaitingForPlayer = 2,
+        Running = 3,
+        Paused  = 4,
     }
 }

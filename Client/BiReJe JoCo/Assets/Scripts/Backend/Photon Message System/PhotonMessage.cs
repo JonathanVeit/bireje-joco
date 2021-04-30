@@ -1,9 +1,6 @@
-﻿using JoVei.Base.MessageSystem;
-
-namespace BiReJeJoCo.Backend
+﻿namespace BiReJeJoCo.Backend
 {
-    public class PhotonMessage : IMessage
+    public class PhotonMessage
     {
-        public string Name { get; set; }
     }
 }

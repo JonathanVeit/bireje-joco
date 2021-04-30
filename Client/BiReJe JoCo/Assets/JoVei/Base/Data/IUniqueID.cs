@@ -5,6 +5,6 @@
     /// </summary>
     public interface IUniqueId
     {
-        string UniqueId { get; set; }
+        string UniqueId { get; }
     }
 }

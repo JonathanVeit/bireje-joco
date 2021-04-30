@@ -24,11 +24,10 @@ namespace BiReJeJoCo.UI
             visibleRenderer = renderer;
         }
 
-        public void Tick (float deltaTime)
+        public virtual void Tick (float deltaTime)
         {
             if (visibleRenderer != null)
             {
-                Debug.Log(transform.gameObject.activeSelf.ToString() + " " + visibleRenderer.isVisible.ToString());
                 if (transform.gameObject.activeSelf != visibleRenderer.isVisible)
                     transform.gameObject.SetActive(visibleRenderer.isVisible);
             }
