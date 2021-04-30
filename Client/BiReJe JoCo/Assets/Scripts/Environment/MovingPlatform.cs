@@ -8,6 +8,8 @@ namespace BiReJeJoCo.Character
 	//It also moves any controllers on top along with it;
 	public class MovingPlatform : SystemBehaviour
 	{
+		private bool isActive = false;
+
 		//Movement speed;
 		public float movementSpeed = 10f;
 
@@ -33,6 +35,7 @@ namespace BiReJeJoCo.Character
 		protected override void OnSystemsInitialized()
 		{
 
+
 			//Get references to components;
 			r = GetComponent<Rigidbody>();
 			triggerArea = GetComponentInChildren<TriggerArea>();
@@ -56,16 +59,20 @@ namespace BiReJeJoCo.Character
 			//Start coroutines;
 			StartCoroutine(WaitRoutine());
 			StartCoroutine(LateFixedUpdate());
+			isActive = true;
 		}
 
 		//This coroutine ensures that platform movement always occurs after Fixed Update;
 		IEnumerator LateFixedUpdate()
 		{
-			WaitForFixedUpdate _instruction = new WaitForFixedUpdate();
-			while (true)
+			if (isActive)
 			{
-				yield return _instruction;
-				MovePlatform();
+				WaitForFixedUpdate _instruction = new WaitForFixedUpdate();
+				while (true)
+				{
+					yield return _instruction;
+					MovePlatform();
+				}
 			}
 		}
 
