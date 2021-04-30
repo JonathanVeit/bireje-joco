@@ -264,8 +264,13 @@ namespace BiReJeJoCo.Debugging
 
             RegisterCommand(new DebugCommand<bool>("set_color_mode", "Change color mode to light (true) or dark (false)", "set_color_mode <bool>", (mode) =>
             {
-                Camera.main.transform.GetChild(0).gameObject.SetActive(mode); // light
-                Camera.main.transform.GetChild(1).gameObject.SetActive(!mode); // dark 
+                // light
+                Camera.main.transform.GetChild(0)?.gameObject.SetActive(mode); 
+                GameObject.Find("PPS_Up")?.SetActive(mode);
+
+                // dark 
+                Camera.main.transform.GetChild(1)?.gameObject.SetActive(!mode); 
+                GameObject.Find("PPS_Down")?.SetActive(!mode);
             }));
         }
 
