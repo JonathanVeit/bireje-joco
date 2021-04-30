@@ -89,4 +89,11 @@ namespace BiReJeJoCo
     {
     }
     #endregion
+
+    #region Player Inputs
+    public class OnPlayerPressedTriggerMsg : BaseMessage
+    {
+        
+    }
+    #endregion
 }

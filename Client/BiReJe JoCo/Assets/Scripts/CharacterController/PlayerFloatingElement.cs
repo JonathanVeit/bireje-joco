@@ -37,7 +37,7 @@ namespace BiReJeJoCo.Character
                 var config = new FloatingElementConfig("player_character_name", gameUI.floatingElementGrid, floatingElementTarget);
                 nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
                 nameFloaty.Initialize(player.NickName);
-                nameFloaty.SetVisibleMesh(floatingElementMesh);
+                nameFloaty.SetVisibleRenderer(floatingElementMesh);
                 //nameFloaty.ShowHealthBar(playerHealth);
             }
         }

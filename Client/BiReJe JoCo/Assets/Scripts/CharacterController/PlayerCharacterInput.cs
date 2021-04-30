@@ -91,6 +91,16 @@ namespace BiReJeJoCo.Character
             }
         }
 
+        public void SetTriggerInput(InputAction.CallbackContext inputValue)
+        {
+            if (!characterInputIsActive)
+                return;
+
+            if (inputValue.performed)
+            {
+                messageHub.ShoutMessage<OnPlayerPressedTriggerMsg>(this);
+            }
+        }
         #endregion
 
         public void AdjustSensitivityController()

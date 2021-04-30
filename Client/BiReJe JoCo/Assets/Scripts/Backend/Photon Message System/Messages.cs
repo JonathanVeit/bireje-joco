@@ -2,6 +2,7 @@
 
 namespace BiReJeJoCo.Backend
 {
+    #region Match Related 
     /// <summary>
     /// Fired by the host to inform each player that the match is beeing prepared (lobby -> game)
     /// </summary>
@@ -75,6 +76,20 @@ namespace BiReJeJoCo.Backend
         public QuitMatchPhoMsg(bool leaveLobby)
         {
             this.leaveLobby = leaveLobby;
+        }
+    }
+    #endregion
+
+    public class OnSynchronizedTriggerPhoMsg : PhotonMessage
+    {
+        public int i;
+        public int a;
+
+        public OnSynchronizedTriggerPhoMsg() { }
+        public OnSynchronizedTriggerPhoMsg(int id, int actor)
+        {
+            i = id;
+            a = actor;
         }
     }
 }

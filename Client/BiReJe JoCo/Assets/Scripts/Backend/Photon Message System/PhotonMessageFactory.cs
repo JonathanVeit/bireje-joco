@@ -29,6 +29,8 @@ namespace BiReJeJoCo.Backend
                     return JsonConvert.DeserializeObject<PrepareMatchStartPhoMsg>(serializedMessage);
                 case 7:
                     return JsonConvert.DeserializeObject<DefineMatchRulesPhoMsg>(serializedMessage);
+                case 8:
+                    return JsonConvert.DeserializeObject<OnSynchronizedTriggerPhoMsg>(serializedMessage); 
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing messages of code { code }");
@@ -53,6 +55,8 @@ namespace BiReJeJoCo.Backend
                     return 6;
                 case DefineMatchRulesPhoMsg casted:
                     return 7;
+                case OnSynchronizedTriggerPhoMsg casted:
+                    return 8;
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing mesasges of type { msg.GetType().Name }");

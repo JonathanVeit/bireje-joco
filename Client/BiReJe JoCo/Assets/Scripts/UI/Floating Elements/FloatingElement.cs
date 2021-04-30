@@ -19,7 +19,7 @@ namespace BiReJeJoCo.UI
             tickSystem.Unregister(this);
         }
 
-        public void SetVisibleMesh(MeshRenderer renderer)
+        public void SetVisibleRenderer(MeshRenderer renderer)
         {
             visibleRenderer = renderer;
         }

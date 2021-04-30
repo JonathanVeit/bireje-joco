@@ -44,26 +44,6 @@ namespace BiReJeJoCo.UI
         }
         #endregion
 
-        /*
-        public override void Tick(float deltaTime)
-        {
-            if (Keyboard.current[Key.Escape].wasPressedThisFrame)
-            {
-                ToggleMenu();
-            }
-        }
-
-        private void ToggleMenu()
-        {
-            menuGO.SetActive(!menuGO.activeSelf);
-
-            if (menuGO.activeSelf)
-                messageHub.ShoutMessage(this, new OnGameMenuOpenedMsg());
-            else
-                messageHub.ShoutMessage(this, new OnGameMenuClosedMsg());
-        }
-        */
-
         #region Events
         private void OnMatchStart(PhotonMessage msg)
         {
@@ -106,7 +86,6 @@ namespace BiReJeJoCo.UI
                 }
             }
         }
-
         #endregion
 
 
