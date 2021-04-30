@@ -738,18 +738,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6599232578438129189, guid: 695db81757349ef49b201db5046f4c62, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cc245e38225dd6348b0a31ff83abcf2f, type: 2}
     - target: {fileID: 919132149155446097, guid: 695db81757349ef49b201db5046f4c62, type: 3}
       propertyPath: m_Name
       value: map_jens_prototype_1
       objectReference: {fileID: 0}
+    - target: {fileID: 1393166067839716969, guid: 695db81757349ef49b201db5046f4c62, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 053e032aaf56f2846b1dbc5aeb7eda6b, type: 2}
     - target: {fileID: 1681916125738709495, guid: 695db81757349ef49b201db5046f4c62, type: 3}
       propertyPath: m_SelectedEditorRenderState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4328053960349741916, guid: 695db81757349ef49b201db5046f4c62, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e36d41a226dafb949976f9fa569585b9, type: 2}
     - target: {fileID: 6659604067164902328, guid: 695db81757349ef49b201db5046f4c62, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 453003688}
+    - target: {fileID: 7451816377373800335, guid: 695db81757349ef49b201db5046f4c62, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f669409d735ec3041a05ccad595fb072, type: 2}
+    - target: {fileID: 8753682507098091089, guid: 695db81757349ef49b201db5046f4c62, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a8fc9a940f62c6346acbeec12a932eac, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 695db81757349ef49b201db5046f4c62, type: 3}
 --- !u!1 &912326140 stripped
@@ -10882,6 +10902,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PPS_Up
       objectReference: {fileID: 0}
+    - target: {fileID: 4090436436528479853, guid: 276133c03ab54324894e7cc830e0afdd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4090436436528479855, guid: 276133c03ab54324894e7cc830e0afdd, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -11252,6 +11276,10 @@ PrefabInstance:
     - target: {fileID: 4090436436528479853, guid: 46ebd82c716352b499951ef36579aca9, type: 3}
       propertyPath: m_Name
       value: PPS_Down
+      objectReference: {fileID: 0}
+    - target: {fileID: 4090436436528479853, guid: 46ebd82c716352b499951ef36579aca9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4090436436528479855, guid: 46ebd82c716352b499951ef36579aca9, type: 3}
       propertyPath: m_RootOrder
