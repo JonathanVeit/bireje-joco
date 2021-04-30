@@ -42,7 +42,6 @@ namespace BiReJeJoCo
 
         protected virtual void DisconnectEvents()
         {
-            Debug.Log(123);
             photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
