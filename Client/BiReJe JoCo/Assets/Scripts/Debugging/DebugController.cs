@@ -194,7 +194,7 @@ namespace BiReJeJoCo.Debugging
             
             RegisterCommand(new DebugCommand("log_match_config", "Logs the serialized match config", "log_match_config", () =>
             {
-                DebugHelper.Print($"MatchState = { JsonConvert.SerializeObject(matchHandler.MatchConfig)}");
+                DebugHelper.Print($"Matchconfig = { JsonConvert.SerializeObject(matchHandler.MatchConfig)}");
             }));
 
             RegisterCommand(new DebugCommand<bool>("lock_cursor", "Locks/Unlocks the cursor", "lock_cursor <bool>", (name) =>
