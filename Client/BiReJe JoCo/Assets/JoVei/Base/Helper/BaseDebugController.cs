@@ -390,7 +390,9 @@ namespace JoVei.Base.Helper
 
             foreach (var curCommand in Commands)
             {
-                if (curCommand.Id.ToUpper().Contains(input.ToUpper()))
+                var commandPart= input.Split(' ')[0];
+
+                if (curCommand.Id.ToUpper().Contains(commandPart.ToUpper()))
                     result.Add(curCommand);
             }
 

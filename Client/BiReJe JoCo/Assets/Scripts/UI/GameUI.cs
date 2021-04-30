@@ -40,6 +40,7 @@ namespace BiReJeJoCo.UI
         private void DisconnectEvents()
         {
             photonMessageHub.UnregisterReceiver(this);
+            messageHub.UnregisterReceiver(this);
         }
         #endregion
 
@@ -110,7 +111,6 @@ namespace BiReJeJoCo.UI
 
 
         #region Toggle and Shout Menu and Messages
-
         void HandleGameMenuOpened()
         {
             messageHub.ShoutMessage(this, new OnGameMenuOpenedMsg());

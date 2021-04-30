@@ -16,9 +16,9 @@ namespace BiReJeJoCo.Character
 
         private Player player;
 
-        public void Initialize(Player player)
+        public void Initialize(PlayerControlled controller)
         {
-            this.player = player;
+            this.player = controller.Player;
 
             if (!player.IsLocalPlayer)
             {
@@ -50,7 +50,8 @@ namespace BiReJeJoCo.Character
 
         protected override void OnBeforeDestroy()
         {
-            syncVarHub.UnregisterSyncVar(playerHealth);
+            if (syncVarHub != null)
+                syncVarHub.UnregisterSyncVar(playerHealth);
         }
     }
 }

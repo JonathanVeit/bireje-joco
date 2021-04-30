@@ -27,8 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480456209983}
-  m_LocalRotation: {x: 0.1801921, y: 0.77747, z: -0.25706992, w: 0.5449645}
-  m_LocalPosition: {x: -3.5102906, y: 8.94607, z: 1.2737048}
+  m_LocalRotation: {x: 0.18019205, y: 0.77747, z: -0.25706986, w: 0.5449645}
+  m_LocalPosition: {x: -3.5102904, y: 5.3460693, z: 1.2737049}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481413435625}
@@ -219,7 +219,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.777551, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.777551, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -726,8 +726,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2570280502476000005}
-  - {fileID: 4083899046466820168}
+  - {fileID: 5511257325265948869}
+  - {fileID: 7745530482288170499}
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1120,7 +1120,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.777551, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1323,7 +1323,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.777551, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1377,7 +1377,7 @@ GameObject:
   - component: {fileID: 4563714668376417847}
   - component: {fileID: 4522404481329450004}
   - component: {fileID: 4522930805405680878}
-  - component: {fileID: 2570280502476000005}
+  - component: {fileID: 5511257325265948869}
   m_Layer: 0
   m_Name: ThirdPersonCharacterController
   m_TagString: Player
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 4522404480456209981}
---- !u!114 &2570280502476000005
+--- !u!114 &5511257325265948869
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1631,13 +1631,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4522930805405680879}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: dff5823c1cf63d34390e626be2ee355b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
+  type: 1
   m_UseLocal: 0
+  teleportAt: 100
 --- !u!1 &4523749849254761105
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1648,7 @@ GameObject:
   - component: {fileID: 4527090404595922603}
   - component: {fileID: 4565103655412213379}
   - component: {fileID: 4563362120231370793}
-  - component: {fileID: 4083899046466820168}
+  - component: {fileID: 7745530482288170499}
   m_Layer: 0
   m_Name: ModelRoot
   m_TagString: Untagged
@@ -1705,7 +1704,7 @@ MonoBehaviour:
   controller: {fileID: 4563714668376417847}
   turnSpeed: 1500
   ignoreControllerMomentum: 0
---- !u!114 &4083899046466820168
+--- !u!114 &7745530482288170499
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1714,13 +1713,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4523749849254761105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: dff5823c1cf63d34390e626be2ee355b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 0
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  type: 2
+  m_UseLocal: 0
+  teleportAt: 100
 --- !u!1 &8736826287155520946
 GameObject:
   m_ObjectHideFlags: 0

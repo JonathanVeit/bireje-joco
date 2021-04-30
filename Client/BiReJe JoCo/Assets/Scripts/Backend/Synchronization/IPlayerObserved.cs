@@ -1,7 +1,9 @@
+using Photon.Pun;
+
 namespace BiReJeJoCo.Backend
 {
     public interface IPlayerObserved
     {
-        void Initialize(Player player);
+        void Initialize(PlayerControlled controller);
     }
 }

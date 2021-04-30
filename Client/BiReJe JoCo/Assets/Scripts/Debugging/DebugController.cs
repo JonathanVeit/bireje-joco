@@ -223,15 +223,6 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand<string>("switch_lobby_scene", "Load another game scene in the current lobby", "switch_lobby_scene <string>", (value) =>
-            {
-                if (photonRoomWrapper.IsInRoom &&
-                    localPlayer.IsHost)
-                {
-                //(matchHandler as HostMatchHandler).SwitchLobbyScene(value);
-                }
-            }));
-
             RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>
             {
                 var mover = localPlayer.PlayerCharacter.GetComponentInChildren<Character.Mover>();
@@ -247,6 +238,10 @@ namespace BiReJeJoCo.Debugging
                     localPlayer.IsHost)
                 {
                     (matchHandler as HostMatchHandler).RestartMatch(value);
+                }
+                else
+                {
+                    Debug.Log($"command 'restart_match' is denied. Player is not host.");
                 }
             }));
 

@@ -33,7 +33,7 @@ namespace BiReJeJoCo.Backend
         {
             foreach (var curComponent in observedComponents)
             {
-                curComponent.Initialize(Player);
+                curComponent.Initialize(this);
             }
         }
 
