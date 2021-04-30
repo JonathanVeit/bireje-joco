@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using UnityEngine;
 using ExitGames.Client.Photon;
+using System;
 
 namespace BiReJeJoCo.Backend
 {
@@ -22,9 +23,11 @@ namespace BiReJeJoCo.Backend
         void SetSerialized(byte[] value);
     }
 
-    [System.Serializable]
+    [Serializable]
     public class SyncVar<TValue> : SystemAccessor, ISyncVar
     {
+        public event Action<byte> OnValueReceived;
+
         public SyncVarStatus Status { get; private set; }
         public byte? UniqueId { get; private set; }
         [SerializeField] private TValue value;
@@ -61,7 +64,8 @@ namespace BiReJeJoCo.Backend
         public void SetSerialized(byte[] value)
         {
             this.value = (TValue) Protocol.Deserialize(value);
-        }
+            OnValueReceived.Invoke(UniqueId.Value);
+    }
         public byte[] GetSerialized()
         {
             return Protocol.Serialize(value);

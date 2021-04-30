@@ -34,7 +34,7 @@ namespace BiReJeJoCo.Backend
         #endregion
 
         [JsonIgnore] 
-        public GameObject PlayerCharacter { get; private set; }
+        public PlayerControlled PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
         {
@@ -49,7 +49,8 @@ namespace BiReJeJoCo.Backend
             else if (Role == PlayerRole.Hunter)
                 randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHunterSpawnPoint(posIndex);
 
-            PlayerCharacter = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
+            var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
+            PlayerCharacter = go.GetComponent<PlayerControlled>();
         }
 
         public void SetNickName(string name)
