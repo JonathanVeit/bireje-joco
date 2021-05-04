@@ -1,8 +1,5 @@
-﻿using BiReJeJoCo.Character;
-using System.Collections;
-using System.Collections.Generic;
+﻿using BiReJeJoCo.Backend;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace BiReJeJoCo.Character
 {
@@ -10,8 +7,8 @@ namespace BiReJeJoCo.Character
 	//Advanced walker controller script;
 	//This controller is used as a basis for other controller types ('SidescrollerController');
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
-	public class AdvancedWalkerController : Controller {
-
+	public class AdvancedWalkerController : Controller, IPlayerObserved
+	{
 		//References to attached components;
 		protected Transform tr;
 		protected Mover mover;
@@ -83,7 +80,8 @@ namespace BiReJeJoCo.Character
 		public Transform cameraTransform;
 		
 		//Get references to all necessary components;
-		void Awake () {
+		void Awake () 
+		{
 			mover = GetComponent<Mover>();
 			tr = transform;
 			characterInput = GetComponent<PlayerCharacterInput>();
@@ -146,13 +144,25 @@ namespace BiReJeJoCo.Character
 		}
 
 
-		void FixedUpdate()
+		public void Initialize(PlayerControlled controller)
 		{
+			if (controller.Player.IsLocalPlayer)
+				tickSystem.Register(this, "late_fixed_update");
+		}
+
+		protected override void OnSystemsInitialized()
+        {
+			
+        }
+
+        public override void Tick(float deltaTime)
+        {
 			ControllerUpdate();
 		}
 
-		private void OnDestroy()
-		{
+        protected override void OnBeforeDestroy()
+        {
+			base.OnBeforeDestroy();
 			characterInput.onJumpIsPressed -= HandleJumpKeyPressed;
 			characterInput.onJumpLetGo -= HandleJumpKeyLetGo;
 
@@ -195,7 +205,7 @@ namespace BiReJeJoCo.Character
 
 			//Set mover velocity;		
 			mover.SetVelocity(_velocity);
-
+		
 			//Store velocity for next frame;
 			savedVelocity = _velocity;
 		
@@ -656,5 +666,5 @@ namespace BiReJeJoCo.Character
 			else
 				momentum = _newMomentum;
 		}
-	}
+    }
 }

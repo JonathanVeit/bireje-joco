@@ -29,7 +29,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 840523288215481781}
-  - {fileID: 6680907556944273476}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -45,16 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5785769caffdba4ca4b4e8a6cbc57e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: 0
-  range: 8
-  coolDown: 1
-  floatingElementId: default_trigger
-  floatingElementTarget: {fileID: 840523287541905236}
-  floatingElementOffset: {x: 0, y: 0}
-  floatingElementRenderer: {fileID: 840523288215481786}
-  playerTransform: {fileID: 0}
-  floaty: {fileID: 0}
-  isCoolDown: 0
+  triggerPoints:
+  - target: 3
+    Id: 0
+    root: {fileID: 840523287541905236}
+    areaSize: {x: 2, y: 2, z: 2}
+    areaOffset: {x: 0, y: 0, z: 0}
+    coolDown: 1
+    floatingElementId: default_trigger
+    floatingElementTarget: {fileID: 840523287541905236}
+    floatingElementOffset: {x: 0, y: 0}
+    visiblityRenderer: {fileID: 840523288215481786}
+    isCoolingDown: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   triggerId: 0
   messageTarget: 0
   mainLight: {fileID: 0}
@@ -141,33 +145,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1581244809790409767
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6680907556944273476}
-  m_Layer: 0
-  m_Name: teleport_end
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6680907556944273476
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1581244809790409767}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 840523287541905236}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -2,6 +2,6 @@
 {
     public abstract class LocalTrigger : BaseTrigger
     {
-        protected override abstract void OnTriggerInteracted();
+        protected override abstract void OnTriggerInteracted(byte pointId);
     }
 }

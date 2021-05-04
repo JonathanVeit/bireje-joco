@@ -82,13 +82,15 @@ namespace BiReJeJoCo.Backend
 
     public class OnSynchronizedTriggerPhoMsg : PhotonMessage
     {
-        public int i;
+        public byte i;
+        public byte pi;
         public int a;
 
         public OnSynchronizedTriggerPhoMsg() { }
-        public OnSynchronizedTriggerPhoMsg(int id, int actor)
+        public OnSynchronizedTriggerPhoMsg(byte id, byte pointId, int actor)
         {
             i = id;
+            pi = pointId;
             a = actor;
         }
     }

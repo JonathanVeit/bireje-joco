@@ -1,7 +1,9 @@
 ﻿using Photon.Pun;
+using System;
 
 namespace BiReJeJoCo.Backend
 {
+    using JoVei.Base;
     using UnityEngine;
 
     [System.Flags]
@@ -11,8 +13,10 @@ namespace BiReJeJoCo.Backend
         Rotation = 1 << 1,
     }
 
-    public class SynchedTransform : SystemBehaviour, IPunObservable, IPlayerObserved
+    public class SynchedTransform : SystemBehaviour, IPunObservable, IPlayerObserved, ITickable
     {
+        public event Action<Vector3> OnUpdatePosition;
+
         [SerializeField] SyncedTransformType type;
         [SerializeField] bool m_UseLocal;
         [SerializeField] float teleportAt;
@@ -37,6 +41,8 @@ namespace BiReJeJoCo.Backend
 
             m_NetworkRotation = Quaternion.identity;
             photonView = controller.PhotonView;
+
+            tickSystem.Register(this, "fixed_update");
         }
 
         private void Reset()
@@ -50,10 +56,20 @@ namespace BiReJeJoCo.Backend
             m_firstTake = true;
         }
 
-        public void Update()
+        //public void FixedUpdate()
+        //{
+        //    if (this.photonView.IsMine) return;
+          
+        //    if (type.HasFlag(SyncedTransformType.Position))
+        //        UpdatePosition();
+        //    if (type.HasFlag(SyncedTransformType.Rotation))
+        //        UpdateRotation();
+        //}
+
+        public void Tick(float deltaTime)
         {
             if (this.photonView.IsMine) return;
-          
+
             if (type.HasFlag(SyncedTransformType.Position))
                 UpdatePosition();
             if (type.HasFlag(SyncedTransformType.Rotation))
@@ -66,17 +82,21 @@ namespace BiReJeJoCo.Backend
 
             if (m_UseLocal)
             {
+                var tmp = transform.localPosition;
                 if (teleport)
                     transform.localPosition = m_NetworkPosition;
                 else
                     transform.localPosition = Vector3.MoveTowards(transform.localPosition, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                OnUpdatePosition?.Invoke(transform.localPosition - transform.position);
             }
             else
             {
+                var tmp = transform.position;
                 if (teleport)
                     transform.position = m_NetworkPosition;
                 else
                     transform.position = Vector3.MoveTowards(transform.position, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                OnUpdatePosition?.Invoke(transform.position - transform.position);
             }
         }
 
@@ -95,9 +115,13 @@ namespace BiReJeJoCo.Backend
         private void UpdateRotation()
         {
             if (m_UseLocal)
+            {
                 transform.localRotation = Quaternion.RotateTowards(transform.localRotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+            }
             else
+            {
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+            }
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

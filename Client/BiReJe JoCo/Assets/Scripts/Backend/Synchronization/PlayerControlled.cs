@@ -26,7 +26,7 @@ namespace BiReJeJoCo.Backend
             InitializeComponents();
             InitializeVariables();
 
-            this.gameObject.name = $"({Player.NickName}) Player Character";
+            this.gameObject.name = $"({Player.NickName}) {this.gameObject.name}";
         }
 
         private void InitializeComponents()

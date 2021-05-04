@@ -45,13 +45,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c729399c34a409e4bb8df3e0effd34c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: 2
-  range: 8
-  coolDown: 1
-  floatingElementId: default_trigger
-  floatingElementTarget: {fileID: 840523287541905236}
-  floatingElementOffset: {x: 0, y: 0}
-  floatingElementRenderer: {fileID: 840523288215481786}
+  triggerPoints:
+  - target: 2
+    Id: 0
+    root: {fileID: 840523287541905236}
+    areaSize: {x: 2, y: 2, z: 2}
+    areaOffset: {x: 0.34, y: 0, z: 0.68}
+    coolDown: 1
+    floatingElementId: default_trigger
+    floatingElementTarget: {fileID: 840523287541905236}
+    floatingElementOffset: {x: 0, y: 0}
+    visiblityRenderer: {fileID: 840523288215481786}
+    isCoolingDown: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   teleportTarget: {fileID: 6680907556944273476}
 --- !u!1 &840523288215481780
 GameObject:
@@ -159,7 +167,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1581244809790409767}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 23, y: -1, z: -14.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 840523287541905236}
