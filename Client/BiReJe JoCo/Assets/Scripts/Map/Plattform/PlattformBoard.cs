@@ -4,14 +4,13 @@ using UnityEngine;
 
 namespace BiReJeJoCo.Map
 {
-    public class PlattformBoard : TickBehaviour, IPlayerObserved
+    public class PlattformBoard : SystemBehaviour, IPlayerObserved
     {
         [Header("Settings")]
         [SerializeField] float moveSpeed = 8f;
         [SerializeField] float stopAtDistance = 0.1f;
 
         private PlattformBoardTrigger trigger;
-        private Rigidbody rb;
         private PlayerControlled controller;
 
         private Transform currentTarget;
@@ -19,21 +18,10 @@ namespace BiReJeJoCo.Map
         public bool ReachedTarget => currentTarget == null ? true : Vector3.Distance(transform.position, currentTarget.position) <= stopAtDistance;
 
         #region Initialization
-        protected override void OnSystemsInitialized()
-        {
-            tickSystem.Register(this, "update");
-        }
-
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
             trigger = GetComponentInChildren<PlattformBoardTrigger>();
-            rb = GetComponent<Rigidbody>();
-
-            if (!localPlayer.IsHost)
-            {
-                GetComponent<SynchedTransform>().OnUpdatePosition += UpdateUser;
-            }
         }
 
         public void Initialize(byte plattformId)
@@ -55,22 +43,18 @@ namespace BiReJeJoCo.Map
             currentTarget = target;
         }
 
-        public override void Tick(float deltaTime)
+        public void Update()
         {
             if (localPlayer.IsHost)
             {
                 if (currentTarget != null && !ReachedTarget)
                 {
                     var direction = currentTarget.position - transform.position;
-                    if (direction.magnitude > 1)
-                        direction.Normalize();
 
-                    var velocity = direction * moveSpeed * deltaTime;
-                    rb.transform.position += velocity;
+                    var velocity = direction.normalized * moveSpeed * Time.deltaTime;
+                    transform.position += velocity;
                     UpdateUser(velocity);
                 }
-                else
-                    rb.velocity = Vector3.zero;
             }
         }
 

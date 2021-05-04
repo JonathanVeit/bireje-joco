@@ -1,5 +1,4 @@
-﻿using BiReJeJoCo.Backend;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
@@ -7,7 +6,7 @@ namespace BiReJeJoCo.Character
 	//Advanced walker controller script;
 	//This controller is used as a basis for other controller types ('SidescrollerController');
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
-	public class AdvancedWalkerController : Controller, IPlayerObserved
+	public class AdvancedWalkerController : Controller
 	{
 		//References to attached components;
 		protected Transform tr;
@@ -143,19 +142,12 @@ namespace BiReJeJoCo.Character
 			movementSpeed = movementSpeedSave;
 		}
 
-
-		public void Initialize(PlayerControlled controller)
-		{
-			if (controller.Player.IsLocalPlayer)
-				tickSystem.Register(this, "late_fixed_update");
-		}
-
 		protected override void OnSystemsInitialized()
         {
 			
         }
 
-        public override void Tick(float deltaTime)
+        public void FixedUpdate()
         {
 			ControllerUpdate();
 		}

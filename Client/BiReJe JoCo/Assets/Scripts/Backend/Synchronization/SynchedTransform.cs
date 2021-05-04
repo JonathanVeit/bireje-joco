@@ -13,7 +13,7 @@ namespace BiReJeJoCo.Backend
         Rotation = 1 << 1,
     }
 
-    public class SynchedTransform : SystemBehaviour, IPunObservable, IPlayerObserved, ITickable
+    public class SynchedTransform : SystemBehaviour, IPunObservable, IPlayerObserved
     {
         public event Action<Vector3> OnUpdatePosition;
 
@@ -41,8 +41,6 @@ namespace BiReJeJoCo.Backend
 
             m_NetworkRotation = Quaternion.identity;
             photonView = controller.PhotonView;
-
-            tickSystem.Register(this, "fixed_update");
         }
 
         private void Reset()
@@ -56,17 +54,7 @@ namespace BiReJeJoCo.Backend
             m_firstTake = true;
         }
 
-        //public void FixedUpdate()
-        //{
-        //    if (this.photonView.IsMine) return;
-          
-        //    if (type.HasFlag(SyncedTransformType.Position))
-        //        UpdatePosition();
-        //    if (type.HasFlag(SyncedTransformType.Rotation))
-        //        UpdateRotation();
-        //}
-
-        public void Tick(float deltaTime)
+        public void Update()
         {
             if (this.photonView.IsMine) return;
 
