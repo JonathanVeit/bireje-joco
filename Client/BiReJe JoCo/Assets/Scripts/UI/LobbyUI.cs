@@ -50,7 +50,9 @@ namespace BiReJeJoCo.UI
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
-            photonMessageHub.UnregisterReceiver(this);
+
+            if (photonMessageHub != null)
+                photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
