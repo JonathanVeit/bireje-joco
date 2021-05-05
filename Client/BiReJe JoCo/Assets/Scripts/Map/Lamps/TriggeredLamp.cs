@@ -3,9 +3,9 @@ using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Map
 {
-    public class LampTrigger : SynchronizedTrigger
+    public class TriggeredLamp : SynchronizedTrigger
     {
-        [Header("Lamp Trigger Settings")]
+        [Header("Lamp Settings")]
         [SerializeField] Light mainLight;
         [SerializeField] GameObject[] additionalObjects;
 
