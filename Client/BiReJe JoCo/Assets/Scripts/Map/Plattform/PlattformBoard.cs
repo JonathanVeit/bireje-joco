@@ -1,69 +1,63 @@
-﻿using BiReJeJoCo.Backend;
-using Photon.Pun;
-using UnityEngine;
+﻿using UnityEngine;
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Map
 {
-    public class PlattformBoard : SystemBehaviour, IPlayerObserved
+    public class PlattformBoard : TickBehaviour
     {
         [Header("Settings")]
         [SerializeField] float moveSpeed = 8f;
         [SerializeField] float stopAtDistance = 0.1f;
+        [SerializeField] CollisionTrigger trigger;
 
-        private PlattformBoardTrigger trigger;
-        private PlayerControlled controller;
+        [Space(10)]
+        [SerializeField] Transform userGround;
 
-        private Transform currentTarget;
-
-        public bool ReachedTarget => currentTarget == null ? true : Vector3.Distance(transform.position, currentTarget.position) <= stopAtDistance;
+        private Transform target;
+        public bool ReachedTarget => target == null ? true : Vector3.Distance(transform.position, target.position) <= stopAtDistance;
 
         #region Initialization
-        public void Initialize(PlayerControlled controller)
+        protected override void OnSystemsInitialized()
         {
-            this.controller = controller;
-            trigger = GetComponentInChildren<PlattformBoardTrigger>();
-        }
-
-        public void Initialize(byte plattformId)
-        {
-            controller.PhotonView.RPC("PlattformBoard_Initialize", RpcTarget.All, plattformId);
-        }
-
-        [PunRPC]
-        private void PlattformBoard_Initialize(byte plattformId) 
-        {
-            var plattform = (SynchronizedTrigger.Find(plattformId) as TriggeredPlattform);
-            plattform.RegisterBoard(this);
-            transform.SetParent(plattform.transform);
+            trigger.OnRemoteEntered += OnUserEntered;
+            trigger.OnRemoteLeft += OnUserLeft;
+            tickSystem.Register(this, "update");
         }
         #endregion
 
         public void SetTarget(Transform target)
         {
-            currentTarget = target;
+            this.target = target;
         }
 
-        public void Update()
+        public override void Tick(float deltaTime)
         {
-            if (localPlayer.IsHost)
+            if (target != null && !ReachedTarget)
             {
-                if (currentTarget != null && !ReachedTarget)
-                {
-                    var direction = currentTarget.position - transform.position;
-
-                    var velocity = direction.normalized * moveSpeed * Time.deltaTime;
-                    transform.position += velocity;
-                    UpdateUser(velocity);
-                }
+                Move(deltaTime);
             }
         }
 
-        private void UpdateUser(Vector3 velocity)
+        private void Move(float deltaTime)
         {
-            foreach (var curUser in trigger.User)
+            var direction = target.position - transform.position;
+            var velocity = direction.normalized * moveSpeed * deltaTime;
+            transform.position += velocity;
+
+            if (trigger.Local)
             {
-                //curUser.AddMomentum(velocity * 1f);
+                trigger.Local.transform.position += velocity;
             }
+        }
+
+        private void OnUserEntered(GameObject user)
+        {
+            user.GetComponent<SynchedTransform>().SetGround(userGround);
+        }
+
+        private void OnUserLeft(GameObject user)
+        {
+            user.GetComponent<SynchedTransform>().SetGround(null);
         }
     }
 }

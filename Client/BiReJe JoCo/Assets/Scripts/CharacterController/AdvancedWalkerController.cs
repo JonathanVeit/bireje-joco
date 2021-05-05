@@ -144,10 +144,10 @@ namespace BiReJeJoCo.Character
 
 		protected override void OnSystemsInitialized()
         {
-			
+			tickSystem.Register(this, "late_fixed_update");
         }
 
-        public void FixedUpdate()
+        public override void Tick (float deltaTime)
         {
 			ControllerUpdate();
 		}
@@ -197,7 +197,7 @@ namespace BiReJeJoCo.Character
 
 			//Set mover velocity;		
 			mover.SetVelocity(_velocity);
-		
+
 			//Store velocity for next frame;
 			savedVelocity = _velocity;
 		

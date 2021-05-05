@@ -51,6 +51,8 @@ namespace BiReJeJoCo.Backend
 
             var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
             PlayerCharacter = go.GetComponent<PlayerControlled>();
+
+            messageHub.ShoutMessage<OnPlayerCharacterSpawnedMsg>(this);
         }
 
         public void SetNickName(string name)

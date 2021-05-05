@@ -4,6 +4,7 @@ using BiReJeJoCo.Character;
 using BiReJeJoCo.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BiReJeJoCo.Backend
 {
@@ -23,6 +24,7 @@ namespace BiReJeJoCo.Backend
 
             tickSystem.Register(this, "update_half_second");
             messageHub.RegisterReceiver<OnPlayerPressedTriggerMsg>(this, OnPressedTrigger);
+            messageHub.RegisterReceiver<OnPlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             
             floaties = new Dictionary<byte, FloatingElement>();
             foreach (var curTrigger in triggerPoints)
@@ -80,6 +82,10 @@ namespace BiReJeJoCo.Backend
             OnFloatySpawned(trigger.Id, floaty);
         }
 
+        protected abstract void OnTriggerInteracted(byte pointId);
+        protected virtual void OnFloatySpawned(int pointId, FloatingElement floaty) { }
+
+        #region Events
         protected virtual void OnPressedTrigger(OnPlayerPressedTriggerMsg msg)
         {
             foreach (var curTrigger in triggerPoints)
@@ -92,9 +98,11 @@ namespace BiReJeJoCo.Backend
             }
         }
 
-
-        protected abstract void OnTriggerInteracted(byte pointId);
-        protected virtual void OnFloatySpawned(int pointId, FloatingElement floaty) { }
+        protected virtual void OnPlayerCharacterSpawned(OnPlayerCharacterSpawnedMsg msg)
+        {
+            playerTransform = localPlayer.PlayerCharacter.GetComponentInChildren<Mover>().transform;
+        }
+        #endregion
 
         #region Helper
         protected bool PlayerRoleMatchesTarget(PlayerRole role)
@@ -122,12 +130,9 @@ namespace BiReJeJoCo.Backend
         {
             var offset = trigger.root.TransformDirection(trigger.areaOffset);
             var collisions = Physics.OverlapBox(trigger.root.position + offset, trigger.areaSize / 2, trigger.root.rotation, playerLayer, QueryTriggerInteraction.Ignore);
-            if (playerTransform == null && localPlayer.PlayerCharacter != null)
-                playerTransform = localPlayer.PlayerCharacter.GetComponentInChildren<Mover>().transform;
-
+            
             if (collisions.Length == 0 || playerTransform == null) return false;
-
-            return collisions[0].transform == playerTransform;
+            return collisions.ToList().Find(x => x.transform == playerTransform) != null;
         }
         void OnDrawGizmos()
         {

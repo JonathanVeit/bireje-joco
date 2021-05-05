@@ -22,7 +22,6 @@ namespace BiReJeJoCo.Character
         //Menu
         public event Action onMenuPressed;
 
-
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 

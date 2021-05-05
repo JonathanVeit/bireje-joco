@@ -11,23 +11,11 @@ namespace BiReJeJoCo.Map
         [Header("Plattform Settings")]
         [SerializeField] List<PlattformTarget> targets;
         [SerializeField] byte plattformStartIndex;
-
-        PlattformBoard board;
+        [SerializeField] PlattformBoard board;
 
         protected override void OnSetupActive()
         {
             base.OnSetupActive();
-
-            if (localPlayer.IsHost)
-            {
-                var board = photonRoomWrapper.Instantiate("plattform_board", targets[plattformStartIndex].target.position, Quaternion.identity, false).transform;
-                board.GetComponent<PlattformBoard>().Initialize(triggerId);
-            }
-        }
-
-        public void RegisterBoard(PlattformBoard board)
-        {
-            this.board = board;
         }
 
         protected override void OnTriggerInteracted(byte pointId)

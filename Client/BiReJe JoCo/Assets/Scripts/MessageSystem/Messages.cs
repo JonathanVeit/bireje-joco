@@ -81,6 +81,11 @@ namespace BiReJeJoCo
     {
     }
 
+    public class OnPlayerCharacterSpawnedMsg : BaseMessage
+    {
+        
+    }
+
     public class OnGameMenuOpenedMsg : BaseMessage
     { 
     }
