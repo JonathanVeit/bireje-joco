@@ -33,8 +33,8 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<OnLeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
 
             messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
         }
 
         private void DisconnectEvents()
@@ -93,12 +93,12 @@ namespace BiReJeJoCo.Backend
             DebugHelper.PrintFormatted("<color=green>[Photon Clien]</color> Joined game lobby: {0}.", msg.Param1);
         }
 
-        private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
+        private void OnJoinLobbyFailed(JoinLobbyFailedMsg msg)
         {
             DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Joining game lobby failed. Reason: {0}.", msg.Param1);
         }
 
-        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        private void OnLeftLobby(LeftLobbyMsg msg)
         {
             DebugHelper.PrintFormatted("<color=red>[Photon Clien]</color> Left game lobby.");
         }

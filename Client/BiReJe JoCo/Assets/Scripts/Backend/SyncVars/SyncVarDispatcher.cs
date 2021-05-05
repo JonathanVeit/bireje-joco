@@ -80,15 +80,14 @@ namespace BiReJeJoCo.Backend
                 return;
             }
 
-            var value = syncVar.GetSerialized();
-            var valueAsString = syncVar.GetSerializedString();
-
             // skip cached 
-            if (variableCache.ContainsKey(syncVar.UniqueId.Value) &&
+            var valueAsString = syncVar.GetSerializedString();
+            if (!syncVar.IsForced && variableCache.ContainsKey(syncVar.UniqueId.Value) &&
                 valueAsString == variableCache[syncVar.UniqueId.Value])
                 return;
 
             // convert to serializable & send
+            var value = syncVar.GetSerialized();
             var photonVar = new SerializableVariable(syncVar.UniqueId.Value, value);
             stream.SendNext(photonVar);
 

@@ -26,20 +26,20 @@ namespace BiReJeJoCo.Backend
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<OnPlayerJoinedLobbyMsg>(this, OnPlayerJoined);
-            messageHub.RegisterReceiver<OnPlayerLeftLobbyMsg>(this, OnPlayerLeft);
+            messageHub.RegisterReceiver<PlayerJoinedLobbyMsg>(this, OnPlayerJoined);
+            messageHub.RegisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeft);
 
             messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedRoom);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftRoom);
         }
 
         private void DisconnectEvents()
         {
-            messageHub.UnregisterReceiver<OnPlayerJoinedLobbyMsg>(this, OnPlayerJoined);
-            messageHub.UnregisterReceiver<OnPlayerLeftLobbyMsg>(this, OnPlayerLeft);
+            messageHub.UnregisterReceiver<PlayerJoinedLobbyMsg>(this, OnPlayerJoined);
+            messageHub.UnregisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeft);
 
             messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedRoom);
-            messageHub.UnregisterReceiver<OnLeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.UnregisterReceiver<LeftLobbyMsg>(this, OnLeftRoom);
         }
         #endregion
 
@@ -98,24 +98,24 @@ namespace BiReJeJoCo.Backend
             }
 
             allPlayer.Add(newPlayer.Id, newPlayer);
-            messageHub.ShoutMessage<OnAddedPlayerMsg>(this, new OnAddedPlayerMsg(newPlayer));
+            messageHub.ShoutMessage<AddedPlayerMsg>(this, new AddedPlayerMsg(newPlayer));
         }
 
         private void UnregisterPlayer(string playerId)
         {
             var tmp = allPlayer[playerId];
             allPlayer.Remove(playerId);
-            messageHub.ShoutMessage<OnRemovedPlayerMsg>(this, new OnRemovedPlayerMsg(tmp));
+            messageHub.ShoutMessage<RemovedPlayerMsg>(this, new RemovedPlayerMsg(tmp));
         }
 
         #region Photon Events
-        private void OnPlayerJoined(OnPlayerJoinedLobbyMsg msg)
+        private void OnPlayerJoined(PlayerJoinedLobbyMsg msg)
         {
             var photonPlayer = GetPhotonPlayer(msg.Param1);
             RegisterPlayer(photonPlayer, false);
         }
 
-        private void OnPlayerLeft(OnPlayerLeftLobbyMsg msg) 
+        private void OnPlayerLeft(PlayerLeftLobbyMsg msg) 
         {
             UnregisterPlayer(msg.Param1);
         }
@@ -126,7 +126,7 @@ namespace BiReJeJoCo.Backend
                 RegisterPlayer(curPlayer, false);
         }
 
-        private void OnLeftRoom(OnLeftLobbyMsg msg)
+        private void OnLeftRoom(LeftLobbyMsg msg)
         {
             foreach (var curPlayer in allPlayer.Values.ToArray())
             {

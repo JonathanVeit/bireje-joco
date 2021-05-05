@@ -7,5 +7,6 @@ namespace BiReJeJoCo
         WaitingForPlayer = 2,
         Running = 3,
         Paused  = 4,
+        Result  = 5,
     }
 }

@@ -1,7 +1,6 @@
 using JoVei.Base;
 using BiReJeJoCo.Backend;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace BiReJeJoCo
 {
@@ -14,65 +13,58 @@ namespace BiReJeJoCo
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
-            State = MatchState.InLobby;
             DontDestroyOnLoad(this);
+            State = MatchState.InLobby;
+            
             DIContainer.RegisterImplementation<MatchHandler>(this);
-            messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
+            messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
         }
 
-        protected virtual void OnLoadedLobbyScene(OnLoadedLobbySceneMsg msg)
+        protected virtual void OnLoadedLobbyScene(LoadedLobbySceneMsg msg)
         {
             LogMatchMessage("Loaded lobby scene");
-            messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
+            messageHub.UnregisterReceiver<LoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
             ConnectEvents();
         }
 
         protected virtual void ConnectEvents()
         {           
-            photonMessageHub.RegisterReceiver<DefineMatchRulesPhoMsg>(this, OnDefineMatchRoles);
+            photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnDefineMatchRules);
             photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnStartMatch);
-            photonMessageHub.RegisterReceiver<PausePausePhoMsg>(this, OnPauseMatch);
+            photonMessageHub.RegisterReceiver<PauseMatchPhoMsg>(this, OnPauseMatch);
             photonMessageHub.RegisterReceiver<ContinueMatchPhoMsg>(this, OnContinueMatch);
-            photonMessageHub.RegisterReceiver<EndMatchPhoMsg>(this, OnEndMatch);
-            photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
 
-            messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnLoadedGameScene);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
-        }
-
-        protected virtual void DisconnectEvents()
-        {
-            photonMessageHub.UnregisterReceiver(this);
+            messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnLoadedGameScene);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
         }
         #endregion
 
         #region Events
-        protected virtual void OnLoadedGameScene(OnLoadedGameSceneMsg msg) 
+        protected virtual void OnDefineMatchRules(PhotonMessage msg)
         {
-            State = MatchState.WaitingForPlayer;
-        }
-
-        protected virtual void OnDefineMatchRoles(PhotonMessage msg)
-        {
-            var castedMsg = msg as DefineMatchRulesPhoMsg;
+            var castedMsg = msg as DefinedMatchRulesPhoMsg;
             MatchConfig = castedMsg.config;
 
             localPlayer.SetRole(castedMsg.config.roles[localPlayer.NumberInRoom]);
             LogMatchMessage("Match rules synchronized");
         }
 
+        protected virtual void OnLoadedGameScene(LoadedGameSceneMsg msg) 
+        {
+            State = MatchState.WaitingForPlayer;
+        }
         protected virtual void OnStartMatch(PhotonMessage msg) 
         {
             State = MatchState.Running;
             LogMatchMessage("Match started");
         }
-
         protected virtual void OnPauseMatch(PhotonMessage msg)
         {
             State = MatchState.Paused;
             LogMatchMessage("Match paused");
         }
-
         protected virtual void OnContinueMatch(PhotonMessage msg)
         {
             State = MatchState.Running;
@@ -80,30 +72,27 @@ namespace BiReJeJoCo
         }
 
 
-        protected virtual void OnEndMatch(PhotonMessage msg)
+        protected virtual void OnMatchFinished(PhotonMessage msg)
         {
             LogMatchMessage("Match ended");
+            State = MatchState.Result;
         }
-
-        protected virtual void OnQuitMatch(PhotonMessage msg)
+        protected virtual void OnMatchClosed(PhotonMessage msg)
         {
-            var casted = msg as QuitMatchPhoMsg;
-
-            if (casted.leaveLobby)
+            var casted = msg as CloseMatchPhoMsg;
+            if (casted.mode == CloseMatchMode.LeaveLobby)
             {
-                DisconnectEvents();
+                photonMessageHub.UnregisterReceiver(this);
                 photonClient.LeaveLobby();
             }
 
-            LogMatchMessage($"Match is quitted. Leave Lobby = {casted.leaveLobby}");
+            LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }
-
-        protected virtual void OnLeftLobby(OnLeftLobbyMsg msg)
+        protected virtual void OnLeftLobby(LeftLobbyMsg msg)
         {
             DIContainer.UnregisterImplementation<MatchHandler>();
             messageHub.UnregisterReceiver(this);
             gameManager.OpenMainMenu();
-            Destroy(this.gameObject);
         }
         #endregion
 

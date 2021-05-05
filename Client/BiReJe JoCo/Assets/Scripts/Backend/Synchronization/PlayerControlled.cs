@@ -15,7 +15,6 @@ namespace BiReJeJoCo.Backend
 
         private List<IPlayerObserved> observedComponents;
         private Dictionary<byte, ISyncVar> observedVariables;
-        private Dictionary<byte, string> variableCache;
 
         private void Awake()
         {
@@ -49,7 +48,6 @@ namespace BiReJeJoCo.Backend
         {
             observedComponents = new List<IPlayerObserved>();
             observedVariables = new Dictionary<byte, ISyncVar>();
-            variableCache = new Dictionary<byte, string>();
 
             foreach (var curComponet in GetComponentsInChildren<IPlayerObserved>())
             {
@@ -73,7 +71,7 @@ namespace BiReJeJoCo.Backend
 
                 if (!syncVar.UniqueId.HasValue)
                 {
-                    Debug.LogError($"Field {curField.Name} of component {(component as Component).name} is not initalized and cannot be observed");
+                    Debug.Log($"Field {curField.Name} of component {(component as Component).name} is not initalized and cannot be observed");
                     continue;
                 }
 

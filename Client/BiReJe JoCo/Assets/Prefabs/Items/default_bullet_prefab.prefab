@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1766137848272914866}
   - component: {fileID: 4419943282010837964}
   - component: {fileID: 5730826362964053997}
-  - component: {fileID: 8322805726900709324}
-  m_Layer: 0
-  m_Name: sphere
+  - component: {fileID: -8552605599834842739}
+  m_Layer: 7
+  m_Name: default_bullet_prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7469541983887774474}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.329197, y: -0.94, z: -6.4905396}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -113,8 +113,8 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &8322805726900709324
+  m_CollisionDetection: 3
+--- !u!114 &-8552605599834842739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,16 +123,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7469541983887774474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 17f04e80796c1c94aa436e8d2f25ee59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 1
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  poolSettings:
+    poolId: default_bullet
+    Type: 3
+    poolLimit: 10
+  damage: 10
+  ignoreCollides: 0

@@ -245,7 +245,20 @@ namespace BiReJeJoCo.Debugging
                 }
             }));
 
-
+            RegisterCommand(new DebugCommand<bool>("finish_match", "Finish the current match (true = hunted wins)", "finish_match <bool>", (value) =>
+            {
+                if (matchHandler is HostMatchHandler hostMatchHandler && 
+                    hostMatchHandler.State == MatchState.Running &&
+                    photonRoomWrapper.IsInRoom &&
+                    localPlayer.IsHost)
+                {
+                    photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, new MatchResult() { winner = value? PlayerRole.Hunted : PlayerRole.Hunter });
+                }
+                else
+                {
+                    Debug.Log($"command 'end_match' is denied. Player is not host.");
+                }
+            }));
 
             RegisterCommand(new DebugCommand<string, int>("host_lobby", "Host a new a lobby with name and max player amount", "host_lobby <name> <int>", (name, playerAmount) =>
             {

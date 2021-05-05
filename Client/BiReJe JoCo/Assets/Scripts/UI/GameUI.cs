@@ -2,17 +2,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using JoVei.Base;
 using BiReJeJoCo.Backend;
+using UnityEngine.UI;
 
 namespace BiReJeJoCo.UI
 {
     public class GameUI : UIElement
     {
+        [Header("UI Elements")]
         public Transform floatingElementGrid;
         [SerializeField] GameObject menuGO;
         [SerializeField] GameObject endMatchButton;
         [SerializeField] GameObject loadingOverlay;
+        [SerializeField] GameObject crosshairGO;
+        [SerializeField] MatchResultPopup resultPopup;
 
-        static bool isMenuActive = false;
+        bool menuIsActive => menuGO.activeSelf;
 
         #region Inizialization
         protected override void OnSystemsInitialized()
@@ -20,23 +24,41 @@ namespace BiReJeJoCo.UI
             base.OnSystemsInitialized();
             DIContainer.RegisterImplementation<GameUI>(this);
             endMatchButton.SetActive(localPlayer.IsHost);
-            
+
             ConnectEvents();
+            InitializeUI();
         }
-        
+        private void InitializeUI()
+        {
+            if (localPlayer.Role == PlayerRole.Hunted)
+            {
+                InitializeAsHunted();
+            }
+            else if (localPlayer.Role == PlayerRole.Hunter)
+            {
+                InitializeAsHunter();
+            }
+        }
+
+        private void InitializeAsHunted()
+        {
+            crosshairGO.SetActive(false);
+        }
+        private void InitializeAsHunter() 
+        {
+            crosshairGO.SetActive(true);
+        }
+   
+
         private void ConnectEvents()
         {
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
+
             photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
-            photonMessageHub.RegisterReceiver<EndMatchPhoMsg>(this, OnFinishMatch);
-            photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
-
-            //Register what to do when game menu is being opened
-            messageHub.RegisterReceiver<OnGameMenuOpenedMsg>(this, ToggleMenuOn);
-
-            //Register what to do when game menu being closed
-            messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, ToggleMenuOff);
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
         }
-
         private void DisconnectEvents()
         {
             photonMessageHub.UnregisterReceiver(this);
@@ -49,12 +71,12 @@ namespace BiReJeJoCo.UI
         {
             loadingOverlay.gameObject.SetActive(false);
         }
-
-        private void OnFinishMatch(PhotonMessage msg)
-        { 
+        private void OnMatchFinished(PhotonMessage msg)
+        {
+            var casted = msg as FinishMatchPhoMsg;
+            ShowResult(casted.result);
         }
-
-        private void OnQuitMatch(PhotonMessage msg)
+        private void OnMatchClosed(PhotonMessage msg)
         {
             DIContainer.UnregisterImplementation<GameUI>();
             DisconnectEvents();
@@ -64,52 +86,48 @@ namespace BiReJeJoCo.UI
         #region UI Input
         public void Continue()
         {
-            HandleGameMenuClosed();
+            ToggleMenu();
         }
 
         public void EndMatch()
         {
-            photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(true), PhotonMessageTarget.AllViaServer);
+            (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.LeaveLobby);
         }
 
         public void SetMenuInput(InputAction.CallbackContext inputValue)
         {
-            if (inputValue.performed)
+            if (!inputValue.performed) return;
+
+            if (!menuIsActive)
             {
-                if (!isMenuActive)
-                {
-                    HandleGameMenuOpened();
-                }
-                else
-                {
-                    HandleGameMenuClosed();
-                }
+                messageHub.ShoutMessage(this, new PauseMenuOpenedMsg());
+            }
+            else
+            {
+                messageHub.ShoutMessage(this, new PauseMenuClosedMsg());
             }
         }
         #endregion
 
-
-        #region Toggle and Shout Menu and Messages
-        void HandleGameMenuOpened()
+        #region Events
+        void OnPauseMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
-            messageHub.ShoutMessage(this, new OnGameMenuOpenedMsg());
-            isMenuActive = true;
+            ToggleMenu();
+        }
+        void OnPauseMenuClosed(PauseMenuClosedMsg onGameMenuOpenedMsg)
+        {
+            ToggleMenu();
+        }
+        private void ToggleMenu() 
+        {
+            menuGO.SetActive(!menuGO.activeSelf);
         }
 
-        void HandleGameMenuClosed()
+        private void ShowResult(MatchResult result) 
         {
-            messageHub.ShoutMessage(this, new OnGameMenuClosedMsg());
-            isMenuActive = false;
-        }
-
-        void ToggleMenuOn(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
-        {
-            menuGO.SetActive(true);
-        }
-
-        void ToggleMenuOff(OnGameMenuClosedMsg onGameMenuOpenedMsg)
-        {
-            menuGO.SetActive(false);
+            Cursor.lockState = CursorLockMode.Confined;
+            uiManager.GetInstanceOf<MatchResultPopup>().Show(result);
+            crosshairGO.SetActive(false);
         }
         #endregion
     }

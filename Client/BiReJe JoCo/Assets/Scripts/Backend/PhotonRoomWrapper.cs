@@ -71,7 +71,7 @@ namespace BiReJeJoCo.Backend
             IsInRoom = false;
             RoomName = null;
 
-            messageHub.ShoutMessage(this, new OnJoinLobbyFailedMsg(message));
+            messageHub.ShoutMessage(this, new JoinLobbyFailedMsg(message));
         }
 
         // switch scene
@@ -91,19 +91,19 @@ namespace BiReJeJoCo.Backend
             IsInRoom = false;
             RoomName = null;
 
-            messageHub.ShoutMessage(this, new OnLeftLobbyMsg());
+            messageHub.ShoutMessage(this, new LeftLobbyMsg());
         }
 
         
         // other player join / leave
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
         {
-            messageHub.ShoutMessage(this, new OnPlayerJoinedLobbyMsg(newPlayer.UserId));
+            messageHub.ShoutMessage(this, new PlayerJoinedLobbyMsg(newPlayer.UserId));
         }
 
         public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
-            messageHub.ShoutMessage(this, new OnPlayerLeftLobbyMsg(otherPlayer.UserId));
+            messageHub.ShoutMessage(this, new PlayerLeftLobbyMsg(otherPlayer.UserId));
         }
 
         // instantiation

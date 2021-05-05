@@ -8,12 +8,12 @@ namespace JoVei.Base
     /// <summary>
     /// Provides access to instances of a class and its subclasses
     /// </summary>
-    public class InstanceProvider<TBase> 
+    public abstract class InstanceProvider<TBase> 
         where TBase : Component
     {
-        protected static Dictionary<string, List<TBase>> Instances { get; set; } = new Dictionary<string, List<TBase>>();
+        protected Dictionary<string, List<TBase>> Instances { get; set; } = new Dictionary<string, List<TBase>>();
 
-        protected static void RegisterInstance(TBase instance)
+        protected void RegisterInstance(TBase instance)
         {
             string name = instance.GetType().FullName;
 
@@ -26,7 +26,7 @@ namespace JoVei.Base
                 Instances[name].Add (instance);
         }
 
-        protected static void RemoveInstance(TBase instance)
+        protected void RemoveInstance(TBase instance)
         {
             if (!Instances.ContainsKey(instance.GetType().FullName))
                 return;
@@ -34,13 +34,13 @@ namespace JoVei.Base
             Instances[instance.GetType().FullName].Remove(instance);
         }
 
-        public static TElement GetInstanceOf<TElement>() 
+        public TElement GetInstanceOf<TElement>() 
             where TElement : TBase
         {
             return GetInstancesOf<TElement>()[0];
         }
 
-        public static TElement[] GetInstancesOf<TElement>() 
+        public TElement[] GetInstancesOf<TElement>() 
             where TElement : TBase
         {
             string name = typeof(TElement).FullName;
@@ -66,7 +66,7 @@ namespace JoVei.Base
         }
 
         #region Helper        
-        protected static void Refresh() 
+        protected void Refresh() 
         {
             // find all elements 
             var allInstances = UnityEngine.Object.FindObjectsOfType<TBase>(true).ToList();
@@ -78,7 +78,7 @@ namespace JoVei.Base
             }
         }
 
-        private static bool InstanceIsNull(TBase instance)
+        private bool InstanceIsNull(TBase instance)
         {
             return instance == null;
         }

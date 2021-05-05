@@ -56,11 +56,11 @@ namespace BiReJeJoCo
         {
             if (scene.name.StartsWith("game_"))
             {
-                StartCoroutine(ShoutMessageDelayed<OnLoadedGameSceneMsg>(new OnLoadedGameSceneMsg(), 5));
+                StartCoroutine(ShoutMessageDelayed<LoadedGameSceneMsg>(new LoadedGameSceneMsg(), 5));
             }
             if (scene.name.StartsWith("lobby_"))
             {
-                StartCoroutine(ShoutMessageDelayed<OnLoadedLobbySceneMsg>(new OnLoadedLobbySceneMsg(), 5));
+                StartCoroutine(ShoutMessageDelayed<LoadedLobbySceneMsg>(new LoadedLobbySceneMsg(), 5));
             }
         }
 

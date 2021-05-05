@@ -20,7 +20,7 @@ namespace BiReJeJoCo.UI
         protected override void OnSystemsInitialized()
         {
             startButton.gameObject.SetActive(localPlayer.IsHost);
-            messageHub.RegisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
+            messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
         }
 
         protected override void OnBeforeDestroy()
@@ -29,21 +29,21 @@ namespace BiReJeJoCo.UI
             DisconnectEvents();
         }
 
-        private void OnLobbySceneLoaded(OnLoadedLobbySceneMsg msg)
+        private void OnLobbySceneLoaded(LoadedLobbySceneMsg msg)
         {
             lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
                 AddMemberListEntry(curPlayer);
 
-            messageHub.UnregisterReceiver<OnLoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
+            messageHub.UnregisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             ConnectEvents();
         }
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<OnAddedPlayerMsg>(this, OnAddedPlayer);
-            messageHub.RegisterReceiver<OnRemovedPlayerMsg>(this, OnRemovedPlayer);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            messageHub.RegisterReceiver<AddedPlayerMsg>(this, OnAddedPlayer);
+            messageHub.RegisterReceiver<RemovedPlayerMsg>(this, OnRemovedPlayer);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
         }
 
@@ -73,17 +73,17 @@ namespace BiReJeJoCo.UI
         #endregion
 
         #region Events
-        private void OnAddedPlayer(OnAddedPlayerMsg msg) 
+        private void OnAddedPlayer(AddedPlayerMsg msg) 
         {
             AddMemberListEntry(msg.Param1);
         }
 
-        private void OnRemovedPlayer(OnRemovedPlayerMsg msg)
+        private void OnRemovedPlayer(RemovedPlayerMsg msg)
         {
             RemoveMemberListEntry(msg.Param1);
         }
 
-        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        private void OnLeftLobby(LeftLobbyMsg msg)
         {
             gameManager.OpenMainMenu();
         }

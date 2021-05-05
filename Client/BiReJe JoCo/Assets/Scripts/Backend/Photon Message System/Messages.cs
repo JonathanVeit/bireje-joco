@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace BiReJeJoCo.Backend
 {
-    #region Match Related 
     /// <summary>
     /// Fired by the host to inform each player that the match is beeing prepared (lobby -> game)
     /// </summary>
@@ -21,13 +19,13 @@ namespace BiReJeJoCo.Backend
     /// <summary>
     /// Fired by the host to inform each player about the match rules, roles etc.
     /// </summary>
-    public class DefineMatchRulesPhoMsg : PhotonMessage
+    public class DefinedMatchRulesPhoMsg : PhotonMessage
     {
         public MatchConfig config;
 
-        public DefineMatchRulesPhoMsg() { }
+        public DefinedMatchRulesPhoMsg() { }
 
-        public DefineMatchRulesPhoMsg(MatchConfig config)
+        public DefinedMatchRulesPhoMsg(MatchConfig config)
         {
             this.config = config;
         }
@@ -44,7 +42,7 @@ namespace BiReJeJoCo.Backend
     /// <summary>
     /// Fired by the host to pause the match 
     /// </summary>
-    public class PausePausePhoMsg : PhotonMessage
+    public class PauseMatchPhoMsg : PhotonMessage
     {
 
     }
@@ -58,36 +56,76 @@ namespace BiReJeJoCo.Backend
     }
 
     /// <summary>
-    /// Fired by the host to end the match
+    /// Fired by the host to end the match with a certain result
     /// </summary>
-    public class EndMatchPhoMsg : PhotonMessage
+    public class FinishMatchPhoMsg : PhotonMessage
     {
-        
+        public MatchResult result;
+
+        public FinishMatchPhoMsg() { }
+        public FinishMatchPhoMsg(MatchResult result)
+        {
+            this.result = result;
+        }
     }
 
     /// <summary>
-    /// Fired by the host to quit the match
+    /// Defines how a match will be closed
     /// </summary>
-    public class QuitMatchPhoMsg : PhotonMessage
+    public enum CloseMatchMode
     {
-        public bool leaveLobby;
+        None    = 0,
+        LeaveLobby = 1,
+        ReturnToLobby  = 2,
+        LoadLevel   = 3,
+    }
 
-        public QuitMatchPhoMsg() { }
-        public QuitMatchPhoMsg(bool leaveLobby)
+    /// <summary>
+    /// Fired by the host to close the match (rehost possible)
+    /// </summary>
+    public class CloseMatchPhoMsg : PhotonMessage
+    {
+        public CloseMatchMode mode;
+
+        public CloseMatchPhoMsg() { }
+        public CloseMatchPhoMsg(CloseMatchMode mode)
         {
-            this.leaveLobby = leaveLobby;
+            this.mode = mode;
         }
     }
-    #endregion
 
-    public class OnSynchronizedTriggerPhoMsg : PhotonMessage
+    /// <summary>
+    /// Fired by a hunter when hitting the hunted with a bullet
+    /// </summary>
+    public class HuntedHitByBulletPhoMsg : PhotonMessage
+    {
+        public float dmg;
+
+        public HuntedHitByBulletPhoMsg() { }
+        public HuntedHitByBulletPhoMsg(float damage) 
+        {
+            dmg = damage;
+        }
+    }
+
+    /// <summary>
+    /// Fired by the hunted when beeing killed
+    /// </summary>
+    public class HuntedKilledPhoMsg : PhotonMessage
+    { 
+    }
+
+    /// <summary>
+    /// Cally by any player when interacting with a trigger
+    /// </summary>
+    public class TriggerPointInteractedPhoMsg : PhotonMessage
     {
         public byte i;
         public byte pi;
         public int a;
 
-        public OnSynchronizedTriggerPhoMsg() { }
-        public OnSynchronizedTriggerPhoMsg(byte id, byte pointId, int actor)
+        public TriggerPointInteractedPhoMsg() { }
+        public TriggerPointInteractedPhoMsg(byte id, byte pointId, int actor)
         {
             i = id;
             pi = pointId;

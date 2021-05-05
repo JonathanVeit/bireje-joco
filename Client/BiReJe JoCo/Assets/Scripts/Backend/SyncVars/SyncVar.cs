@@ -16,8 +16,10 @@ namespace BiReJeJoCo.Backend
     {
         SyncVarStatus Status { get; }
         byte? UniqueId { get; }
-        void Connect(SyncVarStatus type);
+        bool IsForced { get; }
 
+        void SetConnected(SyncVarStatus type);
+        
         byte[] GetSerialized();
         string GetSerializedString();
         void SetSerialized(byte[] value);
@@ -26,10 +28,13 @@ namespace BiReJeJoCo.Backend
     [Serializable]
     public class SyncVar<TValue> : SystemAccessor, ISyncVar
     {
-        public event Action<byte> OnValueReceived;
+        public event Action<TValue> OnValueReceived;
 
         public SyncVarStatus Status { get; private set; }
         public byte? UniqueId { get; private set; }
+        public bool IsForced => forceSendAmount > 0;
+        private int forceSendAmount = 0;
+
         [SerializeField] private TValue value;
 
         public SyncVar(byte uniqueId) : this(uniqueId, default) { }
@@ -53,9 +58,18 @@ namespace BiReJeJoCo.Backend
         {
             return value;
         }
+        public void ForceSend() 
+        {
+            if (Status == SyncVarStatus.IsReceiving)
+            {
+                Debug.LogWarning($"SyncVar {UniqueId} cannot be forced to synchronize. Its Receiving.");
+                return;
+            }
 
+            forceSendAmount++;
+        }
 
-        public void Connect(SyncVarStatus type)
+        public void SetConnected(SyncVarStatus type)
         {
             Status = type;
         }
@@ -64,10 +78,11 @@ namespace BiReJeJoCo.Backend
         public void SetSerialized(byte[] value)
         {
             this.value = (TValue) Protocol.Deserialize(value);
-            OnValueReceived.Invoke(UniqueId.Value);
-    }
+            OnValueReceived.Invoke(this.value);
+        }
         public byte[] GetSerialized()
         {
+            forceSendAmount = Mathf.Clamp (--forceSendAmount, 0, int.MaxValue);
             return Protocol.Serialize(value);
         }
         public string GetSerializedString() 

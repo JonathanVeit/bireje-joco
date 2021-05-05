@@ -35,7 +35,7 @@ namespace BiReJeJoCo.UI
         {
             messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
             messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnJoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
+            messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
 
         private void DisconnectEvents()
@@ -55,7 +55,7 @@ namespace BiReJeJoCo.UI
                 gameManager.OpenLobby();
         }
 
-        private void OnJoinLobbyFailed(OnJoinLobbyFailedMsg msg)
+        private void OnJoinLobbyFailed(JoinLobbyFailedMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
         }

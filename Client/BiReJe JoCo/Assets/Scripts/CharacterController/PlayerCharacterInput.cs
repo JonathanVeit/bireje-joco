@@ -22,6 +22,9 @@ namespace BiReJeJoCo.Character
         //Menu
         public event Action onMenuPressed;
 
+        // shooting 
+        public event Action onShootPressed;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
@@ -31,10 +34,10 @@ namespace BiReJeJoCo.Character
             Cursor.lockState = CursorLockMode.Locked;
 
             //Register what to do when game menu is being opened
-            messageHub.RegisterReceiver<OnGameMenuOpenedMsg>(this, ReceiveGameMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, ReceiveGameMenuOpened);
 
             //Register what to do when game menu being closed
-            messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, ReceiveGameMenuClosed);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, ReceiveGameMenuClosed);
         }
 
         #region Set Input (PlayerInput Component)
@@ -90,6 +93,19 @@ namespace BiReJeJoCo.Character
             }
         }
 
+        public void SetShootInput(InputAction.CallbackContext inputValue)
+        {
+            Debug.Log (123);
+
+            if (!characterInputIsActive)
+                return;
+
+            if (inputValue.performed)
+            {
+                onShootPressed?.Invoke();
+            }
+        }
+
         public void SetTriggerInput(InputAction.CallbackContext inputValue)
         {
             if (!characterInputIsActive)
@@ -97,7 +113,7 @@ namespace BiReJeJoCo.Character
 
             if (inputValue.performed)
             {
-                messageHub.ShoutMessage<OnPlayerPressedTriggerMsg>(this);
+                messageHub.ShoutMessage<PlayerPressedTriggerMsg>(this);
             }
         }
         #endregion
@@ -141,7 +157,7 @@ namespace BiReJeJoCo.Character
         #endregion
 
         
-        void ReceiveGameMenuOpened(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
+        void ReceiveGameMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
@@ -149,7 +165,7 @@ namespace BiReJeJoCo.Character
             Cursor.lockState = CursorLockMode.Confined;
         }
 
-        void ReceiveGameMenuClosed(OnGameMenuClosedMsg onGameMenuOpenedMsg)
+        void ReceiveGameMenuClosed(PauseMenuClosedMsg onGameMenuOpenedMsg)
         {
             Cursor.lockState = CursorLockMode.Locked;
             characterInputIsActive = true;

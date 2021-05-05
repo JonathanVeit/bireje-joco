@@ -24,17 +24,15 @@ namespace BiReJeJoCo.Character
         private float xAxisSave;
         private float yAxisSave;
 
-
-
         protected override void OnSystemsInitialized()
         {
             cinemaFreeLook = this.GetComponent<CinemachineFreeLook>();
 
             //Register what to do when game menu is being opened
-            messageHub.RegisterReceiver<OnGameMenuOpenedMsg>(this, HandleGameMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, HandleGameMenuOpened);
 
             //Register what to do when game menu being closed
-            messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, HandleGameMenuClosed);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, HandleGameMenuClosed);
 
             //save axis values
             xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
@@ -55,7 +53,7 @@ namespace BiReJeJoCo.Character
             }
         }
 
-        void HandleGameMenuOpened(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
+        void HandleGameMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
             xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
             yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
@@ -63,7 +61,7 @@ namespace BiReJeJoCo.Character
             cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
         }
 
-        void HandleGameMenuClosed(OnGameMenuClosedMsg onGameMenuClosedMsg)
+        void HandleGameMenuClosed(PauseMenuClosedMsg onGameMenuClosedMsg)
         {
             cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
             cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
