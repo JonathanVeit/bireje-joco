@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5100420059376135683}
   - component: {fileID: 5100420059376135687}
   m_Layer: 0
-  m_Name: triggered_lamp 1
+  m_Name: triggered_lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
     Id: 0
     root: {fileID: 5576149577623805219}
     areaSize: {x: 2, y: 2, z: 2}
-    areaOffset: {x: 0, y: 0.4, z: -1}
+    areaOffset: {x: 0, y: 0, z: -1}
     coolDown: 1
     floatingElementId: default_trigger
     floatingElementTarget: {fileID: 5576149577623805219}
@@ -359,7 +359,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5576149577623805217}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.381, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 3.3333333, y: 0.2, z: 3.3333333}
   m_Children:
   - {fileID: 5576149578556639170}
@@ -392,7 +392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5576149578556639171}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.54, z: -0.12}
+  m_LocalPosition: {x: 0, y: 0, z: -0.12}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 5576149577623805219}
