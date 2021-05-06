@@ -36,7 +36,7 @@ namespace BiReJeJoCo.Character
 
         private void HandleHit(GameObject target)
         {
-            var characterModel = target.GetComponent<PlayerCharacterModel>();
+            var characterModel = target.GetComponent<HuntedCharacterModel>();
             if (isLocalBullet && characterModel != null)
             {
                 photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(characterModel.Owner, damage);

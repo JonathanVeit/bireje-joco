@@ -38,7 +38,7 @@ namespace BiReJeJoCo.Backend
 
         private void SpawnPlayerCharacter() 
         {
-            string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
+            string prefabId = MatchPrefabMapping.GetMapping().GetElementForKey("third_person_pc").name;
 
             var scene = matchHandler.MatchConfig.matchScene;
             var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];

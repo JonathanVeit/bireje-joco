@@ -2,7 +2,7 @@ using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Character
 {
-    public class PlayerCharacterModel : SystemBehaviour, IPlayerObserved
+    public class HuntedCharacterModel : SystemBehaviour, IPlayerObserved
     {
         public float Health { get; private set; } = 100f;
         public Player Owner { get; private set; }

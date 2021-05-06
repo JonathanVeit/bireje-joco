@@ -27,6 +27,8 @@ namespace BiReJeJoCo.Backend
 
         protected override void OnBeforeDestroy()
         {
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
             instances.Remove(triggerId);
             base.OnBeforeDestroy();
         }

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
-
-
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Character
 {
@@ -20,24 +17,40 @@ namespace BiReJeJoCo.Character
         
 
         CinemachineFreeLook cinemaFreeLook;
+        AdvancedWalkerController walkController;
+
         //save active Axis numbers
         private float xAxisSave;
         private float yAxisSave;
 
+        #region Initiazation
         protected override void OnSystemsInitialized()
         {
             cinemaFreeLook = this.GetComponent<CinemachineFreeLook>();
 
-            //Register what to do when game menu is being opened
-            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, HandleGameMenuOpened);
-
-            //Register what to do when game menu being closed
-            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, HandleGameMenuClosed);
-
             //save axis values
             xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
             yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
+            ConnectEvents();
         }
+        protected override void OnBeforeDestroy()
+        {
+            DisconnectEvents();
+        }
+
+        private void ConnectEvents()
+        {  
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, HandleGameMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, HandleGameMenuClosed);
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchEnd);
+        }
+        private void DisconnectEvents()
+        {
+            messageHub.UnregisterReceiver(this);
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
+        }
+        #endregion
 
         public void OnControlsChanged(PlayerInput playerInput)
         {
@@ -55,18 +68,29 @@ namespace BiReJeJoCo.Character
 
         void HandleGameMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
+            BlockMovement();
+        }
+        void HandleGameMenuClosed(PauseMenuClosedMsg onGameMenuClosedMsg)
+        {
+            UnblockMovement();
+        }
+
+        void OnMatchEnd(PhotonMessage msg)
+        {
+            BlockMovement();
+        }
+
+        void BlockMovement()
+        {
             xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
             yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
             cinemaFreeLook.m_XAxis.m_MaxSpeed = 0f;
             cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
         }
-
-        void HandleGameMenuClosed(PauseMenuClosedMsg onGameMenuClosedMsg)
+        void UnblockMovement() 
         {
             cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
             cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
         }
-
-
     }
 }

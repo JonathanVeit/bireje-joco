@@ -1,10 +1,9 @@
 ﻿using BiReJeJoCo.Backend;
-using JoVei.Base.Helper;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class PlayerShoot : SystemBehaviour, IPlayerObserved
+    public class CharacterShooter : SystemBehaviour, IPlayerObserved
     {
         [Header("Settings")]
         [SerializeField] SyncVar<Vector3> playerShot = new SyncVar<Vector3>(0);
@@ -22,9 +21,9 @@ namespace BiReJeJoCo.Character
         public void Initialize(PlayerControlled controller)
         {
             this.controller  = controller;
-            input = GetComponent<PlayerCharacterInput>();
+            input = GetComponentInParent<PlayerCharacterInput>();
 
-            if(controller.Player.IsLocalPlayer && controller.Player.Role == PlayerRole.Hunter)
+            if(controller.Player.IsLocalPlayer)
                 input.onShootPressed += OnShootPressed;
             playerShot.OnValueReceived += OnShotFired;
 

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using JoVei.Base;
 using BiReJeJoCo.Backend;
-using UnityEngine.UI;
 
 namespace BiReJeJoCo.UI
 {
@@ -16,20 +15,22 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject crosshairGO;
         [SerializeField] MatchResultPopup resultPopup;
 
-        bool menuIsActive => menuGO.activeSelf;
+        private static bool pauseMenuIsOpened;
 
         #region Inizialization
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
             DIContainer.RegisterImplementation<GameUI>(this);
-            endMatchButton.SetActive(localPlayer.IsHost);
 
             ConnectEvents();
             InitializeUI();
         }
+        
         private void InitializeUI()
         {
+            endMatchButton.SetActive(localPlayer.IsHost);
+
             if (localPlayer.Role == PlayerRole.Hunted)
             {
                 InitializeAsHunted();
@@ -39,7 +40,6 @@ namespace BiReJeJoCo.UI
                 InitializeAsHunter();
             }
         }
-
         private void InitializeAsHunted()
         {
             crosshairGO.SetActive(false);
@@ -98,7 +98,7 @@ namespace BiReJeJoCo.UI
         {
             if (!inputValue.performed) return;
 
-            if (!menuIsActive)
+            if (!pauseMenuIsOpened)
             {
                 messageHub.ShoutMessage(this, new PauseMenuOpenedMsg());
             }
@@ -121,6 +121,7 @@ namespace BiReJeJoCo.UI
         private void ToggleMenu() 
         {
             menuGO.SetActive(!menuGO.activeSelf);
+            pauseMenuIsOpened = menuGO.activeSelf;
         }
 
         private void ShowResult(MatchResult result) 
