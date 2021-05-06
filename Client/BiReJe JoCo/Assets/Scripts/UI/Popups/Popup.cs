@@ -14,11 +14,14 @@ namespace BiReJeJoCo.UI
         
         public static int OpenCount => OpenPopups.Count;
         public static int HistoryCount => History.Count;
-        public static bool IsOpen => OpenPopups.Count > 0;
+        public static bool PopupIsOpen => OpenPopups.Count > 0;
 
         public static int HistoryLength = 20;
 
         protected static List<Popup> cachedPopups;
+
+
+        public bool IsOpen { get; protected set; }
 
         public virtual void Show() 
         {
@@ -35,6 +38,8 @@ namespace BiReJeJoCo.UI
                     History.RemoveAt(History.Count - 1);  
                 }
             }
+
+            IsOpen = true;
         }
 
         public virtual void Hide() 
@@ -45,6 +50,8 @@ namespace BiReJeJoCo.UI
                 OpenPopups.Remove(this);
                 LastClosed = this;
             }
+
+            IsOpen = false;
         }
 
         public static void HideAll(bool save = false) 

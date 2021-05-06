@@ -13,9 +13,9 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject endMatchButton;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] GameObject crosshairGO;
-        [SerializeField] MatchResultPopup resultPopup;
 
-        private static bool pauseMenuIsOpened;
+        private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
+        private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
 
         #region Inizialization
         protected override void OnSystemsInitialized()
@@ -84,27 +84,17 @@ namespace BiReJeJoCo.UI
         #endregion
 
         #region UI Input
-        public void Continue()
-        {
-            ToggleMenu();
-        }
-
-        public void EndMatch()
-        {
-            (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.LeaveLobby);
-        }
-
         public void SetMenuInput(InputAction.CallbackContext inputValue)
         {
             if (!inputValue.performed) return;
 
-            if (!pauseMenuIsOpened)
+            if (pausePopup.IsOpen)
             {
-                messageHub.ShoutMessage(this, new PauseMenuOpenedMsg());
+                messageHub.ShoutMessage<PauseMenuClosedMsg>(this);
             }
             else
             {
-                messageHub.ShoutMessage(this, new PauseMenuClosedMsg());
+                messageHub.ShoutMessage<PauseMenuOpenedMsg>(this);
             }
         }
         #endregion
@@ -120,14 +110,16 @@ namespace BiReJeJoCo.UI
         }
         private void ToggleMenu() 
         {
-            menuGO.SetActive(!menuGO.activeSelf);
-            pauseMenuIsOpened = menuGO.activeSelf;
+            if (pausePopup.IsOpen)
+                pausePopup.Hide();
+            else
+                pausePopup.Show();
         }
 
         private void ShowResult(MatchResult result) 
         {
             Cursor.lockState = CursorLockMode.Confined;
-            uiManager.GetInstanceOf<MatchResultPopup>().Show(result);
+            resultPopup.Show(result);
             crosshairGO.SetActive(false);
         }
         #endregion

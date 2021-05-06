@@ -46,12 +46,19 @@ namespace BiReJeJoCo.Character
             foreach (var curComponent in componentsToDisable)
                 curComponent.enabled = false;
             rb.isKinematic = true;
+
         }
 
         private void SetupAsHunted() 
         {
             var model = characterRoot.AddComponent<HuntedCharacterModel>();
             controller.AddObservedComponent(model);
+
+            // TODO: hunted should not have a lamp but better pp 
+            if (!Owner.IsLocalPlayer)
+                GetComponentsInChildren<Light>()[0].gameObject.SetActive(false);
+
+            SetLayerRecursively(this.gameObject, 10);
         }
 
         private void SetupAsHunter() 
@@ -62,5 +69,17 @@ namespace BiReJeJoCo.Character
             var gun = Instantiate(gunPrefab, root.position, Quaternion.identity, root);
             controller.AddObservedComponent(gun.GetComponent<CharacterShooter>());
         }
+
+        #region Helper
+        private void SetLayerRecursively(GameObject target, int newLayer)
+        {
+            target.layer = newLayer;
+
+            foreach (Transform child in target.transform)
+            {
+                SetLayerRecursively(child.gameObject, newLayer);
+            }
+        }
+        #endregion
     }
 }
