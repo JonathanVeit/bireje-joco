@@ -46,7 +46,7 @@ namespace BiReJeJoCo.Character
             foreach (var curComponent in componentsToDisable)
                 curComponent.enabled = false;
             rb.isKinematic = true;
-
+            SetTagRecursively(this.gameObject, "RemotePlayer");
         }
 
         private void SetupAsHunted() 
@@ -71,13 +71,23 @@ namespace BiReJeJoCo.Character
         }
 
         #region Helper
-        private void SetLayerRecursively(GameObject target, int newLayer)
+        private void SetLayerRecursively(GameObject target, int layer)
         {
-            target.layer = newLayer;
+            target.layer = layer;
 
             foreach (Transform child in target.transform)
             {
-                SetLayerRecursively(child.gameObject, newLayer);
+                SetLayerRecursively(child.gameObject, layer);
+            }
+        }
+
+        private void SetTagRecursively(GameObject target, string tag)
+        {
+            target.tag = tag;
+
+            foreach (Transform child in target.transform)
+            {
+                SetTagRecursively(child.gameObject, tag);
             }
         }
         #endregion
