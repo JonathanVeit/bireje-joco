@@ -97,7 +97,7 @@ namespace BiReJeJoCo.UI
         #region UI Inputs
         public void StartGame()
         {
-            (matchHandler as HostMatchHandler).StartMatch("game_scene");
+            (matchHandler as HostMatchHandler).StartMatch("game_scene_4");
         }
 
         public void LeaveLobby() 
