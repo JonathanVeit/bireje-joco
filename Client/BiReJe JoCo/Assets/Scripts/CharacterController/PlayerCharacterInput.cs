@@ -119,6 +119,13 @@ namespace BiReJeJoCo.Character
                 onShootPressed?.Invoke();
             }
         }
+        private void Update()
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                onShootPressed?.Invoke();
+            }
+        }
 
         public void SetTriggerInput(InputAction.CallbackContext inputValue)
         {
