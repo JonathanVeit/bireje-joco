@@ -19,6 +19,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] public GameObject fogDownstairsHunted;
         [SerializeField] public GameObject fogUpstairsHunted;
         [SerializeField] List<MonoBehaviour> componentsToDisable;
+        [SerializeField] GameObject huntedHead;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -68,6 +69,7 @@ namespace BiReJeJoCo.Character
                 GetComponentsInChildren<Light>()[0].gameObject.SetActive(false);
 
             SetLayerRecursively(this.gameObject, 10);
+            huntedHead.gameObject.SetActive(true);
         }
 
         private void SetupAsHunter() 
