@@ -93,6 +93,15 @@ namespace BiReJeJoCo
     public class PauseMenuClosedMsg : BaseMessage
     {
     }
+
+    public class PPSUpstairsMsg : BaseMessage 
+    { 
+    }
+
+    public class PPSDownstairsMsg : BaseMessage
+    {
+    }
+
     #endregion
 
     #region Player Inputs
