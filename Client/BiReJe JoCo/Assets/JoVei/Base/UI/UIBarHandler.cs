@@ -21,6 +21,8 @@ namespace JoVei.Base.UI
         [SerializeField] Image target;
         [SerializeField] float speed;
 
+        public Image TargetImage { get { return target; } }
+
         #region Runtime Member
         private float currentValue;
         private float targetValue;

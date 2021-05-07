@@ -13,6 +13,7 @@ namespace BiReJeJoCo
         {
             base.ConnectEvents();
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
+            photonMessageHub.RegisterReceiver<HuntedKilledPhoMsg>(this, OnHuntedKilled);
         }
         #endregion
 
@@ -27,7 +28,7 @@ namespace BiReJeJoCo
             var castedMsg = msg as PrepareMatchStartPhoMsg;
             var config = CreateMatchConfig(castedMsg.matchScene);
 
-            photonMessageHub.ShoutMessage(new DefineMatchRulesPhoMsg(config), PhotonMessageTarget.AllViaServer);
+            photonMessageHub.ShoutMessage(new DefinedMatchRulesPhoMsg(config), PhotonMessageTarget.AllViaServer);
             LogMatchMessage("Match rules defined");
         }
 
@@ -76,17 +77,17 @@ namespace BiReJeJoCo
             return config;
         }
 
-        protected override void OnDefineMatchRoles(PhotonMessage msg)
+        protected override void OnDefineMatchRules(PhotonMessage msg)
         {
-            var castedMsg = msg as DefineMatchRulesPhoMsg;
-            base.OnDefineMatchRoles(msg);
+            var castedMsg = msg as DefinedMatchRulesPhoMsg;
+            base.OnDefineMatchRules(msg);
 
-            LoadLevel(castedMsg.config.matchScene);
+            photonRoomWrapper.LoadLevel(castedMsg.config.matchScene);
         }
         #endregion
 
         #region Match
-        protected override void OnLoadedGameScene(OnLoadedGameSceneMsg msg)
+        protected override void OnLoadedGameScene(LoadedGameSceneMsg msg)
         {
             base.OnLoadedGameScene(msg);
             startedMatch = false;
@@ -97,7 +98,6 @@ namespace BiReJeJoCo
             if (State == MatchState.WaitingForPlayer) 
                 WaitForPlayer();
         } 
-
         private void WaitForPlayer() 
         {
             if (!startedMatch && AllPlayerReady())
@@ -106,7 +106,6 @@ namespace BiReJeJoCo
                 startedMatch = true;
             }
         }
-
         private bool AllPlayerReady() 
         {
             foreach (var curPlayer in playerManager.GetAllPlayer())
@@ -126,17 +125,40 @@ namespace BiReJeJoCo
                 LogMatchMessage("Restart match");
                 StartMatch(scene_name);
             };
-            callback += (x) => { photonMessageHub.UnregisterReceiver<QuitMatchPhoMsg>(this, callback); };
-            photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, callback);
+            callback += (x) => { photonMessageHub.UnregisterReceiver<CloseMatchPhoMsg>(this, callback); };
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, callback);
 
-            photonMessageHub.ShoutMessage(new QuitMatchPhoMsg(false), PhotonMessageTarget.AllViaServer);
+            photonMessageHub.ShoutMessage(new CloseMatchPhoMsg(CloseMatchMode.LoadLevel), PhotonMessageTarget.AllViaServer);
         }
-        #endregion
-
-        #region Helper
-        private void LoadLevel(string level_name)
+        public void CloseMatch(CloseMatchMode mode)
         {
-            photonRoomWrapper.LoadLevel(level_name);
+            photonMessageHub.ShoutMessage<CloseMatchPhoMsg>(PhotonMessageTarget.AllViaServer, mode);
+        }
+        
+        private void OnHuntedKilled(PhotonMessage msg)
+        {
+            var result = new MatchResult()
+            {
+                winner = PlayerRole.Hunter,
+            };
+
+            photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);
+        }
+
+        protected override void OnMatchClosed(PhotonMessage msg)
+        {
+            var casted = msg as CloseMatchPhoMsg;
+            if (casted.mode == CloseMatchMode.LeaveLobby)
+            {
+                photonMessageHub.UnregisterReceiver(this);
+                photonClient.LeaveLobby();
+            }
+            else if (casted.mode == CloseMatchMode.ReturnToLobby)
+            {
+                photonRoomWrapper.LoadLevel("lobby_scene");
+            }
+
+            LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }
         #endregion
     }

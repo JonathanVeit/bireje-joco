@@ -17,7 +17,8 @@ namespace BiReJeJoCo
         protected static Backend.SyncVarHub syncVarHub => DIContainer.GetImplementationFor<Backend.SyncVarHub>();
 
         protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();
-        protected static UI.GameUI gameUI => DIContainer.GetImplementationFor<UI.GameUI>();
+        protected static UI.UIManager uiManager => DIContainer.GetImplementationFor<UI.UIManager>();
         protected static MatchHandler matchHandler => DIContainer.GetImplementationFor<MatchHandler>();
     }
+
 }

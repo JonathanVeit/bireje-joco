@@ -23,8 +23,8 @@ namespace BiReJeJoCo.Backend
             if (!PlayerRoleMatchesTarget(localPlayer.Role)) return;
 
             tickSystem.Register(this, "update_half_second");
-            messageHub.RegisterReceiver<OnPlayerPressedTriggerMsg>(this, OnPressedTrigger);
-            messageHub.RegisterReceiver<OnPlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+            messageHub.RegisterReceiver<PlayerPressedTriggerMsg>(this, OnPressedTrigger);
+            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             
             floaties = new Dictionary<byte, FloatingElement>();
             foreach (var curTrigger in triggerPoints)
@@ -39,12 +39,6 @@ namespace BiReJeJoCo.Backend
         {
             base.OnBeforeDestroy();
             messageHub.UnregisterReceiver(this);
-
-            foreach(var curEntry in floaties)
-            {
-                if (curEntry.Value != null)
-                    floatingManager.DestroyElement(curEntry.Value);
-            }
         }
         #endregion
 
@@ -72,7 +66,7 @@ namespace BiReJeJoCo.Backend
 
         protected virtual void ShowTriggerPointFloaty(TriggerSetup trigger)
         {
-            var config = new FloatingElementConfig(trigger.floatingElementId, gameUI.floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
+            var config = new FloatingElementConfig(trigger.floatingElementId, uiManager.GetInstanceOf<GameUI> ().floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
             if (!floaties.ContainsKey(trigger.Id))
                 floaties.Add(trigger.Id, null);
 
@@ -86,7 +80,7 @@ namespace BiReJeJoCo.Backend
         protected virtual void OnFloatySpawned(int pointId, FloatingElement floaty) { }
 
         #region Events
-        protected virtual void OnPressedTrigger(OnPlayerPressedTriggerMsg msg)
+        protected virtual void OnPressedTrigger(PlayerPressedTriggerMsg msg)
         {
             foreach (var curTrigger in triggerPoints)
             {
@@ -98,7 +92,7 @@ namespace BiReJeJoCo.Backend
             }
         }
 
-        protected virtual void OnPlayerCharacterSpawned(OnPlayerCharacterSpawnedMsg msg)
+        protected virtual void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             playerTransform = localPlayer.PlayerCharacter.GetComponentInChildren<Mover>().transform;
         }

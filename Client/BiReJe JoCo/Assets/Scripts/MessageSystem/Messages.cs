@@ -41,62 +41,62 @@ namespace BiReJeJoCo
         public OnJoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
     }
 
-    public class OnLoadedLobbySceneMsg : BaseMessage
+    public class LoadedLobbySceneMsg : BaseMessage
     {
 
     }
 
-    public class OnJoinLobbyFailedMsg : Message<string>
+    public class JoinLobbyFailedMsg : Message<string>
     {
-        public OnJoinLobbyFailedMsg(string lobbyName) : base(lobbyName) { }
+        public JoinLobbyFailedMsg(string lobbyName) : base(lobbyName) { }
     }
 
-    public class OnLeftLobbyMsg : BaseMessage
+    public class LeftLobbyMsg : BaseMessage
     {
     }
 
-    public class OnPlayerJoinedLobbyMsg : Message<string>
+    public class PlayerJoinedLobbyMsg : Message<string>
     {
-        public OnPlayerJoinedLobbyMsg(string playerId) : base(playerId) { }
+        public PlayerJoinedLobbyMsg(string playerId) : base(playerId) { }
     }
 
-    public class OnPlayerLeftLobbyMsg : Message<string>
+    public class PlayerLeftLobbyMsg : Message<string>
     {
-        public OnPlayerLeftLobbyMsg(string playerId) : base(playerId) { }
+        public PlayerLeftLobbyMsg(string playerId) : base(playerId) { }
     }
 
-    public class OnAddedPlayerMsg : Message<Player>
+    public class AddedPlayerMsg : Message<Player>
     {
-        public OnAddedPlayerMsg(Player player) : base(player) { }
+        public AddedPlayerMsg(Player player) : base(player) { }
     }
 
-    public class OnRemovedPlayerMsg : Message<Player>
+    public class RemovedPlayerMsg : Message<Player>
     {
-        public OnRemovedPlayerMsg(Player player) : base(player) { }
+        public RemovedPlayerMsg(Player player) : base(player) { }
     }
     #endregion
 
     #region Game Related
-    public class OnLoadedGameSceneMsg : BaseMessage
+    public class LoadedGameSceneMsg : BaseMessage
     {
     }
 
-    public class OnPlayerCharacterSpawnedMsg : BaseMessage
+    public class PlayerCharacterSpawnedMsg : BaseMessage
     {
         
     }
 
-    public class OnGameMenuOpenedMsg : BaseMessage
+    public class PauseMenuOpenedMsg : BaseMessage
     { 
     }
 
-    public class OnGameMenuClosedMsg : BaseMessage
+    public class PauseMenuClosedMsg : BaseMessage
     {
     }
     #endregion
 
     #region Player Inputs
-    public class OnPlayerPressedTriggerMsg : BaseMessage
+    public class PlayerPressedTriggerMsg : BaseMessage
     {
         
     }

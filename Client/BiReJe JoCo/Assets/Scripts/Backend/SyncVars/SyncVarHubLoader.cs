@@ -10,7 +10,7 @@ namespace BiReJeJoCo.Backend
         public IEnumerator Initialize(object[] parameters)
         {
             messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnLeftLobbyMsg>(this, OnLeftLobby);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
             yield return null;
         }
 
@@ -33,7 +33,7 @@ namespace BiReJeJoCo.Backend
             }
         }
 
-        private void OnLeftLobby(OnLeftLobbyMsg msg)
+        private void OnLeftLobby(LeftLobbyMsg msg)
         {
             if (syncVarHub != null)
                 GameObject.Destroy(syncVarHub.gameObject);

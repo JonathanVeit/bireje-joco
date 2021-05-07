@@ -15,7 +15,7 @@ namespace BiReJeJoCo.Backend
         #region Initialization
         protected override void OnSetupActive()
         {
-            photonMessageHub.RegisterReceiver<OnSynchronizedTriggerPhoMsg>(this, OnSychronizedTriggerReceived);
+            photonMessageHub.RegisterReceiver<TriggerPointInteractedPhoMsg>(this, OnSychronizedTriggerReceived);
 
             if (instances.ContainsKey(triggerId))
             {
@@ -27,6 +27,8 @@ namespace BiReJeJoCo.Backend
 
         protected override void OnBeforeDestroy()
         {
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
             instances.Remove(triggerId);
             base.OnBeforeDestroy();
         }
@@ -38,20 +40,20 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        protected sealed override void OnPressedTrigger(OnPlayerPressedTriggerMsg msg)
+        protected sealed override void OnPressedTrigger(PlayerPressedTriggerMsg msg)
         {
             foreach (var curTrigger in triggerPoints)
             {
                 if (PlayerIsInArea(curTrigger) && !curTrigger.isCoolingDown)
                 {
-                    photonMessageHub.ShoutMessage(new OnSynchronizedTriggerPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
+                    photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
                     curTrigger.isCoolingDown = true;
                 }
             }
         }
         private void OnSychronizedTriggerReceived(PhotonMessage msg) 
         {
-            var castedMsg = msg as OnSynchronizedTriggerPhoMsg;
+            var castedMsg = msg as TriggerPointInteractedPhoMsg;
 
             if (castedMsg.i == triggerId)
             {

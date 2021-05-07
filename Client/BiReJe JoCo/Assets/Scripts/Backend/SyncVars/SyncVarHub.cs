@@ -110,7 +110,7 @@ namespace BiReJeJoCo.Backend
         private void RegisterSyncVarInternal(Player owner, ISyncVar syncVar) 
         {
             loadeDispatcher[owner].RegisterSyncVar(syncVar);
-            syncVar.Connect(owner.IsLocalPlayer ? SyncVarStatus.IsSending : SyncVarStatus.IsReceiving);
+            syncVar.SetConnected(owner.IsLocalPlayer ? SyncVarStatus.IsSending : SyncVarStatus.IsReceiving);
             variablesToLoad[owner].Remove(syncVar);
         }
     }

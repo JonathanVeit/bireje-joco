@@ -10,48 +10,44 @@ namespace BiReJeJoCo.Character
         [SerializeField] MeshRenderer colorMesh;
         [SerializeField] Transform floatingElementTarget;
         [SerializeField] MeshRenderer floatingElementMesh;
-        [SerializeField] SyncVar<int> playerHealth = new SyncVar<int>(0, 100);
+
 
         private PlayerNameFloaty nameFloaty;
 
-        private Player player;
+
+        private PlayerControlled controller;
+        public Player Owner => controller.Player;
 
         public void Initialize(PlayerControlled controller)
         {
-            this.player = controller.Player;
+            this.controller = controller;
 
-            if (!player.IsLocalPlayer)
+            if (!Owner.IsLocalPlayer)
             {
                 SpawnFloaty();
-                photonMessageHub.RegisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
+                photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
             }
 
-            colorMesh.material.color = player.Role == PlayerRole.Hunted ? Color.red : Color.white;
+            colorMesh.material.color = Owner.Role == PlayerRole.Hunted ? Color.red : Color.white;
         }
 
         private void SpawnFloaty()
         {
-            if (player.Role == PlayerRole.Hunter && 
+            if (Owner.Role == PlayerRole.Hunter && 
                 localPlayer.Role == PlayerRole.Hunter)
             {
-                var config = new FloatingElementConfig("player_character_name", gameUI.floatingElementGrid, floatingElementTarget);
+                var config = new FloatingElementConfig("player_character_name", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, floatingElementTarget);
                 nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
-                nameFloaty.Initialize(player.NickName);
+                nameFloaty.Initialize(Owner.NickName);
                 nameFloaty.SetVisibleRenderer(floatingElementMesh);
                 //nameFloaty.ShowHealthBar(playerHealth);
             }
         }
 
-        private void OnQuitMatch(PhotonMessage msg)
+        private void OnMatchClosed(PhotonMessage msg)
         {
             floatingManager.DestroyElement(nameFloaty);
-            photonMessageHub.UnregisterReceiver<QuitMatchPhoMsg>(this, OnQuitMatch);
-        }
-
-        protected override void OnBeforeDestroy()
-        {
-            if (syncVarHub != null)
-                syncVarHub.UnregisterSyncVar(playerHealth);
+            photonMessageHub.UnregisterReceiver(this);
         }
     }
 }

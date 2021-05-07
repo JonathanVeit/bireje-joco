@@ -39,9 +39,13 @@ namespace BiReJeJoCo.Backend
         bool m_firstTake = false;
         PhotonView photonView;
 
+        private PlayerControlled controller;
+        public Player Owner => controller.Player;
+
         #region Initialization
         public void Initialize(PlayerControlled controller)
         {
+            this.controller = controller;
             m_StoredPosition = transform.localPosition;
             m_NetworkPosition = Vector3.zero;
 

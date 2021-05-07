@@ -29,7 +29,7 @@ namespace BiReJeJoCo.Backend
         {
             messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
-            messageHub.RegisterReceiver<OnLoadedGameSceneMsg>(this, OnGameSceneLoaded);
+            messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace BiReJeJoCo.Backend
 
         private void SpawnPlayerCharacter() 
         {
-            string prefabId = PlayerPrefabMapping.GetMapping().GetElementForKey("third_person_pc");
+            string prefabId = MatchPrefabMapping.GetMapping().GetElementForKey("third_person_pc").name;
 
             var scene = matchHandler.MatchConfig.matchScene;
             var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];
@@ -52,7 +52,7 @@ namespace BiReJeJoCo.Backend
             var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
             PlayerCharacter = go.GetComponent<PlayerControlled>();
 
-            messageHub.ShoutMessage<OnPlayerCharacterSpawnedMsg>(this);
+            messageHub.ShoutMessage<PlayerCharacterSpawnedMsg>(this);
         }
 
         public void SetNickName(string name)
@@ -76,7 +76,7 @@ namespace BiReJeJoCo.Backend
             UpdateProperties("State", PlayerState.Free, "Role", PlayerRole.None);
         }
 
-        private void OnGameSceneLoaded(OnLoadedGameSceneMsg msg)
+        private void OnGameSceneLoaded(LoadedGameSceneMsg msg)
         {
             SpawnPlayerCharacter();
             UpdateProperty("State", PlayerState.Ready);

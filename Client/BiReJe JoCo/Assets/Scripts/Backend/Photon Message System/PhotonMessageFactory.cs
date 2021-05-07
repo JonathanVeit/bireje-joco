@@ -18,19 +18,23 @@ namespace BiReJeJoCo.Backend
                 case 1:
                     return JsonConvert.DeserializeObject<StartMatchPhoMsg>(serializedMessage);
                 case 2:
-                    return JsonConvert.DeserializeObject<PausePausePhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<PauseMatchPhoMsg>(serializedMessage);
                 case 3:
                     return JsonConvert.DeserializeObject<ContinueMatchPhoMsg>(serializedMessage);
                 case 4:
-                    return JsonConvert.DeserializeObject<EndMatchPhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<FinishMatchPhoMsg>(serializedMessage);
                 case 5:
-                    return JsonConvert.DeserializeObject<QuitMatchPhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<CloseMatchPhoMsg>(serializedMessage);
                 case 6:
                     return JsonConvert.DeserializeObject<PrepareMatchStartPhoMsg>(serializedMessage);
                 case 7:
-                    return JsonConvert.DeserializeObject<DefineMatchRulesPhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<DefinedMatchRulesPhoMsg>(serializedMessage);
                 case 8:
-                    return JsonConvert.DeserializeObject<OnSynchronizedTriggerPhoMsg>(serializedMessage); 
+                    return JsonConvert.DeserializeObject<TriggerPointInteractedPhoMsg>(serializedMessage);
+                case 9:
+                    return JsonConvert.DeserializeObject<HuntedHitByBulletPhoMsg>(serializedMessage);
+                case 10:
+                    return JsonConvert.DeserializeObject<HuntedKilledPhoMsg>(serializedMessage);
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing messages of code { code }");
@@ -43,20 +47,24 @@ namespace BiReJeJoCo.Backend
             {
                 case StartMatchPhoMsg casted:
                     return 1;
-                case PausePausePhoMsg casted:
+                case PauseMatchPhoMsg casted:
                     return 2;
                 case ContinueMatchPhoMsg casted:
                     return 3;
-                case EndMatchPhoMsg casted:
+                case FinishMatchPhoMsg casted:
                     return 4;
-                case QuitMatchPhoMsg casted:
+                case CloseMatchPhoMsg casted:
                     return 5;
                 case PrepareMatchStartPhoMsg casted:
                     return 6;
-                case DefineMatchRulesPhoMsg casted:
+                case DefinedMatchRulesPhoMsg casted:
                     return 7;
-                case OnSynchronizedTriggerPhoMsg casted:
+                case TriggerPointInteractedPhoMsg casted:
                     return 8;
+                case HuntedHitByBulletPhoMsg casted:
+                    return 9;
+                case HuntedKilledPhoMsg casted:
+                    return 10;
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing mesasges of type { msg.GetType().Name }");

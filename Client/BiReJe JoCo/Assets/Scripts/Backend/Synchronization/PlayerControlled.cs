@@ -15,7 +15,6 @@ namespace BiReJeJoCo.Backend
 
         private List<IPlayerObserved> observedComponents;
         private Dictionary<byte, ISyncVar> observedVariables;
-        private Dictionary<byte, string> variableCache;
 
         private void Awake()
         {
@@ -23,44 +22,26 @@ namespace BiReJeJoCo.Backend
             Player = playerManager.GetPlayer(PhotonView.Controller.UserId);
 
             FindObserved();
-            InitializeComponents();
-            InitializeVariables();
-
             this.gameObject.name = $"({Player.NickName}) {this.gameObject.name}";
         }
-
-        private void InitializeComponents()
-        {
-            foreach (var curComponent in observedComponents)
-            {
-                curComponent.Initialize(this);
-            }
-        }
-
-        private void InitializeVariables() 
-        {
-            foreach (var curVariable in observedVariables.Values)
-            {
-                syncVarHub.RegisterSyncVar(Player, curVariable);
-            }
-        }
-
         private void FindObserved()
         {
             observedComponents = new List<IPlayerObserved>();
             observedVariables = new Dictionary<byte, ISyncVar>();
-            variableCache = new Dictionary<byte, string>();
 
             foreach (var curComponet in GetComponentsInChildren<IPlayerObserved>())
             {
-                if (!observedComponents.Contains(curComponet))
-                    observedComponents.Add(curComponet);
-
-                FindObservedField(curComponet);
+                AddObservedComponent(curComponet);
             }
         }
-
-        private void FindObservedField(IPlayerObserved component)
+        
+        public void AddObservedComponent(IPlayerObserved component)
+        {
+            observedComponents.Add(component);
+            component.Initialize(this);
+            FindObservedFields(component);
+        }
+        private void FindObservedFields(IPlayerObserved component)
         {
             var fields = component.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -73,12 +54,17 @@ namespace BiReJeJoCo.Backend
 
                 if (!syncVar.UniqueId.HasValue)
                 {
-                    Debug.LogError($"Field {curField.Name} of component {(component as Component).name} is not initalized and cannot be observed");
+                    Debug.Log($"Field {curField.Name} of component {(component as Component).name} is not initalized and cannot be observed");
                     continue;
                 }
 
-                observedVariables.Add(syncVar.UniqueId.Value, syncVar);
+                AddSyncVar(syncVar);
             }
+        }
+        public void AddSyncVar(ISyncVar syncVar)
+        {
+            observedVariables.Add(syncVar.UniqueId.Value, syncVar);
+            syncVarHub.RegisterSyncVar(Player, syncVar);
         }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Character
 {
@@ -22,20 +23,38 @@ namespace BiReJeJoCo.Character
         //Menu
         public event Action onMenuPressed;
 
+        // shooting 
+        public event Action onShootPressed;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
+        #region Initialization
         protected override void OnSystemsInitialized()
         {
             //lock cursor
             Cursor.lockState = CursorLockMode.Locked;
-
-            //Register what to do when game menu is being opened
-            messageHub.RegisterReceiver<OnGameMenuOpenedMsg>(this, ReceiveGameMenuOpened);
-
-            //Register what to do when game menu being closed
-            messageHub.RegisterReceiver<OnGameMenuClosedMsg>(this, ReceiveGameMenuClosed);
+            ConnectEvents();
         }
+        protected override void OnBeforeDestroy()
+        {
+            DisconnectEvents();
+        }
+
+        private void ConnectEvents()
+        {
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
+
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnFinishMatch);
+        }
+        private void DisconnectEvents()
+        {
+            messageHub.UnregisterReceiver(this);
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
+        }
+        #endregion
 
         #region Set Input (PlayerInput Component)
         // assigns the new input system values to a vector and gives that vector back
@@ -90,6 +109,24 @@ namespace BiReJeJoCo.Character
             }
         }
 
+        public void SetShootInput(InputAction.CallbackContext inputValue)
+        {
+            if (!characterInputIsActive)
+                return;
+
+            if (inputValue.performed)
+            {
+                onShootPressed?.Invoke();
+            }
+        }
+        private void Update()
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                onShootPressed?.Invoke();
+            }
+        }
+
         public void SetTriggerInput(InputAction.CallbackContext inputValue)
         {
             if (!characterInputIsActive)
@@ -97,7 +134,7 @@ namespace BiReJeJoCo.Character
 
             if (inputValue.performed)
             {
-                messageHub.ShoutMessage<OnPlayerPressedTriggerMsg>(this);
+                messageHub.ShoutMessage<PlayerPressedTriggerMsg>(this);
             }
         }
         #endregion
@@ -140,18 +177,33 @@ namespace BiReJeJoCo.Character
         }
         #endregion
 
-        
-        void ReceiveGameMenuOpened(OnGameMenuOpenedMsg onGameMenuOpenedMsg)
+        #region Events
+        void OnPauseMenuOpened(PauseMenuOpenedMsg msg)
+        {
+            BlockMovement();
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        void OnPauseMenuClosed(PauseMenuClosedMsg msg)
+        {
+            UnblockMovement();
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        void OnFinishMatch(PhotonMessage msg)
+        {
+            BlockMovement();
+        }
+        #endregion
+
+        private void BlockMovement()
         {
             moveInput = Vector2.zero;
             lookInput = Vector2.zero;
             characterInputIsActive = false;
-            Cursor.lockState = CursorLockMode.Confined;
         }
 
-        void ReceiveGameMenuClosed(OnGameMenuClosedMsg onGameMenuOpenedMsg)
+        private void UnblockMovement() 
         {
-            Cursor.lockState = CursorLockMode.Locked;
             characterInputIsActive = true;
         }
     }
