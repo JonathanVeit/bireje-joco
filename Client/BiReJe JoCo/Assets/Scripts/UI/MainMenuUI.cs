@@ -24,6 +24,8 @@ namespace BiReJeJoCo.UI
                 playerNickNameInput.text = System.Guid.NewGuid().ToString();
                 localPlayer.SetNickName(playerNickNameInput.text);
             }
+
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
         protected override void OnBeforeDestroy()

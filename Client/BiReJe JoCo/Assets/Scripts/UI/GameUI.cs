@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using JoVei.Base;
+using JoVei.Base.UI;
 using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.UI
@@ -9,10 +10,11 @@ namespace BiReJeJoCo.UI
     {
         [Header("UI Elements")]
         public Transform floatingElementGrid;
-        [SerializeField] GameObject menuGO;
         [SerializeField] GameObject endMatchButton;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] GameObject crosshairGO;
+        [SerializeField] UIBarHandler healthBar;
+        [SerializeField] UIBarHandler bulletCooldownBar;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
@@ -26,7 +28,24 @@ namespace BiReJeJoCo.UI
             ConnectEvents();
             InitializeUI();
         }
-        
+
+        private void ConnectEvents()
+        {
+            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
+            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
+
+            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
+        }
+        private void DisconnectEvents()
+        {
+            photonMessageHub.UnregisterReceiver(this);
+            messageHub.UnregisterReceiver(this);
+        }
+        #endregion
+
+        #region UI 
         private void InitializeUI()
         {
             endMatchButton.SetActive(localPlayer.IsHost);
@@ -43,26 +62,25 @@ namespace BiReJeJoCo.UI
         private void InitializeAsHunted()
         {
             crosshairGO.SetActive(false);
+            bulletCooldownBar.TargetImage.transform.parent.gameObject.SetActive(false);
         }
-        private void InitializeAsHunter() 
+        private void InitializeAsHunter()
         {
             crosshairGO.SetActive(true);
+            healthBar.TargetImage.transform.parent.gameObject.SetActive(false);
         }
-   
 
-        private void ConnectEvents()
+        public void UpdateHealthBar(float value, float maxValue) 
         {
-            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
-            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
-
-            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
-            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
-            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
+            healthBar.SetValue(value / maxValue);
         }
-        private void DisconnectEvents()
+
+        public void UpdateCooldown(float value, float maxValue) 
         {
-            photonMessageHub.UnregisterReceiver(this);
-            messageHub.UnregisterReceiver(this);
+            if (value <= 0.1f)
+                bulletCooldownBar.OverrideValue(0);
+            else
+                bulletCooldownBar.SetValue(value / maxValue);
         }
         #endregion
 

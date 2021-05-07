@@ -21,6 +21,7 @@ namespace BiReJeJoCo.UI
         {
             startButton.gameObject.SetActive(localPlayer.IsHost);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
         protected override void OnBeforeDestroy()

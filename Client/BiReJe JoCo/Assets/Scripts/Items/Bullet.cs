@@ -50,7 +50,7 @@ namespace BiReJeJoCo.Character
 
         private void SpawnEffect() 
         {
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("bullet_hit_sfx");
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("bullet_hit_sfx"); 
             poolingManager.PoolInstance(prefab, transform.position, Quaternion.identity);
         }
     }

@@ -1,13 +1,15 @@
 ﻿using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class CharacterShooter : SystemBehaviour, IPlayerObserved
+    public class CharacterShooter : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
         [SerializeField] SyncVar<Vector3> playerShot = new SyncVar<Vector3>(0);
         [SerializeField] float bulletForce;
+        [SerializeField] float coolDown;
         [SerializeField] float targetRange;
         [SerializeField] Transform bulletSpawn;
         [SerializeField] LayerMask targetLayer;
@@ -16,6 +18,7 @@ namespace BiReJeJoCo.Character
         public Player Owner => controller.Player;
 
         private PlayerCharacterInput input;
+        private float coolDownCounter;
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
@@ -32,13 +35,25 @@ namespace BiReJeJoCo.Character
 
         protected override void OnBeforeDestroy()
         {
+            base.OnBeforeDestroy();
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
+        public override void Tick(float deltaTime)
+        {
+            coolDownCounter = Mathf.Clamp(coolDownCounter += Time.deltaTime, 0, coolDown);
+            uiManager.GetInstanceOf<GameUI>().UpdateCooldown(coolDownCounter, coolDown);
+        }
+
         private void OnShootPressed()
         {
+            if (coolDownCounter != coolDown)
+            {
+                return;
+            }
+
             RaycastHit hit;
             Vector3 targetPoint;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, targetRange, targetLayer, QueryTriggerInteraction.Ignore))
@@ -51,6 +66,8 @@ namespace BiReJeJoCo.Character
             playerShot.SetValue(targetPoint);
             playerShot.ForceSend();
             OnShotFired(playerShot.GetValue());
+            coolDownCounter = 0;
+
             Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * hit.distance, Color.red, 5f);
         }
 

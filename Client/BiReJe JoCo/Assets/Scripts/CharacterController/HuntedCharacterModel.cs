@@ -1,4 +1,5 @@
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo.Character
 {
@@ -14,6 +15,7 @@ namespace BiReJeJoCo.Character
         {
             Owner = controller.Player;
             ConnectEvents();
+            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health, 100);
         }
 
         protected override void OnBeforeDestroy()
@@ -41,6 +43,7 @@ namespace BiReJeJoCo.Character
             var casted = msg as HuntedHitByBulletPhoMsg;
 
             Health -= casted.dmg;
+            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health, 100);
 
             if (Health <= 0 && !wasKilled)
             {
