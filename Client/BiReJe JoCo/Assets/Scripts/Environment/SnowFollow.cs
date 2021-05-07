@@ -10,6 +10,7 @@ namespace BiReJeJoCo
     public class SnowFollow : SystemBehaviour
     {
         [SerializeField] GameObject player;
+        bool gameStart = false;
 
         [SerializeField] float offset;
 
@@ -21,11 +22,16 @@ namespace BiReJeJoCo
         private void SnowSetup(PlayerCharacterSpawnedMsg obj)
         {
             player = localPlayer.PlayerCharacter.gameObject;
+            gameStart = true;
         }
 
         void Update()
         {
-            this.transform.position = player.transform.position + new Vector3(0, offset, 0);
+            if (gameStart)
+            {
+                this.transform.position = player.transform.position + new Vector3(0, offset, 0);
+            }
+            
         }
 
 

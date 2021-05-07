@@ -40,8 +40,7 @@ namespace BiReJeJoCo
                 Debug.LogError("PPS game objects have not been assigned correctly to " + this.gameObject);
             }
 
-            messageHub.RegisterReceiver<PPSUpstairsMsg>(this, HandleGoingUpTriggered);
-            messageHub.RegisterReceiver<PPSDownstairsMsg>(this, HandleGoingDownTriggered);
+            messageHub.RegisterReceiver<PPSSwitchMsg>(this, HandlePPSSwitch);
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, VisualEffectsSetup);
         }
 
@@ -53,22 +52,34 @@ namespace BiReJeJoCo
 
                     upstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogUpstairsHunted;
                     downstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogDownstairsHunted;
+                    HandleGoingDownTriggered();
 
                     break;
                 case Backend.PlayerRole.Hunter:
 
                     upstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogUpstairs;
                     downstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogDownstairs;
+                    HandleGoingUpTriggered();
 
                     break;
             }
         }
 
-        protected virtual void HandleGoingUpTriggered(PPSUpstairsMsg msg)
+        protected virtual void HandlePPSSwitch(PPSSwitchMsg msg)
         {
             if (isUpstairs)
-                return;
+            {
+                HandleGoingDownTriggered();
+            }
+            else 
+            {
+                HandleGoingUpTriggered();
+            }
 
+        }
+
+        void HandleGoingUpTriggered()
+        {
             //Enable all upstairs effects
             upstairsMainLight.SetActive(true);
             upstairsFog.SetActive(true);
@@ -80,16 +91,11 @@ namespace BiReJeJoCo
 
             //switch PPS
             StartCoroutine(SmoothPPSWeight(upstairsPPSVol, downstairsPPSVol));
-            downstairsPPSVol.weight = 1f;
-            upstairsPPSVol.weight = 0f;
             isUpstairs = true;
         }
 
-        protected virtual void HandleGoingDownTriggered(PPSDownstairsMsg msg)
+        void HandleGoingDownTriggered()
         {
-            if (!isUpstairs)
-                return;
-
             //Disable all upstairs effects
             upstairsMainLight.SetActive(false);
             upstairsFog.SetActive(false);
@@ -101,8 +107,6 @@ namespace BiReJeJoCo
 
             //switch PPS
             StartCoroutine(SmoothPPSWeight(downstairsPPSVol, upstairsPPSVol));
-            downstairsPPSVol.weight = 0f;
-            upstairsPPSVol.weight = 1f;
             isUpstairs = false;
         }
 
@@ -115,6 +119,8 @@ namespace BiReJeJoCo
                 _ppsVolOff.weight -= 1 * Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
+            _ppsVolOn.weight = 1f;
+            _ppsVolOff.weight = 0f;
         }
 
         private void OnDestroy()

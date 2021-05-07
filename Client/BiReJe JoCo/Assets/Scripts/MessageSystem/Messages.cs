@@ -94,12 +94,8 @@ namespace BiReJeJoCo
     {
     }
 
-    public class PPSUpstairsMsg : BaseMessage 
+    public class PPSSwitchMsg : BaseMessage 
     { 
-    }
-
-    public class PPSDownstairsMsg : BaseMessage
-    {
     }
 
     #endregion
