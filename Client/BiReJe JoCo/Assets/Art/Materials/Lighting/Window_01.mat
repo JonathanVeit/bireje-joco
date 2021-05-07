@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VolumetricLight_01_mat
-  m_Shader: {fileID: -6465566751694194690, guid: e8490efcc9adbf944b7e923f9c70236d, type: 3}
+  m_Name: Window_01
+  m_Shader: {fileID: -6465566751694194690, guid: cddd49faf8df78e449a18d015e84babb, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -33,26 +33,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - BOOLEAN: 0
-    - CameraFadeDistance: 5
-    - EdgeIntensity_Fresnel: 0.54
-    - GradientIntencity: 2.13
-    - GradientIntensity: 1.33
-    - Gradient_Intencity: 1
-    - Intencity_Fresnel: 0.54
-    - IntersectFadeIntensity: 0.067
-    - IntersectFadeMultiply: 0.054
-    - NoiseIntencity: 0.5
-    - NoiseIntensity: 0.5
-    - NoiseScale: 3
-    - Opacity: 0.729
-    - TextureSpeed: 0.0583
-    - UseEmission: 0
-    - UseNoiseTexture: 0
-    - UseUVGradient: 0
-    - _Emission: 4.09
+    - CloudIntensity: 0
+    - CloudIntersectFade: 0.01
+    - FogAmount: 17.21
+    - FogDensity: 1.72
+    - GradientHight: -0.51
+    - GradientIntensity: 0.804
+    - GradientMax: 1
+    - GradientMin: -0.26
+    - NoiseIntensity: 10
+    - NoiseScale: 130.43
+    - Opacity: -0.99
+    - TextureSpeed: 0.3
+    - UseGradient: 0
+    - UseNoise: 0
     m_Colors:
-    - MainColor: {r: 1, g: 1, b: 1, a: 0}
-    - WindDirection: {r: 2, g: 3, b: 0, a: 0}
-    - _Emission: {r: 5.992157, g: 5.992157, b: 5.992157, a: 0}
+    - FogColor: {r: 1, g: 0, b: 0, a: 0}
+    - GradientColor: {r: 0.13069598, g: 0.31132078, b: 0.2943208, a: 0}
+    - MainColor: {r: 0.066571735, g: 0.06684153, b: 0.0754717, a: 1}
+    - NoiseColor: {r: 0.88964033, g: 0, b: 1, a: 0}
+    - WindDirection: {r: 0, g: 1, b: 0, a: 0}
+    - extraColor: {r: 0.8867924, g: 0.1045746, b: 0.1045746, a: 0}
   m_BuildTextureStacks: []

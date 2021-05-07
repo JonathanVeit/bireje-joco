@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
+using Unity.VisualScripting;
 
 namespace BiReJeJoCo.Character
 {
@@ -13,6 +14,10 @@ namespace BiReJeJoCo.Character
         [SerializeField] private GameObject cam;
         [SerializeField] private GameObject cinemachineObject;
         [SerializeField] private Rigidbody rb;
+        [SerializeField] public GameObject fogUpstairs;
+        [SerializeField] public GameObject fogDownstairs;
+        [SerializeField] public GameObject fogDownstairsHunted;
+        [SerializeField] public GameObject fogUpstairsHunted;
         [SerializeField] List<MonoBehaviour> componentsToDisable;
 
         public Player Owner => controller.Player;
@@ -42,6 +47,10 @@ namespace BiReJeJoCo.Character
         {
             cam.SetActive(false);
             cinemachineObject.SetActive(false);
+            fogUpstairs.SetActive(false);
+            fogDownstairs.SetActive(false);
+            fogDownstairsHunted.SetActive(false);
+            fogUpstairsHunted.SetActive(false);
 
             foreach (var curComponent in componentsToDisable)
                 curComponent.enabled = false;
