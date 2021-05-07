@@ -1,11 +1,8 @@
 ﻿using Photon.Pun;
-using System;
+using UnityEngine;
 
 namespace BiReJeJoCo.Backend
 {
-    using JoVei.Base;
-    using UnityEngine;
-
     [System.Flags]
     public enum SyncedTransformType
     {
