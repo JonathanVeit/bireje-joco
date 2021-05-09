@@ -13,7 +13,7 @@ namespace BiReJeJoCo.Backend
             = new Dictionary<byte, SynchronizedTrigger>();
 
         #region Initialization
-        protected override void OnSetupActive()
+        protected override void SetupAsActive()
         {
             photonMessageHub.RegisterReceiver<TriggerPointInteractedPhoMsg>(this, OnSychronizedTriggerReceived);
 

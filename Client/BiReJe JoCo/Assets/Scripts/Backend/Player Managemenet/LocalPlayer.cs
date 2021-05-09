@@ -2,6 +2,7 @@ using PhotonPlayer = Photon.Realtime.Player;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 using Newtonsoft.Json;
 using UnityEngine;
+using BiReJeJoCo.Character;
 
 namespace BiReJeJoCo.Backend
 {
@@ -34,7 +35,7 @@ namespace BiReJeJoCo.Backend
         #endregion
 
         [JsonIgnore] 
-        public PlayerControlled PlayerCharacter { get; private set; }
+        public CharacterOnlineSetup PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
         {
@@ -50,16 +51,20 @@ namespace BiReJeJoCo.Backend
                 randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHunterSpawnPoint(posIndex);
 
             var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
-            PlayerCharacter = go.GetComponent<PlayerControlled>();
+            PlayerCharacter = go.GetComponent<CharacterOnlineSetup>();
 
             messageHub.ShoutMessage<PlayerCharacterSpawnedMsg>(this);
+        }
+        public void DestroyPlayerCharacter()
+        {
+            photonRoomWrapper.Destroy(PlayerCharacter.gameObject);
+            PlayerCharacter = null;
         }
 
         public void SetNickName(string name)
         {
             photonPlayer.NickName = name;
         }
-
         public void SetRole(PlayerRole role)
         {
             UpdateProperty("Role", role);

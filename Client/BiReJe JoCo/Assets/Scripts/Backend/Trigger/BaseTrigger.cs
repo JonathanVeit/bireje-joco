@@ -30,10 +30,10 @@ namespace BiReJeJoCo.Backend
             foreach (var curTrigger in triggerPoints)
                 floaties.Add(curTrigger.Id, null);
 
-            OnSetupActive();
+            SetupAsActive();
         }
 
-        protected virtual void OnSetupActive() { }
+        protected virtual void SetupAsActive() { }
 
         protected override void OnBeforeDestroy()
         {
@@ -67,8 +67,6 @@ namespace BiReJeJoCo.Backend
         protected virtual void ShowTriggerPointFloaty(TriggerSetup trigger)
         {
             var config = new FloatingElementConfig(trigger.floatingElementId, uiManager.GetInstanceOf<GameUI> ().floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
-            if (!floaties.ContainsKey(trigger.Id))
-                floaties.Add(trigger.Id, null);
 
             var floaty = floatingManager.GetElementAs<FloatingElement>(config);
             floaties[trigger.Id] = floaty;
@@ -168,8 +166,21 @@ namespace BiReJeJoCo.Backend
         protected virtual IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            yield return new WaitForSeconds(trigger.coolDown);
+            TryHideFloaty(trigger);
+             yield return new WaitForSeconds(trigger.coolDown);
+            TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
+        }
+        protected virtual void TryHideFloaty(TriggerSetup trigger)
+        {
+            if (floaties[trigger.Id] != null && trigger.hideInCooldown)
+                floaties[trigger.Id].Hide();
+
+        }
+        protected virtual void TryUnhideFloaty(TriggerSetup trigger)
+        {
+            if (floaties[trigger.Id] != null && trigger.hideInCooldown)
+                floaties[trigger.Id].Unhide();
         }
 
         [System.Serializable]
@@ -179,11 +190,14 @@ namespace BiReJeJoCo.Backend
             public byte Id;
             public Transform root;
 
+            [Space(10)]
             public Vector3 areaSize;
             public Vector3 areaOffset;
             public float coolDown = 1f;
 
+            [Space(10)]
             public string floatingElementId = "default_trigger";
+            public bool hideInCooldown = true;
             public Transform floatingElementTarget;
             public Vector2 floatingElementOffset;
             public MeshRenderer visiblityRenderer;

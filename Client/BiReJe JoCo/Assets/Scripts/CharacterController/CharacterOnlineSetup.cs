@@ -1,25 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
-using Unity.VisualScripting;
 
 namespace BiReJeJoCo.Character
 {
     public class CharacterOnlineSetup : SystemBehaviour, IPlayerObserved
     {
-        [Header("Settings")]
-        [SerializeField] GameObject characterRoot;
+        [Header("Components")]
+        public Transform characterRoot;
+        public Transform modelRoot;
+        public GameObject cam;
+        public Rigidbody rb;
+        public Light flashlight;
+        public PlayerCharacterInput characterInput;
 
-        [Space(10)]
-        [SerializeField] private GameObject cam;
-        [SerializeField] private GameObject cinemachineObject;
-        [SerializeField] private Rigidbody rb;
-        [SerializeField] public GameObject fogUpstairs;
-        [SerializeField] public GameObject fogDownstairs;
-        [SerializeField] public GameObject fogDownstairsHunted;
-        [SerializeField] public GameObject fogUpstairsHunted;
+        [Header("Remote Settings")]
         [SerializeField] List<MonoBehaviour> componentsToDisable;
-        [SerializeField] GameObject huntedHead;
+        [SerializeField] List<GameObject> objectsToDisable;
+        [SerializeField] List<Object> objectsToDestroy;
+
+        [Header("Runtime")]
+        public GameObject fogUpstairs;
+        public GameObject fogDownstairs;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -36,50 +38,80 @@ namespace BiReJeJoCo.Character
             switch (Owner.Role)
             {
                 case PlayerRole.Hunted:
-                    SetupAsHunted();
+                    SetupAsHunted(Owner.IsLocalPlayer);
                     break;
                 case PlayerRole.Hunter:
-                    SetupAsHunter();
+                    SetupAsHunter(Owner.IsLocalPlayer);
                     break;
             }
         }
 
         private void SetupAsRemote()
         {
-            cam.SetActive(false);
-            cinemachineObject.SetActive(false);
-            fogUpstairs.SetActive(false);
-            fogDownstairs.SetActive(false);
-            fogDownstairsHunted.SetActive(false);
-            fogUpstairsHunted.SetActive(false);
-
             foreach (var curComponent in componentsToDisable)
                 curComponent.enabled = false;
+            foreach (var curObject in objectsToDisable)
+                curObject.SetActive(false);
+            foreach (var curObject in objectsToDestroy)
+                Destroy(curObject);
+
             rb.isKinematic = true;
             SetTagRecursively(this.gameObject, "RemotePlayer");
         }
-
-        private void SetupAsHunted() 
+        private void SetupAsHunted(bool isLocal) 
         {
-            var model = characterRoot.AddComponent<HuntedCharacterModel>();
-            controller.AddObservedComponent(model);
+            // add hunted behaviour 
+            var behaviourPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_behaviour");
+            var huntedBehviour = Instantiate(behaviourPrefab, characterRoot).GetComponent<HuntedBehaviour>();
+            controller.AddObservedComponent(huntedBehviour);
 
             // TODO: hunted should not have a lamp but better pp 
-            if (!Owner.IsLocalPlayer)
-                GetComponentsInChildren<Light>()[0].gameObject.SetActive(false);
+            if (!isLocal)
+                flashlight.gameObject.SetActive(false);
 
+            // spawn marker object 
+            var earPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_ears");
+            Instantiate(earPrefab, modelRoot.position, modelRoot.rotation, modelRoot);
+
+            if (isLocal)
+                SetupHuntedPP();
+
+            // set layer to hunted layer
             SetLayerRecursively(this.gameObject, 10);
-            huntedHead.gameObject.SetActive(true);
         }
-
-        private void SetupAsHunter() 
+        private void SetupAsHunter(bool isLocal) 
         {
+            // spawn gun 
             var gunPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_gun");
-
             var root = characterRoot.transform.GetChild(0);
             var gun = Instantiate(gunPrefab, root.position, Quaternion.identity, root);
-            controller.AddObservedComponent(gun.GetComponent<CharacterShooter>());
+            controller.AddObservedComponent(gun.GetComponent<Gun>());
+            
+            if (isLocal)
+                SetupHunterPP();
         }
+
+        #region PostProcessing
+        private void SetupHuntedPP() 
+        {
+            var fogUpstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_upstairs_hunted_sfx");
+            var fogDownstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_downstairs_hunted_sfx");
+            
+            var root = CreateSFXRoot();
+            fogUpstairs = Instantiate(fogUpstairsPrefab, root.position, root.rotation, root);
+            fogDownstairs = Instantiate(fogDownstairsPrefab, root.position, root.rotation, root);
+        }
+
+        private void SetupHunterPP() 
+        {
+            var fogUpstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_upstairs_hunter_sfx");
+            var fogDownstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_downstairs_hunter_sfx");
+
+            var root = CreateSFXRoot();
+            fogUpstairs = Instantiate(fogUpstairsPrefab, root.position, root.rotation, root);
+            fogDownstairs = Instantiate(fogDownstairsPrefab, root.position, root.rotation, root);
+        }
+        #endregion
 
         #region Helper
         private void SetLayerRecursively(GameObject target, int layer)
@@ -100,6 +132,15 @@ namespace BiReJeJoCo.Character
             {
                 SetTagRecursively(child.gameObject, tag);
             }
+        }
+
+        private Transform CreateSFXRoot() 
+        {
+            var sfx_root = new GameObject("SFX");
+            sfx_root.transform.position = cam.transform.position;
+            sfx_root.transform.rotation = cam.transform.rotation;
+            sfx_root.transform.SetParent(cam.transform);
+            return sfx_root.transform;
         }
         #endregion
     }

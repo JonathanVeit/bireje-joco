@@ -86,6 +86,9 @@ namespace BiReJeJoCo
                 photonClient.LeaveLobby();
             }
 
+            // needs to be destroyed over photon 
+            photonRoomWrapper.Destroy(localPlayer.PlayerCharacter.gameObject);
+
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }
         protected virtual void OnLeftLobby(LeftLobbyMsg msg)

@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using JoVei.Base;
 using JoVei.Base.UI;
 using BiReJeJoCo.Backend;
+using System.Collections;
+using UnityEngine.UI;
 
 namespace BiReJeJoCo.UI
 {
@@ -10,11 +12,19 @@ namespace BiReJeJoCo.UI
     {
         [Header("UI Elements")]
         public Transform floatingElementGrid;
-        [SerializeField] GameObject endMatchButton;
         [SerializeField] GameObject loadingOverlay;
+        [SerializeField] Text startInformation;
+
+        [Header("Hunter")]
+        [SerializeField] GameObject hunterHUD;
         [SerializeField] GameObject crosshairGO;
+        [SerializeField] UIBarHandler shootingCooldownBar;
+
+        [Header("Hunted")]
+        [SerializeField] GameObject huntedHUD;
         [SerializeField] UIBarHandler healthBar;
-        [SerializeField] UIBarHandler bulletCooldownBar;
+        [SerializeField] UIBarHandler transformationBar;
+        [SerializeField] UIBarHandler transformationCooldownBar;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
@@ -48,8 +58,6 @@ namespace BiReJeJoCo.UI
         #region UI 
         private void InitializeUI()
         {
-            endMatchButton.SetActive(localPlayer.IsHost);
-
             if (localPlayer.Role == PlayerRole.Hunted)
             {
                 InitializeAsHunted();
@@ -58,46 +66,74 @@ namespace BiReJeJoCo.UI
             {
                 InitializeAsHunter();
             }
+
+            UpdateTransformationDurationBar(0, 1);
         }
         private void InitializeAsHunted()
         {
-            crosshairGO.SetActive(false);
-            bulletCooldownBar.TargetImage.transform.parent.gameObject.SetActive(false);
+            hunterHUD.SetActive(false);
+
+            startInformation.text = "You are the monster!\nTry to hide!";
+            StartCoroutine(FadeText(3, startInformation));
         }
         private void InitializeAsHunter()
         {
-            crosshairGO.SetActive(true);
-            healthBar.TargetImage.transform.parent.gameObject.SetActive(false);
+            huntedHUD.SetActive(false);
+
+            startInformation.text = "You are the Hunter!\nTry to kill the monster!";
+            StartCoroutine(FadeText(3, startInformation));
         }
+
+        private IEnumerator FadeText(float duration, Text target) 
+        {
+            float counter = duration;
+            var color = target.color;
+            while (counter >= 0)
+            {
+                color.a = counter / duration;
+                target.color = color;
+
+                counter -= Time.deltaTime;
+                yield return null;
+            }
+
+            target.gameObject.SetActive(false);
+        }
+        public void UpdateWeaponCooldown(float value, float maxValue) 
+        {
+            if (value <= 0.1f)
+                shootingCooldownBar.OverrideValue(0);
+            else
+                shootingCooldownBar.SetValue(value / maxValue);
+        }
+
 
         public void UpdateHealthBar(float value, float maxValue) 
         {
             healthBar.SetValue(value / maxValue);
         }
-
-        public void UpdateCooldown(float value, float maxValue) 
+        public void UpdateTransformationDurationBar(float value, float maxValue)
         {
-            if (value <= 0.1f)
-                bulletCooldownBar.OverrideValue(0);
+            if (value > 0)
+            {
+                transformationBar.TargetImage.transform.parent.gameObject.SetActive(true);
+            }
             else
-                bulletCooldownBar.SetValue(value / maxValue);
-        }
-        #endregion
+            {
+                transformationBar.TargetImage.transform.parent.gameObject.SetActive(false);
+            }
 
-        #region Events
-        private void OnMatchStart(PhotonMessage msg)
-        {
-            loadingOverlay.gameObject.SetActive(false);
+            if (value / maxValue == 1)
+                transformationBar.OverrideValue(1);
+            else
+                transformationBar.SetValue(value / maxValue);
         }
-        private void OnMatchFinished(PhotonMessage msg)
+        public void UpdateTransformationCooldownBar(float value, float maxValue)
         {
-            var casted = msg as FinishMatchPhoMsg;
-            ShowResult(casted.result);
-        }
-        private void OnMatchClosed(PhotonMessage msg)
-        {
-            DIContainer.UnregisterImplementation<GameUI>();
-            DisconnectEvents();
+            if (value == 0)
+                transformationCooldownBar.OverrideValue(0);
+            else
+                transformationCooldownBar.SetValue(value / maxValue);
         }
         #endregion
 
@@ -118,6 +154,21 @@ namespace BiReJeJoCo.UI
         #endregion
 
         #region Events
+        private void OnMatchStart(PhotonMessage msg)
+        {
+            loadingOverlay.gameObject.SetActive(false);
+        }
+        private void OnMatchFinished(PhotonMessage msg)
+        {
+            var casted = msg as FinishMatchPhoMsg;
+            ShowResult(casted.result);
+        }
+        private void OnMatchClosed(PhotonMessage msg)
+        {
+            DIContainer.UnregisterImplementation<GameUI>();
+            DisconnectEvents();
+        }
+
         void OnPauseMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
             ToggleMenu();
@@ -136,7 +187,6 @@ namespace BiReJeJoCo.UI
 
         private void ShowResult(MatchResult result) 
         {
-            Cursor.lockState = CursorLockMode.Confined;
             resultPopup.Show(result);
             crosshairGO.SetActive(false);
         }

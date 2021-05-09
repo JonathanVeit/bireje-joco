@@ -24,6 +24,13 @@ namespace BiReJeJoCo.UI
             quitButton.gameObject.SetActive(localPlayer.IsHost);
 
             resultLabel.text = result.winner == PlayerRole.Hunted ? "Hunted wins!" : "Hunter win!";
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         #region UI Input

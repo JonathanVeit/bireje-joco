@@ -158,7 +158,8 @@ namespace JoVei.Base.TickSystem
         {
             for (int i = 0; i < tickables.Count; i++) 
             {
-                tickables[i].Tick(deltaTime);
+                if (tickables[i] != null)
+                    tickables[i].Tick(deltaTime);
             }
         }
         #endregion

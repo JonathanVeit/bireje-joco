@@ -30,7 +30,7 @@ namespace BiReJeJoCo.Backend
         public void CleanUp() { }
         #endregion
 
-        public void Connect ()
+        public void Connect()
         {
             PhotonNetwork.ConnectUsingSettings();
         }

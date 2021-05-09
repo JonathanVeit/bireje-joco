@@ -1,6 +1,8 @@
 using BiReJeJoCo.Backend;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
+using UnityEngine;
 
 namespace BiReJeJoCo
 {
@@ -148,6 +150,10 @@ namespace BiReJeJoCo
         protected override void OnMatchClosed(PhotonMessage msg)
         {
             var casted = msg as CloseMatchPhoMsg;
+
+            // needs to be destroyed over photon 
+            localPlayer.DestroyPlayerCharacter();
+
             if (casted.mode == CloseMatchMode.LeaveLobby)
             {
                 photonMessageHub.UnregisterReceiver(this);
@@ -155,10 +161,17 @@ namespace BiReJeJoCo
             }
             else if (casted.mode == CloseMatchMode.ReturnToLobby)
             {
-                photonRoomWrapper.LoadLevel("lobby_scene");
+                // delay the loading so player characters can be destroyed by photon
+                StartCoroutine(LoadLobbyAsync());
             }
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
+        }
+
+        private IEnumerator LoadLobbyAsync() 
+        {
+            yield return new WaitForSeconds(0.5f);
+            photonRoomWrapper.LoadLevel("lobby_scene");
         }
         #endregion
     }

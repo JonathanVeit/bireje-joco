@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 using UnityEngine;
 
 namespace BiReJeJoCo.Map
@@ -13,9 +14,9 @@ namespace BiReJeJoCo.Map
         [SerializeField] byte plattformStartIndex;
         [SerializeField] PlattformBoard board;
 
-        protected override void OnSetupActive()
+        protected override void SetupAsActive()
         {
-            base.OnSetupActive();
+            base.SetupAsActive();
         }
 
         protected override void OnTriggerInteracted(byte pointId)
@@ -25,10 +26,17 @@ namespace BiReJeJoCo.Map
             board.SetTarget (targets.Find(x => x.triggerPoint == pointId).target);
         }
 
+        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        {
+            (floaty as InteractionFloaty).Initialize("Elevator");
+        }
+
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
+            TryHideFloaty(trigger);
             yield return new WaitUntil(() => board.ReachedTarget);
+            TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
         }
 

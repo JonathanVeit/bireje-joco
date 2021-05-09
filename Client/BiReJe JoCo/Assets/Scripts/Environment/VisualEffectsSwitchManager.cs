@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using System;
-using BiReJeJoCo.Character;
 
 namespace BiReJeJoCo
 {
@@ -41,28 +40,16 @@ namespace BiReJeJoCo
             }
 
             messageHub.RegisterReceiver<PPSSwitchMsg>(this, HandlePPSSwitch);
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, VisualEffectsSetup);
+            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnCharacterSpawned);
         }
 
-        private void VisualEffectsSetup(PlayerCharacterSpawnedMsg obj)
+        private void OnCharacterSpawned(PlayerCharacterSpawnedMsg obj)
         {
-            switch (localPlayer.Role)
-            {
-                case Backend.PlayerRole.Hunted:
+            upstairsFog = localPlayer.PlayerCharacter.fogUpstairs;
+            downstairsFog = localPlayer.PlayerCharacter.fogDownstairs;
 
-                    upstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogUpstairsHunted;
-                    downstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogDownstairsHunted;
-                    HandleGoingDownTriggered();
-
-                    break;
-                case Backend.PlayerRole.Hunter:
-
-                    upstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogUpstairs;
-                    downstairsFog = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().fogDownstairs;
-                    HandleGoingUpTriggered();
-
-                    break;
-            }
+            isUpstairs = localPlayer.Role == Backend.PlayerRole.Hunted;
+            HandlePPSSwitch(null);
         }
 
         protected virtual void HandlePPSSwitch(PPSSwitchMsg msg)
@@ -75,7 +62,6 @@ namespace BiReJeJoCo
             {
                 HandleGoingUpTriggered();
             }
-
         }
 
         void HandleGoingUpTriggered()
@@ -123,7 +109,7 @@ namespace BiReJeJoCo
             _ppsVolOff.weight = 0f;
         }
 
-        private void OnDestroy()
+        protected override void OnBeforeDestroy()
         {
             messageHub.UnregisterReceiver(this);
         }

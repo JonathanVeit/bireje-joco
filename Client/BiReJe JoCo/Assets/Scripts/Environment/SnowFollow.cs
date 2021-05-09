@@ -1,25 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-
 
 namespace BiReJeJoCo
 {
     public class SnowFollow : SystemBehaviour
     {
         [SerializeField] GameObject player;
-        bool gameStart = false;
-
         [SerializeField] float offset;
+
+        bool gameStart = false;
 
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,SnowSetup);messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,SnowSetup);
+            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,OnCharacterSpawned);messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,OnCharacterSpawned);
         }
 
-        private void SnowSetup(PlayerCharacterSpawnedMsg obj)
+        private void OnCharacterSpawned(PlayerCharacterSpawnedMsg obj)
         {
             player = localPlayer.PlayerCharacter.gameObject;
             gameStart = true;
@@ -27,20 +22,15 @@ namespace BiReJeJoCo
 
         void Update()
         {
-            if (gameStart)
+            if (gameStart && player)
             {
                 this.transform.position = player.transform.position + new Vector3(0, offset, 0);
             }
-            
         }
-
-
 
         private void OnDestroy()
         {
             messageHub.UnregisterReceiver(this);
         }
-
-
     }
 }

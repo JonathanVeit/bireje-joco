@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using Photon.Pun;
 using UnityEngine;
@@ -23,6 +24,13 @@ namespace BiReJeJoCo.Backend
             photonView = GetComponent<PhotonView>();
 
             player = playerManager.GetPlayer(photonView.Owner.ActorNumber);
+            StartCoroutine(RegisterAsync());
+        }
+
+        private IEnumerator RegisterAsync() 
+        {
+            yield return new WaitUntil(()=> syncVarHub != null);
+
             syncVarHub.RegisterDispatcher(player, this);
             this.gameObject.name = $"{player.NickName}'s Dispatcher";
             transform.SetParent(syncVarHub.transform);

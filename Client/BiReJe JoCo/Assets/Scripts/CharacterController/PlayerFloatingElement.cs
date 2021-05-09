@@ -7,14 +7,11 @@ namespace BiReJeJoCo.Character
 {
     public class PlayerFloatingElement : SystemBehaviour, IPlayerObserved
     {
-        [SerializeField] MeshRenderer colorMesh;
         [SerializeField] Transform floatingElementTarget;
         [SerializeField] MeshRenderer floatingElementMesh;
 
 
         private PlayerNameFloaty nameFloaty;
-
-
         private PlayerControlled controller;
         public Player Owner => controller.Player;
 
@@ -27,8 +24,6 @@ namespace BiReJeJoCo.Character
                 SpawnFloaty();
                 photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
             }
-
-            colorMesh.material.color = Owner.Role == PlayerRole.Hunted ? Color.red : Color.white;
         }
 
         private void SpawnFloaty()
@@ -40,12 +35,13 @@ namespace BiReJeJoCo.Character
                 nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
                 nameFloaty.Initialize(Owner.NickName);
                 nameFloaty.SetVisibleRenderer(floatingElementMesh);
-                //nameFloaty.ShowHealthBar(playerHealth);
             }
         }
 
         private void OnMatchClosed(PhotonMessage msg)
         {
+            if (nameFloaty == null) return;
+            nameFloaty.gameObject.SetActive(false);
             floatingManager.DestroyElement(nameFloaty);
             photonMessageHub.UnregisterReceiver(this);
         }

@@ -7,7 +7,10 @@ namespace BiReJeJoCo.Character
 {
     public class PlayerCharacterInput : SystemBehaviour
     {
-        bool characterInputIsActive = true;
+        [SerializeField] InputBlockState state;
+        public InputBlockState BlockState { get; private set; } 
+            = InputBlockState.Loading;
+        public event Action<InputBlockState> onBlockStateChanged;
 
         private Vector2 moveInput;
         private Vector2 lookInput;
@@ -46,6 +49,10 @@ namespace BiReJeJoCo.Character
             messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
             messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
 
+            messageHub.RegisterReceiver<BlockPlayerControlsMsg>(this, BlockPlayerControls);
+            messageHub.RegisterReceiver<UnblockPlayerControlsMsg>(this, UnblockPlayerControls);
+
+            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStarted);
             photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnFinishMatch);
         }
         private void DisconnectEvents()
@@ -61,7 +68,7 @@ namespace BiReJeJoCo.Character
         // call Player_Input.MovementInput to get a Vector3 
         public void SetMovementInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Movement))
                 return;
 
             Vector2 inputMovement = inputValue.ReadValue<Vector2>();
@@ -70,7 +77,7 @@ namespace BiReJeJoCo.Character
 
         public void SetLookInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Look))
                 return;
 
             Vector2 inputMovement = inputValue.ReadValue<Vector2>();
@@ -79,7 +86,7 @@ namespace BiReJeJoCo.Character
 
         public void SetJumpInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Movement))
                 return;
 
             if (inputValue.performed)
@@ -95,7 +102,7 @@ namespace BiReJeJoCo.Character
 
         public void SetSprintInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Movement))
                 return;
 
             if (inputValue.performed)
@@ -111,7 +118,7 @@ namespace BiReJeJoCo.Character
 
         public void SetShootInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
 
             if (inputValue.performed)
@@ -121,6 +128,9 @@ namespace BiReJeJoCo.Character
         }
         private void Update()
         {
+            if (BlockState.HasFlag(InputBlockState.Shoot))
+                return;
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 onShootPressed?.Invoke();
@@ -129,7 +139,7 @@ namespace BiReJeJoCo.Character
 
         public void SetTriggerInput(InputAction.CallbackContext inputValue)
         {
-            if (!characterInputIsActive)
+            if (BlockState.HasFlag(InputBlockState.Interact))
                 return;
 
             if (inputValue.performed)
@@ -178,33 +188,46 @@ namespace BiReJeJoCo.Character
         #endregion
 
         #region Events
+        void OnMatchStarted(PhotonMessage msg)
+        {
+            SetBlockState(InputBlockState.Free);
+        }
+
         void OnPauseMenuOpened(PauseMenuOpenedMsg msg)
         {
-            BlockMovement();
-            Cursor.lockState = CursorLockMode.Confined;
+            SetBlockState(InputBlockState.Menu);
         }
         void OnPauseMenuClosed(PauseMenuClosedMsg msg)
         {
-            UnblockMovement();
-            Cursor.lockState = CursorLockMode.Locked;
+            SetBlockState(InputBlockState.Free);
+        }
+
+        void BlockPlayerControls(BlockPlayerControlsMsg msg)
+        {
+            SetBlockState(msg.blockState);
+
+            if (BlockState.HasFlag(InputBlockState.Movement))
+                moveInput = Vector2.zero;
+
+            if (BlockState.HasFlag(InputBlockState.Look))
+                lookInput = Vector2.zero;
+        }
+        void UnblockPlayerControls(UnblockPlayerControlsMsg msg)
+        {
+            SetBlockState(msg.blockState);
         }
 
         void OnFinishMatch(PhotonMessage msg)
         {
-            BlockMovement();
+            SetBlockState(InputBlockState.Menu);
         }
         #endregion
 
-        private void BlockMovement()
+        private void SetBlockState(InputBlockState state) 
         {
-            moveInput = Vector2.zero;
-            lookInput = Vector2.zero;
-            characterInputIsActive = false;
-        }
-
-        private void UnblockMovement() 
-        {
-            characterInputIsActive = true;
+            this.state = state;
+            BlockState = state;
+            onBlockStateChanged?.Invoke(state);
         }
     }
 }

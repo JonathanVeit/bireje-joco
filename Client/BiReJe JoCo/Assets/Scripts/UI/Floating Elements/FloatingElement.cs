@@ -7,6 +7,7 @@ namespace BiReJeJoCo.UI
     public class FloatingElement : BaseFloatingElement, ITickable
     {
         private MeshRenderer visibleRenderer;
+        private bool isHided;
 
         protected override void OnInitialize()
         {
@@ -26,11 +27,22 @@ namespace BiReJeJoCo.UI
 
         public virtual void Tick (float deltaTime)
         {
-            if (visibleRenderer != null)
+            if (visibleRenderer != null && !isHided)
             {
                 if (transform.gameObject.activeSelf != visibleRenderer.isVisible)
                     transform.gameObject.SetActive(visibleRenderer.isVisible);
             }
+        }
+
+        public void Hide() 
+        {
+            this.gameObject.SetActive(false);
+            isHided = true;
+        }
+        public void Unhide() 
+        {
+            this.gameObject.SetActive(true);
+            isHided = false;
         }
     }
 }

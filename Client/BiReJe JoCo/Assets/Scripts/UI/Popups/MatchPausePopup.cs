@@ -14,14 +14,24 @@ namespace BiReJeJoCo.UI
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
+            rehostButton.gameObject.SetActive(localPlayer.IsHost);
+            quitButton.gameObject.SetActive(localPlayer.IsHost);
         }
 
-        public void Show(MatchResult result)
+        public override void Show()
         {
             base.Show();
 
             rehostButton.gameObject.SetActive(localPlayer.IsHost);
             quitButton.gameObject.SetActive(localPlayer.IsHost);
+
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         #region UI Input

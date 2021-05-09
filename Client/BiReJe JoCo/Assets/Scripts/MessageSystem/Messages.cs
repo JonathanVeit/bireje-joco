@@ -1,5 +1,6 @@
 ﻿using JoVei.Base.MessageSystem;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.Character;
 
 namespace BiReJeJoCo
 {
@@ -98,6 +99,25 @@ namespace BiReJeJoCo
     { 
     }
 
+    public class BlockPlayerControlsMsg : BaseMessage 
+    {
+        public InputBlockState blockState;
+
+        public BlockPlayerControlsMsg(InputBlockState blockState)
+        {
+            this.blockState = blockState;
+        }
+    }
+
+    public class UnblockPlayerControlsMsg : BaseMessage 
+    {
+        public InputBlockState blockState;
+
+        public UnblockPlayerControlsMsg(InputBlockState blockState)
+        {
+            this.blockState = blockState;
+        }
+    }
     #endregion
 
     #region Player Inputs

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo.Map
 {
@@ -11,6 +12,11 @@ namespace BiReJeJoCo.Map
         protected override void OnTriggerInteracted(byte pointId)
         {
             playerTransform.position = targetLocation.position;
+        }
+
+        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        {
+            (floaty as InteractionFloaty).Initialize("Teleport");
         }
     }
 }

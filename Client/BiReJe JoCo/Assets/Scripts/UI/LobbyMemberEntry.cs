@@ -9,9 +9,12 @@ namespace BiReJeJoCo.UI
     {
         [SerializeField] Text memberName;
 
-        public void Initialize(string memberName)
+        public void Initialize(string memberName, bool isHost= false)
         {
             this.memberName.text = memberName;
+
+            if (isHost)
+                this.memberName.text += " (host)";
         }
     }
 }

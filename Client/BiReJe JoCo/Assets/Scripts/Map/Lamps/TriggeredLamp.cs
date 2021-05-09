@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo.Map
 {
@@ -11,9 +12,9 @@ namespace BiReJeJoCo.Map
 
         private bool isOn;
 
-        protected override void OnSetupActive()
+        protected override void SetupAsActive()
         {
-            base.OnSetupActive();
+            base.SetupAsActive();
             isOn = mainLight.enabled;
         }
 
@@ -23,6 +24,11 @@ namespace BiReJeJoCo.Map
             mainLight.enabled = isOn;
             foreach (var curObject in additionalObjects)
                 curObject.SetActive(isOn);
+        }
+
+        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        {
+            (floaty as InteractionFloaty).Initialize("Lamp");
         }
     }
 }

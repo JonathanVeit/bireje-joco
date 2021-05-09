@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class CharacterShooter : TickBehaviour, IPlayerObserved
+    public class Gun : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
         [SerializeField] SyncVar<Vector3> playerShot = new SyncVar<Vector3>(0);
@@ -24,11 +24,12 @@ namespace BiReJeJoCo.Character
         public void Initialize(PlayerControlled controller)
         {
             this.controller  = controller;
-            input = GetComponentInParent<PlayerCharacterInput>();
+            input = localPlayer.PlayerCharacter.characterInput;
 
-            if(controller.Player.IsLocalPlayer)
+            if (controller.Player.IsLocalPlayer)
                 input.onShootPressed += OnShootPressed;
-            playerShot.OnValueReceived += OnShotFired;
+            else
+                playerShot.OnValueReceived += OnShotFired;
 
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
         }
@@ -44,7 +45,7 @@ namespace BiReJeJoCo.Character
         public override void Tick(float deltaTime)
         {
             coolDownCounter = Mathf.Clamp(coolDownCounter += Time.deltaTime, 0, coolDown);
-            uiManager.GetInstanceOf<GameUI>().UpdateCooldown(coolDownCounter, coolDown);
+            uiManager.GetInstanceOf<GameUI>().UpdateWeaponCooldown(coolDownCounter, coolDown);
         }
 
         private void OnShootPressed()

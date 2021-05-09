@@ -11,7 +11,6 @@ namespace BiReJeJoCo.Character
         [SerializeField] float damage;
         [SerializeField] int ignoreCollisions;
 
-
         private bool isLocalBullet;
         private int collisions;
         private PhotonMessageHub photonMsgHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
@@ -36,16 +35,31 @@ namespace BiReJeJoCo.Character
 
         private void HandleHit(GameObject target)
         {
-            var characterModel = target.GetComponent<HuntedCharacterModel>();
-            if (isLocalBullet && characterModel != null)
+            if (isLocalBullet)
             {
-                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(characterModel.Owner, damage);
+                HandleHitLocal(target);
             }
-         
+
             SpawnEffect();
 
             GetComponent<Rigidbody>().isKinematic = true;
             RequestReturnToPool();
+        }
+
+        private void HandleHitLocal(GameObject target)
+        {
+            var characterModel = target.GetComponent<HuntedBehaviour>();
+            var transformableItem = target.GetComponent<TransformableItem>();
+
+            if (characterModel != null)
+            {
+                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(characterModel.Owner, damage);
+            }
+
+            if (transformableItem != null)
+            {
+                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(transformableItem.Owner, damage);
+            }
         }
 
         private void SpawnEffect() 

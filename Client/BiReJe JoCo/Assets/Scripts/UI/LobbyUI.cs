@@ -61,14 +61,14 @@ namespace BiReJeJoCo.UI
         private void AddMemberListEntry(Player player)
         {
             var entry = memberList.Add();
-            entry.Initialize(player.NickName);
-            memberEntries.Add(player.NickName, entry);
+            entry.Initialize(player.NickName, player.IsHost);
+            memberEntries.Add(player.Id, entry);
         }
 
         private void RemoveMemberListEntry(Player player)
         {
-            var entry = memberEntries[player.NickName];
-            memberEntries.Remove(player.NickName);
+            var entry = memberEntries[player.Id];
+            memberEntries.Remove(player.Id);
             memberList.Remove(entry);
         }
         #endregion
