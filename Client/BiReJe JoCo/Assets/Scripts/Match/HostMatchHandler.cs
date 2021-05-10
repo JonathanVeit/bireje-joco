@@ -74,7 +74,7 @@ namespace BiReJeJoCo
                 matchScene = matchScene,
                 roles = playerRoles,
                 spawnPos = spawnPoints,
-                duration = 10,
+                duration = 60*5,
             };
 
             return config;
