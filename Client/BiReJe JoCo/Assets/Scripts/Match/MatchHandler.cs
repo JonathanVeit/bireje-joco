@@ -1,6 +1,8 @@
 using JoVei.Base;
 using BiReJeJoCo.Backend;
 using UnityEngine;
+using System.Collections;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo
 {
@@ -41,6 +43,31 @@ namespace BiReJeJoCo
         }
         #endregion
 
+        #region Duration
+        protected virtual IEnumerator DurationCounter(int duration)
+        {
+            var waiter = new WaitForSeconds(1);
+
+            for (int i = duration; i >= 0; i--)
+            {
+                uiManager.GetInstanceOf<GameUI>().UpdateDuration(ConvertSecondsToTimeString(i));
+                yield return waiter;
+            }
+
+            uiManager.GetInstanceOf<GameUI>().UpdateDuration("");
+        }
+        private string ConvertSecondsToTimeString(int seconds)
+        {
+            var m = Mathf.FloorToInt(seconds / 60);
+            var s = seconds - (m * 60);
+
+            var m_str = m > 9 ? m.ToString() : "0" + m.ToString();
+            var s_str = s > 9 ? s.ToString() : "0" + s.ToString();
+
+            return string.Format("{0}:{1}", m_str, s_str);
+        }
+        #endregion
+
         #region Events
         protected virtual void OnDefineMatchRules(PhotonMessage msg)
         {
@@ -58,6 +85,7 @@ namespace BiReJeJoCo
         protected virtual void OnStartMatch(PhotonMessage msg) 
         {
             State = MatchState.Running;
+            StartCoroutine(DurationCounter(MatchConfig.duration));
             LogMatchMessage("Match started");
         }
         protected virtual void OnPauseMatch(PhotonMessage msg)
@@ -88,6 +116,7 @@ namespace BiReJeJoCo
 
             // needs to be destroyed over photon 
             photonRoomWrapper.Destroy(localPlayer.PlayerCharacter.gameObject);
+            StopAllCoroutines();
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }

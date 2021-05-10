@@ -8,6 +8,7 @@ namespace BiReJeJoCo.UI
     {
         [Header("UI Elements")]
         [SerializeField] Text resultLabel;
+        [SerializeField] Text resultMessageLabel;
         [SerializeField] Button rehostButton;
         [SerializeField] Button quitButton;
 
@@ -24,6 +25,7 @@ namespace BiReJeJoCo.UI
             quitButton.gameObject.SetActive(localPlayer.IsHost);
 
             resultLabel.text = result.winner == PlayerRole.Hunted ? "Hunted wins!" : "Hunter win!";
+            resultMessageLabel.text = result.message;
             Cursor.lockState = CursorLockMode.Confined;
         }
 

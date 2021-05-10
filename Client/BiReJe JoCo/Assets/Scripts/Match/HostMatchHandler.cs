@@ -40,7 +40,7 @@ namespace BiReJeJoCo
             var allPlayer = playerManager.GetAllPlayer().ToList();
             
             // define hunted 
-            var hunted = allPlayer[UnityEngine.Random.Range(0, allPlayer.Count)];
+            var hunted = allPlayer[Random.Range(0, allPlayer.Count)];
             var hunter = new List<Player>(allPlayer);
             hunter.Remove(hunted);
 
@@ -74,6 +74,7 @@ namespace BiReJeJoCo
                 matchScene = matchScene,
                 roles = playerRoles,
                 spawnPos = spawnPoints,
+                duration = 10,
             };
 
             return config;
@@ -85,6 +86,20 @@ namespace BiReJeJoCo
             base.OnDefineMatchRules(msg);
 
             photonRoomWrapper.LoadLevel(castedMsg.config.matchScene);
+        }
+        #endregion
+
+        #region Duration
+        protected override IEnumerator DurationCounter(int duration)
+        {
+            yield return base.DurationCounter(duration);
+
+            var result = new MatchResult()
+            {
+                winner = PlayerRole.Hunted,
+                message = "Time is over!",
+            };
+            photonMessageHub.ShoutMessage(new FinishMatchPhoMsg() { result = result }, PhotonMessageTarget.AllViaServer);
         }
         #endregion
 
@@ -142,11 +157,11 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunter,
+                message = "Monster has been killed!",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);
         }
-
         protected override void OnMatchClosed(PhotonMessage msg)
         {
             var casted = msg as CloseMatchPhoMsg;
@@ -167,7 +182,6 @@ namespace BiReJeJoCo
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }
-
         private IEnumerator LoadLobbyAsync() 
         {
             yield return new WaitForSeconds(0.5f);

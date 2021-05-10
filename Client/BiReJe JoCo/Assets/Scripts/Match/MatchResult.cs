@@ -4,5 +4,6 @@ namespace BiReJeJoCo.Backend
     public class MatchResult
     {
         public PlayerRole winner;
+        public string message;
     }
 }

@@ -17,17 +17,17 @@ namespace BiReJeJoCo.Character
         private PlayerControlled controller;
         public Player Owner => controller.Player;
 
-        private PlayerCharacterInput input;
         private float coolDownCounter;
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
         {
             this.controller  = controller;
-            input = localPlayer.PlayerCharacter.characterInput;
 
             if (controller.Player.IsLocalPlayer)
-                input.onShootPressed += OnShootPressed;
+            {
+                messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+            }
             else
                 playerShot.OnValueReceived += OnShotFired;
 
@@ -37,6 +37,8 @@ namespace BiReJeJoCo.Character
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
+
+            messageHub.UnregisterReceiver(this);
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
         }
@@ -73,6 +75,12 @@ namespace BiReJeJoCo.Character
         }
 
         #region Events
+        private void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
+        {
+            var input = localPlayer.PlayerCharacter.characterInput;
+            input.onShootPressed += OnShootPressed;
+        }
+
         private void OnShotFired(Vector3 target)
         {
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("default_bullet");

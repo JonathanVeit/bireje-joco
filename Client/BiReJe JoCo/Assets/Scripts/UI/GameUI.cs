@@ -14,6 +14,7 @@ namespace BiReJeJoCo.UI
         public Transform floatingElementGrid;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Text startInformation;
+        [SerializeField] Text durationLabel;
 
         [Header("Hunter")]
         [SerializeField] GameObject hunterHUD;
@@ -107,6 +108,10 @@ namespace BiReJeJoCo.UI
                 shootingCooldownBar.SetValue(value / maxValue);
         }
 
+        public void UpdateDuration(string duration)
+        {
+            durationLabel.text = duration;
+        }
 
         public void UpdateHealthBar(float value, float maxValue) 
         {
