@@ -135,8 +135,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480456209983}
-  m_LocalRotation: {x: 0.24676885, y: -0.36945197, z: 0.10243622, w: 0.8900097}
-  m_LocalPosition: {x: 2.7351954, y: 5.2647486, z: -2.7268393}
+  m_LocalRotation: {x: -0.23063949, y: 0.4864769, z: -0.13488318, w: -0.8318367}
+  m_LocalPosition: {x: 3.3661692, y: 5.264748, z: -1.8936346}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481413435625}
@@ -283,7 +283,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480608869084}
-  m_LocalRotation: {x: 0.2698159, y: -0.36666492, z: 0.11200327, w: 0.88329583}
+  m_LocalRotation: {x: -0.2521801, y: 0.48280707, z: -0.1474806, w: -0.8255616}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -327,7 +327,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7748344, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -642,7 +642,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404481114022363}
-  m_LocalRotation: {x: 0.23598632, y: -0.37066382, z: 0.09796028, w: 0.8929292}
+  m_LocalRotation: {x: -0.22056171, y: 0.4880727, z: -0.12898949, w: -0.8345654}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -686,7 +686,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7748344, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1215,7 +1215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482127453853}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.7351954, y: 5.2647486, z: -2.7268393}
+  m_LocalPosition: {x: 3.3661692, y: 5.264748, z: -1.8936346}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4522404481114022362}
@@ -1254,7 +1254,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7748344, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1357,10 +1357,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yAxisKeyboard: 0.001
   xAxisKeyboard: 0.1
-  yAxisController: 0.0085
-  xAxisController: 0.95
+  yAxisController: 0.05
+  xAxisController: 4
   cinemaFreeLook: {fileID: 4522404482127453850}
   characterInput: {fileID: 4522404481329450004}
+  playerInput: {fileID: 4522930805405680878}
 --- !u!114 &4522404482127453849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1415,7 +1416,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482295260262}
-  m_LocalRotation: {x: 0.2573591, y: -0.36820483, z: 0.10683234, w: 0.8870053}
+  m_LocalRotation: {x: -0.2405375, y: 0.48483473, z: -0.14067179, w: -0.82902867}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1459,7 +1460,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7748344, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1608,11 +1609,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 8.2
-  sprintMultiplyer: 1.35
+  movementSpeed: 7
+  sprintMultiplyer: 1.64
   airControlRate: 15
-  jumpSpeed: 5.75
-  jumpDuration: 0.2
+  jumpSpeed: 9
+  jumpDuration: 0.1
   airFriction: 0.5
   groundFriction: 100
   gravity: 30
@@ -1632,7 +1633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04bab299057d7894f9624a497f700b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
 --- !u!114 &4522930805405680878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1656,19 +1656,7 @@ MonoBehaviour:
       m_Calls: []
   m_ControlsChangedEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1205868672}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.AdjustInputSensitivity, Assembly-CSharp
-        m_MethodName: OnControlsChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:

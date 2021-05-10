@@ -9,17 +9,23 @@ namespace BiReJeJoCo
     public class VisualEffectsSwitchManager : SystemBehaviour
     {
         bool isUpstairs;
-
+        [Header("Upstairs Effects")]
         [SerializeField] GameObject upstairsPPS;
         Volume upstairsPPSVol;
         [SerializeField] GameObject upstairsMainLight;
         [SerializeField] GameObject upstairsFog;
         [SerializeField] GameObject snowEffects;
         [Space(10)]
+        [Header("Downstairs Effects")]
         [SerializeField] GameObject downstairsPPS;
         Volume downstairsPPSVol;
         [SerializeField] GameObject downstairsMainLight;
         [SerializeField] GameObject downstairsFog;
+
+        [Header("Hunted alterations")]
+        [SerializeField] VolumeProfile huntedUpstairsPPSProfile;
+        [SerializeField] VolumeProfile huntedDownstairsPPSProfile;
+
 
         public event Action onGoingDown;
         public event Action onGoingUp;
@@ -49,6 +55,11 @@ namespace BiReJeJoCo
             downstairsFog = localPlayer.PlayerCharacter.fogDownstairs;
 
             isUpstairs = localPlayer.Role == Backend.PlayerRole.Hunted;
+            if (localPlayer.Role == Backend.PlayerRole.Hunted)
+            {
+                upstairsPPSVol.profile = huntedUpstairsPPSProfile;
+                downstairsPPSVol.profile = huntedDownstairsPPSProfile;
+            }
             HandlePPSSwitch(null);
         }
 

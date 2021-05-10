@@ -11,12 +11,14 @@ namespace BiReJeJoCo.Character
         [SerializeField] [Range(0f, 1f)] private float xAxisKeyboard;
 
         [Header("Controller Cam")]
-        [SerializeField] [Range(0f, 1f)] private float yAxisController;
-        [SerializeField] [Range(0f, 1f)] private float xAxisController;
+        [SerializeField] [Range(0f, 0.5f)] private float yAxisController;
+        [SerializeField] [Range(0f, 6f)] private float xAxisController;
 
         [Space(10)]
         [SerializeField] CinemachineFreeLook cinemaFreeLook;
         [SerializeField] PlayerCharacterInput characterInput;
+        string currentControlScheme;
+        [SerializeField] PlayerInput playerInput;
 
         //save active Axis numbers
         private float xAxisSave;
@@ -31,11 +33,23 @@ namespace BiReJeJoCo.Character
             //save axis values
             xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
             yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
+
+            currentControlScheme = playerInput.currentControlScheme;
         }
         protected override void OnBeforeDestroy()
         {
         }
         #endregion
+
+        
+        private void Update()
+        {
+            if (playerInput.currentControlScheme != currentControlScheme)
+            {
+                OnControlsChanged(playerInput);
+                currentControlScheme = playerInput.currentControlScheme;
+            }
+        }
 
         public void OnControlsChanged(PlayerInput playerInput)
         {

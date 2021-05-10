@@ -98,8 +98,8 @@ namespace BiReJeJoCo.Character
             var fogDownstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_downstairs_hunted_sfx");
             
             var root = CreateSFXRoot();
-            fogUpstairs = Instantiate(fogUpstairsPrefab, root.position, root.rotation, root);
-            fogDownstairs = Instantiate(fogDownstairsPrefab, root.position, root.rotation, root);
+            fogUpstairs = Instantiate(fogUpstairsPrefab, root);
+            fogDownstairs = Instantiate(fogDownstairsPrefab, root);
         }
 
         private void SetupHunterPP() 
@@ -108,8 +108,8 @@ namespace BiReJeJoCo.Character
             var fogDownstairsPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("fog_downstairs_hunter_sfx");
 
             var root = CreateSFXRoot();
-            fogUpstairs = Instantiate(fogUpstairsPrefab, root.position, root.rotation, root);
-            fogDownstairs = Instantiate(fogDownstairsPrefab, root.position, root.rotation, root);
+            fogUpstairs = Instantiate(fogUpstairsPrefab, root);
+            fogDownstairs = Instantiate(fogDownstairsPrefab, root);
         }
         #endregion
 

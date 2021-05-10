@@ -1,3 +1,4 @@
+using BiReJeJoCo.Character;
 using UnityEngine;
 
 namespace BiReJeJoCo
@@ -11,12 +12,12 @@ namespace BiReJeJoCo
 
         protected override void OnSystemsInitialized()
         {
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,OnCharacterSpawned);messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,OnCharacterSpawned);
+            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this,OnCharacterSpawned);
         }
 
         private void OnCharacterSpawned(PlayerCharacterSpawnedMsg obj)
         {
-            player = localPlayer.PlayerCharacter.gameObject;
+            player = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().characterRoot.gameObject;
             gameStart = true;
         }
 
