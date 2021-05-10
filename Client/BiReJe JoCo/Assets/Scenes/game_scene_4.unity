@@ -11265,7 +11265,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh186996
+  m_Name: pb_Mesh269856
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11447,7 +11447,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673541173}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -58.2, y: 22.141, z: 0}
+  m_LocalPosition: {x: -46.9, y: 22.141, z: 40.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1791001268}
@@ -11792,7 +11792,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1204865288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 22.141, z: 71.3}
+  m_LocalPosition: {x: 18.3, y: 22.141, z: 43.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1443722922}
@@ -11823,7 +11823,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218813185}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.8, y: 22.141, z: 0}
+  m_LocalPosition: {x: -1.7, y: 22.141, z: -1.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2006849087}
@@ -12498,41 +12498,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2160889362134024291, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: switchAreas.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2160889362134024292, guid: df7cbd8f34f12844c824540f66065397, type: 3}
       propertyPath: m_Name
       value: VisualEffectsManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160889362134024292, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160889362764790416, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160889362764790416, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160889362764790416, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2160889363685637145, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682213712495032383, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: weight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682213712725422379, guid: df7cbd8f34f12844c824540f66065397, type: 3}
-      propertyPath: weight
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df7cbd8f34f12844c824540f66065397, type: 3}
@@ -96335,10 +96303,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 227332582873924264, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 522728605563746142, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7530a391db204e744829f99580a7e5d0, type: 2}
+    - target: {fileID: 638330770318274907, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1663622246564127615, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2098444358600679783, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -96347,6 +96327,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7530a391db204e744829f99580a7e5d0, type: 2}
+    - target: {fileID: 2987453230752553381, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085017149109156132, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4166541936823939763, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4595493019276591994, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -96359,10 +96351,22 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7530a391db204e744829f99580a7e5d0, type: 2}
+    - target: {fileID: 6514552129636831328, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8129088269972065598, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7530a391db204e744829f99580a7e5d0, type: 2}
+    - target: {fileID: 8147652599321752790, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040212578278850354, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9103129040806714864, guid: c4ecba39c7ae2f04b9c499f83bb7b38e, type: 3}
       propertyPath: m_Name
       value: ExtraProps_Playtesting
