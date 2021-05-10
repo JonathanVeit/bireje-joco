@@ -7,7 +7,6 @@ namespace BiReJeJoCo.Character
 {
     public class PlayerCharacterInput : SystemBehaviour
     {
-        [SerializeField] InputBlockState state;
         public InputBlockState BlockState { get; private set; } 
             = InputBlockState.Loading;
         public event Action<InputBlockState> onBlockStateChanged;
@@ -225,7 +224,6 @@ namespace BiReJeJoCo.Character
 
         private void SetBlockState(InputBlockState state) 
         {
-            this.state = state;
             BlockState = state;
             onBlockStateChanged?.Invoke(state);
         }
