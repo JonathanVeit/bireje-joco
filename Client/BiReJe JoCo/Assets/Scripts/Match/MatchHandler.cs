@@ -11,6 +11,8 @@ namespace BiReJeJoCo
         public MatchState State { get; protected set; }
         public MatchConfig MatchConfig { get; protected set; }
 
+        protected Coroutine durationCounter;
+
         #region Initialization
         protected override void OnSystemsInitialized()
         {
@@ -56,7 +58,7 @@ namespace BiReJeJoCo
 
             uiManager.GetInstanceOf<GameUI>().UpdateDuration("");
         }
-        private string ConvertSecondsToTimeString(int seconds)
+        protected string ConvertSecondsToTimeString(int seconds)
         {
             var m = Mathf.FloorToInt(seconds / 60);
             var s = seconds - (m * 60);
@@ -85,7 +87,7 @@ namespace BiReJeJoCo
         protected virtual void OnStartMatch(PhotonMessage msg) 
         {
             State = MatchState.Running;
-            StartCoroutine(DurationCounter(MatchConfig.duration));
+            durationCounter = StartCoroutine(DurationCounter(MatchConfig.duration));
             LogMatchMessage("Match started");
         }
         protected virtual void OnPauseMatch(PhotonMessage msg)
@@ -102,6 +104,7 @@ namespace BiReJeJoCo
 
         protected virtual void OnMatchFinished(PhotonMessage msg)
         {
+            StopCoroutine(durationCounter);
             LogMatchMessage("Match ended");
             State = MatchState.Result;
         }
@@ -116,7 +119,7 @@ namespace BiReJeJoCo
 
             // needs to be destroyed over photon 
             photonRoomWrapper.Destroy(localPlayer.PlayerCharacter.gameObject);
-            StopAllCoroutines();
+            StopCoroutine(durationCounter);
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }

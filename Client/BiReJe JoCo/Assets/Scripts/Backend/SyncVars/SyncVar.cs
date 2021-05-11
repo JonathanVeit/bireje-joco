@@ -78,7 +78,7 @@ namespace BiReJeJoCo.Backend
         public void SetSerialized(byte[] value)
         {
             this.value = (TValue) Protocol.Deserialize(value);
-            OnValueReceived.Invoke(this.value);
+            OnValueReceived?.Invoke(this.value);
         }
         public byte[] GetSerialized()
         {

@@ -75,6 +75,11 @@ namespace BiReJeJoCo
     {
         public RemovedPlayerMsg(Player player) : base(player) { }
     }
+
+    public class HostSwitchedMsg : BaseMessage
+    {
+        
+    }
     #endregion
 
     #region Game Related

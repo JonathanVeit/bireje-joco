@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo
 {
     public class HostMatchHandler : MatchHandler
     {
         private bool startedMatch = false;
+        public int MatchDuration { get; protected set; } = 10 * 60;
 
         #region Initialiation
         protected override void ConnectEvents()
@@ -20,7 +22,7 @@ namespace BiReJeJoCo
         #endregion
 
         #region Lobby
-        public void StartMatch(string match_scene) 
+        public void StartMatch(string match_scene)
         {
             photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(match_scene), PhotonMessageTarget.AllViaServer);
         }
@@ -34,13 +36,13 @@ namespace BiReJeJoCo
             LogMatchMessage("Match rules defined");
         }
 
-        private MatchConfig CreateMatchConfig(string matchScene) 
+        private MatchConfig CreateMatchConfig(string matchScene)
         {
             // roles 
             var allPlayer = playerManager.GetAllPlayer().ToList();
-            
+
             // define hunted 
-            var hunted = allPlayer[Random.Range(0, allPlayer.Count)];
+            Player hunted = GetRandomHunted(allPlayer);
             var hunter = new List<Player>(allPlayer);
             hunter.Remove(hunted);
 
@@ -56,7 +58,7 @@ namespace BiReJeJoCo
             // spawn points
             var spawnPoints = new Dictionary<int, int>();
             var mapConfig = MapConfigMapping.GetMapping().GetElementForKey(matchScene);
-            
+
             // hunted 
             int huntedSpawnPoint = mapConfig.GetRandomHuntedSpawnPointIndex();
             spawnPoints.Add(hunted.NumberInRoom, huntedSpawnPoint);
@@ -74,10 +76,18 @@ namespace BiReJeJoCo
                 matchScene = matchScene,
                 roles = playerRoles,
                 spawnPos = spawnPoints,
-                duration = 5*60,
+                duration = MatchDuration,
             };
 
             return config;
+        }
+
+        private static Player GetRandomHunted(List<Player> allPlayer)
+        {
+            var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted);
+            if (preferedHunted.Length == 0)
+                return allPlayer[Random.Range(0, allPlayer.Count)];
+            return preferedHunted[Random.Range(0, preferedHunted.Length)];
         }
 
         protected override void OnDefineMatchRules(PhotonMessage msg)
@@ -92,7 +102,15 @@ namespace BiReJeJoCo
         #region Duration
         protected override IEnumerator DurationCounter(int duration)
         {
-            yield return base.DurationCounter(duration);
+            var waiter = new WaitForSeconds(1);
+
+            for (int i = duration; i >= 0; i--)
+            {
+                uiManager.GetInstanceOf<GameUI>().UpdateDuration(ConvertSecondsToTimeString(i));
+                yield return waiter;
+            }
+
+            uiManager.GetInstanceOf<GameUI>().UpdateDuration("");
 
             var result = new MatchResult()
             {
@@ -100,6 +118,11 @@ namespace BiReJeJoCo
                 message = "Time is over!",
             };
             photonMessageHub.ShoutMessage(new FinishMatchPhoMsg() { result = result }, PhotonMessageTarget.AllViaServer);
+        }
+
+        public void SetDuration(int duration) 
+        {
+            MatchDuration = duration;
         }
         #endregion
 
@@ -168,7 +191,7 @@ namespace BiReJeJoCo
 
             // needs to be destroyed over photon 
             localPlayer.DestroyPlayerCharacter();
-            StopAllCoroutines();
+            StopCoroutine(durationCounter);
 
             if (casted.mode == CloseMatchMode.LeaveLobby)
             {

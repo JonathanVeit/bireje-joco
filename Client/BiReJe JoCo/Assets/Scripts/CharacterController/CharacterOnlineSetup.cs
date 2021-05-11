@@ -58,7 +58,7 @@ namespace BiReJeJoCo.Character
             rb.isKinematic = true;
             SetTagRecursively(this.gameObject, "RemotePlayer");
         }
-        private void SetupAsHunted(bool isLocal) 
+        private void SetupAsHunted(bool isLocal)
         {
             // add hunted behaviour 
             var behaviourPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_behaviour");
@@ -66,11 +66,11 @@ namespace BiReJeJoCo.Character
             controller.AddObservedComponent(huntedBehviour);
 
             // TODO: hunted should not have a lamp but better pp 
-            if (!isLocal)
-                flashlight.gameObject.SetActive(false);
+            if (isLocal)
+                SpawnFlashlight();
 
-            // spawn marker object 
-            var earPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_ears");
+             // spawn marker object 
+             var earPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_ears");
             Instantiate(earPrefab, modelRoot.position, modelRoot.rotation, modelRoot);
 
             if (isLocal)
@@ -79,16 +79,26 @@ namespace BiReJeJoCo.Character
             // set layer to hunted layer
             SetLayerRecursively(this.gameObject, 10);
         }
-        private void SetupAsHunter(bool isLocal) 
+        private void SetupAsHunter(bool isLocal)
         {
             // spawn gun 
             var gunPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_gun");
             var root = characterRoot.transform.GetChild(0);
             var gun = Instantiate(gunPrefab, root.position, Quaternion.identity, root);
             controller.AddObservedComponent(gun.GetComponent<Gun>());
-            
+
             if (isLocal)
                 SetupHunterPP();
+
+            SpawnFlashlight();
+        }
+
+        private void SpawnFlashlight() 
+        {
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("flashlight");
+            var root = characterRoot.transform.GetChild(0);
+            var flashlight = Instantiate(prefab, root.position, Quaternion.identity, root);
+            controller.AddObservedComponent(flashlight.GetComponent<Flashlight>());
         }
 
         #region PostProcessing

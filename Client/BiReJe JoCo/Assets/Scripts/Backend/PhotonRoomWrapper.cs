@@ -106,6 +106,11 @@ namespace BiReJeJoCo.Backend
             messageHub.ShoutMessage(this, new PlayerLeftLobbyMsg(otherPlayer.UserId));
         }
 
+        public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+        {
+            messageHub.ShoutMessage(this, new HostSwitchedMsg());
+        }
+
         // instantiation
         public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation, bool asRoomObject = false)
         {

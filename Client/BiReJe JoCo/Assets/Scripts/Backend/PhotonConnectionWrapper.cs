@@ -25,6 +25,7 @@ namespace BiReJeJoCo.Backend
         private void SetupPhoton() 
         {
             PhotonNetwork.AutomaticallySyncScene = true;
+            PhotonNetwork.PhotonServerSettings.DevRegion = "eu";
         }
 
         public void CleanUp() { }
@@ -34,7 +35,6 @@ namespace BiReJeJoCo.Backend
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-
         public void Disconnect()
         {
             PhotonNetwork.Disconnect();
@@ -45,14 +45,12 @@ namespace BiReJeJoCo.Backend
             messageHub.ShoutMessage(this, new OnConnectedToPhotonMsg());
             IsConnected = true;
         }
-
         public override void OnDisconnected(DisconnectCause cause)
         {
             messageHub.ShoutMessage(this, new OnDisconnectedFromPhotonMsg(cause.ToString()));
             IsConnectedToMaster = false;
             IsConnected = false;
         }
-    
         public override void OnConnectedToMaster()
         {
             messageHub.ShoutMessage(this, new OnConnectedToPhotonMasterMsg());
@@ -64,13 +62,11 @@ namespace BiReJeJoCo.Backend
         {
             PhotonNetwork.JoinLobby();
         }
-
         public override void OnJoinedLobby()
         {
             messageHub.ShoutMessage(this, new OnJoinedPhotonLobbyMsg());
             IsInLobby = true;
         }
-
         public override void OnLeftLobby()
         {
             messageHub.ShoutMessage(this, new OnLeftPhotonLobbyMsg());

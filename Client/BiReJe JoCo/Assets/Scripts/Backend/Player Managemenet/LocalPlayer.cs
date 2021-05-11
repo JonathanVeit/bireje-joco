@@ -69,11 +69,15 @@ namespace BiReJeJoCo.Backend
         {
             UpdateProperty("Role", role);
         }
+        public void SetPreferedRole(PlayerRole role)
+        {
+            UpdateProperty("PreferedRole", role);
+        }
 
         #region Events
         private void OnJoinedLobby(OnJoinedLobbyMsg msg)
         {
-            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator);
+            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "PreferedRole", PlayerRole.Hunter);
         }
 
         private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg) 
