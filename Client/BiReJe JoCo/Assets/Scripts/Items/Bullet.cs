@@ -14,8 +14,9 @@ namespace BiReJeJoCo.Character
         private bool isLocalBullet;
         private int collisions;
         private PhotonMessageHub photonMsgHub => DIContainer.GetImplementationFor<PhotonMessageHub>();
-            
-        public void Initialize(bool isLocalBullet) 
+        private PlayerManager playerManager => DIContainer.GetImplementationFor<PlayerManager>();
+
+        public void Initialize(bool isLocalBullet)
         {
             this.isLocalBullet = isLocalBullet;
 
@@ -48,23 +49,15 @@ namespace BiReJeJoCo.Character
 
         private void HandleHitLocal(GameObject target)
         {
-            var characterModel = target.GetComponent<HuntedBehaviour>();
-            var transformableItem = target.GetComponent<TransformableItem>();
-
-            if (characterModel != null)
+            if (target.layer == 10)
             {
-                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(characterModel.Owner, damage);
-            }
-
-            if (transformableItem != null)
-            {
-                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(transformableItem.Owner, damage);
+                photonMsgHub.ShoutMessage<HuntedHitByBulletPhoMsg>(playerManager.GetAllPlayer((x) => x.Role == PlayerRole.Hunted)[0], damage);
             }
         }
 
-        private void SpawnEffect() 
+        private void SpawnEffect()
         {
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("bullet_hit_sfx"); 
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("bullet_hit_sfx");
             poolingManager.PoolInstance(prefab, transform.position, Quaternion.identity);
         }
     }

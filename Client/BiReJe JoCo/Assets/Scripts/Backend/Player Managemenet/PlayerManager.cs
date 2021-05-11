@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using JoVei.Base;
 using PhotonPlayer = Photon.Realtime.Player;
+using System;
 
 namespace BiReJeJoCo.Backend
 {
@@ -66,6 +67,17 @@ namespace BiReJeJoCo.Backend
         public Player[] GetAllPlayer()
         {
             return allPlayer.Values.ToArray();
+        }
+        public Player[] GetAllPlayer(Func<Player, bool> predicate)
+        {
+            List<Player> result = new List<Player>();
+
+            foreach (var curPlayer in allPlayer.Values)
+            {
+                if (predicate(curPlayer))
+                    result.Add (curPlayer);
+            }
+            return result.ToArray();
         }
 
         public bool HasPlayer(string id)

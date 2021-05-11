@@ -26,7 +26,7 @@ namespace BiReJeJoCo.Character
         public void Initialize(PlayerControlled controller)
         {
             Owner = controller.Player;
-            ConnectEvents();
+           
             Health = maxHealth;
             uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health, 100);
 
@@ -34,15 +34,14 @@ namespace BiReJeJoCo.Character
             {
                 isTransformed.OnValueReceived += OnChangedTransformation;
             }
+            else
+                ConnectEvents();
         }
 
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
             DisconnectEvents();
-
-            if (syncVarHub)
-                syncVarHub.UnregisterSyncVar(isTransformed);
         }
 
         void ConnectEvents()
@@ -50,12 +49,14 @@ namespace BiReJeJoCo.Character
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             photonMessageHub.RegisterReceiver<HuntedHitByBulletPhoMsg>(this, OnHitByBullet);
         }
-
         void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
+
+            if (syncVarHub)
+                syncVarHub.UnregisterSyncVar(isTransformed);
         }
         #endregion
 

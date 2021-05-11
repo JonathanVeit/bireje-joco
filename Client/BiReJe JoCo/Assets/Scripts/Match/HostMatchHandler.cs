@@ -74,7 +74,7 @@ namespace BiReJeJoCo
                 matchScene = matchScene,
                 roles = playerRoles,
                 spawnPos = spawnPoints,
-                duration = 60*5,
+                duration = 5*60,
             };
 
             return config;
@@ -168,6 +168,7 @@ namespace BiReJeJoCo
 
             // needs to be destroyed over photon 
             localPlayer.DestroyPlayerCharacter();
+            StopAllCoroutines();
 
             if (casted.mode == CloseMatchMode.LeaveLobby)
             {
