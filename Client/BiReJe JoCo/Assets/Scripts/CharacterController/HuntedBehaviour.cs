@@ -1,5 +1,6 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
+using System;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
@@ -20,7 +21,7 @@ namespace BiReJeJoCo.Character
 
         float transformationCounter = 0;
         float transformationCooldownCounter = 0;
-
+        private Func<bool> isGrounded;
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
@@ -63,6 +64,9 @@ namespace BiReJeJoCo.Character
         #region Transformation
         private void OnShootPressed()
         {
+            if (!isGrounded())
+                return;
+
             if (isTransformed.GetValue())
             {
                 TransformBack();
@@ -125,6 +129,8 @@ namespace BiReJeJoCo.Character
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             localPlayer.PlayerCharacter.characterInput.onShootPressed += OnShootPressed;
+            var mover = localPlayer.PlayerCharacter.characterRoot.GetComponent<Mover>();
+            isGrounded = () => mover.IsGrounded();
         }
 
         void OnHitByBullet(PhotonMessage msg) 

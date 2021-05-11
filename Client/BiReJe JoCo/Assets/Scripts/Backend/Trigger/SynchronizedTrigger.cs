@@ -51,17 +51,24 @@ namespace BiReJeJoCo.Backend
                 }
             }
         }
-        private void OnSychronizedTriggerReceived(PhotonMessage msg) 
+        protected virtual void OnSychronizedTriggerReceived(PhotonMessage msg)
         {
             var castedMsg = msg as TriggerPointInteractedPhoMsg;
 
             if (castedMsg.i == triggerId)
             {
                 OnTriggerInteracted(castedMsg.pi);
-                StartCoroutine(CoolDown(triggerPoints[castedMsg.pi]));
+                StartCoroutine(CoolDown(triggerPoints.Find(x => x.Id == castedMsg.pi)));
             }
         }
 
         protected abstract override void OnTriggerInteracted(byte pointId);
+
+        #region Access
+        public void SetTriggerId(byte id) 
+        {
+            triggerId = id;
+        }
+        #endregion
     }
 }

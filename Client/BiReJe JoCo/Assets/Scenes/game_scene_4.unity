@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11265,7 +11265,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh269856
+  m_Name: pb_Mesh362342
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25883,6 +25883,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d29b22b47d29f7f47baa778a0b890dde, type: 2}
+    - target: {fileID: 6535875703580563058, guid: f48e0262560ad6542be24a3b566225a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6540741794832115630, guid: f48e0262560ad6542be24a3b566225a4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -96440,7 +96444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1943573373
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -96709,6 +96713,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006849086}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &4068354069628774269
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8253345
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3062141
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.85871744
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879284266357564701, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8435645183212299621, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
+      propertyPath: m_Name
+      value: doors
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 67f91bd2ef91b9743b7ebf175f5e61f8, type: 3}
 --- !u!1001 &4411561141330474780
 PrefabInstance:
   m_ObjectHideFlags: 0
