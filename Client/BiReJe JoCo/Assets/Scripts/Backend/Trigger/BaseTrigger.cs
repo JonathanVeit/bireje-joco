@@ -11,7 +11,7 @@ namespace BiReJeJoCo.Backend
     public abstract class BaseTrigger : TickBehaviour
     {
         [Header("Base Trigger Settings")]
-        [SerializeField] protected TriggerSetup[] triggerPoints;
+        [SerializeField] protected List<TriggerSetup> triggerPoints;
         [SerializeField] LayerMask playerLayer;
 
         protected Transform playerTransform;
