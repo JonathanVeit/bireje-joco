@@ -32,7 +32,10 @@ namespace BiReJeJoCo.Character
 
         protected override void OnBeforeDestroy()
         {
-            syncVarHub.UnregisterSyncVar(rotation);
+            base.OnBeforeDestroy();
+
+            if (syncVarHub)
+                syncVarHub.UnregisterSyncVar(rotation);
         }
     }
 }

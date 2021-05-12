@@ -85,9 +85,6 @@ namespace BiReJeJoCo.UI
         private void OnRemovedPlayer(RemovedPlayerMsg msg)
         {
             RemoveMemberListEntry(msg.Param1);
-
-            if (msg.Param1.IsHost)
-                photonClient.LeaveLobby();
         }
         private void OnSwitchedHost(HostSwitchedMsg msg)
         {
