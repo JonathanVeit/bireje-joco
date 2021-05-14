@@ -20,6 +20,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject hunterHUD;
         [SerializeField] GameObject crosshairGO;
         [SerializeField] UIBarHandler shootingCooldownBar;
+        [SerializeField] UIBarHandler pingCooldownBar;
 
         [Header("Hunted")]
         [SerializeField] GameObject huntedHUD;
@@ -85,6 +86,10 @@ namespace BiReJeJoCo.UI
             StartCoroutine(FadeText(3, startInformation));
         }
 
+        public void UpdateMatchDuration(string duration)
+        {
+            durationLabel.text = duration;
+        }
         private IEnumerator FadeText(float duration, Text target) 
         {
             float counter = duration;
@@ -100,17 +105,20 @@ namespace BiReJeJoCo.UI
 
             target.gameObject.SetActive(false);
         }
-        public void UpdateWeaponCooldown(float value, float maxValue) 
+        
+        public void UpdateShootCooldown(float value, float maxValue) 
         {
             if (value <= 0.1f)
                 shootingCooldownBar.OverrideValue(0);
             else
                 shootingCooldownBar.SetValue(value / maxValue);
         }
-
-        public void UpdateDuration(string duration)
+        public void UpdatePingCooldown(float value, float maxValue)
         {
-            durationLabel.text = duration;
+            if (value <= 0.1f)
+                pingCooldownBar.OverrideValue(0);
+            else
+                pingCooldownBar.SetValue(value / maxValue);
         }
 
         public void UpdateHealthBar(float value, float maxValue) 

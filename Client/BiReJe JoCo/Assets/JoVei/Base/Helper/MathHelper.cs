@@ -54,5 +54,33 @@ namespace JoVei.Base.Helper
 
             return -1;
         }
+
+        /// <summary>
+        /// Returns true if there is an intersection between the two lines 
+        /// </summary>
+        public static bool LineLineIntersection(out Vector3 intersection, Vector3 lineOrigin1,
+                Vector3 lineDirection1, Vector3 lineOrigin2, Vector3 lineDirection2)
+        {
+
+            Vector3 lineVec3 = lineOrigin2 - lineOrigin1;
+            Vector3 crossVec1and2 = Vector3.Cross(lineDirection1, lineDirection2);
+            Vector3 crossVec3and2 = Vector3.Cross(lineVec3, lineDirection2);
+
+            float planarFactor = Vector3.Dot(lineVec3, crossVec1and2);
+
+            //is coplanar, and not parallel
+            if (Mathf.Approximately(planarFactor, 0f) &&
+                !Mathf.Approximately(crossVec1and2.sqrMagnitude, 0f))
+            {
+                float s = Vector3.Dot(crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
+                intersection = lineOrigin1 + (lineDirection1 * s);
+                return true;
+            }
+            else
+            {
+                intersection = Vector3.zero;
+                return false;
+            }
+        }
     }
 }

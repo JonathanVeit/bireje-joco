@@ -17,6 +17,11 @@ namespace JoVei.Base.UI
             this.enabled = true;
             OnInitialize();
         }
+
+        public void Destroy()
+        {
+            OnDestroyed();
+        }
         #endregion
 
         #region Behaviour
@@ -42,6 +47,11 @@ namespace JoVei.Base.UI
         /// Called right after beeing initialized
         /// </summary>
         protected virtual void OnInitialize() { }
+
+        /// <summary>
+        /// Called right before beeing destroyed
+        /// </summary>
+        protected virtual void OnDestroyed() { }
         #endregion
     }
 }

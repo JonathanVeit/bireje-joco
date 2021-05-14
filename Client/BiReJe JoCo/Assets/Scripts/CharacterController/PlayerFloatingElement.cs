@@ -8,8 +8,6 @@ namespace BiReJeJoCo.Character
     public class PlayerFloatingElement : SystemBehaviour, IPlayerObserved
     {
         [SerializeField] Transform floatingElementTarget;
-        [SerializeField] MeshRenderer floatingElementMesh;
-
 
         private PlayerNameFloaty nameFloaty;
         private PlayerControlled controller;
@@ -34,7 +32,6 @@ namespace BiReJeJoCo.Character
                 var config = new FloatingElementConfig("player_character_name", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, floatingElementTarget);
                 nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
                 nameFloaty.Initialize(Owner.NickName);
-                nameFloaty.SetVisibleRenderer(floatingElementMesh);
             }
         }
 

@@ -70,7 +70,6 @@ namespace BiReJeJoCo.Backend
 
             var floaty = floatingManager.GetElementAs<FloatingElement>(config);
             floaties[trigger.Id] = floaty;
-            floaty.SetVisibleRenderer(trigger.visiblityRenderer);
             OnFloatySpawned(trigger.Id, floaty);
         }
 
@@ -200,7 +199,6 @@ namespace BiReJeJoCo.Backend
             public bool hideInCooldown = true;
             public Transform floatingElementTarget;
             public Vector2 floatingElementOffset;
-            public MeshRenderer visiblityRenderer;
 
             [Header("Debugging")]
             public bool isCoolingDown;

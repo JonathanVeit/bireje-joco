@@ -62,8 +62,8 @@ namespace BiReJeJoCo.Character
         {
             // add hunted behaviour 
             var behaviourPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_behaviour");
-            var huntedBehviour = Instantiate(behaviourPrefab, characterRoot).GetComponent<HuntedBehaviour>();
-            controller.AddObservedComponent(huntedBehviour);
+            var huntedBehaviour = Instantiate(behaviourPrefab, characterRoot).GetComponent<HuntedBehaviour>();
+            controller.AddObservedComponent(huntedBehaviour);
 
             // TODO: hunted should not have a lamp but better pp 
             if (isLocal)
@@ -81,6 +81,11 @@ namespace BiReJeJoCo.Character
         }
         private void SetupAsHunter(bool isLocal)
         {
+            // add hunter behaviour 
+            var behaviourPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_behaviour");
+            var hunterBehaviour = Instantiate(behaviourPrefab, characterRoot).GetComponent<HunterBehaviour>();
+            controller.AddObservedComponent(hunterBehaviour);
+
             // spawn gun 
             var gunPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_gun");
             var root = characterRoot.transform.GetChild(0);

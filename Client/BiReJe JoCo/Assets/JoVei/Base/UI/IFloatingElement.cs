@@ -5,6 +5,7 @@
         IFloatingElementConfig Config { get; } // config 
         UnityEngine.Transform FloatyRoot { get; }
         void Initialize(IFloatingElementConfig config); // initialize when pooling
+        void Destroy (); // destroyed 
 
         void RequestDestroyFloaty();
         void RequestReleaseFloaty();

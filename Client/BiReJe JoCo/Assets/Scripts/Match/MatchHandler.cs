@@ -52,11 +52,11 @@ namespace BiReJeJoCo
 
             for (int i = duration; i >= 0; i--)
             {
-                uiManager.GetInstanceOf<GameUI>().UpdateDuration(ConvertSecondsToTimeString(i));
+                uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(i));
                 yield return waiter;
             }
 
-            uiManager.GetInstanceOf<GameUI>().UpdateDuration("");
+            uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration("");
         }
         protected string ConvertSecondsToTimeString(int seconds)
         {

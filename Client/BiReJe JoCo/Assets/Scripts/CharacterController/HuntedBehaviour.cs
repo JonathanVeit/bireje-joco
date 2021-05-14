@@ -1,5 +1,6 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
+using JoVei.Base.Helper;
 using System;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace BiReJeJoCo.Character
         [Header("Settings")]
         [SerializeField] float maxHealth = 100f;
         [SerializeField] float transformationDuration = 6;
-        [SerializeField] float transformationCooldownDuration = 12;
+        [SerializeField] float transformationCooldown = 12;
 
         public float Health { get; private set; }
         public Player Owner { get; private set; }
@@ -19,29 +20,40 @@ namespace BiReJeJoCo.Character
         private bool wasKilled;
         private GameObject transformedItem;
 
-        float transformationCounter = 0;
-        float transformationCooldownCounter = 0;
+        Timer transformationDurationTimer = new Timer();
+        Timer transformationCooldownTimer = new Timer();
+        GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
         {
             Owner = controller.Player;
-           
+            transformationDurationTimer.SetDuration(transformationDuration);
+            transformationCooldownTimer.SetDuration(transformationCooldown);
+
             Health = maxHealth;
-            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health, 100);
+            gameUI.UpdateHealthBar(Health, 100);
 
             if (!Owner.IsLocalPlayer)
             {
                 isTransformed.OnValueReceived += OnChangedTransformation;
             }
             else
-                ConnectEvents();
+            {
+                ConnectEvents(); 
+                transformationCooldownTimer.Start(() => // update 
+                {
+                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldown);
+                }, null);
+            }
         }
 
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
+            transformationDurationTimer.Stop();
+            transformationCooldownTimer.Stop();
             DisconnectEvents();
         }
 
@@ -71,7 +83,7 @@ namespace BiReJeJoCo.Character
             {
                 TransformBack();
             }
-            else if (transformationCooldownCounter >= transformationCooldownDuration)
+            else if (transformationCooldownTimer.State == TimerState.Finished)
             {
                 TransformInto();
             }
@@ -80,48 +92,39 @@ namespace BiReJeJoCo.Character
         private void TransformInto()
         {
             isTransformed.SetValue(true);
-            OnChangedTransformation(true);
+            OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<BlockPlayerControlsMsg>(this, InputBlockState.Transformation);
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_fake_model");
             transformedItem = photonRoomWrapper.Instantiate(prefab.name, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
 
-            uiManager.GetInstanceOf<GameUI>().UpdateTransformationCooldownBar(0, transformationCooldownDuration);
+            gameUI.UpdateTransformationCooldownBar(0, transformationCooldown);
+            transformationDurationTimer.Start(
+            () => // update 
+            {
+                gameUI.UpdateTransformationDurationBar(transformationDuration - transformationDurationTimer.Progress, transformationDuration);
+            }, 
+            () => // finish
+            { 
+                TransformBack(); 
+            });
         }
         private void TransformBack()
         {
             isTransformed.SetValue(false);
-            OnChangedTransformation(false);
+            OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, InputBlockState.Free);
 
             photonRoomWrapper.Destroy(transformedItem);
             transformedItem = null;
 
-            transformationCounter = 0;
-            transformationCooldownCounter = 0;
-            uiManager.GetInstanceOf<GameUI>().UpdateTransformationDurationBar(0, transformationDuration);
-        }
-
-        public override void Tick(float deltaTime)
-        {
-            if (!Owner.IsLocalPlayer)
-                return;
-
-            if (isTransformed.GetValue())
+            gameUI.UpdateTransformationDurationBar(0, transformationDuration);
+            transformationDurationTimer.Stop();
+            transformationCooldownTimer.Start(
+                () => // update
             {
-                uiManager.GetInstanceOf<GameUI>().UpdateTransformationDurationBar(transformationDuration - transformationCounter, transformationDuration);
-                transformationCounter += Time.deltaTime;
-
-                if (transformationCounter >= transformationDuration)
-                {
-                    TransformBack();
-                }
-            }
-            else
-            {
-                uiManager.GetInstanceOf<GameUI>().UpdateTransformationCooldownBar(transformationCooldownCounter, transformationCooldownDuration);
-                transformationCooldownCounter = Mathf.Clamp(transformationCooldownCounter + Time.deltaTime, 0, transformationCooldownDuration);
-            }
+                gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldown);
+            }, null);
         }
         #endregion
 

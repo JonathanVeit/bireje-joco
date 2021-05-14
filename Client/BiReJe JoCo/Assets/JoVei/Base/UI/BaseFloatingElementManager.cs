@@ -72,6 +72,7 @@ namespace JoVei.Base.UI
         public virtual void DestroyElement(IFloatingElement element)
         {
             Elements.Remove(element);
+            element.Destroy();
             factory.DestroyElement(element);
         }
 

@@ -28,6 +28,9 @@ namespace BiReJeJoCo.Character
         // shooting 
         public event Action onShootPressed;
 
+        // special 1
+        public event Action onSpecial1Pressed;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
@@ -144,6 +147,17 @@ namespace BiReJeJoCo.Character
             if (inputValue.performed)
             {
                 messageHub.ShoutMessage<PlayerPressedTriggerMsg>(this);
+            }
+        }
+
+        public void SetSpecial1Input(InputAction.CallbackContext inputValue)
+        {
+            if (BlockState.HasFlag(InputBlockState.Interact))
+                return;
+
+            if (inputValue.performed)
+            {
+                onSpecial1Pressed?.Invoke();
             }
         }
         #endregion
