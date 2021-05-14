@@ -44,5 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  transformationDuration: 12
-  transformationCooldownDuration: 15
+  transformationDurationTimer:
+    duration: 12
+    timeScale: 1
+  transformationCooldownTimer:
+    duration: 15
+    timeScale: 1

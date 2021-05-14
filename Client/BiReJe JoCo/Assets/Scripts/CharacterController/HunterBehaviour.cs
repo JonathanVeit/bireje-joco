@@ -9,23 +9,20 @@ namespace BiReJeJoCo.Character
     public class HunterBehaviour : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
-        [SerializeField] float pingDuration;
-        [SerializeField] float pingCooldown;
+        [SerializeField] Timer pingDurationTimer;
+        [SerializeField] Timer pingCooldownTimer;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
 
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
-        private Timer pingDurationTimer = new Timer();
-        private Timer pingCooldownTimer = new Timer();
+
         private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
-            pingDurationTimer.SetDuration (pingDuration);
-            pingCooldownTimer.SetDuration (pingCooldown);
 
             if (Owner.IsLocalPlayer)
             {
@@ -41,6 +38,9 @@ namespace BiReJeJoCo.Character
             DisconnectEvents();
             pingDurationTimer.Stop();
             pingCooldownTimer.Stop();
+
+            if (syncVarHub)
+                syncVarHub.UnregisterSyncVar(pingPosition);
         }
 
         private void ConnectEvents() 
@@ -57,12 +57,12 @@ namespace BiReJeJoCo.Character
         {
             if (pingCooldownTimer.State == TimerState.Counting) return;
 
-            pingPosition.SetValue(transform.position);
+            pingPosition.SetValue(transform.position + Vector3.up);
             pingPosition.ForceSend();
             pingCooldownTimer.Start(
                 () => // update
                 {
-                    gameUI.UpdatePingCooldown(pingCooldownTimer.Progress, pingCooldown);
+                    gameUI.UpdatePingCooldown(pingCooldownTimer.Progress, pingCooldownTimer.Duration);
                 },null);
         }
 
@@ -83,10 +83,15 @@ namespace BiReJeJoCo.Character
             var target = new GameObject("ping_target");
             target.transform.position = position;
             var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
-            var floaty = floatingManager.GetElement(config);
-            (floaty as FloatingElement).SetClamped();
+            var floaty = floatingManager.GetElement(config) as HunterPingFloaty;
+            floaty.SetClamped();
 
             pingDurationTimer.Start(
+                () => // update  
+                {
+                    if (floaty)
+                        floaty.SetAlpha(1 - pingDurationTimer.RelativeProgress);
+                },
                 () => // finish
                 {
                     floaty.RequestDestroyFloaty();

@@ -43,5 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487a1b4aa399b864b8ce18b57d38dd7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pingDuration: 15
-  pingCooldown: 5
+  pingDurationTimer:
+    duration: 15
+    timeScale: 1
+  pingCooldownTimer:
+    duration: 5
+    timeScale: 1

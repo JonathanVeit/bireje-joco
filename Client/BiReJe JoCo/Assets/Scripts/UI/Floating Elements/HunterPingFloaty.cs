@@ -8,6 +8,7 @@ namespace BiReJeJoCo.UI
     public class HunterPingFloaty : FloatingElement
     {
         [Header("Settings")]
+        [SerializeField] Image icon;
         [SerializeField] Text distanceLabel;
 
         private LocalPlayer localPlayer => DIContainer.GetImplementationFor<PlayerManager>().LocalPlayer;
@@ -16,6 +17,17 @@ namespace BiReJeJoCo.UI
         {
             base.Tick(deltaTime);
             distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.modelRoot.position)).ToString() + "m";
+        }
+
+        public void SetAlpha(float alpha) 
+        {
+            var iconColor = icon.color;
+            iconColor.a = alpha;
+            icon.color = iconColor;
+
+            var labelColor = distanceLabel.color;
+            labelColor.a = alpha;
+            distanceLabel.color = labelColor;
         }
     }
 }

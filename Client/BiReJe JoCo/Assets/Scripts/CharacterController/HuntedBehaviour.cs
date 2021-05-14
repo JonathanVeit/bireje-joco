@@ -10,8 +10,8 @@ namespace BiReJeJoCo.Character
     {
         [Header("Settings")]
         [SerializeField] float maxHealth = 100f;
-        [SerializeField] float transformationDuration = 6;
-        [SerializeField] float transformationCooldown = 12;
+        [SerializeField] Timer transformationDurationTimer;
+        [SerializeField] Timer transformationCooldownTimer;
 
         public float Health { get; private set; }
         public Player Owner { get; private set; }
@@ -20,8 +20,6 @@ namespace BiReJeJoCo.Character
         private bool wasKilled;
         private GameObject transformedItem;
 
-        Timer transformationDurationTimer = new Timer();
-        Timer transformationCooldownTimer = new Timer();
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
 
@@ -29,8 +27,6 @@ namespace BiReJeJoCo.Character
         public void Initialize(PlayerControlled controller)
         {
             Owner = controller.Player;
-            transformationDurationTimer.SetDuration(transformationDuration);
-            transformationCooldownTimer.SetDuration(transformationCooldown);
 
             Health = maxHealth;
             gameUI.UpdateHealthBar(Health, 100);
@@ -44,7 +40,7 @@ namespace BiReJeJoCo.Character
                 ConnectEvents(); 
                 transformationCooldownTimer.Start(() => // update 
                 {
-                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldown);
+                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldownTimer.Duration);
                 }, null);
             }
         }
@@ -98,11 +94,11 @@ namespace BiReJeJoCo.Character
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_fake_model");
             transformedItem = photonRoomWrapper.Instantiate(prefab.name, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
 
-            gameUI.UpdateTransformationCooldownBar(0, transformationCooldown);
+            gameUI.UpdateTransformationCooldownBar(0, transformationCooldownTimer.Duration);
             transformationDurationTimer.Start(
             () => // update 
             {
-                gameUI.UpdateTransformationDurationBar(transformationDuration - transformationDurationTimer.Progress, transformationDuration);
+                gameUI.UpdateTransformationDurationBar(transformationDurationTimer.Duration - transformationDurationTimer.Progress, transformationDurationTimer.Duration);
             }, 
             () => // finish
             { 
@@ -118,12 +114,12 @@ namespace BiReJeJoCo.Character
             photonRoomWrapper.Destroy(transformedItem);
             transformedItem = null;
 
-            gameUI.UpdateTransformationDurationBar(0, transformationDuration);
+            gameUI.UpdateTransformationDurationBar(0, transformationDurationTimer.Duration);
             transformationDurationTimer.Stop();
             transformationCooldownTimer.Start(
                 () => // update
             {
-                gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldown);
+                gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldownTimer.Duration);
             }, null);
         }
         #endregion
