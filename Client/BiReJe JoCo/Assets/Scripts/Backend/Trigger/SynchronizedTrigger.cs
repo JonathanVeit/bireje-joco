@@ -40,17 +40,40 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        protected sealed override void OnPressedTrigger(PlayerPressedTriggerMsg msg)
+        protected sealed override void OnTriggerPressed()
         {
             foreach (var curTrigger in triggerPoints)
             {
-                if (PlayerIsInArea(curTrigger) && !curTrigger.isCoolingDown)
+                if (curTrigger.pressDuration == 0 &&
+                    PlayerIsInArea(curTrigger) && 
+                    !curTrigger.isCoolingDown)
                 {
                     photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
                     curTrigger.isCoolingDown = true;
                 }
             }
         }
+        protected sealed override void OnTriggerHold(float duration)
+        {
+            foreach (var curTrigger in triggerPoints)
+            {
+                if (PlayerIsInArea(curTrigger) &&
+                    !curTrigger.isCoolingDown)
+                {
+                    if (curTrigger.pressDuration <= duration)
+                    {
+                        photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
+                        curTrigger.isCoolingDown = true;
+                        floaties[curTrigger.Id].UpdateProgress(0);
+                    }
+                    else
+                    {
+                        floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
+                    }
+                }
+            }
+        }
+
         protected virtual void OnSychronizedTriggerReceived(PhotonMessage msg)
         {
             var castedMsg = msg as TriggerPointInteractedPhoMsg;

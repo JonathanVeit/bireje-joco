@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3367ce219644a614db12fe7efa5c3ad2, type: 3}
+  m_Name: SpriteMapping
+  m_EditorClassIdentifier: 
+  MappedContent:
+  - ID: empty
+    Element: {fileID: 21300000, guid: 7c0bef9fa81768b4daf1a552e3c16c6c, type: 3}
+  - ID: transformable_barrel
+    Element: {fileID: 21300000, guid: 7cd0d96a8fdf74a47b6c7a83cfabf53c, type: 3}
+  - ID: transformable_box
+    Element: {fileID: 21300000, guid: 7a7590f773f25ea4fa27a5dff2fee176, type: 3}

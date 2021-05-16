@@ -12,10 +12,10 @@ namespace BiReJeJoCo.Backend
     {
         [Header("Base Trigger Settings")]
         [SerializeField] protected List<TriggerSetup> triggerPoints;
-        [SerializeField] LayerMask playerLayer;
+        [SerializeField] protected LayerMask playerLayer;
 
         protected Transform playerTransform;
-        protected Dictionary<byte, FloatingElement> floaties;
+        protected Dictionary<byte, InteractionFloaty> floaties;
 
         #region Initialization
         protected sealed override void OnSystemsInitialized()
@@ -23,10 +23,17 @@ namespace BiReJeJoCo.Backend
             if (!PlayerRoleMatchesTarget(localPlayer.Role)) return;
 
             tickSystem.Register(this, "update_half_second");
-            messageHub.RegisterReceiver<PlayerPressedTriggerMsg>(this, OnPressedTrigger);
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
-            
-            floaties = new Dictionary<byte, FloatingElement>();
+
+            if (localPlayer.PlayerCharacter == null)
+            {
+                messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+            }
+            else
+            {
+                OnPlayerCharacterSpawned(null);
+            }
+
+            floaties = new Dictionary<byte, InteractionFloaty>();
             foreach (var curTrigger in triggerPoints)
                 floaties.Add(curTrigger.Id, null);
 
@@ -38,7 +45,13 @@ namespace BiReJeJoCo.Backend
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
-            messageHub.UnregisterReceiver(this);
+
+            if (localPlayer.PlayerCharacter)
+            {
+                localPlayer.PlayerCharacter.characterInput.onTriggerPressed -= OnTriggerPressed;
+                localPlayer.PlayerCharacter.characterInput.onTriggerHold -= OnTriggerHold;
+                localPlayer.PlayerCharacter.characterInput.onTriggerReleased -= OnTriggerReleased;
+            }
         }
         #endregion
 
@@ -48,7 +61,8 @@ namespace BiReJeJoCo.Backend
             {
                 if (PlayerIsInArea(curTrigger))
                 {
-                    if (floaties[curTrigger.Id] == null)
+                    if (floaties[curTrigger.Id] == null &&
+                        !curTrigger.isCoolingDown)
                     {
                         ShowTriggerPointFloaty(curTrigger);
                     }
@@ -68,30 +82,64 @@ namespace BiReJeJoCo.Backend
         {
             var config = new FloatingElementConfig(trigger.floatingElementId, uiManager.GetInstanceOf<GameUI> ().floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
 
-            var floaty = floatingManager.GetElementAs<FloatingElement>(config);
+            var floaty = floatingManager.GetElementAs<InteractionFloaty>(config);
+            floaty.UpdateProgress(0);
             floaties[trigger.Id] = floaty;
             OnFloatySpawned(trigger.Id, floaty);
         }
 
         protected abstract void OnTriggerInteracted(byte pointId);
-        protected virtual void OnFloatySpawned(int pointId, FloatingElement floaty) { }
+        protected virtual void OnFloatySpawned(int pointId, InteractionFloaty floaty) { }
 
         #region Events
-        protected virtual void OnPressedTrigger(PlayerPressedTriggerMsg msg)
+        protected virtual void OnTriggerPressed()
         {
             foreach (var curTrigger in triggerPoints)
             {
-                if (PlayerIsInArea(curTrigger) && !curTrigger.isCoolingDown)
+                if (curTrigger.pressDuration == 0 && 
+                    PlayerIsInArea(curTrigger) && 
+                    !curTrigger.isCoolingDown)
                 {
                     OnTriggerInteracted(curTrigger.Id);
                     StartCoroutine(CoolDown(curTrigger));
                 }
             }
         }
+        protected virtual void OnTriggerHold(float duration)
+        {
+            foreach (var curTrigger in triggerPoints)
+            {
+                if (PlayerIsInArea(curTrigger) &&
+                    !curTrigger.isCoolingDown)
+                {
+                    if (curTrigger.pressDuration <= duration)
+                    {
+                        OnTriggerInteracted(curTrigger.Id);
+                        StartCoroutine(CoolDown(curTrigger));
+                        floaties[curTrigger.Id].UpdateProgress(0);
+                    }
+                    else
+                    {
+                        floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
+                    }
+                }
+            }
+        }
+        protected virtual void OnTriggerReleased() 
+        {
+            foreach (var curFloaty in floaties.Values)
+            {
+                if (curFloaty)
+                    curFloaty.UpdateProgress(0);
+            }
+        }
 
         protected virtual void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            playerTransform = localPlayer.PlayerCharacter.GetComponentInChildren<Mover>().transform;
+            playerTransform = localPlayer.PlayerCharacter.characterRoot;
+            localPlayer.PlayerCharacter.characterInput.onTriggerPressed += OnTriggerPressed;
+            localPlayer.PlayerCharacter.characterInput.onTriggerHold += OnTriggerHold;
+            localPlayer.PlayerCharacter.characterInput.onTriggerReleased += OnTriggerReleased;
         }
         #endregion
 
@@ -192,6 +240,7 @@ namespace BiReJeJoCo.Backend
             [Space(10)]
             public Vector3 areaSize;
             public Vector3 areaOffset;
+            public float pressDuration = 0f;
             public float coolDown = 1f;
 
             [Space(10)]

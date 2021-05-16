@@ -26,9 +26,9 @@ namespace BiReJeJoCo.Map
             board.SetTarget (targets.Find(x => x.triggerPoint == pointId).target);
         }
 
-        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            (floaty as InteractionFloaty).Initialize("Elevator");
+            floaty.SetDescription("Elevator");
         }
 
         protected override IEnumerator CoolDown(TriggerSetup trigger)

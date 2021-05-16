@@ -19,5 +19,6 @@ namespace BiReJeJoCo
         protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();
         protected static UI.UIManager uiManager => DIContainer.GetImplementationFor<UI.UIManager>();
         protected static MatchHandler matchHandler => DIContainer.GetImplementationFor<MatchHandler>();
+        protected static Items.CollectablesManager collectablesManager => DIContainer.GetImplementationFor<Items.CollectablesManager>();
     }
 }

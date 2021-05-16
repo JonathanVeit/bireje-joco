@@ -1,5 +1,4 @@
-﻿
-namespace BiReJeJoCo.Backend
+﻿namespace BiReJeJoCo.Backend
 {
     /// <summary>
     /// Fired by the host to inform each player that the match is beeing prepared (lobby -> game)
@@ -131,5 +130,28 @@ namespace BiReJeJoCo.Backend
             pi = pointId;
             a = actor;
         }
+    }
+
+    /// <summary>
+    /// Cally by any player when collecting an item
+    /// </summary>
+    public class CollectItemPhoMsg : PhotonMessage
+    {
+        public string i; // instance id
+        public int i2; // player number
+
+        public CollectItemPhoMsg() { }
+        public CollectItemPhoMsg(string instanceId, int playerNumber)
+        {
+            i = instanceId;
+            i2 = playerNumber;
+        }
+    }
+
+    /// <summary>
+    /// Fired by the hunted when beeing killed
+    /// </summary>
+    public class HuntedFinishedObjectivePhoMsg : PhotonMessage
+    {
     }
 }

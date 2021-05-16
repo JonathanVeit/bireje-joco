@@ -26,9 +26,9 @@ namespace BiReJeJoCo.Map
                 curObject.SetActive(isOn);
         }
 
-        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            (floaty as InteractionFloaty).Initialize("Lamp");
+            floaty.SetDescription("Lamp");
         }
     }
 }

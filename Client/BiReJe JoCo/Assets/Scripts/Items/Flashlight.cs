@@ -1,7 +1,7 @@
 using UnityEngine;
 using BiReJeJoCo.Backend;
 
-namespace BiReJeJoCo.Character
+namespace BiReJeJoCo.Items
 {
     public class Flashlight : TickBehaviour, IPlayerObserved
     {

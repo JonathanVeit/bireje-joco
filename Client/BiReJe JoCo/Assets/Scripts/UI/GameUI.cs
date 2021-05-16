@@ -27,6 +27,8 @@ namespace BiReJeJoCo.UI
         [SerializeField] UIBarHandler healthBar;
         [SerializeField] UIBarHandler transformationBar;
         [SerializeField] UIBarHandler transformationCooldownBar;
+        [SerializeField] Image scannedItemIcon;
+        [SerializeField] Text collectableLabel;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
@@ -74,8 +76,9 @@ namespace BiReJeJoCo.UI
         private void InitializeAsHunted()
         {
             hunterHUD.SetActive(false);
-
+            UpdateCollectedItemAmount(0);
             startInformation.text = "You are the monster!\nTry to hide!";
+            UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey("empty"));
             StartCoroutine(FadeText(3, startInformation));
         }
         private void InitializeAsHunter()
@@ -147,6 +150,14 @@ namespace BiReJeJoCo.UI
                 transformationCooldownBar.OverrideValue(0);
             else
                 transformationCooldownBar.SetValue(value / maxValue);
+        }
+        public void UpdateScannedItemIcon(Sprite icon)
+        {
+            scannedItemIcon.sprite = icon;
+        }
+        public void UpdateCollectedItemAmount(int amount)
+        {
+            collectableLabel.text = string.Format("{0} / {1}", amount, matchHandler.MatchConfig.Mode.huntedCollectables);
         }
         #endregion
 

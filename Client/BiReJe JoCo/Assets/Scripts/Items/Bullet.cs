@@ -3,7 +3,7 @@ using JoVei.Base;
 using JoVei.Base.PoolingSystem;
 using BiReJeJoCo.Backend;
 
-namespace BiReJeJoCo.Character
+namespace BiReJeJoCo.Items
 {
     public class Bullet : PoolablePrefab
     {

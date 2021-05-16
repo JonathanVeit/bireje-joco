@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using BiReJeJoCo.Backend;
+using System.Collections;
 
 namespace BiReJeJoCo.Character
 {
     public class PlayerCharacterInput : SystemBehaviour
     {
-        public InputBlockState BlockState { get; private set; } 
+        public InputBlockState BlockState { get; private set; }
             = InputBlockState.Loading;
         public event Action<InputBlockState> onBlockStateChanged;
 
@@ -24,6 +25,12 @@ namespace BiReJeJoCo.Character
 
         //Menu
         public event Action onMenuPressed;
+
+        // trigger 
+        public event Action onTriggerPressed;
+        public event Action<float> onTriggerHold;
+        public event Action onTriggerReleased;
+        private Coroutine onTriggerHoldInvoker;
 
         // shooting 
         public event Action onShootPressed;
@@ -146,7 +153,24 @@ namespace BiReJeJoCo.Character
 
             if (inputValue.performed)
             {
-                messageHub.ShoutMessage<PlayerPressedTriggerMsg>(this);
+                onTriggerPressed?.Invoke();
+                onTriggerHoldInvoker = StartCoroutine(OnTriggerHoldInvoker());
+            }
+            else if (inputValue.canceled)
+            {
+                onTriggerReleased?.Invoke();
+                StopCoroutine(onTriggerHoldInvoker);
+            }
+        }
+        private IEnumerator OnTriggerHoldInvoker() 
+        {
+            float duration = 0;
+
+            while (true)
+            {
+                onTriggerHold?.Invoke(duration);
+                duration += Time.deltaTime;
+                yield return null;
             }
         }
 

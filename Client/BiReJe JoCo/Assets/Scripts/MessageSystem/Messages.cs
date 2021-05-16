@@ -123,12 +123,25 @@ namespace BiReJeJoCo
             this.blockState = blockState;
         }
     }
-    #endregion
 
-    #region Player Inputs
-    public class PlayerPressedTriggerMsg : BaseMessage
+    public class HuntedScannedItemMsg : BaseMessage
     {
-        
+        public string itemId;
+
+        public HuntedScannedItemMsg(string itemId)
+        {
+            this.itemId = itemId;
+        }
+    }
+
+    public class ItemCollectedByPlayerMsg : BaseMessage
+    {
+        public string itemId;
+
+        public ItemCollectedByPlayerMsg(string itemId) 
+        {
+            this.itemId = itemId;
+        }
     }
     #endregion
 }

@@ -2,7 +2,7 @@
 using BiReJeJoCo.UI;
 using UnityEngine;
 
-namespace BiReJeJoCo.Character
+namespace BiReJeJoCo.Items
 {
     public class Gun : TickBehaviour, IPlayerObserved
     {

@@ -1,7 +1,7 @@
 using BiReJeJoCo.Backend;
 using UnityEngine;
 
-namespace BiReJeJoCo.Character
+namespace BiReJeJoCo.Items
 {
     public class TransformableItem : SystemBehaviour, IPlayerObserved
     {

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using BiReJeJoCo.UI;
+using BiReJeJoCo.Items;
 
 namespace BiReJeJoCo
 {
@@ -18,6 +19,7 @@ namespace BiReJeJoCo
             base.ConnectEvents();
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
             photonMessageHub.RegisterReceiver<HuntedKilledPhoMsg>(this, OnHuntedKilled);
+            photonMessageHub.RegisterReceiver<HuntedFinishedObjectivePhoMsg>(this, OnHuntedFinishedObjective);
         }
         #endregion
 
@@ -64,10 +66,26 @@ namespace BiReJeJoCo
             spawnPoints.Add(hunted.NumberInRoom, huntedSpawnPoint);
 
             // hunter 
-            var hunterSpawnPoints = mapConfig.GetRandomHunterSpawnPointIndex(hunter.Count);
+            var hunterSpawnPoints = mapConfig.GetRandomHunterSpawnPointIndeces(hunter.Count);
             for (int i = 0; i < hunter.Count; i++)
             {
                 spawnPoints.Add(hunter[i].NumberInRoom, hunterSpawnPoints[i]);
+            }
+
+            // collectables
+            var collectableConfigs = new List<CollectableSpawnConfig>();
+            var collectableAmount = MatchModeMapping.GetMapping().GetElementForKey("default_match").huntedCollectables;
+            var collectableSpawnPoints = mapConfig.GetRandomCollectableSpawnPointIndices(collectableAmount);
+            for (int i = 0; i < collectableAmount; i++)
+            {
+                var spawnConfig = new CollectableSpawnConfig()
+                {
+                     i = "hunted_collectable",
+                     i2 = i.ToString(),
+                     s = collectableSpawnPoints[i]
+                };
+
+                collectableConfigs.Add(spawnConfig);
             }
 
             // create match config 
@@ -77,6 +95,8 @@ namespace BiReJeJoCo
                 roles = playerRoles,
                 spawnPos = spawnPoints,
                 duration = MatchDuration,
+                collectables = collectableConfigs, 
+                matchMode = "default_match"
             };
 
             return config;
@@ -181,6 +201,16 @@ namespace BiReJeJoCo
             {
                 winner = PlayerRole.Hunter,
                 message = "Monster has been killed!",
+            };
+
+            photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);
+        }
+        private void OnHuntedFinishedObjective(PhotonMessage msg)
+        {
+            var result = new MatchResult()
+            {
+                winner = PlayerRole.Hunted,
+                message = "Monster collected all items!",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);

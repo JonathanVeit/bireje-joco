@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.Items;
 
 namespace BiReJeJoCo.Character
 {

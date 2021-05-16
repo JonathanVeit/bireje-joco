@@ -83,6 +83,11 @@ namespace BiReJeJoCo
         protected virtual void OnLoadedGameScene(LoadedGameSceneMsg msg) 
         {
             State = MatchState.WaitingForPlayer;
+
+            foreach (var curConfig in MatchConfig.collectables)
+                collectablesManager.CreateCollectable(curConfig);
+
+            LogMatchMessage("Spawned collectables");
         }
         protected virtual void OnStartMatch(PhotonMessage msg) 
         {

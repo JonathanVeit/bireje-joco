@@ -14,9 +14,9 @@ namespace BiReJeJoCo.Map
             playerTransform.position = targetLocation.position;
         }
 
-        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            (floaty as InteractionFloaty).Initialize("Teleport");
+            floaty.SetDescription("Teleport");
         }
     }
 }

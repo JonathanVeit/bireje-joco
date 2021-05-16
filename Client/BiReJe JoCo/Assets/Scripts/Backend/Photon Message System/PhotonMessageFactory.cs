@@ -35,6 +35,10 @@ namespace BiReJeJoCo.Backend
                     return JsonConvert.DeserializeObject<HuntedHitByBulletPhoMsg>(serializedMessage);
                 case 10:
                     return JsonConvert.DeserializeObject<HuntedKilledPhoMsg>(serializedMessage);
+                case 11:
+                    return JsonConvert.DeserializeObject<CollectItemPhoMsg>(serializedMessage);
+                case 12:
+                    return JsonConvert.DeserializeObject<HuntedFinishedObjectivePhoMsg>(serializedMessage); 
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing messages of code { code }");
@@ -65,6 +69,10 @@ namespace BiReJeJoCo.Backend
                     return 9;
                 case HuntedKilledPhoMsg casted:
                     return 10;
+                case CollectItemPhoMsg casted:
+                    return 11;
+                case HuntedFinishedObjectivePhoMsg casted:
+                    return 12;
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing mesasges of type { msg.GetType().Name }");

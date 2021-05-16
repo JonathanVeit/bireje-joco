@@ -77,9 +77,9 @@ namespace BiReJeJoCo.Map
             trigger.isCoolingDown = false;
         }
 
-        protected override void OnFloatySpawned(int pointId, FloatingElement floaty)
+        protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            (floaty as InteractionFloaty).Initialize("Door");
+           floaty.SetDescription("Door");
         }
     }
 }

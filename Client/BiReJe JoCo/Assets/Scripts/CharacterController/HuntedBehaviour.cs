@@ -17,11 +17,13 @@ namespace BiReJeJoCo.Character
         public Player Owner { get; private set; }
 
         private SyncVar<bool> isTransformed = new SyncVar<bool>(1, false);
+        private string scannedItemId;
         private bool wasKilled;
         private GameObject transformedItem;
 
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
+        private int collectedItems;
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
@@ -56,8 +58,11 @@ namespace BiReJeJoCo.Character
         void ConnectEvents()
         {
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+            messageHub.RegisterReceiver<HuntedScannedItemMsg>(this, OnScannedItem);
+            messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
             photonMessageHub.RegisterReceiver<HuntedHitByBulletPhoMsg>(this, OnHitByBullet);
         }
+
         void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
@@ -72,7 +77,7 @@ namespace BiReJeJoCo.Character
         #region Transformation
         private void OnShootPressed()
         {
-            if (!isGrounded())
+            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId))
                 return;
 
             if (isTransformed.GetValue())
@@ -91,7 +96,7 @@ namespace BiReJeJoCo.Character
             OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<BlockPlayerControlsMsg>(this, InputBlockState.Transformation);
 
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_fake_model");
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(scannedItemId);
             transformedItem = photonRoomWrapper.Instantiate(prefab.name, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
 
             gameUI.UpdateTransformationCooldownBar(0, transformationCooldownTimer.Duration);
@@ -174,6 +179,23 @@ namespace BiReJeJoCo.Character
             var sfxPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_transformation_sfx");
             var sfx = poolingManager.PoolInstance(sfxPrefab, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
             sfx.transform.position -= Vector3.up;
+        }
+
+        private void OnScannedItem(HuntedScannedItemMsg msg)
+        {
+            scannedItemId = msg.itemId;
+            gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(msg.itemId));
+        }
+
+        void OnItemCollected(ItemCollectedByPlayerMsg msg)
+        {
+            collectedItems++;
+            gameUI.UpdateCollectedItemAmount(collectedItems);
+
+            if (collectedItems >= matchHandler.MatchConfig.Mode.huntedCollectables)
+            {
+                photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
+            }
         }
         #endregion
     }
