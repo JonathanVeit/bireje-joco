@@ -112,8 +112,8 @@ namespace BiReJeJoCo
             float startTime = Time.time;
             while (Time.time - startTime < 1f)
             {
-                _ppsVolOn.weight += 1 * Time.deltaTime;
-                _ppsVolOff.weight -= 1 * Time.deltaTime;
+                _ppsVolOn.weight += 1 * Time.fixedDeltaTime;
+                _ppsVolOff.weight -= 1 * Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             }
             _ppsVolOn.weight = 1f;

@@ -15,7 +15,7 @@
                 },
                 {
                     "name": "LookAround",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "294fde9f-6f97-47c7-9ec0-1929f91f34dc",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -60,6 +60,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "CameraSwitch",
+                    "type": "Button",
+                    "id": "7bae92ca-3483-41ee-b269-983a0ba9c852",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -77,6 +85,17 @@
                 {
                     "name": "",
                     "id": "bd7b2c45-41a2-43fd-8728-ddd268338d27",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jumping",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "250ff464-d606-46ab-a5d0-6427c2efaa86",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
@@ -145,7 +164,7 @@
                     "id": "45215c05-b67e-44aa-90aa-24223e9fc310",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "Gamepad",
                     "action": "Movement",
                     "isComposite": false,
@@ -167,7 +186,7 @@
                     "id": "f1d87afd-c3e6-44f9-829f-c6843ac4f4c1",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "Gamepad",
                     "action": "LookAround",
                     "isComposite": false,
@@ -187,7 +206,7 @@
                 {
                     "name": "",
                     "id": "d9753891-6c37-4156-ba3a-16f08f6749c1",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -231,7 +250,7 @@
                 {
                     "name": "",
                     "id": "4784e977-5561-431e-a3e5-2ceca768c8f5",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -253,11 +272,33 @@
                 {
                     "name": "",
                     "id": "04658d23-e971-4ecc-b570-624bcf8a6529",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "686f340e-2eed-4d6b-990c-645917808c13",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "CameraSwitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01ca0f49-9fe3-4f2d-a7b5-944b15e0eaf9",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "CameraSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

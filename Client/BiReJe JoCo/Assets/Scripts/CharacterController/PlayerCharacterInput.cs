@@ -11,6 +11,9 @@ namespace BiReJeJoCo.Character
             = InputBlockState.Loading;
         public event Action<InputBlockState> onBlockStateChanged;
 
+        public PlayerInput playerInput;
+        public Tp_Character_Input_Actions playerControlsAsset;
+
         private Vector2 moveInput;
         private Vector2 lookInput;
 
@@ -28,6 +31,9 @@ namespace BiReJeJoCo.Character
         // shooting 
         public event Action onShootPressed;
 
+        //Camera change
+        public event Action onCameraSwitchPressed;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
@@ -36,6 +42,8 @@ namespace BiReJeJoCo.Character
         {
             //lock cursor
             Cursor.lockState = CursorLockMode.Locked;
+            playerControlsAsset = new Tp_Character_Input_Actions();
+            playerControlsAsset.Enable();
             ConnectEvents();
         }
         protected override void OnBeforeDestroy()
@@ -79,8 +87,8 @@ namespace BiReJeJoCo.Character
             if (BlockState.HasFlag(InputBlockState.Look))
                 return;
 
-            Vector2 inputMovement = inputValue.ReadValue<Vector2>();
-            lookInput = inputMovement;
+            Vector2 inputLook = inputValue.ReadValue<Vector2>();
+            lookInput = inputLook;
         }
 
         public void SetJumpInput(InputAction.CallbackContext inputValue)
@@ -129,10 +137,18 @@ namespace BiReJeJoCo.Character
         {
             if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
-
+            
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 onShootPressed?.Invoke();
+            }
+
+            if (BlockState.HasFlag(InputBlockState.Look))
+                return;
+
+            if (playerInput.currentControlScheme == "Keyboard")
+            {
+                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>();
             }
         }
 
@@ -146,12 +162,19 @@ namespace BiReJeJoCo.Character
                 messageHub.ShoutMessage<PlayerPressedTriggerMsg>(this);
             }
         }
-        #endregion
 
-        public void AdjustSensitivityController()
+        public void SetCameraSwitchInput(InputAction.CallbackContext inputValue)
         {
-            //TODO adjust camera sensitivity for controller
+            if (BlockState.HasFlag(InputBlockState.Interact))
+                return;
+
+            if (inputValue.performed)
+            {
+                onCameraSwitchPressed?.Invoke();
+            }
         }
+
+        #endregion
 
         #region Get Movement Input
         public Vector2 GetMovementInput()
@@ -227,6 +250,7 @@ namespace BiReJeJoCo.Character
             BlockState = state;
             onBlockStateChanged?.Invoke(state);
         }
+
     }
 }
 
