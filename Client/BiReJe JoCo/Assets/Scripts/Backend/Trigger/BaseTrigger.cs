@@ -124,7 +124,7 @@ namespace BiReJeJoCo.Backend
                     }
                     else
                     {
-                        UpdateTriggerProgress(curTrigger, 0);
+                        UpdateTriggerProgress(curTrigger, duration);
                     }
                 }
             }
@@ -170,6 +170,9 @@ namespace BiReJeJoCo.Backend
        
         protected bool PlayerIsInArea(TriggerSetup trigger)
         {
+            if (Vector3.Distance(trigger.root.position, playerTransform.position) > trigger.areaSize.magnitude)
+                return false;
+
             var offset = trigger.root.TransformDirection(trigger.areaOffset);
             var collisions = Physics.OverlapBox(trigger.root.position + offset, trigger.areaSize / 2, trigger.root.rotation, playerLayer, QueryTriggerInteraction.Ignore);
             

@@ -144,7 +144,7 @@ namespace BiReJeJoCo.Character
 
 		protected override void OnSystemsInitialized()
         {
-			tickSystem.Register(this, "late_fixed_update");
+			tickSystem.Register(this, "fixed_update");
         }
 
         public override void Tick (float deltaTime)
