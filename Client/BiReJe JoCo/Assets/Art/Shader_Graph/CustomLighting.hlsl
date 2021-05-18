@@ -1,28 +1,55 @@
 ﻿#ifndef CUSTOM_LIGHTING_INCLUDED
 #define CUSTOM_LIGHTING_INCLUDED
 
-void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float ShadowAtten)
+void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float ShadowAtten, out float DistanceAtten)
 {
 #if defined(SHADERGRAPH_PREVIEW)
     Direction = float3(0.5, 0.5, 0);
     Color = 1;
     ShadowAtten = 1;
+    DistanceAtten = 1;
 #else
 	float4 shadowCoord = TransformWorldToShadowCoord(WorldPos);
+    #if SHADOWS_SCREEN
+        float4 clipPos = TransformWorldToHClip(WorldPos);
+        shadowCoord = ComputeScreenPos(clipPos);
+    #endif
 
     Light mainLight = GetMainLight(shadowCoord);
     Direction = mainLight.direction;
     Color = mainLight.color;
 
+    ShadowAtten = mainLight.shadowAttenuation;
+    DistanceAtten = mainLight.distanceAttenuation;
+
+    /*
 	#if !defined(_MAIN_LIGHT_SHADOWS) || defined(_RECEIVE_SHADOWS_OFF)
-		ShadowAtten = 1.0h;
+
+        ShadowAtten = mainLight.shadowAttenuation;
+        DistanceAtten = mainLight.distanceAttenuation;
     #else
 	    ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
 	    float shadowStrength = GetMainLightShadowStrength();
 	    ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture,
 	    sampler_MainLightShadowmapTexture),
 	    shadowSamplingData, shadowStrength, false);
+
+        ShadowAtten = mainLight.shadowAttenuation;
+        DistanceAtten = mainLight.distanceAttenuation;
     #endif
+
+
+    #if SHADOWS_SCREEN
+        float4 clipPos = TransformWorldToHClip(WorldPos);
+        shadowCoord = ComputeScreenPos(clipPos);
+    #else
+        shadowCoord = TransformWorldToShadowCoord(WorldPos)
+    #endif
+
+        DistanceAtten = mainLight.distanceAttenuation;
+        ShadowAtten = mainLight.shadowAttenuation;
+     */
+
 #endif
 }
 
