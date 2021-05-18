@@ -97,7 +97,7 @@ namespace BiReJeJoCo.Character
         private void SpawnFlashlight() 
         {
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("flashlight");
-            var root = characterRoot.transform.GetChild(0);
+            var root = characterRoot;
             var flashlight = Instantiate(prefab, root.position, Quaternion.identity, root);
             controller.AddObservedComponent(flashlight.GetComponent<Flashlight>());
         }

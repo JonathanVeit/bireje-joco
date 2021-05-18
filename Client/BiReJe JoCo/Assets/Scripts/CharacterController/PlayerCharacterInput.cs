@@ -175,7 +175,8 @@ namespace BiReJeJoCo.Character
             else if (inputValue.canceled)
             {
                 onTriggerReleased?.Invoke();
-                StopCoroutine(onTriggerHoldInvoker);
+                if (onTriggerHoldInvoker != null)
+                    StopCoroutine(onTriggerHoldInvoker);
             }
         }
         private IEnumerator OnTriggerHoldInvoker() 
