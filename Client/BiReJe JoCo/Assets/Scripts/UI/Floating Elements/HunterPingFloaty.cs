@@ -16,7 +16,9 @@ namespace BiReJeJoCo.UI
         public override void Tick(float deltaTime)
         {
             base.Tick(deltaTime);
-            distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.modelRoot.position)).ToString() + "m";
+
+            if (localPlayer.PlayerCharacter)
+                distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.modelRoot.position)).ToString() + "m";
         }
 
         public void SetAlpha(float alpha) 

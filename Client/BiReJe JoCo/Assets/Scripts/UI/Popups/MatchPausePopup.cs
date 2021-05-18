@@ -47,7 +47,8 @@ namespace BiReJeJoCo.UI
 
         public void Quit()
         {
-            (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.LeaveLobby);
+            if (matchHandler is HostMatchHandler asHostHandler)
+                asHostHandler.CloseMatch(CloseMatchMode.LeaveLobby);
         }
         #endregion
     }
