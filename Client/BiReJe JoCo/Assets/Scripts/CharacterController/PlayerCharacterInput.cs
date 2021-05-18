@@ -200,7 +200,6 @@ namespace BiReJeJoCo.Character
                 onSpecial1Pressed?.Invoke();
             }
         }
-        #endregion
 
         public void SetCameraSwitchInput(InputAction.CallbackContext inputValue)
         {
@@ -212,7 +211,6 @@ namespace BiReJeJoCo.Character
                 onCameraSwitchPressed?.Invoke();
             }
         }
-
         #endregion
 
         #region Get Movement Input
