@@ -15,10 +15,14 @@ namespace BiReJeJoCo.Character
         [SerializeField] [Range(0f, 6f)] private float xAxisController;
 
         [Space(10)]
+        [Header("Cinemamachine Components")]
+        [SerializeField] CinemachineVirtualCamera cinemaVirtual;
         [SerializeField] CinemachineFreeLook cinemaFreeLook;
+
+        [Header("Input Components")]
         [SerializeField] PlayerCharacterInput characterInput;
-        string currentControlScheme;
         [SerializeField] PlayerInput playerInput;
+        string currentControlScheme;
 
         //save active Axis numbers
         private float xAxisSave;
@@ -67,19 +71,39 @@ namespace BiReJeJoCo.Character
 
         private void OnBlockStateChanged(InputBlockState state)
         {
-            if (state.HasFlag(InputBlockState.Look))
+            if (cinemaFreeLook)
             {
-                xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
-                yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
-                cinemaFreeLook.m_XAxis.m_MaxSpeed = 0f;
-                cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
-                wasBlocked = true;
+                if (state.HasFlag(InputBlockState.Look))
+                {
+                    xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
+                    yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
+                    cinemaFreeLook.m_XAxis.m_MaxSpeed = 0f;
+                    cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
+                    wasBlocked = true;
+                }
+                else if (wasBlocked)
+                {
+                    cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
+                    cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
+                    wasBlocked = false;
+                }
             }
-            else if (wasBlocked)
+            else if (cinemaVirtual)
             {
-                cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
-                cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
-                wasBlocked = false;
+                if (state.HasFlag(InputBlockState.Look))
+                {
+                    //xAxisSave = cinemaVirtual.
+                    //yAxisSave = cinemaVirtual.m_YAxis.m_MaxSpeed;
+                    //cinemaVirtual.m_XAxis.m_MaxSpeed = 0f;
+                    //cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
+                    //wasBlocked = true;
+                }
+                else if (wasBlocked)
+                {
+                    cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
+                    cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
+                    wasBlocked = false;
+                }
             }
         }
     }
