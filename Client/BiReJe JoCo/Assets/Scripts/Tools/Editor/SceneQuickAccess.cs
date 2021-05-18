@@ -29,6 +29,12 @@ namespace BiReJeJoCo.Tools
             EditorSceneManager.OpenScene("Assets/Scenes/game_scene.unity");
         }
 
+        [MenuItem("Tools/Scenes/Game 4")]
+        public static void OpenGameScene4()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/game_scene_4.unity");
+        }
+
         [MenuItem("Tools/Scenes/Testing")]
         public static void OpenTestingScene()
         {
