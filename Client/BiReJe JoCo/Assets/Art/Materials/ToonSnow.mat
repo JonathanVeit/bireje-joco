@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ToonSnow
-  m_Shader: {fileID: -6465566751694194690, guid: ce18c22fd4c7aca45a591af8d30475ab, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: bf4ff9691d17c574691d8a56de6bbf4a, type: 3}
   m_ShaderKeywords: MAIN_LIGHT_CALCULATE_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -69,9 +69,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - BakedIntensity: 0.5
+    - CameraFadeDistance: 3
+    - EdgeIntensity_Fresnel: 1
     - EmissionIntensity: 0
+    - FogDensity: 1
+    - GradientHight: -0.15
+    - GradientIntensity: 1
+    - IntersectFadeIntensity: 1
     - LIGHTMAP: 0
     - MAIN_LIGHT_CALCULATE_SHADOWS: 1
+    - NoiseIntensity: 0.5
+    - NoiseScale: 1
+    - Opacity: 0.25
     - ShadowSmoothness: 0.32
     - Smoothness: 10
     - SnowEdgeMax: 0.63
@@ -80,20 +90,27 @@ Material:
     - SparkleDencity: 0
     - SparkleIntensity: 2.3
     - SparkleScale: 28
+    - TextureSpeed: 0.1
     - UseGI: 0
+    - UseGradient: 0
+    - UseNoiseTexture: 0
     - UseSnow: 1
     - UseSparkle: 1
+    - UseUVGradient: 0
     - Vector1_8606F96E: 0
+    - _Emission: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _SHADOWS_SOFT: 1
     - _Smoothness: 0.5
     m_Colors:
+    - GradientColor: {r: 0.3406017, g: 0.679619, b: 0.8113208, a: 0}
     - MainColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
     - MixedShadowsColor: {r: 1, g: 1, b: 1, a: 0}
     - SnowColor: {r: 0, g: 0, b: 0, a: 0}
     - SnowDirection: {r: 0, g: 1, b: 0, a: 0}
     - SparkleColor: {r: 1, g: 1, b: 1, a: 0}
     - Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - WindDirection: {r: 2, g: 3, b: 0, a: 0}
     - _MainColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
