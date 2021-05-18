@@ -7,6 +7,9 @@ namespace BiReJeJoCo.UI
 {
     public class FloatingElement : BaseFloatingElement, ITickable
     {
+        [Header("Floating Settings")]
+        [SerializeField] Vector2 clampSize;
+
         private bool isHided;
         private bool isClamped;
 
@@ -56,8 +59,8 @@ namespace BiReJeJoCo.UI
                 pos = UIHelper.ClampScreenPointToScreenBorder(pos, true);
             }
  
-            pos.x = Mathf.Clamp(pos.x, 0, Screen.width);
-            pos.y = Mathf.Clamp(pos.y, 0, Screen.height);
+            pos.x = Mathf.Clamp(pos.x, 0 + clampSize.x, Screen.width - clampSize.x);
+            pos.y = Mathf.Clamp(pos.y, 0 + clampSize.x, Screen.height - clampSize.y);
             rectTransform.position = pos;
         }
 
