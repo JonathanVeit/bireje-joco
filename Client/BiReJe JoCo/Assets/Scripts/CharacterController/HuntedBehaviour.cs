@@ -163,9 +163,17 @@ namespace BiReJeJoCo.Character
             {
                 // transformed into
                 case true:
+                    // TODO: remove 
+                    var camSwitch = GetComponentInParent<CameraSwitch>();
+                    if (camSwitch != null && camSwitch.isFirstPerson)
+                    {
+                        camSwitch.CameraTransformReset();
+                    }
+
                     foreach (Transform curChild in  transform.parent.GetChild(0))
                         curChild.gameObject.SetActive(false);
                     GetComponentInParent<Collider>().enabled = false;
+
                     break;
 
                 // transformed back

@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace BiReJeJoCo.Character
 {
     public class CameraSwitch : SystemBehaviour
     {
-        
         [Header("Camera Setup")]
         [SerializeField] GameObject cam;
         [SerializeField] GameObject firstPersonCameraTransform;
@@ -21,23 +17,32 @@ namespace BiReJeJoCo.Character
 
         private GameObject playerRoot;
 
-        private bool isFirstPerson = false;
+        public bool isFirstPerson = false;
 
-
+        #region Initialization
         protected override void OnSystemsInitialized()
         {
-            base.OnSystemsInitialized();
             characterInput = this.GetComponent<PlayerCharacterInput>();
             characterInput.onCameraSwitchPressed += HandleCameraSwitch;
             playerRoot = this.gameObject.transform.parent.gameObject;
 
+            ConnetEvents();
             CameraThirdPersonSetup();
         }
         protected override void OnBeforeDestroy()
         {
-            characterInput.onCameraSwitchPressed -= HandleCameraSwitch;
+            DisconnectEvents();
+            if (characterInput)
+                characterInput.onCameraSwitchPressed -= HandleCameraSwitch;
         }
 
+        private void ConnetEvents() 
+        {
+        }
+        private void DisconnectEvents() 
+        {
+        }
+        #endregion
 
         private void HandleCameraSwitch()
         {
@@ -88,13 +93,12 @@ namespace BiReJeJoCo.Character
         {
             if (isFirstPerson)
             {
-                CameraFirstPersonSetup();    
+                CameraThirdPersonSetup();    
             }
             else
             {
                 CameraThirdPersonSetup();
             }
         }
-
     }
 }

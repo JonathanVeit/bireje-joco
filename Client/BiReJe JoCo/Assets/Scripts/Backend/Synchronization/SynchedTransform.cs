@@ -59,7 +59,7 @@ namespace BiReJeJoCo.Backend
         #region Update Transform
         public override void Tick(float deltaTime)
         {
-            if (this.photonView.IsMine) return;
+            if (this.photonView.IsMine|| !this.enabled) return;
 
             if (type.HasFlag(SyncedTransformType.Position))
                 UpdatePosition();
@@ -118,6 +118,8 @@ namespace BiReJeJoCo.Backend
         #region Synchronize 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!this.enabled) return;
+
             // Write
             if (stream.IsWriting)
             {

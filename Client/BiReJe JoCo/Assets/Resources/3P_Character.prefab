@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 670431439467271008}
   - component: {fileID: 1877300246214547864}
   - component: {fileID: 9171976171894931984}
+  - component: {fileID: 3140277240807124517}
   m_Layer: 6
   m_Name: ModelRoot_FirstPerson
   m_TagString: LocalPlayer
@@ -198,6 +199,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 3557819206093081981}
+--- !u!114 &3140277240807124517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185039844377125009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dff5823c1cf63d34390e626be2ee355b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
+  m_UseLocal: 0
+  teleportAt: 100
+  rigidBody: {fileID: 0}
+  snapGroundTreshold: 0.2
+  m_Distance: 0
+  m_Angle: 0
+  m_Direction: {x: 0, y: 0, z: 0}
+  m_NetworkPosition: {x: 0, y: 0, z: 0}
+  m_StoredPosition: {x: 0, y: 0, z: 0}
+  m_NetworkVelocity: 0
+  m_NetworkRotation: {x: 0, y: 0, z: 0, w: 0}
+  overrideGround: {fileID: 0}
 --- !u!1 &2651478460317835684
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,7 +759,6 @@ GameObject:
   - component: {fileID: 6996543075720690884}
   - component: {fileID: 1205868675}
   - component: {fileID: -7507430672165961418}
-  - component: {fileID: 8969549613774185693}
   m_Layer: 6
   m_Name: 3P_Character
   m_TagString: LocalPlayer
@@ -810,15 +835,16 @@ MonoBehaviour:
   modelRoot: {fileID: 4527090404595922603}
   cam: {fileID: 4522404480456209983}
   rb: {fileID: 4468045622457463749}
-  flashlight: {fileID: 0}
   characterInput: {fileID: 4522404481329450004}
   componentsToDisable:
   - {fileID: 4563308274119672729}
   - {fileID: 4563714668376417847}
   - {fileID: 4522404481329450004}
+  - {fileID: 7718273194206152313}
   - {fileID: 4522930805405680878}
   - {fileID: 4565103655412213379}
-  - {fileID: 4563362120231370793}
+  - {fileID: 1877300246214547864}
+  - {fileID: 9171976171894931984}
   objectsToDisable: []
   objectsToDestroy:
   - {fileID: 4522404480456209983}
@@ -826,6 +852,8 @@ MonoBehaviour:
   - {fileID: 4522404481705858889}
   - {fileID: 4522404481705858889}
   - {fileID: 4522404481705858889}
+  - {fileID: 185039844377125009}
+  - {fileID: 851775976}
   fogUpstairs: {fileID: 0}
   fogDownstairs: {fileID: 0}
 --- !u!114 &-7507430672165961418
@@ -841,22 +869,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floatingElementTarget: {fileID: 6575098428899023102}
---- !u!114 &8969549613774185693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4522404481413435626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &4522404481672959882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,7 +1082,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.5949198, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1393,6 +1405,7 @@ MonoBehaviour:
   thirdPersonRig: {fileID: 4522404482127453853}
   thirdPersonModelRoot: {fileID: 4523749849254761105}
   firstPersonModelRoot: {fileID: 185039844377125009}
+  isFirstPerson: 0
 --- !u!114 &4522930805405680878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,6 +1563,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7bae92ca-3483-41ee-b269-983a0ba9c852
     m_ActionName: Player/CameraSwitch[/Keyboard/p,/XInputControllerWindows/select]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4522404481329450004}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSpecial1Input
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 345fe285-9088-4d20-a207-4c99896c2159
+    m_ActionName: Player/Special1[/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1591,7 +1620,6 @@ GameObject:
   - component: {fileID: 4527090404595922603}
   - component: {fileID: 4565103655412213379}
   - component: {fileID: 3179104564267516859}
-  - component: {fileID: 4563362120231370793}
   - component: {fileID: 7745530482288170499}
   m_Layer: 6
   m_Name: ModelRoot_ThirdPerson
@@ -1647,21 +1675,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 4522404480456209980}
---- !u!114 &4563362120231370793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4523749849254761105}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea00ad25c692c9d4881f3c19e75ca56c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 4563714668376417847}
-  turnSpeed: 1500
-  ignoreControllerMomentum: 0
 --- !u!114 &7745530482288170499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1755,7 +1768,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.5949198, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1832,7 +1845,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.5949198, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1939,7 +1952,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.5949198, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

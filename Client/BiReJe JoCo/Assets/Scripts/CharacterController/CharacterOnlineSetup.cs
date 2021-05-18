@@ -12,7 +12,6 @@ namespace BiReJeJoCo.Character
         public Transform modelRoot;
         public GameObject cam;
         public Rigidbody rb;
-        public Light flashlight;
         public PlayerCharacterInput characterInput;
 
         [Header("Remote Settings")]
@@ -65,10 +64,6 @@ namespace BiReJeJoCo.Character
             var behaviourPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_behaviour");
             var huntedBehaviour = Instantiate(behaviourPrefab, characterRoot).GetComponent<HuntedBehaviour>();
             controller.AddObservedComponent(huntedBehaviour);
-
-            // TODO: hunted should not have a lamp but better pp 
-            if (isLocal)
-                SpawnFlashlight();
 
              // spawn marker object 
              var earPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_ears");

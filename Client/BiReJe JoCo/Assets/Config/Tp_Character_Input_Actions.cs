@@ -81,6 +81,14 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Special1"",
+                    ""type"": ""Button"",
+                    ""id"": ""345fe285-9088-4d20-a207-4c99896c2159"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -314,6 +322,28 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""action"": ""CameraSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee1fbb21-8ba8-4aae-b770-0edbd7b3c818"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b833d37a-3ca6-4f17-9c37-8417bdda56c6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Special1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -380,6 +410,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Trigger = m_Player.FindAction("Trigger", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_CameraSwitch = m_Player.FindAction("CameraSwitch", throwIfNotFound: true);
+        m_Player_Special1 = m_Player.FindAction("Special1", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -440,6 +471,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Trigger;
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_CameraSwitch;
+    private readonly InputAction m_Player_Special1;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -452,6 +484,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Trigger => m_Wrapper.m_Player_Trigger;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @CameraSwitch => m_Wrapper.m_Player_CameraSwitch;
+        public InputAction @Special1 => m_Wrapper.m_Player_Special1;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -485,6 +518,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @CameraSwitch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
                 @CameraSwitch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
                 @CameraSwitch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
+                @Special1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
+                @Special1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
+                @Special1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -513,6 +549,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @CameraSwitch.started += instance.OnCameraSwitch;
                 @CameraSwitch.performed += instance.OnCameraSwitch;
                 @CameraSwitch.canceled += instance.OnCameraSwitch;
+                @Special1.started += instance.OnSpecial1;
+                @Special1.performed += instance.OnSpecial1;
+                @Special1.canceled += instance.OnSpecial1;
             }
         }
     }
@@ -578,6 +617,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnTrigger(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnCameraSwitch(InputAction.CallbackContext context);
+        void OnSpecial1(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

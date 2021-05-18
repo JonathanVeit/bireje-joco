@@ -22,7 +22,11 @@ namespace BiReJeJoCo.Backend
             Player = playerManager.GetPlayer(PhotonView.Controller.UserId);
 
             FindObserved();
-            this.gameObject.name = $"({Player.NickName}) {this.gameObject.name}";
+
+            string prefix = string.Empty;
+            if (Player.IsLocalPlayer)
+                prefix = "*";
+            this.gameObject.name = $"{prefix}({Player.NickName}) {this.gameObject.name}";
         }
         private void FindObserved()
         {
