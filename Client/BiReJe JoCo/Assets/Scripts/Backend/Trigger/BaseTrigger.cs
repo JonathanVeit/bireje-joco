@@ -118,7 +118,7 @@ namespace BiReJeJoCo.Backend
                         StartCoroutine(CoolDown(curTrigger));
                         floaties[curTrigger.Id].UpdateProgress(0);
                     }
-                    else
+                    else if (floaties[curTrigger.Id])
                     {
                         floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
                     }
