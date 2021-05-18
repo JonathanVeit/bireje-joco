@@ -80,9 +80,9 @@ namespace BiReJeJoCo
             {
                 var spawnConfig = new CollectableSpawnConfig()
                 {
-                     i = "hunted_collectable",
-                     i2 = i.ToString(),
-                     s = collectableSpawnPoints[i]
+                    i = "hunted_collectable",
+                    i2 = i.ToString(),
+                    s = collectableSpawnPoints[i]
                 };
 
                 collectableConfigs.Add(spawnConfig);
@@ -95,9 +95,15 @@ namespace BiReJeJoCo
                 roles = playerRoles,
                 spawnPos = spawnPoints,
                 duration = MatchDuration,
-                collectables = collectableConfigs, 
+                collectables = collectableConfigs,
                 matchMode = "default_match"
             };
+
+            if (globalVariables.HasVar("force_hunter") && 
+                globalVariables.GetVar<bool>("force_hunter"))
+            {
+                config.roles[localPlayer.NumberInRoom] = PlayerRole.Hunter;
+            }
 
             return config;
         }

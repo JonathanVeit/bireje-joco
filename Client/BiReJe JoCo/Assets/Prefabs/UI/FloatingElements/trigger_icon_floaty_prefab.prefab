@@ -91,9 +91,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSettings:
-    poolId: 2ed8c405-29c1-431e-aa6d-443fd2a4e742
-    Type: 1
+    poolId: trigger_icon_floaty
+    Type: 3
     poolLimit: 10
+  clampSize: {x: 0, y: 0}
   durationIcon: {fileID: 1490299217882707425}
   description: {fileID: 1918419376965523874}
 --- !u!1 &4153989866959438465
@@ -188,6 +189,7 @@ MonoBehaviour:
     poolId: 2ed8c405-29c1-431e-aa6d-443fd2a4e742
     Type: 1
     poolLimit: 10
+  clampSize: {x: 0, y: 0}
   durationIcon: {fileID: 0}
   description: {fileID: 0}
 --- !u!1 &4915507480041036614

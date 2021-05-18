@@ -39,13 +39,13 @@ namespace BiReJeJoCo.Backend
 
             SetupAsActive();
         }
-
         protected virtual void SetupAsActive() { }
 
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
-
+            
+            messageHub.UnregisterReceiver(this);
             if (localPlayer.PlayerCharacter)
             {
                 localPlayer.PlayerCharacter.characterInput.onTriggerPressed -= OnTriggerPressed;
@@ -64,28 +64,32 @@ namespace BiReJeJoCo.Backend
                     if (floaties[curTrigger.Id] == null &&
                         !curTrigger.isCoolingDown)
                     {
-                        ShowTriggerPointFloaty(curTrigger);
+                        SpawnTriggerFloaty(curTrigger);
                     }
                 }
-                else
+                else 
                 {
-                    if (floaties[curTrigger.Id] != null)
-                    {
-                        floatingManager.DestroyElement(floaties[curTrigger.Id]);
-                        floaties[curTrigger.Id] = null;
-                    }
+                    DestroyTriggerFloaty(curTrigger);
                 }
             }
         }
 
-        protected virtual void ShowTriggerPointFloaty(TriggerSetup trigger)
+        protected virtual void SpawnTriggerFloaty(TriggerSetup trigger)
         {
             var config = new FloatingElementConfig(trigger.floatingElementId, uiManager.GetInstanceOf<GameUI> ().floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
 
             var floaty = floatingManager.GetElementAs<InteractionFloaty>(config);
-            floaty.UpdateProgress(0);
             floaties[trigger.Id] = floaty;
+            UpdateTriggerProgress(trigger, 0);
             OnFloatySpawned(trigger.Id, floaty);
+        }
+        protected virtual void DestroyTriggerFloaty(TriggerSetup trigger)
+        {
+            if (floaties[trigger.Id])
+            {
+                floatingManager.DestroyElement(floaties[trigger.Id]);
+                floaties[trigger.Id] = null;
+            }
         }
 
         protected abstract void OnTriggerInteracted(byte pointId);
@@ -116,21 +120,20 @@ namespace BiReJeJoCo.Backend
                     {
                         OnTriggerInteracted(curTrigger.Id);
                         StartCoroutine(CoolDown(curTrigger));
-                        floaties[curTrigger.Id].UpdateProgress(0);
+                        UpdateTriggerProgress(curTrigger, 0);
                     }
-                    else if (floaties[curTrigger.Id])
+                    else
                     {
-                        floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
+                        UpdateTriggerProgress(curTrigger, 0);
                     }
                 }
             }
         }
         protected virtual void OnTriggerReleased() 
         {
-            foreach (var curFloaty in floaties.Values)
+            foreach (var curTrigger in triggerPoints)
             {
-                if (curFloaty)
-                    curFloaty.UpdateProgress(0);
+                UpdateTriggerProgress(curTrigger, 0);
             }
         }
 
@@ -222,12 +225,17 @@ namespace BiReJeJoCo.Backend
         {
             if (floaties[trigger.Id] != null && trigger.hideInCooldown)
                 floaties[trigger.Id].Hide();
-
         }
         protected virtual void TryUnhideFloaty(TriggerSetup trigger)
         {
             if (floaties[trigger.Id] != null && trigger.hideInCooldown)
                 floaties[trigger.Id].Unhide();
+        }
+
+        protected virtual void UpdateTriggerProgress(TriggerSetup trigger, float duration) 
+        {
+            if (floaties[trigger.Id])
+                floaties[trigger.Id].UpdateProgress(duration / trigger.pressDuration);
         }
 
         [System.Serializable]

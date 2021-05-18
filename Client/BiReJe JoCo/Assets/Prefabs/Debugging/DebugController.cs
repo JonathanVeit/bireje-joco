@@ -275,15 +275,11 @@ namespace BiReJeJoCo.Debugging
                 photonClient.LeaveLobby();
             }));
 
-            RegisterCommand(new DebugCommand<bool>("set_color_mode", "Change color mode to light (true) or dark (false)", "set_color_mode <bool>", (mode) =>
+            RegisterCommand(new DebugCommand<bool>("force_hunter", "force the player to become hunter", "force_hunter <bool>", (mode) =>
             {
-                // light
-                Camera.main.transform.GetChild(0)?.gameObject.SetActive(mode); 
-                GameObject.Find("PPS_Up")?.SetActive(mode);
+                if (!localPlayer.IsHost) return;
 
-                // dark 
-                Camera.main.transform.GetChild(1)?.gameObject.SetActive(!mode); 
-                GameObject.Find("PPS_Down")?.SetActive(!mode);
+                globalVariables.SetVar<bool>("force_hunter", mode);
             }));
         }
 
