@@ -13,6 +13,8 @@ namespace BiReJeJoCo.Character
         public GameObject cam;
         public Rigidbody rb;
         public PlayerCharacterInput characterInput;
+        public Material hunterMat;
+        public Material huntedMat;
 
         [Header("Remote Settings")]
         [SerializeField] List<MonoBehaviour> componentsToDisable;
@@ -74,6 +76,8 @@ namespace BiReJeJoCo.Character
 
             // set layer to hunted layer
             SetLayerRecursively(this.gameObject, 10);
+
+            modelRoot.GetComponentInChildren<MeshRenderer>().material = huntedMat;
         }
         private void SetupAsHunter(bool isLocal)
         {
@@ -92,6 +96,8 @@ namespace BiReJeJoCo.Character
                 SetupHunterPP();
 
             SpawnFlashlight();
+
+            modelRoot.GetComponentInChildren<MeshRenderer>().material = hunterMat;
         }
 
         private void SpawnFlashlight() 
