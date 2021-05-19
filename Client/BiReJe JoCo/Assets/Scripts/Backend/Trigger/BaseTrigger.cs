@@ -5,14 +5,16 @@ using BiReJeJoCo.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JoVei.Base;
 
 namespace BiReJeJoCo.Backend
 {
-    public abstract class BaseTrigger : TickBehaviour
+    public abstract class BaseTrigger : SystemBehaviour, ITickable
     {
         [Header("Base Trigger Settings")]
         [SerializeField] protected List<TriggerSetup> triggerPoints;
         [SerializeField] protected LayerMask playerLayer;
+        [SerializeField] bool drawGizmos;
 
         protected Transform playerTransform;
         protected Dictionary<byte, InteractionFloaty> floaties;
@@ -22,8 +24,17 @@ namespace BiReJeJoCo.Backend
         {
             if (!PlayerRoleMatchesTarget(localPlayer.Role)) return;
 
-            tickSystem.Register(this, "update_half_second");
+            floaties = new Dictionary<byte, InteractionFloaty>();
+            foreach (var curTrigger in triggerPoints)
+                floaties.Add(curTrigger.Id, null);
 
+            ConnectEvents();
+            SetupAsActive();
+        }
+        protected virtual void SetupAsActive() { }
+
+        private void ConnectEvents()
+        {
             if (localPlayer.PlayerCharacter == null)
             {
                 messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
@@ -32,19 +43,15 @@ namespace BiReJeJoCo.Backend
             {
                 OnPlayerCharacterSpawned(null);
             }
-
-            floaties = new Dictionary<byte, InteractionFloaty>();
-            foreach (var curTrigger in triggerPoints)
-                floaties.Add(curTrigger.Id, null);
-
-            SetupAsActive();
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
         }
-
-        protected virtual void SetupAsActive() { }
-
-        protected override void OnBeforeDestroy()
+        private void DisconnectEvents() 
         {
-            base.OnBeforeDestroy();
+            tickSystem.Unregister(this);
+            messageHub.UnregisterReceiver(this);
+
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
 
             if (localPlayer.PlayerCharacter)
             {
@@ -55,7 +62,7 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        public override void Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
             foreach (var curTrigger in triggerPoints)
             {
@@ -64,28 +71,32 @@ namespace BiReJeJoCo.Backend
                     if (floaties[curTrigger.Id] == null &&
                         !curTrigger.isCoolingDown)
                     {
-                        ShowTriggerPointFloaty(curTrigger);
+                        SpawnTriggerFloaty(curTrigger);
                     }
                 }
-                else
+                else 
                 {
-                    if (floaties[curTrigger.Id] != null)
-                    {
-                        floatingManager.DestroyElement(floaties[curTrigger.Id]);
-                        floaties[curTrigger.Id] = null;
-                    }
+                    DestroyTriggerFloaty(curTrigger);
                 }
             }
         }
 
-        protected virtual void ShowTriggerPointFloaty(TriggerSetup trigger)
+        protected virtual void SpawnTriggerFloaty(TriggerSetup trigger)
         {
             var config = new FloatingElementConfig(trigger.floatingElementId, uiManager.GetInstanceOf<GameUI> ().floatingElementGrid, trigger.floatingElementTarget, trigger.floatingElementOffset);
 
             var floaty = floatingManager.GetElementAs<InteractionFloaty>(config);
-            floaty.UpdateProgress(0);
             floaties[trigger.Id] = floaty;
+            UpdateTriggerProgress(trigger, 0);
             OnFloatySpawned(trigger.Id, floaty);
+        }
+        protected virtual void DestroyTriggerFloaty(TriggerSetup trigger)
+        {
+            if (floaties[trigger.Id])
+            {
+                floatingManager.DestroyElement(floaties[trigger.Id]);
+                floaties[trigger.Id] = null;
+            }
         }
 
         protected abstract void OnTriggerInteracted(byte pointId);
@@ -116,35 +127,39 @@ namespace BiReJeJoCo.Backend
                     {
                         OnTriggerInteracted(curTrigger.Id);
                         StartCoroutine(CoolDown(curTrigger));
-                        floaties[curTrigger.Id].UpdateProgress(0);
+                        UpdateTriggerProgress(curTrigger, 0);
                     }
-                    else if (floaties[curTrigger.Id])
+                    else
                     {
-                        floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
+                        UpdateTriggerProgress(curTrigger, duration);
                     }
                 }
             }
         }
         protected virtual void OnTriggerReleased() 
         {
-            foreach (var curFloaty in floaties.Values)
+            foreach (var curTrigger in triggerPoints)
             {
-                if (curFloaty)
-                    curFloaty.UpdateProgress(0);
+                UpdateTriggerProgress(curTrigger, 0);
             }
         }
 
         protected virtual void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
+            tickSystem.Register(this, "update_half_second");
             playerTransform = localPlayer.PlayerCharacter.characterRoot;
             localPlayer.PlayerCharacter.characterInput.onTriggerPressed += OnTriggerPressed;
             localPlayer.PlayerCharacter.characterInput.onTriggerHold += OnTriggerHold;
             localPlayer.PlayerCharacter.characterInput.onTriggerReleased += OnTriggerReleased;
         }
+        protected virtual void OnCloseMatch(PhotonMessage msg)
+        {
+            DisconnectEvents();
+        }
         #endregion
 
         #region Helper
-        protected bool PlayerRoleMatchesTarget(PlayerRole role)
+        protected virtual bool PlayerRoleMatchesTarget(PlayerRole role)
         {
             foreach (var curTrigger in triggerPoints)
             {
@@ -165,8 +180,11 @@ namespace BiReJeJoCo.Backend
             return false;
         }
        
-        protected bool PlayerIsInArea(TriggerSetup trigger)
+        protected virtual bool PlayerIsInArea(TriggerSetup trigger)
         {
+            if (Vector3.Distance(trigger.root.position, playerTransform.position) > trigger.areaSize.magnitude)
+                return false;
+
             var offset = trigger.root.TransformDirection(trigger.areaOffset);
             var collisions = Physics.OverlapBox(trigger.root.position + offset, trigger.areaSize / 2, trigger.root.rotation, playerLayer, QueryTriggerInteraction.Ignore);
             
@@ -175,6 +193,8 @@ namespace BiReJeJoCo.Backend
         }
         void OnDrawGizmos()
         {
+            if (!drawGizmos) return;
+
             foreach (var curTrigger in triggerPoints)
             {
                 var root = curTrigger.root;
@@ -222,12 +242,17 @@ namespace BiReJeJoCo.Backend
         {
             if (floaties[trigger.Id] != null && trigger.hideInCooldown)
                 floaties[trigger.Id].Hide();
-
         }
         protected virtual void TryUnhideFloaty(TriggerSetup trigger)
         {
             if (floaties[trigger.Id] != null && trigger.hideInCooldown)
                 floaties[trigger.Id].Unhide();
+        }
+
+        protected virtual void UpdateTriggerProgress(TriggerSetup trigger, float duration) 
+        {
+            if (floaties[trigger.Id])
+                floaties[trigger.Id].UpdateProgress(duration / trigger.pressDuration);
         }
 
         [System.Serializable]

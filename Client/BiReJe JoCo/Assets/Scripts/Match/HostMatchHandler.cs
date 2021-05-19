@@ -24,22 +24,25 @@ namespace BiReJeJoCo
         #endregion
 
         #region Lobby
-        public void StartMatch(string match_scene)
+        public void StartMatch(string matchMode)
         {
-            photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(match_scene), PhotonMessageTarget.AllViaServer);
+            photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(matchMode), PhotonMessageTarget.AllViaServer);
         }
 
         private void OnPrepareMatchStart(PhotonMessage msg)
         {
             var castedMsg = msg as PrepareMatchStartPhoMsg;
-            var config = CreateMatchConfig(castedMsg.matchScene);
+            var config = CreateMatchConfig(castedMsg.matchMode);
 
             photonMessageHub.ShoutMessage(new DefinedMatchRulesPhoMsg(config), PhotonMessageTarget.AllViaServer);
             LogMatchMessage("Match rules defined");
         }
 
-        private MatchConfig CreateMatchConfig(string matchScene)
+        private MatchConfig CreateMatchConfig(string matchMode)
         {
+            // match mode
+            var mode = MatchModeMapping.GetMapping().GetElementForKey(matchMode);
+
             // roles 
             var allPlayer = playerManager.GetAllPlayer().ToList();
 
@@ -59,7 +62,7 @@ namespace BiReJeJoCo
 
             // spawn points
             var spawnPoints = new Dictionary<int, int>();
-            var mapConfig = MapConfigMapping.GetMapping().GetElementForKey(matchScene);
+            var mapConfig = MapConfigMapping.GetMapping().GetElementForKey(mode.gameScene);
 
             // hunted 
             int huntedSpawnPoint = mapConfig.GetRandomHuntedSpawnPointIndex();
@@ -80,9 +83,9 @@ namespace BiReJeJoCo
             {
                 var spawnConfig = new CollectableSpawnConfig()
                 {
-                     i = "hunted_collectable",
-                     i2 = i.ToString(),
-                     s = collectableSpawnPoints[i]
+                    i = "hunted_collectable",
+                    i2 = i.ToString(),
+                    s = collectableSpawnPoints[i]
                 };
 
                 collectableConfigs.Add(spawnConfig);
@@ -91,13 +94,18 @@ namespace BiReJeJoCo
             // create match config 
             var config = new MatchConfig()
             {
-                matchScene = matchScene,
                 roles = playerRoles,
                 spawnPos = spawnPoints,
                 duration = MatchDuration,
-                collectables = collectableConfigs, 
-                matchMode = "default_match"
+                collectables = collectableConfigs,
+                matchMode = matchMode,
             };
+
+            if (globalVariables.HasVar("force_hunter") && 
+                globalVariables.GetVar<bool>("force_hunter"))
+            {
+                config.roles[localPlayer.NumberInRoom] = PlayerRole.Hunter;
+            }
 
             return config;
         }
@@ -178,12 +186,12 @@ namespace BiReJeJoCo
         }
 
 
-        public void RestartMatch(string scene_name)
+        public void RestartMatch(string match_mode)
         {
             System.Action<PhotonMessage> callback = (x) =>
             {
                 LogMatchMessage("Restart match");
-                StartMatch(scene_name);
+                StartMatch(match_mode);
             };
             callback += (x) => { photonMessageHub.UnregisterReceiver<CloseMatchPhoMsg>(this, callback); };
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, callback);

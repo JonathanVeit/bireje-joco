@@ -16,8 +16,8 @@ namespace BiReJeJoCo.Character
         private PlayerControlled controller;
 
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
-
         private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
+        private HunterPingFloaty pingFloaty; 
 
         #region Initialization
         public void Initialize(PlayerControlled controller)
@@ -36,20 +36,25 @@ namespace BiReJeJoCo.Character
         protected override void OnBeforeDestroy()
         {
             DisconnectEvents();
-            pingDurationTimer.Stop();
-            pingCooldownTimer.Stop();
-
+       
             if (syncVarHub)
                 syncVarHub.UnregisterSyncVar(pingPosition);
+            if (localPlayer.PlayerCharacter)
+                localPlayer.PlayerCharacter.characterInput.onSpecial1Pressed -= OnSpecial1Pressed;
+            pingPosition.OnValueReceived -= OnPingUpdated;
         }
 
         private void ConnectEvents() 
         {
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnClosEMatch);
         }
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
@@ -83,20 +88,34 @@ namespace BiReJeJoCo.Character
             var target = new GameObject("ping_target");
             target.transform.position = position;
             var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
-            var floaty = floatingManager.GetElement(config) as HunterPingFloaty;
-            floaty.SetClamped();
+            pingFloaty = floatingManager.GetElementAs<HunterPingFloaty>(config);
+            pingFloaty.SetClamped();
 
             pingDurationTimer.Start(
                 () => // update  
                 {
-                    if (floaty)
-                        floaty.SetAlpha(1 - pingDurationTimer.RelativeProgress);
+                    if (pingFloaty)
+                    {
+                        pingFloaty.SetAlpha(1 - pingDurationTimer.RelativeProgress);
+                    }
                 },
                 () => // finish
                 {
-                    floaty.RequestDestroyFloaty();
-                    Destroy(target);
+                    if (pingFloaty)
+                    {
+                        pingFloaty.RequestDestroyFloaty();
+                        Destroy(target);
+                    }
                 });
+        }
+
+        private void OnClosEMatch(PhotonMessage obj)
+        {
+            pingDurationTimer.Stop();
+            pingCooldownTimer.Stop();
+
+            if (pingFloaty)
+                pingFloaty.RequestDestroyFloaty();
         }
         #endregion
     }

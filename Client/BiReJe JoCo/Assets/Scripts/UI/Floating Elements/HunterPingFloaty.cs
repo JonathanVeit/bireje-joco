@@ -17,7 +17,8 @@ namespace BiReJeJoCo.UI
         {
             base.Tick(deltaTime);
 
-            if (localPlayer.PlayerCharacter)
+            if (localPlayer.PlayerCharacter != null && 
+                Config.Target != null)
                 distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.modelRoot.position)).ToString() + "m";
         }
 

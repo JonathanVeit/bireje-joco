@@ -118,7 +118,7 @@ namespace JoVei.Base.UI
             }
         }
 
-        private void UpdateElement(IFloatingElement element)
+        protected void UpdateElement(IFloatingElement element)
         {
             // check if valid 
             if (!ElementIsValid(element))

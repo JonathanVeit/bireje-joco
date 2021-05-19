@@ -230,7 +230,7 @@ namespace BiReJeJoCo.Debugging
                 mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
 
-            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match in the current scene", "restart_match <string>", (value) =>
+            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match with the given mode", "restart_match <string>", (value) =>
             {
                 var hostMatchHandler = (matchHandler as HostMatchHandler);
                 if (hostMatchHandler.State == MatchState.Running &&
@@ -275,15 +275,11 @@ namespace BiReJeJoCo.Debugging
                 photonClient.LeaveLobby();
             }));
 
-            RegisterCommand(new DebugCommand<bool>("set_color_mode", "Change color mode to light (true) or dark (false)", "set_color_mode <bool>", (mode) =>
+            RegisterCommand(new DebugCommand<bool>("force_hunter", "force the player to become hunter", "force_hunter <bool>", (mode) =>
             {
-                // light
-                Camera.main.transform.GetChild(0)?.gameObject.SetActive(mode); 
-                GameObject.Find("PPS_Up")?.SetActive(mode);
+                if (!localPlayer.IsHost) return;
 
-                // dark 
-                Camera.main.transform.GetChild(1)?.gameObject.SetActive(!mode); 
-                GameObject.Find("PPS_Down")?.SetActive(!mode);
+                globalVariables.SetVar<bool>("force_hunter", mode);
             }));
         }
 

@@ -5,13 +5,13 @@
     /// </summary>
     public class PrepareMatchStartPhoMsg : PhotonMessage
     {
-        public string matchScene;
+        public string matchMode;
 
         public PrepareMatchStartPhoMsg() { }
 
         public PrepareMatchStartPhoMsg(string matchScene)
         {
-            this.matchScene = matchScene;
+            this.matchMode = matchScene;
         }
     }
 

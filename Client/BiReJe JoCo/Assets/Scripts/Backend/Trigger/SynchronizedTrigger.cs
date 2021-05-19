@@ -64,11 +64,12 @@ namespace BiReJeJoCo.Backend
                     {
                         photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
                         curTrigger.isCoolingDown = true;
-                        floaties[curTrigger.Id].UpdateProgress(0);
+
+                        UpdateTriggerProgress(curTrigger, 0);
                     }
                     else
                     {
-                        floaties[curTrigger.Id].UpdateProgress(duration / curTrigger.pressDuration);
+                        UpdateTriggerProgress(curTrigger, duration);
                     }
                 }
             }

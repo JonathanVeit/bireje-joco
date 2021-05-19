@@ -26,6 +26,10 @@ namespace BiReJeJoCo.UI
             isHided = false;
             isClamped = false;
         }
+        protected override void OnBeforeDestroy()
+        {
+            tickSystem.Unregister(this);
+        }
 
         public void SetClamped()
         {
