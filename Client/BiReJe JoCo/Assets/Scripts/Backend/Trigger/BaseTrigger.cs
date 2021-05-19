@@ -5,14 +5,16 @@ using BiReJeJoCo.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JoVei.Base;
 
 namespace BiReJeJoCo.Backend
 {
-    public abstract class BaseTrigger : TickBehaviour
+    public abstract class BaseTrigger : SystemBehaviour, ITickable
     {
         [Header("Base Trigger Settings")]
         [SerializeField] protected List<TriggerSetup> triggerPoints;
         [SerializeField] protected LayerMask playerLayer;
+        [SerializeField] bool drawGizmos;
 
         protected Transform playerTransform;
         protected Dictionary<byte, InteractionFloaty> floaties;
@@ -22,8 +24,17 @@ namespace BiReJeJoCo.Backend
         {
             if (!PlayerRoleMatchesTarget(localPlayer.Role)) return;
 
-            tickSystem.Register(this, "update_half_second");
+            floaties = new Dictionary<byte, InteractionFloaty>();
+            foreach (var curTrigger in triggerPoints)
+                floaties.Add(curTrigger.Id, null);
 
+            ConnectEvents();
+            SetupAsActive();
+        }
+        protected virtual void SetupAsActive() { }
+
+        private void ConnectEvents()
+        {
             if (localPlayer.PlayerCharacter == null)
             {
                 messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
@@ -32,20 +43,16 @@ namespace BiReJeJoCo.Backend
             {
                 OnPlayerCharacterSpawned(null);
             }
-
-            floaties = new Dictionary<byte, InteractionFloaty>();
-            foreach (var curTrigger in triggerPoints)
-                floaties.Add(curTrigger.Id, null);
-
-            SetupAsActive();
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
         }
-        protected virtual void SetupAsActive() { }
-
-        protected override void OnBeforeDestroy()
+        private void DisconnectEvents() 
         {
-            base.OnBeforeDestroy();
-            
+            tickSystem.Unregister(this);
             messageHub.UnregisterReceiver(this);
+
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
+
             if (localPlayer.PlayerCharacter)
             {
                 localPlayer.PlayerCharacter.characterInput.onTriggerPressed -= OnTriggerPressed;
@@ -55,7 +62,7 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        public override void Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
             foreach (var curTrigger in triggerPoints)
             {
@@ -139,15 +146,20 @@ namespace BiReJeJoCo.Backend
 
         protected virtual void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
+            tickSystem.Register(this, "update_half_second");
             playerTransform = localPlayer.PlayerCharacter.characterRoot;
             localPlayer.PlayerCharacter.characterInput.onTriggerPressed += OnTriggerPressed;
             localPlayer.PlayerCharacter.characterInput.onTriggerHold += OnTriggerHold;
             localPlayer.PlayerCharacter.characterInput.onTriggerReleased += OnTriggerReleased;
         }
+        protected virtual void OnCloseMatch(PhotonMessage msg)
+        {
+            DisconnectEvents();
+        }
         #endregion
 
         #region Helper
-        protected bool PlayerRoleMatchesTarget(PlayerRole role)
+        protected virtual bool PlayerRoleMatchesTarget(PlayerRole role)
         {
             foreach (var curTrigger in triggerPoints)
             {
@@ -168,7 +180,7 @@ namespace BiReJeJoCo.Backend
             return false;
         }
        
-        protected bool PlayerIsInArea(TriggerSetup trigger)
+        protected virtual bool PlayerIsInArea(TriggerSetup trigger)
         {
             if (Vector3.Distance(trigger.root.position, playerTransform.position) > trigger.areaSize.magnitude)
                 return false;
@@ -181,6 +193,8 @@ namespace BiReJeJoCo.Backend
         }
         void OnDrawGizmos()
         {
+            if (!drawGizmos) return;
+
             foreach (var curTrigger in triggerPoints)
             {
                 var root = curTrigger.root;

@@ -230,7 +230,7 @@ namespace BiReJeJoCo.Debugging
                 mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
 
-            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match in the current scene", "restart_match <string>", (value) =>
+            RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match with the given mode", "restart_match <string>", (value) =>
             {
                 var hostMatchHandler = (matchHandler as HostMatchHandler);
                 if (hostMatchHandler.State == MatchState.Running &&

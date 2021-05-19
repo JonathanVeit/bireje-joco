@@ -14,6 +14,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Button startButton;
         [SerializeField] Dropdown durationDropdown;
+        [SerializeField] string matchMode = "default_match";
 
         private Dictionary<string, LobbyMemberEntry> memberEntries
             = new Dictionary<string, LobbyMemberEntry>();
@@ -105,7 +106,7 @@ namespace BiReJeJoCo.UI
         #region UI Inputs
         public void StartGame()
         {
-            (matchHandler as HostMatchHandler).StartMatch("game_scene_4");
+            (matchHandler as HostMatchHandler).StartMatch(matchMode);
         }
 
         public void LeaveLobby() 

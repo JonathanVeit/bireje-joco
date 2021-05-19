@@ -1,5 +1,6 @@
 using UnityEditor;
 using BiReJeJoCo.Backend;
+using UnityEditor.SceneManagement;
 
 namespace BiReJeJoCo.Tools
 {
@@ -13,7 +14,10 @@ namespace BiReJeJoCo.Tools
             for (int i = 0; i < allTrigger.Length; i++)
             {
                 allTrigger[i].SetTriggerId((byte)i);
+                EditorUtility.SetDirty(allTrigger[i]);
             }
+
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
     }
 }
