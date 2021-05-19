@@ -13,7 +13,9 @@ namespace BiReJeJoCo.Map
         [SerializeField] PlattformTarget upperPosition;
         [SerializeField] [Range (0, 1)] byte startPointIndex;
         [SerializeField] ElevatorPlattform board;
-        [SerializeField] new Collider[] collider;
+        [SerializeField] GameObject lowerEntry;
+        [SerializeField] GameObject upperEntry;
+        [SerializeField] ElevatorSign[] signs;
 
         private byte currentPointIndex;
 
@@ -32,14 +34,24 @@ namespace BiReJeJoCo.Map
             {
                 // go down 
                 case 0:
-                    board.SetTarget(lowerPosition.target, () => UnblockEntries());
+                    board.SetTarget(lowerPosition.target, () =>
+                    {
+                        SetLowerEntry(true);
+                        ResetSigns();
+                    });
                     currentPointIndex = 0;
+                    UpdateSigns(false);
                     break;
 
                 // go up
                 case 1:
-                    board.SetTarget(upperPosition.target, () => UnblockEntries());
+                    board.SetTarget(upperPosition.target, () =>
+                    {
+                        SetUpperEntry(true);
+                        ResetSigns();
+                    });
                     currentPointIndex = 1;
+                    UpdateSigns(true);
                     break;
 
                 // toggle on plattform 
@@ -56,7 +68,8 @@ namespace BiReJeJoCo.Map
                     }
             }
 
-            BlockEntries();
+            SetLowerEntry(false);
+            SetUpperEntry(false);
         }
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
@@ -79,16 +92,24 @@ namespace BiReJeJoCo.Map
             public Transform target;
         }
 
-        private void BlockEntries() 
+        private void SetLowerEntry(bool open)
         {
-            foreach (var curCollider in collider)
-                curCollider.enabled = true;
+            lowerEntry.SetActive(!open);
+        }
+        private void SetUpperEntry(bool open) 
+        {
+            upperEntry.SetActive(!open);
         }
 
-        private void UnblockEntries() 
+        private void UpdateSigns(bool up) 
         {
-            foreach (var curCollider in collider)
-                curCollider.enabled = false;
+            foreach (var sign in signs)
+                sign.OnElevatorTargetSet(up);
+        }
+        private void ResetSigns()
+        {
+            foreach (var sign in signs)
+                sign.Reset();
         }
         #endregion
     }
