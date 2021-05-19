@@ -24,6 +24,8 @@ namespace BiReJeJoCo.Items
 
         protected override void OnTriggerInteracted(byte pointId)
         {
+            DisconnectEvents();
+
             collectablesManager.CollectItem(InstanceId);
             foreach (var curFloaty in floaties.Values)
             {

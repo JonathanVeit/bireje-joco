@@ -58,7 +58,7 @@ namespace BiReJeJoCo.Items
 
         public void CollectItem(string instanceId)
         {
-            photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.AllViaServer);
+            photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.All);
         }
 
         #region Events

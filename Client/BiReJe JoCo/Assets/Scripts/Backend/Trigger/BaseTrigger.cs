@@ -33,7 +33,7 @@ namespace BiReJeJoCo.Backend
         }
         protected virtual void SetupAsActive() { }
 
-        private void ConnectEvents()
+        protected virtual void ConnectEvents()
         {
             if (localPlayer.PlayerCharacter == null)
             {
@@ -45,7 +45,7 @@ namespace BiReJeJoCo.Backend
             }
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
         }
-        private void DisconnectEvents() 
+        protected virtual void DisconnectEvents() 
         {
             tickSystem.Unregister(this);
             messageHub.UnregisterReceiver(this);

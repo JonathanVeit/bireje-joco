@@ -81,14 +81,12 @@ namespace BiReJeJoCo.Map
 
         private void BlockEntries() 
         {
-            Debug.Log("block");
             foreach (var curCollider in collider)
                 curCollider.enabled = true;
         }
 
         private void UnblockEntries() 
         {
-            Debug.Log("unblock");
             foreach (var curCollider in collider)
                 curCollider.enabled = false;
         }
