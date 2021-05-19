@@ -8,8 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ToonSnow
-  m_Shader: {fileID: -6465566751694194690, guid: bf4ff9691d17c574691d8a56de6bbf4a, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 3c973a3d97932894c9ee2d4ce8b200d6, type: 3}
   m_ShaderKeywords: MAIN_LIGHT_CALCULATE_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
+    ADDITIONAL_LIGHT_CALCULATE_SHADOWS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -69,6 +70,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - ADDITIONAL_LIGHTS_SHADOWS: 0
+    - ADDITIONAL_LIGHT_CALCULATE_SHADOWS: 1
     - BakedIntensity: 0.5
     - CameraFadeDistance: 3
     - EdgeIntensity_Fresnel: 1
@@ -79,10 +82,13 @@ Material:
     - IntersectFadeIntensity: 1
     - LIGHTMAP: 0
     - MAIN_LIGHT_CALCULATE_SHADOWS: 1
+    - MAIN_LIGHT_SHADOWS: 0
     - MainShadowIntensity: 1
     - NoiseIntensity: 0.5
     - NoiseScale: 1
     - Opacity: 0.25
+    - SHADOW_CASCADE: 0
+    - SOFT_SHADOWS: 0
     - ShadowSmoothness: 0.32
     - Smoothness: 10
     - SnowEdgeMax: 0.63
@@ -92,6 +98,7 @@ Material:
     - SparkleIntensity: 2.3
     - SparkleScale: 28
     - TextureSpeed: 0.1
+    - UseDownstairsGradient: 1
     - UseGI: 0
     - UseGradient: 0
     - UseNoiseTexture: 0

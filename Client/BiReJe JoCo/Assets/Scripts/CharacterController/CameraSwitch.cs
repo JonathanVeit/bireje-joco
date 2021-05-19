@@ -63,6 +63,8 @@ namespace BiReJeJoCo.Character
             cam.transform.rotation = firstPersonCameraTransform.transform.rotation;
             thirdPersonRig.SetActive(false);
 
+            cam.GetComponent<Camera>().fieldOfView = 45;
+
             //model visibility
             firstPersonModelRoot.SetActive(true);
             thirdPersonModelRoot.SetActive(false);
