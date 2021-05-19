@@ -481,8 +481,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480456209983}
-  m_LocalRotation: {x: 0.15743172, y: -0.8096072, z: 0.2517197, w: 0.5063483}
-  m_LocalPosition: {x: 2.678112, y: 2.758175, z: 0.8168121}
+  m_LocalRotation: {x: -0.18992661, y: 0.7915854, z: -0.30367634, w: -0.4950769}
+  m_LocalPosition: {x: 2.1539931, y: 2.8736672, z: 0.5617001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481413435625}
@@ -629,7 +629,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404480652463482}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.52, z: 0}
+  m_LocalPosition: {x: 0, y: 1.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481705858888}
@@ -867,7 +867,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404481672959882}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.34, z: 0}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481705858888}
@@ -1016,7 +1016,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482127453853}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.678112, y: 2.758175, z: 0.81681204}
+  m_LocalPosition: {x: 2.1539931, y: 2.8736672, z: 0.5617001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5843700635952065146}
@@ -1056,7 +1056,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.6730769, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1120,11 +1120,11 @@ MonoBehaviour:
   m_SplineCurvature: 0.5
   m_Orbits:
   - m_Height: 2.8
-    m_Radius: 1.5
-  - m_Height: 1.7
-    m_Radius: 3.3
-  - m_Height: 0.5
-    m_Radius: 2.1
+    m_Radius: 1
+  - m_Height: 2.4
+    m_Radius: 2.4
+  - m_Height: 1
+    m_Radius: 1.4
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
   - {fileID: 3661345897350186113}
@@ -1219,7 +1219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4522404482381640391}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.43, z: 0}
+  m_LocalPosition: {x: 0, y: 1.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4522404481705858888}
@@ -1337,11 +1337,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7
-  sprintMultiplyer: 1.6
+  movementSpeed: 6
+  sprintMultiplyer: 1.45
   airControlRate: 15
-  jumpSpeed: 9
-  jumpDuration: 0.1
+  jumpSpeed: 5
+  jumpDuration: 0.13
   airFriction: 0.5
   groundFriction: 100
   gravity: 30
@@ -1698,7 +1698,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5324111366460665471}
-  m_LocalRotation: {x: 0.16138065, y: -0.80761707, z: 0.2580337, w: 0.5051036}
+  m_LocalRotation: {x: -0.19706824, y: 0.7871098, z: -0.31509516, w: -0.49227774}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1742,7 +1742,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.6730769, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1775,7 +1775,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5764966080921202662}
-  m_LocalRotation: {x: 0.1429809, y: -0.8164327, z: 0.22861412, w: 0.5106171}
+  m_LocalRotation: {x: 0.1762937, y: -0.799607, z: 0.28187847, w: 0.5000938}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1819,7 +1819,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.6730769, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1852,7 +1852,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6099793682165101580}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 889730214}
@@ -1882,7 +1882,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7020474194405719505}
-  m_LocalRotation: {x: 0.13983707, y: -0.8178236, z: 0.22358735, w: 0.51148707}
+  m_LocalRotation: {x: 0.15594152, y: -0.8103442, z: 0.2493371, w: 0.5068092}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1926,7 +1926,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.6730769, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1993,10 +1993,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.758175, z: -1.8663445}
+  m_FollowOffset: {x: 0, y: 2.8736672, z: -1.2834358}
   m_XDamping: 1
   m_YDamping: 1
-  m_ZDamping: 1
+  m_ZDamping: 0.1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -2149,10 +2149,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.758175, z: -1.8663445}
+  m_FollowOffset: {x: 0, y: 2.8736672, z: -1.2834358}
   m_XDamping: 1
   m_YDamping: 1
-  m_ZDamping: 1
+  m_ZDamping: 0.1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -2275,10 +2275,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.758175, z: -1.8663445}
+  m_FollowOffset: {x: 0, y: 2.8736672, z: -1.2834358}
   m_XDamping: 1
   m_YDamping: 1
-  m_ZDamping: 1
+  m_ZDamping: 0.1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
