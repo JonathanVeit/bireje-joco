@@ -42,6 +42,21 @@ void DirectSpecular_float(float Smoothness, float3 Direction, float3 WorldNormal
 #endif
 }
 
+#ifndef SHADERGRAPH_PREVIEW
+// This function gets additional light data and calculates realtime shadows
+Light GetAdditionalLightForToon(int pixelLightIndex, float3 worldPosition) {
+    // Convert the pixel light index to the light data index
+    int perObjectLightIndex = GetPerObjectLightIndex(pixelLightIndex);
+    // Call the URP additional light algorithm. This will not calculate shadows, since we don't pass a shadow mask value
+    Light light = GetAdditionalPerObjectLight(perObjectLightIndex, worldPosition);
+    // Manually set the shadow attenuation by calculating realtime shadows
+    light.shadowAttenuation = AdditionalLightRealtimeShadow(perObjectLightIndex, worldPosition);
+    return light;
+}
+#endif
+
+
+
 void AdditionalLights_float(float Smoothness, float3 WorldPosition, float3 WorldNormal, float3 WorldView, out float3 Diffuse, out float3 Specular)
 {
     float3 diffuseColor = 0;
@@ -55,7 +70,7 @@ void AdditionalLights_float(float Smoothness, float3 WorldPosition, float3 World
     int pixelLightCount = GetAdditionalLightsCount();
     for (int i = 0; i < pixelLightCount; ++i)
     {
-        Light light = GetAdditionalLight(i, WorldPosition);
+        Light light = GetAdditionalLightForToon(i, WorldPosition);
         half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
         diffuseColor += LightingLambert(attenuatedLightColor, light.direction, WorldNormal);
         specularColor += LightingSpecular(attenuatedLightColor, light.direction, WorldNormal, WorldView, White, Smoothness);
