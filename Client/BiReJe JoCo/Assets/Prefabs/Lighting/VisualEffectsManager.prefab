@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 2160889363685637127}
   - component: {fileID: 2160889363685637144}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Directional Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,7 +100,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.9708928, b: 0.8915094, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2160889363843841792
 Transform:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4090436436528479852, guid: 276133c03ab54324894e7cc830e0afdd, type: 3}
       propertyPath: weight
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4090436436528479853, guid: 276133c03ab54324894e7cc830e0afdd, type: 3}
       propertyPath: m_Name
@@ -328,7 +328,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4090436436528479852, guid: 46ebd82c716352b499951ef36579aca9, type: 3}
       propertyPath: weight
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4090436436528479853, guid: 46ebd82c716352b499951ef36579aca9, type: 3}
       propertyPath: m_Name
@@ -460,6 +460,18 @@ PrefabInstance:
     - target: {fileID: 4092567367199414686, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
+      propertyPath: ShapeModule.m_Scale.z
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
