@@ -8,27 +8,24 @@ namespace BiReJeJoCo
 {
     public class VisualEffectsSwitchManager : SystemBehaviour
     {
-        bool isUpstairs;
         [Header("Upstairs Effects")]
         [SerializeField] GameObject upstairsPPS;
         Volume upstairsPPSVol;
-        [SerializeField] GameObject upstairsMainLight;
+        [SerializeField] Light upstairsMainLight;
         [SerializeField] GameObject upstairsFog;
         [SerializeField] GameObject snowEffects;
         [Space(10)]
         [Header("Downstairs Effects")]
         [SerializeField] GameObject downstairsPPS;
         Volume downstairsPPSVol;
-        [SerializeField] GameObject downstairsMainLight;
+        [SerializeField] Light downstairsMainLight;
         [SerializeField] GameObject downstairsFog;
 
         [Header("Hunted alterations")]
         [SerializeField] VolumeProfile huntedUpstairsPPSProfile;
         [SerializeField] VolumeProfile huntedDownstairsPPSProfile;
 
-
-        public event Action onGoingDown;
-        public event Action onGoingUp;
+        bool isStart = true;
 
         [SerializeField] List<GameObject> switchAreas = new List<GameObject>();
 
@@ -45,7 +42,6 @@ namespace BiReJeJoCo
                 Debug.LogError("PPS game objects have not been assigned correctly to " + this.gameObject);
             }
 
-            messageHub.RegisterReceiver<PPSSwitchMsg>(this, HandlePPSSwitch);
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnCharacterSpawned);
         }
 
@@ -54,70 +50,109 @@ namespace BiReJeJoCo
             upstairsFog = localPlayer.PlayerCharacter.fogUpstairs;
             downstairsFog = localPlayer.PlayerCharacter.fogDownstairs;
 
-            isUpstairs = localPlayer.Role == Backend.PlayerRole.Hunted;
+            
             if (localPlayer.Role == Backend.PlayerRole.Hunted)
             {
                 upstairsPPSVol.profile = huntedUpstairsPPSProfile;
                 downstairsPPSVol.profile = huntedDownstairsPPSProfile;
             }
-            HandlePPSSwitch(null);
         }
 
-        protected virtual void HandlePPSSwitch(PPSSwitchMsg msg)
+        private void StartPPS(bool _isUpstairs)
         {
-            if (isUpstairs)
+            if (_isUpstairs)
             {
-                HandleGoingDownTriggered();
+                //Enable all upstairs effects
+                upstairsMainLight.gameObject.SetActive(true);
+                upstairsFog.SetActive(true);
+                snowEffects.SetActive(true);
+
+                //Disable all downstairs effects
+                downstairsMainLight.gameObject.SetActive(false);
+                downstairsFog.SetActive(false);
             }
-            else 
+            else
             {
-                HandleGoingUpTriggered();
+                //Disable all upstairs effects
+                upstairsMainLight.gameObject.SetActive(false);
+                upstairsFog.SetActive(false);
+                snowEffects.SetActive(false);
+
+                //Enable all downstairs effects
+                downstairsMainLight.gameObject.SetActive(true);
+                downstairsFog.SetActive(true);
             }
         }
 
-        void HandleGoingUpTriggered()
+
+        public void HandlePPSSwitch(bool _isUpstairs)
+        {
+            if (isStart)
+            {
+                StartPPS(_isUpstairs);
+                isStart = false;
+                return;
+            }
+
+            if (_isUpstairs)
+            {
+                HandleUpstairs();
+            }
+            else
+            {
+                HandleDownstairs();
+            }
+        }
+
+        void HandleUpstairs()
         {
             //Enable all upstairs effects
-            upstairsMainLight.SetActive(true);
             upstairsFog.SetActive(true);
             snowEffects.SetActive(true);
 
             //Disable all downstairs effects
-            downstairsMainLight.SetActive(false);
             downstairsFog.SetActive(false);
 
+            upstairsMainLight.gameObject.SetActive(false);
             //switch PPS
-            StartCoroutine(SmoothPPSWeight(upstairsPPSVol, downstairsPPSVol));
-            isUpstairs = true;
+            StartCoroutine(SmoothLight(upstairsMainLight, downstairsMainLight));
         }
 
-        void HandleGoingDownTriggered()
+        void HandleDownstairs()
         {
             //Disable all upstairs effects
-            upstairsMainLight.SetActive(false);
             upstairsFog.SetActive(false);
             snowEffects.SetActive(false);
 
             //Enable all downstairs effects
-            downstairsMainLight.SetActive(true);
             downstairsFog.SetActive(true);
 
-            //switch PPS
-            StartCoroutine(SmoothPPSWeight(downstairsPPSVol, upstairsPPSVol));
-            isUpstairs = false;
+            downstairsMainLight.gameObject.SetActive(false);
+            //switch lights
+            StartCoroutine(SmoothLight(downstairsMainLight, upstairsMainLight));
         }
 
-        IEnumerator SmoothPPSWeight(Volume _ppsVolOn, Volume _ppsVolOff)
+        IEnumerator SmoothLight(Light _lightOn, Light _lightOff)
         {
+            float _lightOnIntensSave = _lightOn.intensity;
+            float _lightOffIntensSave = _lightOff.intensity;
+            Debug.Log("light on intensity :"+ _lightOn.intensity + "| light off intensity :" + _lightOff.intensity);
+
+            _lightOn.intensity = 0;
+            _lightOn.gameObject.SetActive(true);
+
             float startTime = Time.time;
             while (Time.time - startTime < 1f)
             {
-                _ppsVolOn.weight += 1 * Time.fixedDeltaTime;
-                _ppsVolOff.weight -= 1 * Time.fixedDeltaTime;
+                _lightOn.intensity += _lightOnIntensSave * Time.deltaTime;
+                _lightOff.intensity -= _lightOffIntensSave * Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
-            _ppsVolOn.weight = 1f;
-            _ppsVolOff.weight = 0f;
+
+            _lightOn.intensity = _lightOnIntensSave;
+
+            _lightOff.gameObject.SetActive(false);
+            _lightOff.intensity = _lightOffIntensSave;
         }
 
         protected override void OnBeforeDestroy()
