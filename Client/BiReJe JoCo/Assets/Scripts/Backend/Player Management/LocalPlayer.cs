@@ -28,7 +28,7 @@ namespace BiReJeJoCo.Backend
         
         private void ConnectToEvents()
         {
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
@@ -71,7 +71,7 @@ namespace BiReJeJoCo.Backend
         }
 
         #region Events
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "PreferedRole", PlayerRole.Hunter);
         }

@@ -37,9 +37,9 @@ namespace BiReJeJoCo
         public OnFailedToHostLobbyMsg(string reason) : base(reason) { }
     }
 
-    public class OnJoinedLobbyMsg : Message<string>
+    public class JoinedLobbyMsg : Message<string>
     {
-        public OnJoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
+        public JoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
     }
 
     public class LoadedLobbySceneMsg : BaseMessage

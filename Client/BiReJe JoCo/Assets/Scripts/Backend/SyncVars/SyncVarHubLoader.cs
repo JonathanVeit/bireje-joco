@@ -9,7 +9,7 @@ namespace BiReJeJoCo.Backend
     {
         public IEnumerator Initialize(object[] parameters)
         {
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
             yield return null;
         }
@@ -19,7 +19,7 @@ namespace BiReJeJoCo.Backend
             messageHub.UnregisterReceiver(this);
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             var result = Resources.LoadAll<SyncVarHub>("");
 

@@ -37,7 +37,7 @@ namespace BiReJeJoCo.UI
         private void ConnectEvents()
         {
             messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
 
@@ -52,7 +52,7 @@ namespace BiReJeJoCo.UI
             loadingOverlay.gameObject.SetActive(false);
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             if (localPlayer.IsHost)
                 gameManager.OpenLobby();

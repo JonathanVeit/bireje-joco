@@ -63,7 +63,7 @@ namespace BiReJeJoCo.Backend
             IsInRoom = true;
             RoomName = PhotonNetwork.CurrentRoom.Name;
 
-            messageHub.ShoutMessage(this, new OnJoinedLobbyMsg(RoomName));
+            messageHub.ShoutMessage(this, new JoinedLobbyMsg(RoomName));
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)

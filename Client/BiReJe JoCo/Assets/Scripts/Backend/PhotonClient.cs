@@ -32,7 +32,7 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<OnLeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
 
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
         }
@@ -88,7 +88,7 @@ namespace BiReJeJoCo.Backend
         }
 
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             DebugHelper.PrintFormatted("<color=green>[Photon Clien]</color> Joined game lobby: {0}.", msg.Param1);
         }

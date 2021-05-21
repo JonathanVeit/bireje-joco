@@ -8,17 +8,17 @@ namespace BiReJeJoCo.Backend
     {
         public IEnumerator Initialize(object[] parameters)
         {
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
 
             yield return null;
         }
 
         public void CleanUp()
         {
-            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedLobby);
+            messageHub.UnregisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg)
+        private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             if (!localPlayer.IsHost) return;
 

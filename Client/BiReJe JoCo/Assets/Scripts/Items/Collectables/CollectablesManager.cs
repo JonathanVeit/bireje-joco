@@ -3,40 +3,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
+using Newtonsoft.Json;
 
 namespace BiReJeJoCo.Items
 {
     public class CollectableSpawnConfig
     {
-        public string i; // prefab id  
-        public string i2; // instance id
-        public int s; // index of spawnpoint
+        [JsonIgnore]
+        public string PrefabId => i;
+        [JsonIgnore]
+        public string InstanceId => i2;
+        [JsonIgnore]
+        public int SpawnPointIndex => s;
+
+        /// <summary>
+        /// Prefab Id
+        /// </summary>
+        public string i; 
+        /// <summary>
+        /// Instance Id
+        /// </summary>
+        public string i2;
+        /// <summary>
+        /// Spawnpoint index
+        /// </summary>
+        public int s;
     }
 
-    public class CollectablesManager : SystemBehaviour, IInitializable
+    public class CollectablesManager : SystemBehaviour
     {
         private Dictionary<string, ICollectableItem> items;
         private Transform root;
 
         #region Initialization
-        public IEnumerator Initialize(object[] parameters)
+        protected override void OnSystemsInitialized()
+        {
+            Setup();
+            DontDestroyOnLoad(this);
+            messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
+            DIContainer.RegisterImplementation<CollectablesManager>(this);
+        }
+        protected override void OnBeforeDestroy() 
+        { 
+            DisconnectEvents(); 
+        }
+
+        private void Setup()
         {
             items = new Dictionary<string, ICollectableItem>();
-            ConnectEvents();
-
-            DIContainer.RegisterImplementation<CollectablesManager>(this);
-            yield return null;
+            root = null;
         }
-        public void CleanUp() { DisconnectEvents(); }
 
         void ConnectEvents()
         {
-            messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnLoadedGameScene);
+            photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
+            messageHub.UnregisterReceiver(this);
         }
-
         void DisconnectEvents()
         {
-            messageHub.UnregisterReceiver(this);
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 
@@ -45,37 +72,40 @@ namespace BiReJeJoCo.Items
             if (root == null)
                 CreateItemRoot();
             var scene = matchHandler.MatchConfig.matchScene;
-            var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.s);
+            var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.SpawnPointIndex);
 
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.i);
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.PrefabId);
             var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
             instance.transform.SetParent(root);
 
             var item = instance.GetComponent<ICollectableItem>();
-            item.InitializeCollectable(config.i2);
-            items.Add(config.i2, item);
+            item.InitializeCollectable(config.InstanceId);
+            items.Add(config.InstanceId, item);
         }
 
         public void CollectItem(string instanceId)
         {
-            photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.All);
+            photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.AllViaServer);
         }
 
         #region Events
-        private void OnLoadedGameScene(LoadedGameSceneMsg msg)
+        private void OnLobbySceneLoaded(LoadedLobbySceneMsg msg)
         {
-            items = new Dictionary<string, ICollectableItem>();
-            photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
+            ConnectEvents();
+        }
+        private void OnCloseMatch(PhotonMessage msg)
+        {
+            Setup();
         }
 
         private void OnItemCollected(PhotonMessage msg)
         {
             var castedMsg = msg as CollectItemPhoMsg;
-            var itemId = items[castedMsg.i].UniqueId;
-            Destroy((items[castedMsg.i] as Component).gameObject);
-            items.Remove(castedMsg.i);
+            var itemId = items[castedMsg.InstanceId].UniqueId;
+            Destroy((items[castedMsg.InstanceId] as Component).gameObject);
+            items.Remove(castedMsg.InstanceId);
 
-            if (castedMsg.i2 == localPlayer.NumberInRoom)
+            if (castedMsg.playerNumber == localPlayer.NumberInRoom)
             {
                 messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, itemId);
             }

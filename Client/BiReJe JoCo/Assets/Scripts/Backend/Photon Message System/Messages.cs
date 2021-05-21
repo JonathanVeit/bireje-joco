@@ -1,4 +1,6 @@
-﻿namespace BiReJeJoCo.Backend
+﻿using Newtonsoft.Json;
+
+namespace BiReJeJoCo.Backend
 {
     /// <summary>
     /// Fired by the host to inform each player that the match is beeing prepared (lobby -> game)
@@ -137,14 +139,19 @@
     /// </summary>
     public class CollectItemPhoMsg : PhotonMessage
     {
+        [JsonIgnore]
+        public string InstanceId => i;
+        [JsonIgnore]
+        public int playerNumber => n;
+
         public string i; // instance id
-        public int i2; // player number
+        public int n; // player number
 
         public CollectItemPhoMsg() { }
         public CollectItemPhoMsg(string instanceId, int playerNumber)
         {
             i = instanceId;
-            i2 = playerNumber;
+            n = playerNumber;
         }
     }
 

@@ -25,7 +25,7 @@ namespace BiReJeJoCo
         private void ConnecteEvents() 
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg> (this, OnJoinedLobby);
+            messageHub.RegisterReceiver<JoinedLobbyMsg> (this, OnJoinedLobby);
         }
 
         private void DisconnectEvents() 
@@ -64,7 +64,7 @@ namespace BiReJeJoCo
             }
         }
 
-        private void OnJoinedLobby(OnJoinedLobbyMsg msg) 
+        private void OnJoinedLobby(JoinedLobbyMsg msg) 
         {
             GameObject matchHandlerPrefab;
             if (localPlayer.IsHost)

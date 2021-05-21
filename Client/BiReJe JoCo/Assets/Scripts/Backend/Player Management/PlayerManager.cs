@@ -30,7 +30,7 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<PlayerJoinedLobbyMsg>(this, OnPlayerJoined);
             messageHub.RegisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeft);
 
-            messageHub.RegisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedRoom);
+            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedRoom);
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftRoom);
         }
 
@@ -39,7 +39,7 @@ namespace BiReJeJoCo.Backend
             messageHub.UnregisterReceiver<PlayerJoinedLobbyMsg>(this, OnPlayerJoined);
             messageHub.UnregisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeft);
 
-            messageHub.UnregisterReceiver<OnJoinedLobbyMsg>(this, OnJoinedRoom);
+            messageHub.UnregisterReceiver<JoinedLobbyMsg>(this, OnJoinedRoom);
             messageHub.UnregisterReceiver<LeftLobbyMsg>(this, OnLeftRoom);
         }
         #endregion
@@ -132,7 +132,7 @@ namespace BiReJeJoCo.Backend
             UnregisterPlayer(msg.Param1);
         }
 
-        private void OnJoinedRoom(OnJoinedLobbyMsg msg)
+        private void OnJoinedRoom(JoinedLobbyMsg msg)
         {
             foreach (var curPlayer in photonRoomWrapper.PlayerList)
                 RegisterPlayer(curPlayer, false);
