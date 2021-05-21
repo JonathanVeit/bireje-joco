@@ -7,12 +7,15 @@ namespace BiReJeJoCo
     [RequireComponent(typeof(Collider))]
     public class VisualEffectsTrigger : SystemBehaviour
     {
+        [SerializeField] bool isUpstairs;
+        VisualEffectsSwitchManager vfxManager;
         Collider col;
 
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
 
+            vfxManager = this.GetComponentInParent<VisualEffectsSwitchManager>();
             col = this.GetComponent<Collider>();
             col.isTrigger = true;
         }
@@ -21,7 +24,7 @@ namespace BiReJeJoCo
         {
             if (other.CompareTag("LocalPlayer"))
             {
-                messageHub.ShoutMessage<PPSSwitchMsg>(this);
+                vfxManager.HandlePPSSwitch(isUpstairs);
             }
         }
     }
