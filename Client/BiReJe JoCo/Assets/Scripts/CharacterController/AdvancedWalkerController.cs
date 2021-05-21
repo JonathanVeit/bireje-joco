@@ -105,6 +105,8 @@ namespace BiReJeJoCo.Character
 			//Subscribe Sprint Functions to character Input
 			characterInput.onSprintIsPressed += HandleSrintKeyPressed;
 			characterInput.onSprintLetGo += HandleSrintKeyLetGo;
+
+			cameraTransform = Camera.main.transform;
 		}
 
 

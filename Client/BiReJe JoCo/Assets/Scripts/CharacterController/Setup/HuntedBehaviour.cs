@@ -132,8 +132,8 @@ namespace BiReJeJoCo.Character
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            localPlayer.PlayerCharacter.characterInput.onShootPressed += OnShootPressed;
-            var mover = localPlayer.PlayerCharacter.characterRoot.GetComponent<Mover>();
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onShootPressed += OnShootPressed;
+            var mover = localPlayer.PlayerCharacter.controllerSetup.characterRoot.GetComponent<Mover>();
             isGrounded = () => mover.IsGrounded();
         }
 
@@ -163,24 +163,14 @@ namespace BiReJeJoCo.Character
             {
                 // transformed into
                 case true:
-                    // TODO: remove 
-                    var camSwitch = GetComponentInParent<CameraSwitch>();
-                    if (camSwitch != null && camSwitch.isFirstPerson)
-                    {
-                        camSwitch.CameraTransformReset();
-                    }
-
-                    foreach (Transform curChild in  transform.parent.GetChild(0))
-                        curChild.gameObject.SetActive(false);
-                    GetComponentInParent<Collider>().enabled = false;
-
+                    Owner.PlayerCharacter.controllerSetup.modelRoot.gameObject.SetActive(false);
+                    Owner.PlayerCharacter.controllerSetup.mainCollider.enabled = false;
                     break;
 
                 // transformed back
                 case false:
-                    foreach (Transform curChild in transform.parent.GetChild(0))
-                        curChild.gameObject.SetActive(true);
-                    GetComponentInParent<Collider>().enabled = true;
+                    Owner.PlayerCharacter.controllerSetup.modelRoot.gameObject.SetActive(true);
+                    Owner.PlayerCharacter.controllerSetup.mainCollider.enabled = true;
                     break;
             }
 

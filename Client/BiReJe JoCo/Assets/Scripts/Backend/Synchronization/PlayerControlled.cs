@@ -33,12 +33,16 @@ namespace BiReJeJoCo.Backend
             observedComponents = new List<IPlayerObserved>();
             observedVariables = new Dictionary<byte, ISyncVar>();
 
-            foreach (var curComponet in GetComponentsInChildren<IPlayerObserved>())
+            AddObservedGameObject(this.gameObject);
+        }
+
+        public void AddObservedGameObject(GameObject gameObject)
+        {
+            foreach (var curComponet in gameObject.GetComponentsInChildren<IPlayerObserved>())
             {
                 AddObservedComponent(curComponet);
             }
         }
-        
         public void AddObservedComponent(IPlayerObserved component)
         {
             observedComponents.Add(component);

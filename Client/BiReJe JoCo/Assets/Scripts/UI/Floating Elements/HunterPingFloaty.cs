@@ -19,7 +19,7 @@ namespace BiReJeJoCo.UI
 
             if (localPlayer.PlayerCharacter != null && 
                 Config.Target != null)
-                distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.modelRoot.position)).ToString() + "m";
+                distanceLabel.text = Mathf.CeilToInt(Vector3.Distance(Config.Target.position, localPlayer.PlayerCharacter.controllerSetup.modelRoot.position)).ToString() + "m";
         }
 
         public void SetAlpha(float alpha) 

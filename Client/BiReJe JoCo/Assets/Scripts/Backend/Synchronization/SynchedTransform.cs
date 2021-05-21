@@ -16,6 +16,8 @@ namespace BiReJeJoCo.Backend
         [SerializeField] SyncedTransformType type;
         [SerializeField] bool m_UseLocal;
         [SerializeField] float teleportAt;
+        [SerializeField] Transform movementTarget;
+        [SerializeField] Transform rotationTarget;
         [SerializeField] Rigidbody rigidBody;
 
         [Space(10)]
@@ -31,7 +33,7 @@ namespace BiReJeJoCo.Backend
         [SerializeField] float m_NetworkVelocity;
 
         [SerializeField] Quaternion m_NetworkRotation;
-        [SerializeField] Transform overrideGround;
+        [SerializeField] Transform ground;
 
         bool m_firstTake = false;
         PhotonView photonView;
@@ -43,11 +45,16 @@ namespace BiReJeJoCo.Backend
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
-            m_StoredPosition = transform.localPosition;
+            m_StoredPosition = movementTarget.localPosition;
             m_NetworkPosition = Vector3.zero;
 
             m_NetworkRotation = Quaternion.identity;
             photonView = controller.PhotonView;
+
+            if (!movementTarget)
+                movementTarget = transform;
+            if (!rotationTarget)
+                rotationTarget = transform;
         }
 
         void OnEnable()
@@ -59,7 +66,7 @@ namespace BiReJeJoCo.Backend
         #region Update Transform
         public override void Tick(float deltaTime)
         {
-            if (this.photonView.IsMine|| !this.enabled) return;
+            if (controller.PhotonView || !this.enabled) return;
 
             if (type.HasFlag(SyncedTransformType.Position))
                 UpdatePosition();
@@ -75,13 +82,13 @@ namespace BiReJeJoCo.Backend
             {
                 if (teleport)
                 {
-                    transform.localPosition = m_NetworkPosition;
+                    movementTarget.localPosition = m_NetworkPosition;
                     return;
                 }
                     
-                var targetPosition = Vector3.MoveTowards(transform.localPosition, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                var targetPosition = Vector3.MoveTowards(movementTarget.localPosition, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
                 targetPosition = SnapToGround(targetPosition);
-                transform.localPosition = targetPosition;
+                movementTarget.localPosition = targetPosition;
             }
             else
             {
@@ -91,9 +98,9 @@ namespace BiReJeJoCo.Backend
                     return;
                 }
 
-                var targetPosition = Vector3.MoveTowards(transform.position, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                var targetPosition = Vector3.MoveTowards(movementTarget.position, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
                 targetPosition = SnapToGround(targetPosition);
-                transform.position = targetPosition;
+                movementTarget.position = targetPosition;
             }
         }
 
@@ -101,17 +108,12 @@ namespace BiReJeJoCo.Backend
         {
             if (m_UseLocal)
             {
-                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+                rotationTarget.localRotation = Quaternion.RotateTowards(rotationTarget.localRotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
             }
             else
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+                rotationTarget.rotation = Quaternion.RotateTowards(rotationTarget.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
             }
-        }
-
-        public void SetGround(Transform ground)
-        {
-            overrideGround = ground;
         }
         #endregion
 
@@ -134,22 +136,20 @@ namespace BiReJeJoCo.Backend
 
         private void WriteStream(PhotonStream stream)
         {
-            var tr = transform;
-
             if (type.HasFlag(SyncedTransformType.Position))
             {
                 if (m_UseLocal)
                 {
-                    this.m_Direction = tr.localPosition - this.m_StoredPosition;
-                    this.m_StoredPosition = tr.localPosition;
-                    stream.SendNext(tr.localPosition);
+                    this.m_Direction = movementTarget.localPosition - this.m_StoredPosition;
+                    this.m_StoredPosition = movementTarget.localPosition;
+                    stream.SendNext(movementTarget.localPosition);
                     stream.SendNext(this.m_Direction);
                 }
                 else
                 {
-                    this.m_Direction = tr.position - this.m_StoredPosition;
-                    this.m_StoredPosition = tr.position;
-                    stream.SendNext(tr.position);
+                    this.m_Direction = movementTarget.position - this.m_StoredPosition;
+                    this.m_StoredPosition = movementTarget.position;
+                    stream.SendNext(movementTarget.position);
                     stream.SendNext(this.m_Direction);
                 }
 
@@ -164,19 +164,17 @@ namespace BiReJeJoCo.Backend
             {
                 if (m_UseLocal)
                 {
-                    stream.SendNext(tr.localRotation);
+                    stream.SendNext(rotationTarget.localRotation);
                 }
                 else
                 {
-                    stream.SendNext(tr.rotation);
+                    stream.SendNext(rotationTarget.rotation);
                 }
             }
         }
 
         private void ReadStream(PhotonStream stream, PhotonMessageInfo info)
         {
-            var tr = transform;
-
             if (type.HasFlag(SyncedTransformType.Position))
             {
                 this.m_NetworkPosition = (Vector3)stream.ReceiveNext();
@@ -184,9 +182,9 @@ namespace BiReJeJoCo.Backend
                 if (m_firstTake)
                 {
                     if (m_UseLocal)
-                        tr.localPosition = this.m_NetworkPosition;
+                        movementTarget.localPosition = this.m_NetworkPosition;
                     else
-                        tr.position = this.m_NetworkPosition;
+                        movementTarget.position = this.m_NetworkPosition;
 
                     this.m_Distance = 0f;
                 }
@@ -196,11 +194,11 @@ namespace BiReJeJoCo.Backend
                     this.m_NetworkPosition += this.m_Direction * lag;
                     if (m_UseLocal)
                     {
-                        this.m_Distance = Vector3.Distance(tr.localPosition, this.m_NetworkPosition);
+                        this.m_Distance = Vector3.Distance(movementTarget.localPosition, this.m_NetworkPosition);
                     }
                     else
                     {
-                        this.m_Distance = Vector3.Distance(tr.position, this.m_NetworkPosition);
+                        this.m_Distance = Vector3.Distance(movementTarget.position, this.m_NetworkPosition);
                     }
                 }
 
@@ -221,22 +219,22 @@ namespace BiReJeJoCo.Backend
 
                     if (m_UseLocal)
                     {
-                        tr.localRotation = this.m_NetworkRotation;
+                        rotationTarget.localRotation = this.m_NetworkRotation;
                     }
                     else
                     {
-                        tr.rotation = this.m_NetworkRotation;
+                        rotationTarget.rotation = this.m_NetworkRotation;
                     }
                 }
                 else
                 {
                     if (m_UseLocal)
                     {
-                        this.m_Angle = Quaternion.Angle(tr.localRotation, this.m_NetworkRotation);
+                        this.m_Angle = Quaternion.Angle(rotationTarget.localRotation, this.m_NetworkRotation);
                     }
                     else
                     {
-                        this.m_Angle = Quaternion.Angle(tr.rotation, this.m_NetworkRotation);
+                        this.m_Angle = Quaternion.Angle(rotationTarget.rotation, this.m_NetworkRotation);
                     }
                 }
             }
@@ -245,6 +243,26 @@ namespace BiReJeJoCo.Backend
             {
                 m_firstTake = false;
             }
+        }
+        #endregion
+
+        #region Public Member
+        public void SetMovementTarget(Transform target)
+        {
+            movementTarget = target;
+        }
+        public void SetRotationTarget(Transform target)
+        {
+            rotationTarget = target;
+        }
+        public void SetRigidBody(Rigidbody target)
+        {
+            rigidBody = target;
+        }
+
+        public void SetGround(Transform ground)
+        {
+            this.ground = ground;
         }
         #endregion
 
@@ -263,13 +281,13 @@ namespace BiReJeJoCo.Backend
 
         private Vector3 SnapToGround(Vector3 position)
         {
-            if (!overrideGround)
+            if (!ground)
                 return position;
 
             if (Mathf.Abs(m_NetworkVelocity) <= snapGroundTreshold || 
-                position.y < overrideGround.position.y)
+                position.y < ground.position.y)
             {
-                position.y = overrideGround.position.y;
+                position.y = ground.position.y;
             }
 
             return position;

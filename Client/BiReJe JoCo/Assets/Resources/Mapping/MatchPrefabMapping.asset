@@ -17,16 +17,18 @@ MonoBehaviour:
     Element: {fileID: 6632399626350781057, guid: f1d11587cf243b04cbcd3c824be94bc3, type: 3}
   - ID: host_match_handler
     Element: {fileID: 7510882243937814039, guid: 71dcffd86c865f24ba8d1985613533ac, type: 3}
-  - ID: third_person_pc
+  - ID: player_character
     Element: {fileID: 4522404481413435626, guid: dba2ac145164e5b49b40eeac91380077, type: 3}
-  - ID: first_person_pc
-    Element: {fileID: 4522404481413435626, guid: dba2ac145164e5b49b40eeac91380077, type: 3}
+  - ID: hunter_model_local
+    Element: {fileID: 1719034285810264868, guid: 3edd0c18194ce2e4c81fb450cc1f1649, type: 3}
+  - ID: hunter_model_remote
+    Element: {fileID: 7011229879302335955, guid: 6b3177b7c28956744acf25a4108aa46d, type: 3}
+  - ID: hunted_model_local
+    Element: {fileID: 536971180423961381, guid: 49b3717fe058b214f979305f84e6a2cb, type: 3}
+  - ID: hunted_model_remote
+    Element: {fileID: 5859591608262929621, guid: b4e8c82a0b72bf6488965fe036e3ad78, type: 3}
   - ID: default_bullet
     Element: {fileID: 7469541983887774474, guid: 5f780030cd889154ba71d9d70e88754b, type: 3}
-  - ID: hunter_gun
-    Element: {fileID: 6652738096216307494, guid: 3c2076ed5940c334790d96398c3800ff, type: 3}
-  - ID: hunter_behaviour
-    Element: {fileID: 2128758038090994894, guid: 05f8994d5f3f1b946bc90d689274b151, type: 3}
   - ID: hunter_ping_target
     Element: {fileID: 2600917491507756849, guid: 6247ff227d7ad524d9264c316ac61151, type: 3}
   - ID: bullet_hit_sfx
@@ -39,17 +41,11 @@ MonoBehaviour:
     Element: {fileID: 525598174719235619, guid: 9470dbe1605b31a45bfb886498c95e6c, type: 3}
   - ID: fog_downstairs_hunter_sfx
     Element: {fileID: 7909681767910252057, guid: 1effbb4724cf76a41bdc7265a264dc5e, type: 3}
-  - ID: hunted_ears
-    Element: {fileID: 9198702876079058877, guid: ec5e0c1cfdead5e4b8c53fe30c99d733, type: 3}
-  - ID: transformable_barrel
-    Element: {fileID: 3744024726589165926, guid: a85a1cc261ecc17438c044cbdcbbdd09, type: 3}
-  - ID: transformable_box
-    Element: {fileID: 6819056805595753159, guid: 56821a2236738664c9912dd7116eb988, type: 3}
   - ID: hunted_transformation_sfx
     Element: {fileID: 390438586309668073, guid: 68b84250ee6af7445aa7436ca99cf6ef, type: 3}
-  - ID: hunted_behaviour
-    Element: {fileID: 2128758038090994894, guid: e95f163e4e8565d469eca77371b10b64, type: 3}
   - ID: hunted_collectable
     Element: {fileID: 8670628230491275192, guid: 01885f35f7e37dd4ca3dec6cb715f998, type: 3}
-  - ID: flashlight
-    Element: {fileID: 4526746822814289284, guid: 7aa308553ae25c04aa509784d47c508f, type: 3}
+  - ID: transformable_box
+    Element: {fileID: 6819056805595753159, guid: 56821a2236738664c9912dd7116eb988, type: 3}
+  - ID: transformable_barrel
+    Element: {fileID: 3744024726589165926, guid: a85a1cc261ecc17438c044cbdcbbdd09, type: 3}

@@ -1,3 +1,5 @@
+using BiReJeJoCo.Character;
+using Newtonsoft.Json;
 using System;
 using PhotonPlayer = Photon.Realtime.Player;
 
@@ -14,12 +16,19 @@ namespace BiReJeJoCo.Backend
         public string NickName => photonPlayer.NickName;
         public string Id => photonPlayer.UserId;
         public int NumberInRoom => photonPlayer.ActorNumber;
-
         protected PhotonPlayer photonPlayer;
+
+        [JsonIgnore]
+        public CharacterSetup PlayerCharacter { get; protected set; }
 
         public Player(PhotonPlayer player) 
         {
             photonPlayer = player;
+        }
+
+        public void AssignCharacter(CharacterSetup character)
+        {
+            PlayerCharacter = character;
         }
 
         #region Helper

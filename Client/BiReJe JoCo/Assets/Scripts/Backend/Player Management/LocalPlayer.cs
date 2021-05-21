@@ -34,12 +34,10 @@ namespace BiReJeJoCo.Backend
         }
         #endregion
 
-        [JsonIgnore] 
-        public CharacterOnlineSetup PlayerCharacter { get; private set; }
 
         private void SpawnPlayerCharacter() 
         {
-            string prefabId = MatchPrefabMapping.GetMapping().GetElementForKey("third_person_pc").name;
+            string prefabId = MatchPrefabMapping.GetMapping().GetElementForKey("player_character").name;
 
             var scene = matchHandler.MatchConfig.matchScene;
             var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];
@@ -51,14 +49,12 @@ namespace BiReJeJoCo.Backend
                 randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHunterSpawnPoint(posIndex);
 
             var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
-            PlayerCharacter = go.GetComponent<CharacterOnlineSetup>();
 
             messageHub.ShoutMessage<PlayerCharacterSpawnedMsg>(this);
         }
         public void DestroyPlayerCharacter()
         {
             photonRoomWrapper.Destroy(PlayerCharacter.gameObject);
-            PlayerCharacter = null;
         }
 
         public void SetNickName(string name)

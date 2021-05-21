@@ -17,7 +17,7 @@ namespace BiReJeJoCo
 
         private void OnCharacterSpawned(PlayerCharacterSpawnedMsg obj)
         {
-            player = localPlayer.PlayerCharacter.GetComponent<CharacterOnlineSetup>().characterRoot.gameObject;
+            player = localPlayer.PlayerCharacter.GetComponent<CharacterSetup>().controllerSetup.gameObject;
             gameStart = true;
         }
 

@@ -7,7 +7,9 @@ namespace BiReJeJoCo.Character
 	//This script rotates an object toward the 'forward' direction of another target transform;
 	public class TurnTowardTransformDirection : MonoBehaviour {
 
-		public Transform targetTransform;
+		[SerializeField] Transform targetTransform;
+		[SerializeField] bool mainCamera;
+
 		Transform tr;
 		Transform parentTransform;
 
@@ -16,8 +18,15 @@ namespace BiReJeJoCo.Character
 			tr = transform;
 			parentTransform = transform.parent;
 
-			if(targetTransform == null)
-				Debug.LogWarning("No target transform has been assigned to this script.", this);
+			if (targetTransform != null) return;
+
+			if (mainCamera)
+			{
+				targetTransform = Camera.main.transform;
+				return;
+			}
+
+			Debug.LogWarning("No target transform has been assigned to this script.", this);
 		}
 		
 		//Update;

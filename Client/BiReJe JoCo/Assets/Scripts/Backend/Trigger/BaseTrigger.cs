@@ -55,9 +55,9 @@ namespace BiReJeJoCo.Backend
 
             if (localPlayer.PlayerCharacter)
             {
-                localPlayer.PlayerCharacter.characterInput.onTriggerPressed -= OnTriggerPressed;
-                localPlayer.PlayerCharacter.characterInput.onTriggerHold -= OnTriggerHold;
-                localPlayer.PlayerCharacter.characterInput.onTriggerReleased -= OnTriggerReleased;
+                localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerPressed -= OnTriggerPressed;
+                localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerHold -= OnTriggerHold;
+                localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerReleased -= OnTriggerReleased;
             }
         }
         #endregion
@@ -147,10 +147,10 @@ namespace BiReJeJoCo.Backend
         protected virtual void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             tickSystem.Register(this, "update_half_second");
-            playerTransform = localPlayer.PlayerCharacter.characterRoot;
-            localPlayer.PlayerCharacter.characterInput.onTriggerPressed += OnTriggerPressed;
-            localPlayer.PlayerCharacter.characterInput.onTriggerHold += OnTriggerHold;
-            localPlayer.PlayerCharacter.characterInput.onTriggerReleased += OnTriggerReleased;
+            playerTransform = localPlayer.PlayerCharacter.controllerSetup.characterRoot;
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerPressed += OnTriggerPressed;
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerHold += OnTriggerHold;
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onTriggerReleased += OnTriggerReleased;
         }
         protected virtual void OnCloseMatch(PhotonMessage msg)
         {

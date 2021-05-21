@@ -77,7 +77,7 @@ namespace BiReJeJoCo.Items
         #region Events
         private void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            var input = localPlayer.PlayerCharacter.characterInput;
+            var input = localPlayer.PlayerCharacter.controllerSetup.characterInput;
             input.onShootPressed += OnShootPressed;
         }
 

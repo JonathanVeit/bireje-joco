@@ -9,6 +9,8 @@ namespace BiReJeJoCo.Character
     public class HunterBehaviour : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
+        [SerializeField] Transform cameraRoot;
+        [SerializeField] Transform fpsSetup;
         [SerializeField] Timer pingDurationTimer;
         [SerializeField] Timer pingCooldownTimer;
 
@@ -27,12 +29,23 @@ namespace BiReJeJoCo.Character
             if (Owner.IsLocalPlayer)
             {
                 ConnectEvents();
+                SetupPerspective();
             }
             else if (localPlayer.Role == PlayerRole.Hunter)
             {
                 pingPosition.OnValueReceived += OnPingUpdated;
             }
         }
+
+        private void SetupPerspective()
+        {
+            Camera.main.transform.SetParent(cameraRoot);
+            Camera.main.transform.position = cameraRoot.position;
+            Camera.main.transform.rotation = cameraRoot.rotation;
+
+            fpsSetup.SetParent(cameraRoot);
+        }
+
         protected override void OnBeforeDestroy()
         {
             DisconnectEvents();
@@ -40,7 +53,7 @@ namespace BiReJeJoCo.Character
             if (syncVarHub)
                 syncVarHub.UnregisterSyncVar(pingPosition);
             if (localPlayer.PlayerCharacter)
-                localPlayer.PlayerCharacter.characterInput.onSpecial1Pressed -= OnSpecial1Pressed;
+                localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed -= OnSpecial1Pressed;
             pingPosition.OnValueReceived -= OnPingUpdated;
         }
 
@@ -74,7 +87,7 @@ namespace BiReJeJoCo.Character
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            localPlayer.PlayerCharacter.characterInput.onSpecial1Pressed += OnSpecial1Pressed;
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed += OnSpecial1Pressed;
         }
 
         private void OnPingUpdated(Vector3 position)
