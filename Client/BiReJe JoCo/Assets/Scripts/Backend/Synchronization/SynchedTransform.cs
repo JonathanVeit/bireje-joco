@@ -271,11 +271,11 @@ namespace BiReJeJoCo.Backend
         {
             if (m_UseLocal)
             {
-                return Vector3.Distance(transform.localPosition, m_NetworkPosition) > teleportAt;
+                return Vector3.Distance(movementTarget.localPosition, m_NetworkPosition) > teleportAt;
             }
             else
             {
-                return Vector3.Distance(transform.position, m_NetworkPosition) > teleportAt;
+                return Vector3.Distance(movementTarget.position, m_NetworkPosition) > teleportAt;
             }
         }
 
