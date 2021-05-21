@@ -3,14 +3,12 @@ using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Items
 {
-    public class Flashlight : TickBehaviour, IPlayerObserved
+    public class FPSSetup : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
-        [SerializeField] Transform light;
-        [SerializeField] float angle;
+        [SerializeField] Transform target;
         [SerializeField] float speed;
-
-        private SyncVar<Vector3> rotation = new SyncVar<Vector3>(2);
+        [SerializeField] SyncVar<Vector3> rotation = new SyncVar<Vector3>(2);
         
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -26,8 +24,8 @@ namespace BiReJeJoCo.Items
 
             if (Owner.IsLocalPlayer)
                 rotation.SetValue(Camera.main.transform.rotation.eulerAngles);
-            
-            light.transform.rotation = Quaternion.Lerp(light.transform.rotation, Quaternion.Euler (rotation.GetValue()), speed * Time.deltaTime);
+
+            target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler (rotation.GetValue()), speed * Time.deltaTime);
         }
 
         protected override void OnBeforeDestroy()

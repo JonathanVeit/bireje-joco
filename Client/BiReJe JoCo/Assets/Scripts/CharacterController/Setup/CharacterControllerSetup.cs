@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BiReJeJoCo.Backend;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BiReJeJoCo.Character
 {
@@ -11,6 +12,7 @@ namespace BiReJeJoCo.Character
         public Transform modelRoot;
         public Rigidbody rigidBody;
         public Collider mainCollider;
+        public PlayerInput playerInput;
         public PlayerCharacterInput characterInput;
         public Mover mover;
 

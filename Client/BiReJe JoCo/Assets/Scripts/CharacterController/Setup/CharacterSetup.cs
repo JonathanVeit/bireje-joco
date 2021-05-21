@@ -40,6 +40,8 @@ namespace BiReJeJoCo.Character
                     SetupAsHunter();
                     break;
             }
+
+            SetTagRecursively(this.gameObject, Owner.IsLocalPlayer ? "LocalPlayer" : "RemotePlayer");
         }
 
         private void SetupAsHunted()
@@ -54,7 +56,6 @@ namespace BiReJeJoCo.Character
                 SetupHuntedPP();
             }
 
-            // set layer to hunted layer
             SetLayerRecursively(this.gameObject, 10);
         }
         private void SetupAsHunter()
@@ -68,6 +69,8 @@ namespace BiReJeJoCo.Character
                 SpawnModel("hunter_model_local");
                 SetupHunterPP();
             }
+
+            SetLayerRecursively(this.gameObject, 6);
         }
 
         private void SpawnModel(string prefab)
@@ -118,7 +121,8 @@ namespace BiReJeJoCo.Character
 
         private void SetTagRecursively(GameObject target, string tag)
         {
-            target.tag = tag;
+            if (target.tag != "MainCamera")
+                target.tag = tag;
 
             foreach (Transform child in target.transform)
             {

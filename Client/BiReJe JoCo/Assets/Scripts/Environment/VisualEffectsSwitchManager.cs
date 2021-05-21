@@ -26,6 +26,7 @@ namespace BiReJeJoCo
         [SerializeField] VolumeProfile huntedDownstairsPPSProfile;
 
         bool isStart = true;
+        bool characterSpawned = false;
 
         [SerializeField] List<GameObject> switchAreas = new List<GameObject>();
 
@@ -50,16 +51,19 @@ namespace BiReJeJoCo
             upstairsFog = localPlayer.PlayerCharacter.fogUpstairs;
             downstairsFog = localPlayer.PlayerCharacter.fogDownstairs;
 
-            
             if (localPlayer.Role == Backend.PlayerRole.Hunted)
             {
                 upstairsPPSVol.profile = huntedUpstairsPPSProfile;
                 downstairsPPSVol.profile = huntedDownstairsPPSProfile;
             }
+
+            characterSpawned = true;
         }
 
         private void StartPPS(bool _isUpstairs)
         {
+            if (!characterSpawned) return;
+
             if (_isUpstairs)
             {
                 //Enable all upstairs effects

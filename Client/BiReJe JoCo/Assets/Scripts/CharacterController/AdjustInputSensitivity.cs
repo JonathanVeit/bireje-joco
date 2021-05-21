@@ -19,9 +19,9 @@ namespace BiReJeJoCo.Character
         [SerializeField] CinemachineVirtualCamera cinemaVirtual;
         [SerializeField] CinemachineFreeLook cinemaFreeLook;
 
-        [Header("Input Components")]
-        [SerializeField] PlayerCharacterInput characterInput;
-        [SerializeField] PlayerInput playerInput;
+        PlayerCharacterInput characterInput => localPlayer.PlayerCharacter.controllerSetup.characterInput;
+        PlayerInput playerInput => localPlayer.PlayerCharacter.controllerSetup.playerInput;
+
         string currentControlScheme;
 
         //save active Axis numbers

@@ -79,6 +79,7 @@ MonoBehaviour:
   modelRoot: {fileID: 1123382873885243662}
   rigidBody: {fileID: 6268242092879492245}
   mainCollider: {fileID: 5701102482184471912}
+  playerInput: {fileID: 4105779778320399909}
   characterInput: {fileID: 6922469825186454421}
   mover: {fileID: 3632402956923623670}
 --- !u!1 &1117997701492219188
@@ -1424,8 +1425,6 @@ MonoBehaviour:
   xAxisController: 4
   cinemaVirtual: {fileID: 0}
   cinemaFreeLook: {fileID: 1142755366882667207}
-  characterInput: {fileID: 0}
-  playerInput: {fileID: 0}
 --- !u!114 &2375423479187049865
 MonoBehaviour:
   m_ObjectHideFlags: 0
