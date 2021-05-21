@@ -80,7 +80,7 @@ namespace BiReJeJoCo.Character
             pingCooldownTimer.Start(
                 () => // update
                 {
-                    gameUI.UpdatePingCooldown(pingCooldownTimer.Progress, pingCooldownTimer.Duration);
+                    gameUI.UpdatePingCooldown(pingCooldownTimer.RelativeProgress);
                 },null);
         }
 

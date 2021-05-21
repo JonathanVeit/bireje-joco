@@ -38,11 +38,9 @@ namespace BiReJeJoCo.Character
         // shooting 
         public event Action onShootPressed;
 
-        //Camera change
-        public event Action onCameraSwitchPressed;
-
         // special 1
         public event Action onSpecial1Pressed;
+        public event Action onSpecial2Pressed;
 
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
@@ -201,15 +199,14 @@ namespace BiReJeJoCo.Character
                 onSpecial1Pressed?.Invoke();
             }
         }
-
-        public void SetCameraSwitchInput(InputAction.CallbackContext inputValue)
+        public void SetSpecial2Input(InputAction.CallbackContext inputValue)
         {
             if (BlockState.HasFlag(InputBlockState.Interact))
                 return;
 
             if (inputValue.performed)
             {
-                onCameraSwitchPressed?.Invoke();
+                onSpecial2Pressed?.Invoke();
             }
         }
         #endregion

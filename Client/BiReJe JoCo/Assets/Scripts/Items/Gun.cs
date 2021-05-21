@@ -46,8 +46,8 @@ namespace BiReJeJoCo.Items
 
         public override void Tick(float deltaTime)
         {
+            uiManager.GetInstanceOf<GameUI>().UpdateShootCooldown(coolDownCounter / coolDown);
             coolDownCounter = Mathf.Clamp(coolDownCounter += Time.deltaTime, 0, coolDown);
-            uiManager.GetInstanceOf<GameUI>().UpdateShootCooldown(coolDownCounter, coolDown);
         }
 
         private void OnShootPressed()

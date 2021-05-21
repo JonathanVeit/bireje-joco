@@ -10,8 +10,13 @@ namespace BiReJeJoCo.Character
     {
         [Header("Settings")]
         [SerializeField] float maxHealth = 100f;
+        [SerializeField] string startTransformationItem;
         [SerializeField] Timer transformationDurationTimer;
         [SerializeField] Timer transformationCooldownTimer;
+        [Space(10)]
+        [SerializeField] float speedUpMultiplier = 1.2f;
+        [SerializeField] Timer speedUpDurationTimer;
+        [SerializeField] Timer speedUpCooldownTimer;
 
         public float Health { get; private set; }
         public Player Owner { get; private set; }
@@ -31,7 +36,7 @@ namespace BiReJeJoCo.Character
             Owner = controller.Player;
 
             Health = maxHealth;
-            gameUI.UpdateHealthBar(Health, 100);
+            gameUI.UpdateHealthBar(1);
 
             if (!Owner.IsLocalPlayer)
             {
@@ -42,8 +47,15 @@ namespace BiReJeJoCo.Character
                 ConnectEvents(); 
                 transformationCooldownTimer.Start(() => // update 
                 {
-                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldownTimer.Duration);
+                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
                 }, null);
+                speedUpCooldownTimer.Start(() => // update 
+                {
+                    gameUI.UpdateSpeedUpBar(speedUpCooldownTimer.RelativeProgress);
+                }, null);
+
+                scannedItemId = startTransformationItem;
+                gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(scannedItemId));
             }
         }
 
@@ -52,6 +64,9 @@ namespace BiReJeJoCo.Character
             base.OnBeforeDestroy();
             transformationDurationTimer.Stop();
             transformationCooldownTimer.Stop();
+
+            speedUpDurationTimer.Stop();
+            speedUpCooldownTimer.Stop();
             DisconnectEvents();
         }
 
@@ -99,11 +114,11 @@ namespace BiReJeJoCo.Character
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(scannedItemId);
             transformedItem = photonRoomWrapper.Instantiate(prefab.name, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
 
-            gameUI.UpdateTransformationCooldownBar(0, transformationCooldownTimer.Duration);
+            gameUI.UpdateTransformationCooldownBar(0);
             transformationDurationTimer.Start(
             () => // update 
             {
-                gameUI.UpdateTransformationDurationBar(transformationDurationTimer.Duration - transformationDurationTimer.Progress, transformationDurationTimer.Duration);
+                gameUI.UpdateTransformationDurationBar(1 - transformationDurationTimer.RelativeProgress);
             }, 
             () => // finish
             { 
@@ -119,13 +134,39 @@ namespace BiReJeJoCo.Character
             photonRoomWrapper.Destroy(transformedItem);
             transformedItem = null;
 
-            gameUI.UpdateTransformationDurationBar(0, transformationDurationTimer.Duration);
+            gameUI.UpdateTransformationDurationBar(0);
             transformationDurationTimer.Stop();
             transformationCooldownTimer.Start(
                 () => // update
             {
-                gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.Progress, transformationCooldownTimer.Duration);
+                gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
             }, null);
+        }
+        #endregion
+
+        #region Speed Up
+        private void OnSpeedUpPressed() 
+        {
+            if (speedUpCooldownTimer.State != TimerState.Finished ||
+                speedUpDurationTimer.State == TimerState.Counting) return;
+
+            var tmp = localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed;
+            localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed *= speedUpMultiplier;
+            
+            speedUpDurationTimer.Start(
+                () => // update 
+                {
+                    gameUI.UpdateSpeedUpBar(1 - speedUpDurationTimer.RelativeProgress);
+                }, 
+                () => // finish
+                {
+                    localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed = tmp;
+
+                    speedUpCooldownTimer.Start(() => // update 
+                    {
+                        gameUI.UpdateSpeedUpBar(speedUpCooldownTimer.RelativeProgress);
+                    }, null);
+                });
         }
         #endregion
 
@@ -133,6 +174,7 @@ namespace BiReJeJoCo.Character
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             localPlayer.PlayerCharacter.controllerSetup.characterInput.onShootPressed += OnShootPressed;
+            localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial2Pressed += OnSpeedUpPressed;
             var mover = localPlayer.PlayerCharacter.controllerSetup.characterRoot.GetComponent<Mover>();
             isGrounded = () => mover.IsGrounded();
         }
@@ -142,7 +184,7 @@ namespace BiReJeJoCo.Character
             var casted = msg as HuntedHitByBulletPhoMsg;
 
             Health -= casted.dmg;
-            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health, 100);
+            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health / 100);
 
             if (Health <= 0 && !wasKilled)
             {

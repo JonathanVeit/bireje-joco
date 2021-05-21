@@ -38,7 +38,8 @@ namespace BiReJeJoCo.UI
 
         public virtual void Tick(float deltaTime)
         {
-            if (isHided || isClamped || Camera.main == null) return;
+            if (isHided || isClamped || Camera.main == null ||
+                Config.Target == null) return;
 
             var pos = Camera.main.WorldToScreenPoint(Config.Target.position) + (Vector3)Config.Offset;
             if (pos.z < 0 && transform.gameObject.activeSelf)

@@ -14,6 +14,7 @@ namespace BiReJeJoCo.Character
         public Collider mainCollider;
         public PlayerInput playerInput;
         public PlayerCharacterInput characterInput;
+        public AdvancedWalkerController walkController;
         public Mover mover;
 
         public Player Owner => controller.Player;

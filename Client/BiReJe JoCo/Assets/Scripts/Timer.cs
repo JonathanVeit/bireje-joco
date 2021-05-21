@@ -82,11 +82,11 @@ namespace JoVei.Base.Helper
             while (counter < Duration)
             {
                 yield return null;
+                onUpdate?.Invoke();
+
                 counter += Time.deltaTime * timeScale;
                 Progress = counter;
                 RelativeProgress = counter / Duration;
-
-                onUpdate?.Invoke();
             }
             onFinishedCallback?.Invoke();
         }

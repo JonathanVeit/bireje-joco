@@ -75,17 +75,17 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""CameraSwitch"",
+                    ""name"": ""Special1"",
                     ""type"": ""Button"",
-                    ""id"": ""7bae92ca-3483-41ee-b269-983a0ba9c852"",
+                    ""id"": ""345fe285-9088-4d20-a207-4c99896c2159"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Special1"",
+                    ""name"": ""Special2"",
                     ""type"": ""Button"",
-                    ""id"": ""345fe285-9088-4d20-a207-4c99896c2159"",
+                    ""id"": ""eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -303,28 +303,6 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""686f340e-2eed-4d6b-990c-645917808c13"",
-                    ""path"": ""<Keyboard>/v"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""CameraSwitch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""01ca0f49-9fe3-4f2d-a7b5-944b15e0eaf9"",
-                    ""path"": ""<Gamepad>/select"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""CameraSwitch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ee1fbb21-8ba8-4aae-b770-0edbd7b3c818"",
                     ""path"": ""<Keyboard>/#(Q)"",
                     ""interactions"": """",
@@ -342,6 +320,17 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Special1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cf50b26-ef84-42a2-a90a-563537e2e5ac"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Special2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -409,8 +398,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
         m_Player_Trigger = m_Player.FindAction("Trigger", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
-        m_Player_CameraSwitch = m_Player.FindAction("CameraSwitch", throwIfNotFound: true);
         m_Player_Special1 = m_Player.FindAction("Special1", throwIfNotFound: true);
+        m_Player_Special2 = m_Player.FindAction("Special2", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -470,8 +459,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Menu;
     private readonly InputAction m_Player_Trigger;
     private readonly InputAction m_Player_Shoot;
-    private readonly InputAction m_Player_CameraSwitch;
     private readonly InputAction m_Player_Special1;
+    private readonly InputAction m_Player_Special2;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -483,8 +472,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Menu => m_Wrapper.m_Player_Menu;
         public InputAction @Trigger => m_Wrapper.m_Player_Trigger;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
-        public InputAction @CameraSwitch => m_Wrapper.m_Player_CameraSwitch;
         public InputAction @Special1 => m_Wrapper.m_Player_Special1;
+        public InputAction @Special2 => m_Wrapper.m_Player_Special2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -515,12 +504,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
-                @CameraSwitch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
-                @CameraSwitch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
-                @CameraSwitch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraSwitch;
                 @Special1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
                 @Special1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
                 @Special1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
+                @Special2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
+                @Special2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
+                @Special2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -546,12 +535,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
-                @CameraSwitch.started += instance.OnCameraSwitch;
-                @CameraSwitch.performed += instance.OnCameraSwitch;
-                @CameraSwitch.canceled += instance.OnCameraSwitch;
                 @Special1.started += instance.OnSpecial1;
                 @Special1.performed += instance.OnSpecial1;
                 @Special1.canceled += instance.OnSpecial1;
+                @Special2.started += instance.OnSpecial2;
+                @Special2.performed += instance.OnSpecial2;
+                @Special2.canceled += instance.OnSpecial2;
             }
         }
     }
@@ -616,8 +605,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnMenu(InputAction.CallbackContext context);
         void OnTrigger(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
-        void OnCameraSwitch(InputAction.CallbackContext context);
         void OnSpecial1(InputAction.CallbackContext context);
+        void OnSpecial2(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

@@ -17,28 +17,21 @@ namespace BiReJeJoCo.Character
         {
             this.controller = controller;
 
-            if (!Owner.IsLocalPlayer)
-            {
-                SpawnFloaty();
-                photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
-            }
+            if (Owner.Role == PlayerRole.Hunted) return;
+            SpawnFloaty();
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
         }
 
         private void SpawnFloaty()
         {
-            if (Owner.Role == PlayerRole.Hunter && 
-                localPlayer.Role == PlayerRole.Hunter)
-            {
-                var config = new FloatingElementConfig("player_character_name", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, floatingElementTarget);
-                nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
-                nameFloaty.Initialize(Owner.NickName);
-            }
+            var config = new FloatingElementConfig("player_character_name", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, floatingElementTarget);
+            nameFloaty = floatingManager.GetElementAs<PlayerNameFloaty>(config);
+            nameFloaty.Initialize(Owner.NickName);
         }
 
         private void OnMatchClosed(PhotonMessage msg)
         {
             if (nameFloaty == null) return;
-            nameFloaty.gameObject.SetActive(false);
             floatingManager.DestroyElement(nameFloaty);
             photonMessageHub.UnregisterReceiver(this);
         }

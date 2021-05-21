@@ -62,17 +62,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "CameraSwitch",
+                    "name": "Special1",
                     "type": "Button",
-                    "id": "7bae92ca-3483-41ee-b269-983a0ba9c852",
+                    "id": "345fe285-9088-4d20-a207-4c99896c2159",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "Special1",
+                    "name": "Special2",
                     "type": "Button",
-                    "id": "345fe285-9088-4d20-a207-4c99896c2159",
+                    "id": "eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -290,28 +290,6 @@
                 },
                 {
                     "name": "",
-                    "id": "686f340e-2eed-4d6b-990c-645917808c13",
-                    "path": "<Keyboard>/v",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "CameraSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "01ca0f49-9fe3-4f2d-a7b5-944b15e0eaf9",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "CameraSwitch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ee1fbb21-8ba8-4aae-b770-0edbd7b3c818",
                     "path": "<Keyboard>/#(Q)",
                     "interactions": "",
@@ -329,6 +307,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Special1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3cf50b26-ef84-42a2-a90a-563537e2e5ac",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Special2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

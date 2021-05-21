@@ -27,6 +27,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] UIBarHandler healthBar;
         [SerializeField] UIBarHandler transformationBar;
         [SerializeField] UIBarHandler transformationCooldownBar;
+        [SerializeField] UIBarHandler speedUpBar;
         [SerializeField] Image scannedItemIcon;
         [SerializeField] Text collectableLabel;
 
@@ -71,7 +72,7 @@ namespace BiReJeJoCo.UI
                 InitializeAsHunter();
             }
 
-            UpdateTransformationDurationBar(0, 1);
+            UpdateTransformationDurationBar(0);
         }
         private void InitializeAsHunted()
         {
@@ -93,7 +94,7 @@ namespace BiReJeJoCo.UI
         {
             durationLabel.text = duration;
         }
-        private IEnumerator FadeText(float duration, Text target) 
+        private IEnumerator FadeText(float duration, Text target)
         {
             float counter = duration;
             var color = target.color;
@@ -108,27 +109,27 @@ namespace BiReJeJoCo.UI
 
             target.gameObject.SetActive(false);
         }
-        
-        public void UpdateShootCooldown(float value, float maxValue) 
+
+        public void UpdateShootCooldown(float value)
         {
-            if (value <= 0.1f)
+            if (value <= 0.01f)
                 shootingCooldownBar.OverrideValue(0);
             else
-                shootingCooldownBar.SetValue(value / maxValue);
+                shootingCooldownBar.SetValue(value);
         }
-        public void UpdatePingCooldown(float value, float maxValue)
+        public void UpdatePingCooldown(float value)
         {
             if (value <= 0.1f)
                 pingCooldownBar.OverrideValue(0);
             else
-                pingCooldownBar.SetValue(value / maxValue);
+                pingCooldownBar.SetValue(value);
         }
 
-        public void UpdateHealthBar(float value, float maxValue) 
+        public void UpdateHealthBar(float value)
         {
-            healthBar.SetValue(value / maxValue);
+            healthBar.SetValue(value);
         }
-        public void UpdateTransformationDurationBar(float value, float maxValue)
+        public void UpdateTransformationDurationBar(float value)
         {
             if (value > 0)
             {
@@ -139,17 +140,17 @@ namespace BiReJeJoCo.UI
                 transformationBar.TargetImage.transform.parent.gameObject.SetActive(false);
             }
 
-            if (value / maxValue == 1)
+            if (value == 1)
                 transformationBar.OverrideValue(1);
             else
-                transformationBar.SetValue(value / maxValue);
+                transformationBar.SetValue(value);
         }
-        public void UpdateTransformationCooldownBar(float value, float maxValue)
+        public void UpdateTransformationCooldownBar(float value)
         {
             if (value == 0)
                 transformationCooldownBar.OverrideValue(0);
             else
-                transformationCooldownBar.SetValue(value / maxValue);
+                transformationCooldownBar.SetValue(value);
         }
         public void UpdateScannedItemIcon(Sprite icon)
         {
@@ -158,6 +159,13 @@ namespace BiReJeJoCo.UI
         public void UpdateCollectedItemAmount(int amount)
         {
             collectableLabel.text = string.Format("{0} / {1}", amount, matchHandler.MatchConfig.Mode.huntedCollectables);
+        }
+        public void UpdateSpeedUpBar(float value)
+        {
+            if (value == 0)
+                speedUpBar.OverrideValue(value);
+            else
+                speedUpBar.SetValue(value);
         }
         #endregion
 
