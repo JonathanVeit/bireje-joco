@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Backend
         public string RoomName { get; private set; }
         public int PlayerCount { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.PlayerCount : 0; }
         public List<Photon.Realtime.Player> PlayerList { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Players.Values.ToList() : null; }
+        public List<RoomInfo> RoomList { get; private set; }
 
         private IMessageHub messageHub => DIContainer.GetImplementationFor<IMessageHub>();
 
@@ -27,6 +28,14 @@ namespace BiReJeJoCo.Backend
 
         public void CleanUp() { }
         #endregion
+
+        // room list 
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            RoomList = roomList;
+
+            messageHub.ShoutMessage<LobbyListUpdatedMsg>(this, new LobbyListUpdatedMsg(LobbyInfo.Create(roomList)));
+        }
 
         // create room
         public void CreateRoom(string roomName, int maxPlayers = 1, bool isVisible = true, bool isOpen = true)
@@ -48,7 +57,7 @@ namespace BiReJeJoCo.Backend
 
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            messageHub.ShoutMessage(this, new OnFailedToHostLobbyMsg(message));
+            messageHub.ShoutMessage(this, new FailedToHostLobbyMsg(message));
         }
 
 

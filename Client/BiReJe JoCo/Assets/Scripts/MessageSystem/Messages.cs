@@ -1,6 +1,7 @@
 ﻿using JoVei.Base.MessageSystem;
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Character;
+using System.Collections.Generic;
 
 namespace BiReJeJoCo
 {
@@ -28,13 +29,23 @@ namespace BiReJeJoCo
     #endregion
 
     #region Lobby Related
+    public class LobbyListUpdatedMsg : BaseMessage
+    {
+        public LobbyInfo[] lobbies;
+
+        public LobbyListUpdatedMsg(LobbyInfo[] lobbies)
+        {
+            this.lobbies = lobbies;
+        }
+    }
+
     public class OnLobbyCreatedMsg : BaseMessage
     {
     }
 
-    public class OnFailedToHostLobbyMsg : Message<string>
+    public class FailedToHostLobbyMsg : Message<string>
     {
-        public OnFailedToHostLobbyMsg(string reason) : base(reason) { }
+        public FailedToHostLobbyMsg(string reason) : base(reason) { }
     }
 
     public class JoinedLobbyMsg : Message<string>

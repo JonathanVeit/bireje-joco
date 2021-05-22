@@ -1,14 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 using BiReJeJoCo.Character;
+using JoVei.Base.UI;
+using System;
+using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.UI
 {
     public class MainMenuUI : UIElement
     {
+        [Header("Settings")]
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] InputField playerNickNameInput;
         [SerializeField] InputField roomNameInput;
+        [SerializeField] UIList<LobbyListEntry> lobbyList;
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -27,6 +32,8 @@ namespace BiReJeJoCo.UI
             }
 
             Cursor.lockState = CursorLockMode.Confined;
+
+            UpdateLobbyList(LobbyInfo.Create(photonRoomWrapper.RoomList));
         }
 
         protected override void OnBeforeDestroy()
@@ -36,7 +43,8 @@ namespace BiReJeJoCo.UI
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<OnFailedToHostLobbyMsg>(this, OnHostLobbyFailed);
+            messageHub.RegisterReceiver<LobbyListUpdatedMsg>(this, OnLobbyListUpdated);
+            messageHub.RegisterReceiver<FailedToHostLobbyMsg>(this, OnHostLobbyFailed);
             messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
         }
@@ -47,23 +55,40 @@ namespace BiReJeJoCo.UI
         }
         #endregion
 
-        private void OnHostLobbyFailed(OnFailedToHostLobbyMsg msg)
+        #region Events
+        private void OnLobbyListUpdated(LobbyListUpdatedMsg msg)
+        {
+            UpdateLobbyList(msg.lobbies);
+        }
+
+        private void OnHostLobbyFailed(FailedToHostLobbyMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
         }
-
+        
         private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
             if (localPlayer.IsHost)
                 gameManager.OpenLobby();
         }
-
         private void OnJoinLobbyFailed(JoinLobbyFailedMsg msg)
         {
             loadingOverlay.gameObject.SetActive(false);
         }
+        #endregion
 
         #region UI Inputs
+        public void UpdateLobbyList(LobbyInfo[] lobbies)
+        {
+            lobbyList.Clear();
+
+            foreach (var lobby in lobbies)
+            {
+                var entry = lobbyList.Add();
+                entry.Initialize(lobby);
+            }
+        }
+
         public void SetNickName(string name) 
         {
             localPlayer.SetNickName(name);
@@ -73,15 +98,15 @@ namespace BiReJeJoCo.UI
         public void HostLobby()
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
-            photonClient.HostLobby(roomNameInput.text, 10);
+            photonClient.HostLobby(localPlayer.NickName, 10);
             loadingOverlay.gameObject.SetActive(true);
         }
 
-        public void JoinLobby() 
+        public void JoinLobby(string lobbyName) 
         {
-            if (string.IsNullOrEmpty(roomNameInput.text)) return;
+            if (string.IsNullOrEmpty(lobbyName)) return;
 
-            photonClient.JoinLobby(roomNameInput.text);
+            photonClient.JoinLobby(lobbyName);
             loadingOverlay.gameObject.SetActive(true);
         }
 
