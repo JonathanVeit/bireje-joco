@@ -26,7 +26,11 @@ namespace BiReJeJoCo.UI
             Cursor.lockState = CursorLockMode.Confined;
 
             durationDropdown.interactable = localPlayer.IsHost;
-            SetMatchDuration(0);
+            if (PlayerPrefs.HasKey("LastSetDuration"))
+            {
+                durationDropdown.value = PlayerPrefs.GetInt("LastSetDuration");
+                SetMatchDuration(PlayerPrefs.GetInt("LastSetDuration"));
+            }
         }
         protected override void OnBeforeDestroy()
         {
@@ -134,7 +138,6 @@ namespace BiReJeJoCo.UI
             {
                 case 0:
                     (matchHandler as HostMatchHandler).SetDuration(5 * 60);
-                    localPlayer.SetPreferedRole(PlayerRole.Hunter);
                     break;
                 case 1:
                     (matchHandler as HostMatchHandler).SetDuration(10 * 60);
@@ -146,6 +149,8 @@ namespace BiReJeJoCo.UI
                     (matchHandler as HostMatchHandler).SetDuration(20 * 60);
                     break;
             }
+
+            PlayerPrefs.SetInt("LastSetDuration", duration);
         }
         #endregion
     }

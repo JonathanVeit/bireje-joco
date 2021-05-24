@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 3178860293184004834}
   - component: {fileID: 1447600056049873815}
   - component: {fileID: 2839698594131978942}
+  - component: {fileID: 3720934730771688614}
   m_Layer: 5
   m_Name: collectable_floaty_prefab
   m_TagString: Untagged
@@ -156,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -192,6 +193,21 @@ MonoBehaviour:
   clampSize: {x: 0, y: 0}
   durationIcon: {fileID: 3819527319199881228}
   description: {fileID: 1918419376965523874}
+--- !u!114 &3720934730771688614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004704759826589875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2966256c5aa9b49bf90a5b0f7d8713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1447600056049873815}
+  keyboard: e_key
+  gamePad: x_button
 --- !u!1 &4915507480041036614
 GameObject:
   m_ObjectHideFlags: 0
