@@ -322,6 +322,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 742350792848343701, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 742350792848343701, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+      propertyPath: m_EffectDistance.y
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8669009103896877604, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -409,6 +417,14 @@ PrefabInstance:
     - target: {fileID: 8669009103896877624, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
       propertyPath: m_Name
       value: game_ui
+      objectReference: {fileID: 0}
+    - target: {fileID: 8829568568357601465, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 8829568568357601465, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+      propertyPath: m_EffectDistance.y
+      value: -0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
