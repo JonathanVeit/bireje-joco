@@ -112,14 +112,14 @@ namespace BiReJeJoCo.UI
 
         public void UpdateShootCooldown(float value)
         {
-            if (value <= 0.01f)
+            if (value == 0)
                 shootingCooldownBar.OverrideValue(0);
             else
                 shootingCooldownBar.SetValue(value);
         }
         public void UpdatePingCooldown(float value)
         {
-            if (value <= 0.1f)
+            if (value == 0f)
                 pingCooldownBar.OverrideValue(0);
             else
                 pingCooldownBar.SetValue(value);

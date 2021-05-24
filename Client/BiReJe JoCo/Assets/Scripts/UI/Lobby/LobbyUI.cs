@@ -68,7 +68,7 @@ namespace BiReJeJoCo.UI
         private void AddMemberListEntry(Player player)
         {
             var entry = memberList.Add();
-            entry.Initialize(player.NickName, player.IsHost);
+            entry.Initialize(player);
             memberEntries.Add(player.Id, entry);
         }
 

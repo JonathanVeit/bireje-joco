@@ -117,7 +117,11 @@ namespace BiReJeJoCo.Backend
             messageHub.ShoutMessage(this, new LeftLobbyMsg());
         }
 
-        
+        public void RemovePlayer(int playerNumber) 
+        {
+            PhotonNetwork.CloseConnection(CurrentRoom.GetPlayer(playerNumber));
+        }
+
         // other player join / leave
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
         {
