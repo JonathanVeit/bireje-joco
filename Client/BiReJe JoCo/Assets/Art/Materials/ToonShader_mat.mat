@@ -25,6 +25,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - BaseMap:
+        m_Texture: {fileID: 2800000, guid: ae32d4a4bd2d38d458daa320bfdb597e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MainTextureTopTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -34,6 +38,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - NormalMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SideTexture:
+        m_Texture: {fileID: 2800000, guid: 16e98f81315afb344b0be9863794cf9c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_223377E2:
@@ -82,16 +90,19 @@ Material:
     - SOFT_SHADOWS: 0
     - ShadowSmoothness: 0.32
     - Smoothness: 10
+    - TextureIntensity: 0.5
     - UseDownstairsGradient: 1
     - UseGI: 1
     - Vector1_8606F96E: 0
+    - WorldTilable: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _SHADOWS_SOFT: 1
     - _Smoothness: 0.5
+    - isTriplanar: 1
     m_Colors:
-    - MainColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+    - MainColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
     - MixedShadowsColor: {r: 0.5799246, g: 1, b: 0, a: 0}
-    - Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - Tiling: {r: 0.8, g: 0.8, b: 0, a: 0}
     - _MainColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}

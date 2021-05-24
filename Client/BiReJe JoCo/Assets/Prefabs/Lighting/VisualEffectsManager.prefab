@@ -100,8 +100,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.9708928, b: 0.8915094, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.9292453, g: 0.9813333, b: 1, a: 1}
+  m_Intensity: 0.9
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -194,7 +194,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 0.2
+  m_Intensity: 0.13
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -473,18 +473,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2160889362134024290}
     m_Modifications:
-    - target: {fileID: 2021532786058166791, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: m_MaxParticleSize
-      value: 0.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092567367199414674, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: Player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092567367199414674, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4092567367199414685, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -532,74 +520,6 @@ PrefabInstance:
     - target: {fileID: 4092567367199414686, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
       propertyPath: m_Name
       value: Snow
-      objectReference: {fileID: 0}
-    - target: {fileID: 4092567367199414686, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: looping
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: prewarm
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: lengthInSec
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: SizeModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: ShapeModule.m_Scale.x
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: ShapeModule.m_Scale.z
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: VelocityModule.x.scalar
-      value: -3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: VelocityModule.y.scalar
-      value: -7
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: VelocityModule.z.scalar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: VelocityModule.x.minScalar
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: VelocityModule.y.minScalar
-      value: -12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: EmissionModule.rateOverTime.scalar
-      value: 190
-      objectReference: {fileID: 0}
-    - target: {fileID: 9202473562581448632, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8df91e33a033e04eb52cf386189c45c, type: 3}

@@ -92,7 +92,7 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 0.09
+  m_MaxParticleSize: 0.12
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
@@ -122,7 +122,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4092567367199414686}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -197,7 +197,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -366,8 +366,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.11
-      minScalar: 0.2
+      scalar: 0.25
+      minScalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -682,7 +682,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 1200
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -750,7 +750,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 50, y: 1, z: 50}
+    m_Scale: {x: 40, y: 1, z: 40}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -948,7 +948,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 150
+      scalar: 350
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1589,8 +1589,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 7
-      minScalar: 5
+      scalar: -3
+      minScalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1642,7 +1642,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 3
-      scalar: -8
+      scalar: -6
       minScalar: -12
       maxCurve:
         serializedVersion: 2
@@ -1695,8 +1695,8 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: -1
+      scalar: 4
+      minScalar: -4
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3829,7 +3829,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 0.46
       minScalar: 0.5
       maxCurve:
         serializedVersion: 2
@@ -3885,7 +3885,7 @@ ParticleSystem:
     collidesWith:
       serializedVersion: 2
       m_Bits: 2147483647
-    maxCollisionShapes: 256
+    maxCollisionShapes: 512
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
