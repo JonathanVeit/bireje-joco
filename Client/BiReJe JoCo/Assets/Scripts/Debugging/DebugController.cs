@@ -186,6 +186,23 @@ namespace BiReJeJoCo.Debugging
                 DebugHelper.Print(result);
             }));
 
+            RegisterCommand(new DebugCommand("log_lobbies", "Logs all lobbies", "log_lobbies", () =>
+            {
+                var result = string.Empty;
+
+                foreach (var curLobby in DIContainer.GetImplementationFor<LobbyManager>().GetOpenLobbies())
+                {
+                    result += JsonConvert.SerializeObject(curLobby,
+                        Formatting.Indented,
+                        new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
+                }
+
+                result += JsonConvert.SerializeObject(DIContainer.GetImplementationFor<LobbyManager>().GetCurrentLobby(),
+                      Formatting.Indented,
+                      new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }) + "\n";
+
+                DebugHelper.Print(result);
+            }));
 
             RegisterCommand(new DebugCommand("log_match_state", "Logs the serialized match state", "log_match_state", () =>
             {
@@ -260,9 +277,9 @@ namespace BiReJeJoCo.Debugging
                 }
             }));
 
-            RegisterCommand(new DebugCommand<string, int>("host_lobby", "Host a new a lobby with name and max player amount", "host_lobby <name> <int>", (name, playerAmount) =>
+            RegisterCommand(new DebugCommand<int>("host_lobby", "Host a new a lobby with max player amount", "host_lobby <int>", (playerAmount) =>
             {
-                photonClient.HostLobby(name, playerAmount);
+                photonClient.HostLobby(playerAmount);
             }));
 
             RegisterCommand(new DebugCommand<string>("join_lobby", "Join a lobby by its name", "join_lobby <name>", (name) =>

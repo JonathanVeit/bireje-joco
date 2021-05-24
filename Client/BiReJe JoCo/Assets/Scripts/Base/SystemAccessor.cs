@@ -14,6 +14,7 @@ namespace BiReJeJoCo
         protected static Backend.PhotonMessageHub photonMessageHub => DIContainer.GetImplementationFor<Backend.PhotonMessageHub>();
         protected static Backend.PlayerManager playerManager => DIContainer.GetImplementationFor<Backend.PlayerManager>();
         protected static Backend.LocalPlayer localPlayer => playerManager.LocalPlayer;
+        protected static Backend.LobbyManager lobbyManager => DIContainer.GetImplementationFor<Backend.LobbyManager>();
         protected static Backend.SyncVarHub syncVarHub => DIContainer.GetImplementationFor<Backend.SyncVarHub>();
 
         protected static GameManager gameManager => DIContainer.GetImplementationFor<GameManager>();

@@ -29,7 +29,7 @@ namespace BiReJeJoCo.Backend
         private void ConnectToEvents()
         {
             messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
-            messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
+            messageHub.RegisterReceiver<JoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
@@ -76,7 +76,7 @@ namespace BiReJeJoCo.Backend
             UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "PreferedRole", PlayerRole.Hunter);
         }
 
-        private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg) 
+        private void OnJoinedPhotonLobby(JoinedPhotonLobbyMsg msg) 
         {
             UpdateProperties("State", PlayerState.Free, "Role", PlayerRole.None);
         }

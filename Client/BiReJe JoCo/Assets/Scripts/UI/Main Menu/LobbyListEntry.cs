@@ -8,22 +8,28 @@ namespace BiReJeJoCo.UI
     {
         [Header("Settings")]
         [SerializeField] Text hostName;
-        [SerializeField] Text lobbyName;
         [SerializeField] Text memberAmount;
         [SerializeField] Button joinBtn;
+        [SerializeField] GameObject isRunningOverlay;
 
         private LobbyInfo lobbyInfo;
 
         public void Initialize(LobbyInfo lobby) 
         {
             lobbyInfo = lobby;
-            hostName.text = lobby.Name;
+            hostName.text = lobby.HostName;
             memberAmount.text = $"{lobby.PlayerAmount} / {lobby.MaxPlayerAmount}";
+            joinBtn.interactable = !lobby.IsFull;
+
+            if (lobby.State == LobbyState.MatchRunning)
+            {
+                isRunningOverlay.SetActive(true);
+            }
         }
 
         public void JoinLobby() 
         {
-            uiManager.GetInstanceOf<MainMenuUI>().JoinLobby(lobbyInfo.Name);
+            uiManager.GetInstanceOf<MainMenuUI>().JoinLobby(lobbyInfo.LobbyId);
         }
     }
 }

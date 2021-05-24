@@ -36,11 +36,7 @@ namespace BiReJeJoCo.Backend
 
         private void DisconnectEvents()
         {
-            messageHub.UnregisterReceiver<PlayerJoinedLobbyMsg>(this, OnPlayerJoined);
-            messageHub.UnregisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeft);
-
-            messageHub.UnregisterReceiver<JoinedLobbyMsg>(this, OnJoinedRoom);
-            messageHub.UnregisterReceiver<LeftLobbyMsg>(this, OnLeftRoom);
+            messageHub.UnregisterReceiver(this);
         }
         #endregion
 
@@ -110,14 +106,14 @@ namespace BiReJeJoCo.Backend
             }
 
             allPlayer.Add(newPlayer.Id, newPlayer);
-            messageHub.ShoutMessage<AddedPlayerMsg>(this, new AddedPlayerMsg(newPlayer));
+            messageHub.ShoutMessage(this, new AddedPlayerMsg(newPlayer));
         }
 
         private void UnregisterPlayer(string playerId)
         {
             var tmp = allPlayer[playerId];
             allPlayer.Remove(playerId);
-            messageHub.ShoutMessage<RemovedPlayerMsg>(this, new RemovedPlayerMsg(tmp));
+            messageHub.ShoutMessage(this, new RemovedPlayerMsg(tmp));
         }
 
         #region Photon Events

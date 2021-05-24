@@ -1,29 +1,39 @@
 ﻿using JoVei.Base.MessageSystem;
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Character;
-using System.Collections.Generic;
 
 namespace BiReJeJoCo
 {
     #region Connection Releated
-    public class OnConnectedToPhotonMsg : BaseMessage
+    public class ConnectedToPhotonMsg : BaseMessage
     {
     }
 
-    public class OnDisconnectedFromPhotonMsg : Message<string>
+    public class DisconnectedFromPhotonMsg : Message<string>
     {
-        public OnDisconnectedFromPhotonMsg(string reason) : base(reason) { }
+        public DisconnectedFromPhotonMsg(string reason) : base(reason) { }
     }
 
-    public class OnConnectedToPhotonMasterMsg : BaseMessage
-    {
-    }
-
-    public class OnJoinedPhotonLobbyMsg : BaseMessage
+    public class ConnectedToPhotonMasterMsg : BaseMessage
     {
     }
 
-    public class OnLeftPhotonLobbyMsg : BaseMessage
+    public class PhotonRoomListUpdatedMsg : BaseMessage
+    {
+        public Photon.Realtime.RoomInfo[] rooms;
+
+        public PhotonRoomListUpdatedMsg(Photon.Realtime.RoomInfo[] lobbies)
+        {
+            this.rooms = lobbies;
+        }
+    }
+
+
+    public class JoinedPhotonLobbyMsg : BaseMessage
+    {
+    }
+
+    public class LeftPhotonLobbyMsg : BaseMessage
     {
     }
     #endregion
@@ -39,7 +49,7 @@ namespace BiReJeJoCo
         }
     }
 
-    public class OnLobbyCreatedMsg : BaseMessage
+    public class LobbyCreatedMsg : BaseMessage
     {
     }
 
@@ -50,7 +60,7 @@ namespace BiReJeJoCo
 
     public class JoinedLobbyMsg : Message<string>
     {
-        public JoinedLobbyMsg(string lobbyName) : base(lobbyName) { }
+        public JoinedLobbyMsg(string lobbyId) : base(lobbyId) { }
     }
 
     public class LoadedLobbySceneMsg : BaseMessage
@@ -60,7 +70,7 @@ namespace BiReJeJoCo
 
     public class JoinLobbyFailedMsg : Message<string>
     {
-        public JoinLobbyFailedMsg(string lobbyName) : base(lobbyName) { }
+        public JoinLobbyFailedMsg(string lobbyId) : base(lobbyId) { }
     }
 
     public class LeftLobbyMsg : BaseMessage

@@ -33,7 +33,7 @@ namespace BiReJeJoCo.UI
 
             Cursor.lockState = CursorLockMode.Confined;
 
-            UpdateLobbyList(LobbyInfo.Create(photonRoomWrapper.RoomList));
+            UpdateLobbyList(lobbyManager.GetOpenLobbies());
         }
 
         protected override void OnBeforeDestroy()
@@ -84,6 +84,8 @@ namespace BiReJeJoCo.UI
 
             foreach (var lobby in lobbies)
             {
+                if (lobby.PlayerAmount == 0) continue;
+
                 var entry = lobbyList.Add();
                 entry.Initialize(lobby);
             }
@@ -98,15 +100,15 @@ namespace BiReJeJoCo.UI
         public void HostLobby()
         {
             if (string.IsNullOrEmpty(roomNameInput.text)) return;
-            photonClient.HostLobby(localPlayer.NickName, 10);
+            photonClient.HostLobby(5);
             loadingOverlay.gameObject.SetActive(true);
         }
 
-        public void JoinLobby(string lobbyName) 
+        public void JoinLobby(string lobbyId) 
         {
-            if (string.IsNullOrEmpty(lobbyName)) return;
+            if (string.IsNullOrEmpty(lobbyId)) return;
 
-            photonClient.JoinLobby(lobbyName);
+            photonClient.JoinLobby(lobbyId);
             loadingOverlay.gameObject.SetActive(true);
         }
 

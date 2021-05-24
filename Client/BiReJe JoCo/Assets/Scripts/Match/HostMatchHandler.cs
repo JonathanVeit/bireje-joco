@@ -27,6 +27,7 @@ namespace BiReJeJoCo
         public void StartMatch(string matchMode)
         {
             photonMessageHub.ShoutMessage(new PrepareMatchStartPhoMsg(matchMode), PhotonMessageTarget.AllViaServer);
+            lobbyManager.GetCurrentLobby().SetState(LobbyState.MatchRunning);
         }
 
         private void OnPrepareMatchStart(PhotonMessage msg)
@@ -247,6 +248,7 @@ namespace BiReJeJoCo
         private IEnumerator LoadLobbyAsync() 
         {
             yield return new WaitForSeconds(0.5f);
+            lobbyManager.GetCurrentLobby().SetState(LobbyState.Open);
             photonRoomWrapper.LoadLevel("lobby_scene");
         }
         #endregion

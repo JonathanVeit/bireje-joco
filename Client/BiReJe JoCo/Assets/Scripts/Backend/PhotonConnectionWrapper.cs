@@ -42,18 +42,18 @@ namespace BiReJeJoCo.Backend
 
         public override void OnConnected()
         {
-            messageHub.ShoutMessage(this, new OnConnectedToPhotonMsg());
+            messageHub.ShoutMessage(this, new ConnectedToPhotonMsg());
             IsConnected = true;
         }
         public override void OnDisconnected(DisconnectCause cause)
         {
-            messageHub.ShoutMessage(this, new OnDisconnectedFromPhotonMsg(cause.ToString()));
+            messageHub.ShoutMessage(this, new DisconnectedFromPhotonMsg(cause.ToString()));
             IsConnectedToMaster = false;
             IsConnected = false;
         }
         public override void OnConnectedToMaster()
         {
-            messageHub.ShoutMessage(this, new OnConnectedToPhotonMasterMsg());
+            messageHub.ShoutMessage(this, new ConnectedToPhotonMasterMsg());
             IsConnectedToMaster = true;
         }
 
@@ -64,12 +64,12 @@ namespace BiReJeJoCo.Backend
         }
         public override void OnJoinedLobby()
         {
-            messageHub.ShoutMessage(this, new OnJoinedPhotonLobbyMsg());
+            messageHub.ShoutMessage(this, new JoinedPhotonLobbyMsg());
             IsInLobby = true;
         }
         public override void OnLeftLobby()
         {
-            messageHub.ShoutMessage(this, new OnLeftPhotonLobbyMsg());
+            messageHub.ShoutMessage(this, new LeftPhotonLobbyMsg());
             IsInLobby = false;
         }
     }

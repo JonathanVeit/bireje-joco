@@ -1,18 +1,35 @@
 ﻿using Photon.Realtime;
+using System;
 using System.Collections.Generic;
 
 namespace BiReJeJoCo.Backend
 {
+    public enum LobbyState
+    {
+        None = 0,
+        Open = 1, 
+        MatchRunning = 2,
+    }
+
     public class LobbyInfo
     {
-        public int HostId => photonRoomInfo.masterClientId;
-        public string Name => photonRoomInfo.Name;
+        public string LobbyId => photonRoomInfo.Name;
+        public string HostName => GetHostName();
+
         public int PlayerAmount => photonRoomInfo.PlayerCount;
         public int MaxPlayerAmount => photonRoomInfo.MaxPlayers;
+        public bool IsFull => PlayerAmount >= MaxPlayerAmount;
+        public bool IsOpen => photonRoomInfo.IsOpen;
+
+        public LobbyState State => GetLobbyState();
 
         private RoomInfo photonRoomInfo;
 
         public LobbyInfo(RoomInfo photonRoomInfo)
+        {
+            this.photonRoomInfo = photonRoomInfo;
+        }
+        public void Update(RoomInfo photonRoomInfo)
         {
             this.photonRoomInfo = photonRoomInfo;
         }
@@ -26,6 +43,16 @@ namespace BiReJeJoCo.Backend
             }
 
             return result.ToArray();
+        }
+
+        private string GetHostName()
+        {
+            return photonRoomInfo.CustomProperties["HN"].ToString();
+        }
+        private LobbyState GetLobbyState() 
+        {
+            var rawValue = photonRoomInfo.CustomProperties["LS"].ToString();
+            return (LobbyState)Enum.Parse(typeof(LobbyState), rawValue);
         }
     }
 }

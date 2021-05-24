@@ -11,11 +11,16 @@ namespace BiReJeJoCo.Backend
 {
     public class PhotonRoomWrapper : MonoBehaviourPunCallbacks, IInitializable
     {
+
+        private const string HOST_NAME_KEY = "HN";
+        private const string LOBBY_STATE_KEY = "LS";
+
         public bool IsInRoom { get; private set; }
         public string RoomName { get; private set; }
         public int PlayerCount { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.PlayerCount : 0; }
         public List<Photon.Realtime.Player> PlayerList { get => PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Players.Values.ToList() : null; }
         public List<RoomInfo> RoomList { get; private set; }
+        public Room CurrentRoom => PhotonNetwork.CurrentRoom;
 
         private IMessageHub messageHub => DIContainer.GetImplementationFor<IMessageHub>();
 
@@ -33,26 +38,35 @@ namespace BiReJeJoCo.Backend
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
             RoomList = roomList;
-
-            messageHub.ShoutMessage<LobbyListUpdatedMsg>(this, new LobbyListUpdatedMsg(LobbyInfo.Create(roomList)));
+            messageHub.ShoutMessage(this, new PhotonRoomListUpdatedMsg(roomList.ToArray()));
         }
-
+        
         // create room
-        public void CreateRoom(string roomName, int maxPlayers = 1, bool isVisible = true, bool isOpen = true)
-        {
-            var roomOptions = new RoomOptions()
+        public void CreateRoom(string hostName, int maxPlayers = 1, bool isVisible = true, bool isOpen = true)
             {
-                MaxPlayers = (byte)maxPlayers,
-                IsVisible = isVisible,
-                IsOpen = isOpen,
-                PublishUserId = true,
-            };
+                var properties = new ExitGames.Client.Photon.Hashtable();
+                properties.Add(0, hostName);
+                properties.Add(1, LobbyState.Open);
+            
+                var roomOptions = new RoomOptions()
+                {
+                    MaxPlayers = (byte)maxPlayers,
+                    IsVisible = isVisible,
+                    IsOpen = isOpen,
+                    PublishUserId = true,
+                    CustomRoomPropertiesForLobby = new string[2] { HOST_NAME_KEY, LOBBY_STATE_KEY },
+                    CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() 
+                    {
+                        { HOST_NAME_KEY, hostName },
+                        { LOBBY_STATE_KEY, LobbyState.Open },
+                    }
+                };
 
-            PhotonNetwork.CreateRoom(roomName, roomOptions);
-        }
+                PhotonNetwork.CreateRoom(System.Guid.NewGuid().ToString(), roomOptions);
+            }
         public override void OnCreatedRoom()
         {
-            messageHub.ShoutMessage(this, new OnLobbyCreatedMsg());
+            messageHub.ShoutMessage(this, new LobbyCreatedMsg());
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)

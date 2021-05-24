@@ -27,10 +27,10 @@ namespace BiReJeJoCo.Backend
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<OnConnectedToPhotonMasterMsg>(this, OnConnectedToMaster);
-            messageHub.RegisterReceiver<OnDisconnectedFromPhotonMsg>(this, OnDisconnected);
-            messageHub.RegisterReceiver<OnJoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
-            messageHub.RegisterReceiver<OnLeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
+            messageHub.RegisterReceiver<ConnectedToPhotonMasterMsg>(this, OnConnectedToMaster);
+            messageHub.RegisterReceiver<DisconnectedFromPhotonMsg>(this, OnDisconnected);
+            messageHub.RegisterReceiver<JoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
+            messageHub.RegisterReceiver<LeftPhotonLobbyMsg>(this, OnLeftPhotonLobby);
 
             messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<JoinLobbyFailedMsg>(this, OnJoinLobbyFailed);
@@ -49,32 +49,32 @@ namespace BiReJeJoCo.Backend
             photonConnectionWrapper.Connect();
         }
 
-        private void OnConnectedToMaster(OnConnectedToPhotonMasterMsg msg)
+        private void OnConnectedToMaster(ConnectedToPhotonMasterMsg msg)
         {
             DebugHelper.PrintFormatted("<color=green>[Photon Client]</color> Successfully connected to photon master.");
             photonConnectionWrapper.JoinLobby();
         }
 
-        private void OnDisconnected(OnDisconnectedFromPhotonMsg msg)
+        private void OnDisconnected(DisconnectedFromPhotonMsg msg)
         {
             DebugHelper.PrintFormatted("<color=red>[Photon Client]</color> Disconnected from photon. Reason: {0}.", msg.Param1);
         }
 
-        private void OnJoinedPhotonLobby(OnJoinedPhotonLobbyMsg msg)
+        private void OnJoinedPhotonLobby(JoinedPhotonLobbyMsg msg)
         {
             DebugHelper.PrintFormatted("<color=green>[Photon Client]</color> Joined default photon lobby.");
         }
 
-        private void OnLeftPhotonLobby(OnLeftPhotonLobbyMsg msg)
+        private void OnLeftPhotonLobby(LeftPhotonLobbyMsg msg)
         {
             DebugHelper.PrintFormatted("<color=red>[Photon Client]</color> Left default photon lobby.");
         }
         #endregion
 
         #region Rooms
-        public void HostLobby(string lobbyName, int playerAmount)
+        public void HostLobby(int playerAmount)
         {
-            photonRoomWrapper.CreateRoom(lobbyName, playerAmount);
+            photonRoomWrapper.CreateRoom(localPlayer.NickName, playerAmount);
         }
 
         public void JoinLobby(string lobbyName)
