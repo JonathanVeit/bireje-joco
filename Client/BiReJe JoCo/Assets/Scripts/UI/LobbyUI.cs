@@ -37,7 +37,6 @@ namespace BiReJeJoCo.UI
 
         private void OnLobbySceneLoaded(LoadedLobbySceneMsg msg)
         {
-            lobbyName.text = photonRoomWrapper.RoomName;
             foreach (var curPlayer in playerManager.GetAllPlayer())
                 AddMemberListEntry(curPlayer);
 

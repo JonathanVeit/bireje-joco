@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using BiReJeJoCo.Character;
 using JoVei.Base.UI;
-using System;
 using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.UI
@@ -12,7 +10,6 @@ namespace BiReJeJoCo.UI
         [Header("Settings")]
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] InputField playerNickNameInput;
-        [SerializeField] InputField roomNameInput;
         [SerializeField] UIList<LobbyListEntry> lobbyList;
 
         #region Initialization
@@ -99,7 +96,6 @@ namespace BiReJeJoCo.UI
 
         public void HostLobby()
         {
-            if (string.IsNullOrEmpty(roomNameInput.text)) return;
             photonClient.HostLobby(5);
             loadingOverlay.gameObject.SetActive(true);
         }
