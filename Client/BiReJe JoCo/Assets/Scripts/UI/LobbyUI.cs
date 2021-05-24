@@ -9,7 +9,6 @@ namespace BiReJeJoCo.UI
     public class LobbyUI : UIElement
     {
         [Header("Settings")]
-        [SerializeField] Text lobbyName;
         [SerializeField] UIList<LobbyMemberEntry> memberList;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Button startButton;

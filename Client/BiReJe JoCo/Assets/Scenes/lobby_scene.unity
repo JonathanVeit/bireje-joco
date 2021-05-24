@@ -339,13 +339,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 282034587, guid: af63b874096c0a74588530a98bb22738, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
+    - target: {fileID: 6117304778298683283, guid: af63b874096c0a74588530a98bb22738, type: 3}
+      propertyPath: m_Spacing
+      value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 2498897123663899738, guid: af63b874096c0a74588530a98bb22738, type: 3}
-      propertyPath: m_Text
-      value: Lobby
+    - target: {fileID: 6117304778298683283, guid: af63b874096c0a74588530a98bb22738, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117304778298683283, guid: af63b874096c0a74588530a98bb22738, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117304778298683283, guid: af63b874096c0a74588530a98bb22738, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117304778298683283, guid: af63b874096c0a74588530a98bb22738, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7926450453417265211, guid: af63b874096c0a74588530a98bb22738, type: 3}
       propertyPath: m_AnchorMax.y
