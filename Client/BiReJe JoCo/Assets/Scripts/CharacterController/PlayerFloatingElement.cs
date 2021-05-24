@@ -17,7 +17,7 @@ namespace BiReJeJoCo.Character
         {
             this.controller = controller;
 
-            if (Owner.Role == PlayerRole.Hunted) return;
+            if (localPlayer.Role == PlayerRole.Hunted) return;
             SpawnFloaty();
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
         }
