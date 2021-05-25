@@ -129,6 +129,8 @@ namespace BiReJeJoCo.Character
 
             if (pingFloaty)
                 pingFloaty.RequestDestroyFloaty();
+
+            Camera.main.transform.parent = null;
         }
         #endregion
     }
