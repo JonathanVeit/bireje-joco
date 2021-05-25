@@ -28,11 +28,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - MainTextureTopTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - MetallicMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SideTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -82,12 +90,15 @@ Material:
     - SOFT_SHADOWS: 0
     - ShadowSmoothness: 0.3
     - Smoothness: 0.7
+    - TextureIntensity: 0.7
     - UseDownstairsGradient: 1
     - UseGI: 0
     - Vector1_8606F96E: 0
+    - WorldTilable: 0
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _SHADOWS_SOFT: 1
     - _Smoothness: 0.5
+    - isTriplanar: 1
     m_Colors:
     - MainColor: {r: 0.4716981, g: 0.3274378, b: 0.30927375, a: 1}
     - MixedShadowsColor: {r: 1, g: 1, b: 1, a: 0}
