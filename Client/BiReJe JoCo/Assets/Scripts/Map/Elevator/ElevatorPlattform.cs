@@ -68,12 +68,12 @@ namespace BiReJeJoCo.Map
 
         private void OnUserEntered(GameObject user)
         {
-            user.GetComponentInParent<IPlayerObserved>().Owner.PlayerCharacter.syncedTransform.SetGround(userGround);
+            user.GetComponentInParent<IPlayerObserved>().Owner.PlayerCharacter.SyncedTransform.SetGround(userGround);
         }
 
         private void OnUserLeft(GameObject user)
         {
-            user.GetComponentInParent<IPlayerObserved>().Owner.PlayerCharacter.syncedTransform.SetGround(null);
+            user.GetComponentInParent<IPlayerObserved>().Owner.PlayerCharacter.SyncedTransform.SetGround(null);
         }
     }
 }

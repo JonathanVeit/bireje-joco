@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BiReJeJoCo.Backend;
+﻿using BiReJeJoCo.Backend;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,14 +7,15 @@ namespace BiReJeJoCo.Character
     public class CharacterControllerSetup : SystemBehaviour, IPlayerObserved
     {
         [Header("Components")]
-        public Transform characterRoot;
-        public Transform modelRoot;
-        public Rigidbody rigidBody;
-        public Collider mainCollider;
-        public PlayerInput playerInput;
-        public PlayerCharacterInput characterInput;
-        public AdvancedWalkerController walkController;
-        public Mover mover;
+        [SerializeField] BaseBehaviour behaviour;
+        [SerializeField] Transform characterRoot;
+        [SerializeField] Transform modelRoot;
+        [SerializeField] Rigidbody rigidBody;
+        [SerializeField] Collider mainCollider;
+        [SerializeField] PlayerInput playerInput;
+        [SerializeField] PlayerCharacterInput characterInput;
+        [SerializeField] AdvancedWalkerController walkController;
+        [SerializeField] Mover mover;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -25,6 +25,18 @@ namespace BiReJeJoCo.Character
         {
             this.controller = controller;
         }
+        #endregion
+
+        #region Access 
+        public Transform CharacterRoot => characterRoot;
+        public Transform ModelRoot => modelRoot;
+        public Rigidbody RigidBody => rigidBody;
+        public Collider MainCollider => mainCollider;
+        public PlayerInput PlayerInput => playerInput;
+        public PlayerCharacterInput CharacterInput => characterInput;
+        public AdvancedWalkerController WalkController => walkController;
+        public Mover Mover => mover;
+        public BaseBehaviour Behaviour => behaviour;
         #endregion
     }
 }

@@ -1,22 +1,20 @@
-using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
-using BiReJeJoCo.Items;
 
 namespace BiReJeJoCo.Character
 {
     public class CharacterSetup : SystemBehaviour, IPlayerObserved
     {
         [Header("Components")]
-        public SynchedTransform syncedTransform;
-        public Material hunterMat;
-        public Material huntedMat;
+        [SerializeField] SynchedTransform syncedTransform;
+        [SerializeField] Material hunterMat;
+        [SerializeField] Material huntedMat;
 
         [Header("Runtime")]
-        public Camera cam;
-        public CharacterControllerSetup controllerSetup;
-        public GameObject fogUpstairs;
-        public GameObject fogDownstairs;
+        [SerializeField] Camera cam;
+        [SerializeField] CharacterControllerSetup controllerSetup;
+        [SerializeField] GameObject fogUpstairs;
+        [SerializeField] GameObject fogDownstairs;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -79,12 +77,20 @@ namespace BiReJeJoCo.Character
             var newModel = Instantiate(modelPrefab, transform.position, transform.rotation, transform);
             controllerSetup = newModel.GetComponent<CharacterControllerSetup>();
 
-            syncedTransform.SetMovementTarget(controllerSetup.characterRoot);
-            syncedTransform.SetRotationTarget(controllerSetup.modelRoot);
-            syncedTransform.SetRigidBody(controllerSetup.rigidBody);
+            syncedTransform.SetMovementTarget(ControllerSetup.CharacterRoot);
+            syncedTransform.SetRotationTarget(ControllerSetup.ModelRoot);
+            syncedTransform.SetRigidBody(ControllerSetup.RigidBody);
 
             controller.AddObservedGameObject(newModel);
         }
+
+        #region Access
+        public Camera Cam => cam;
+        public CharacterControllerSetup ControllerSetup => controllerSetup;
+        public GameObject FogUpstairs => fogUpstairs;
+        public GameObject FogDownstairs => fogDownstairs;
+        public SynchedTransform SyncedTransform => syncedTransform;
+        #endregion
 
         #region PostProcessing
         private void SetupHuntedPP() 

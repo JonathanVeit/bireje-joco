@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class HuntedBehaviour : TickBehaviour, IPlayerObserved
+    public class HuntedBehaviour : BaseBehaviour
     {
         [Header("Settings")]
         [SerializeField] float maxHealth = 100f;
@@ -19,7 +19,6 @@ namespace BiReJeJoCo.Character
         [SerializeField] Timer speedUpCooldownTimer;
 
         public float Health { get; private set; }
-        public Player Owner { get; private set; }
 
         private SyncVar<bool> isTransformed = new SyncVar<bool>(1, false);
         private string scannedItemId;
@@ -31,10 +30,8 @@ namespace BiReJeJoCo.Character
         private int collectedItems;
 
         #region Initialization
-        public void Initialize(PlayerControlled controller)
+        protected override void OnBehaviourInitialized()
         {
-            Owner = controller.Player;
-
             Health = maxHealth;
             gameUI.UpdateHealthBar(1);
 
@@ -150,32 +147,32 @@ namespace BiReJeJoCo.Character
             if (speedUpCooldownTimer.State != TimerState.Finished ||
                 speedUpDurationTimer.State == TimerState.Counting) return;
 
-            var tmp = localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed;
-            localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed *= speedUpMultiplier;
-            
+            var tmp = localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed;
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed *= speedUpMultiplier;
+
             speedUpDurationTimer.Start(
                 () => // update 
                 {
                     gameUI.UpdateSpeedUpBar(1 - speedUpDurationTimer.RelativeProgress);
                 }, 
-                () => // finish
+                (Action)(() => // finish
                 {
-                    localPlayer.PlayerCharacter.controllerSetup.walkController.movementSpeed = tmp;
+                    localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed = tmp;
 
                     speedUpCooldownTimer.Start(() => // update 
                     {
                         gameUI.UpdateSpeedUpBar(speedUpCooldownTimer.RelativeProgress);
                     }, null);
-                });
+                }));
         }
         #endregion
 
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            localPlayer.PlayerCharacter.controllerSetup.characterInput.onShootPressed += OnShootPressed;
-            localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial2Pressed += OnSpeedUpPressed;
-            var mover = localPlayer.PlayerCharacter.controllerSetup.characterRoot.GetComponent<Mover>();
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed += OnShootPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial2Pressed += OnSpeedUpPressed;
+            var mover = localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.GetComponent<Mover>();
             isGrounded = () => mover.IsGrounded();
         }
 
@@ -205,14 +202,14 @@ namespace BiReJeJoCo.Character
             {
                 // transformed into
                 case true:
-                    Owner.PlayerCharacter.controllerSetup.modelRoot.gameObject.SetActive(false);
-                    Owner.PlayerCharacter.controllerSetup.mainCollider.enabled = false;
+                    Owner.PlayerCharacter.ControllerSetup.ModelRoot.gameObject.SetActive(false);
+                    Owner.PlayerCharacter.ControllerSetup.MainCollider.enabled = false;
                     break;
 
                 // transformed back
                 case false:
-                    Owner.PlayerCharacter.controllerSetup.modelRoot.gameObject.SetActive(true);
-                    Owner.PlayerCharacter.controllerSetup.mainCollider.enabled = true;
+                    Owner.PlayerCharacter.ControllerSetup.ModelRoot.gameObject.SetActive(true);
+                    Owner.PlayerCharacter.ControllerSetup.MainCollider.enabled = true;
                     break;
             }
 

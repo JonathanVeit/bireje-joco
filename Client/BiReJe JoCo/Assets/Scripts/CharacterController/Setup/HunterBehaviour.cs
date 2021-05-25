@@ -3,37 +3,42 @@ using BiReJeJoCo.UI;
 using UnityEngine;
 using JoVei.Base.UI;
 using JoVei.Base.Helper;
+using BiReJeJoCo.Items;
 
 namespace BiReJeJoCo.Character
 {
-    public class HunterBehaviour : TickBehaviour, IPlayerObserved
+    public class HunterBehaviour : BaseBehaviour
     {
         [Header("Settings")]
         [SerializeField] Transform cameraRoot;
         [SerializeField] Transform fpsSetup;
         [SerializeField] Timer pingDurationTimer;
-        [SerializeField] Timer pingCooldownTimer;
+        [SerializeField] Timer pingCooldownTimer;   
 
-        public Player Owner => controller.Player;
-        private PlayerControlled controller;
+        [Space(10)]
+        [SerializeField] ShockGun gun;
+        [SerializeField] float shootRange;
+        [SerializeField] [Range(0, 360)] float autoAimAngle;
+        [SerializeField] LayerMask shootTargetLayer;
 
+        private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(0, null);
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
         private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-        private HunterPingFloaty pingFloaty; 
+        private HunterPingFloaty pingFloaty;
 
         #region Initialization
-        public void Initialize(PlayerControlled controller)
+        protected override void OnBehaviourInitialized()
         {
-            this.controller = controller;
-
             if (Owner.IsLocalPlayer)
             {
                 ConnectEvents();
                 SetupPerspective();
             }
-            else if (localPlayer.Role == PlayerRole.Hunter)
+            else 
             {
-                pingPosition.OnValueReceived += OnPingUpdated;
+                if (localPlayer.Role == PlayerRole.Hunter)
+                    pingPosition.OnValueReceived += OnPingUpdated;
+                shootPosition.OnValueReceived += (x) => gun.Shoot(x);
             }
         }
 
@@ -49,18 +54,14 @@ namespace BiReJeJoCo.Character
         protected override void OnBeforeDestroy()
         {
             DisconnectEvents();
-       
-            if (syncVarHub)
-                syncVarHub.UnregisterSyncVar(pingPosition);
-            if (localPlayer.PlayerCharacter)
-                localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed -= OnSpecial1Pressed;
-            pingPosition.OnValueReceived -= OnPingUpdated;
         }
 
         private void ConnectEvents() 
         {
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnClosEMatch);
+
+        
         }
         private void DisconnectEvents() 
         {
@@ -68,10 +69,70 @@ namespace BiReJeJoCo.Character
 
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
+            if (localPlayer.PlayerCharacter)
+            {
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootHold -= OnShootHold;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootReleased -= OnShootReleased;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed -= OnSpecial1Pressed;
+            }
+            pingPosition.OnValueReceived -= OnPingUpdated;
+            if (syncVarHub)
+            {
+                syncVarHub.UnregisterSyncVar(shootPosition);
+                syncVarHub.UnregisterSyncVar(pingPosition);
+            }
         }
         #endregion
 
-        private void OnSpecial1Pressed() 
+        #region Shoot
+        private void OnShootHold(float duration)
+        {
+            shootPosition.SetValue(CalculateShootTarget());
+            shootPosition.ForceSend();
+            gun.Shoot(shootPosition.GetValue().Value);
+        }
+        private void OnShootReleased()
+        {
+            shootPosition.SetValue(null);
+            gun.Shoot(null);
+        }
+
+        private Vector3 CalculateShootTarget()
+        {
+            var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
+
+            if (allHunted.Length > 0)
+            {
+                var huntedRoot =  allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
+
+                if (Vector3.Distance(gun.RayOrigin.position, huntedRoot.position) < shootRange)
+                {
+                    var dirToHunted = huntedRoot.position - gun.RayOrigin.position;
+                    var gunDir = gun.RayOrigin.forward;
+
+                    var angle = Vector3.Angle(dirToHunted, gunDir);
+
+                    Debug.Log(angle);
+
+                    if (angle <= autoAimAngle)
+                        return huntedRoot.position;
+                }
+            }
+
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootRange, shootTargetLayer, QueryTriggerInteraction.Ignore))
+            {
+                return hit.point;
+            }
+            else
+            {
+                return Camera.main.transform.position + Camera.main.transform.forward * shootRange;
+            }
+        }
+        #endregion
+
+        #region Ping
+        private void OnSpecial1Pressed()
         {
             if (pingCooldownTimer.State == TimerState.Counting) return;
 
@@ -81,13 +142,7 @@ namespace BiReJeJoCo.Character
                 () => // update
                 {
                     gameUI.UpdatePingCooldown(pingCooldownTimer.RelativeProgress);
-                },null);
-        }
-
-        #region Events
-        void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
-        {
-            localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed += OnSpecial1Pressed;
+                }, null);
         }
 
         private void OnPingUpdated(Vector3 position)
@@ -120,6 +175,15 @@ namespace BiReJeJoCo.Character
                         Destroy(target);
                     }
                 });
+        }
+        #endregion
+
+        #region Events
+        void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
+        {
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootHold += OnShootHold;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootReleased += OnShootReleased;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed += OnSpecial1Pressed;
         }
 
         private void OnClosEMatch(PhotonMessage obj)

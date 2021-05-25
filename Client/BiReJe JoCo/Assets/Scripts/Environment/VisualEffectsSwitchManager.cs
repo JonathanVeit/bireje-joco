@@ -48,8 +48,8 @@ namespace BiReJeJoCo
 
         private void OnCharacterSpawned(PlayerCharacterSpawnedMsg obj)
         {
-            upstairsFog = localPlayer.PlayerCharacter.fogUpstairs;
-            downstairsFog = localPlayer.PlayerCharacter.fogDownstairs;
+            upstairsFog = localPlayer.PlayerCharacter.FogUpstairs;
+            downstairsFog = localPlayer.PlayerCharacter.FogDownstairs;
 
             if (localPlayer.Role == Backend.PlayerRole.Hunted)
             {
