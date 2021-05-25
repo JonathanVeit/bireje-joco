@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c8afc3c9a015dd41ab680c7f872b858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 5944855385898995380}
-  angle: 0
+  target: {fileID: 0}
   speed: 16
+  rotation:
+    value: {x: 0, y: 0, z: 0}
 --- !u!1 &5944855385898995386
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,10 +92,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 200
-  m_Range: 42.210224
-  m_SpotAngle: 56.55346
-  m_InnerSpotAngle: 44.47001
+  m_Intensity: 140
+  m_Range: 50
+  m_SpotAngle: 68
+  m_InnerSpotAngle: 60
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
