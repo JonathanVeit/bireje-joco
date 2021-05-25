@@ -94,7 +94,7 @@ namespace BiReJeJoCo.Backend
             {
                 if (teleport)
                 {
-                    transform.position = m_NetworkPosition;
+                    movementTarget.position = m_NetworkPosition;
                     return;
                 }
 
