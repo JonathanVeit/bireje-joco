@@ -24,6 +24,7 @@ namespace BiReJeJoCo
         [Header("Hunted alterations")]
         [SerializeField] VolumeProfile huntedUpstairsPPSProfile;
         [SerializeField] VolumeProfile huntedDownstairsPPSProfile;
+        [SerializeField] Material collectableMat;
 
         bool isStart = true;
         bool characterSpawned = false;
@@ -55,6 +56,8 @@ namespace BiReJeJoCo
             {
                 upstairsPPSVol.profile = huntedUpstairsPPSProfile;
                 downstairsPPSVol.profile = huntedDownstairsPPSProfile;
+
+                collectableMat.SetInt("IsBlinkEffect", 1);
             }
 
             characterSpawned = true;
