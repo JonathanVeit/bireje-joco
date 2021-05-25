@@ -11,7 +11,6 @@ namespace BiReJeJoCo.Map
 
         protected override void OnTriggerInteracted(byte pointId)
         {
-            throw new System.Exception("lol");
             playerTransform.position = targetLocation.position;
         }
 
