@@ -103,7 +103,6 @@ namespace BiReJeJoCo.Items
             for (int i = 0; i < amount; i++)
             {
                 var currentPoint = rayOrigin.position + (i * pointLength * direction);
-
                 if (i > 1)
                 {
                     currentPoint += CreateNoise();
@@ -138,11 +137,17 @@ namespace BiReJeJoCo.Items
         private void RandomizeWidth()
         {
             var keyFrames = new List<Keyframe>();
-            for (int i = 0; i < 10 * widthVariance; i++)
+            var amount = 10 * widthVariance;
+
+            for (int i = 0; i < amount; i++)
             {
                 var position = Mathf.InverseLerp(0, 10 * widthVariance, i);
                 var value = Random.Range(minWidth, maxWidth);
-
+                if (i == amount - 1)
+                {
+                    value = 0;
+                }
+           
                 var key = new Keyframe(position, value);
                 keyFrames.Add(key);
             }
@@ -156,7 +161,6 @@ namespace BiReJeJoCo.Items
         {
             if (Physics.CheckSphere(currentTarget.Value, 0.1f, hitLayerMask))
             {
-                Debug.Log(1);
                 targetParticleSystem.enableEmission = true;
                 targetTrailRenderer.emitting = true;
                 targetParticleSystem.transform.position = currentTarget.Value;
@@ -164,7 +168,6 @@ namespace BiReJeJoCo.Items
             }
             else
             {
-                Debug.Log(2);
                 targetParticleSystem.enableEmission = false;
                 targetTrailRenderer.emitting = false;
             }

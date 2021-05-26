@@ -21,7 +21,10 @@ namespace BiReJeJoCo.Character
         [SerializeField] [Range(0, 360)] float autoAimAngle;
         [SerializeField] LayerMask shootTargetLayer;
 
-        private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(0, null);
+        [Header("Runtime")]
+        public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
+        
+        private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
         private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private HunterPingFloaty pingFloaty;
@@ -80,6 +83,7 @@ namespace BiReJeJoCo.Character
             {
                 syncVarHub.UnregisterSyncVar(shootPosition);
                 syncVarHub.UnregisterSyncVar(pingPosition);
+                syncVarHub.UnregisterSyncVar(isHitting); 
             }
         }
         #endregion
@@ -95,6 +99,7 @@ namespace BiReJeJoCo.Character
         {
             shootPosition.SetValue(null);
             gun.Shoot(null);
+            isHitting.SetValue(false);
         }
 
         private Vector3 CalculateShootTarget()
@@ -109,15 +114,16 @@ namespace BiReJeJoCo.Character
                 {
                     var dirToHunted = huntedRoot.position - gun.RayOrigin.position;
                     var gunDir = gun.RayOrigin.forward;
-
                     var angle = Vector3.Angle(dirToHunted, gunDir);
 
-                    Debug.Log(angle);
-
                     if (angle <= autoAimAngle)
+                    {
+                        isHitting.SetValue(true);
                         return huntedRoot.position;
+                    }
                 }
             }
+            isHitting.SetValue(false);
 
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootRange, shootTargetLayer, QueryTriggerInteraction.Ignore))
@@ -193,8 +199,6 @@ namespace BiReJeJoCo.Character
 
             if (pingFloaty)
                 pingFloaty.RequestDestroyFloaty();
-
-            Camera.main.transform.parent = null;
         }
         #endregion
     }

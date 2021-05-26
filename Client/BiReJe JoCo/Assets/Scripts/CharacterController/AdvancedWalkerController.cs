@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
@@ -77,7 +79,10 @@ namespace BiReJeJoCo.Character
 
 		[Tooltip("Optional camera transform used for calculating movement direction. If assigned, character movement will take camera view into account.")]
 		public Transform cameraTransform;
-		
+
+		private List<MovementMultiplier> multipliers
+			= new List<MovementMultiplier>();
+
 		//Get references to all necessary components;
 		void Awake () 
 		{
@@ -197,6 +202,9 @@ namespace BiReJeJoCo.Character
 			//This enables the player to walk up/down stairs and slopes without losing ground contact;
 			mover.SetExtendSensorRange(IsGrounded());
 
+			// add multiplier 
+			_velocity += CalculateMultiplier(_velocity);
+
 			//Set mover velocity;		
 			mover.SetVelocity(_velocity);
 
@@ -215,9 +223,27 @@ namespace BiReJeJoCo.Character
 				ceilingDetector.ResetFlags();
 		}
 
-		//Calculate and return movement direction based on player input;
-		//This function can be overridden by inheriting scripts to implement different player controls;
-		protected virtual Vector3 CalculateMovementDirection()
+		private Vector3 CalculateMultiplier(Vector3 velocity)
+		{
+			var result = Vector3.zero;
+			foreach (var entry in multipliers)
+			{
+				var increase = new Vector3()
+				{
+					x = velocity.x * entry.Value - velocity.x,
+					y = velocity.y * entry.Value - velocity.y,
+					z = velocity.z * entry.Value - velocity.z,
+				};
+
+				result += increase;
+			}
+
+			return result;
+		}
+
+        //Calculate and return movement direction based on player input;
+        //This function can be overridden by inheriting scripts to implement different player controls;
+        protected virtual Vector3 CalculateMovementDirection()
 		{
 			//If no character input script is attached to this object, return;
 			if(characterInput == null)
@@ -660,5 +686,32 @@ namespace BiReJeJoCo.Character
 			else
 				momentum = _newMomentum;
 		}
-    }
+
+		public void AddMultiplier(MovementMultiplier multiplier)
+		{
+			multipliers.Add(multiplier);
+		}
+		public void RemoveMultiplier(MovementMultiplier multiplier)
+		{
+			multipliers.Remove(multiplier);
+		}
+	}
+
+	public class MovementMultiplier
+	{
+		public float Value { get; private set; }
+
+		public MovementMultiplier(float value)
+		{
+			Value = value;
+		}
+		public void Add(float value)
+		{
+			Value += value;
+		}
+		public void Set(float value)
+		{
+			Value = value;
+		}
+	}
 }

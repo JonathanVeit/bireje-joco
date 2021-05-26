@@ -318,4 +318,3 @@ namespace BiReJeJoCo.Character
 
     }
 }
-

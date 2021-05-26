@@ -1,26 +1,35 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
+using JoVei.Base;
 using JoVei.Base.Helper;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class HuntedBehaviour : BaseBehaviour
+    public class HuntedBehaviour : BaseBehaviour, ITickable
     {
         [Header("Settings")]
-        [SerializeField] float maxHealth = 100f;
+        [SerializeField] float maxResistance = 100f;
+        [SerializeField] float resistanceRegenerationRate = 1;
+        [SerializeField] float resistanceLossRate = 1;
+        [SerializeField] float maxResistanceLoss = 1;
+        [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
+
+        [Space(10)]
         [SerializeField] string startTransformationItem;
         [SerializeField] Timer transformationDurationTimer;
         [SerializeField] Timer transformationCooldownTimer;
+
         [Space(10)]
         [SerializeField] float speedUpMultiplier = 1.2f;
         [SerializeField] Timer speedUpDurationTimer;
         [SerializeField] Timer speedUpCooldownTimer;
 
-        public float Health { get; private set; }
+        public float Resistance { get; private set; }
 
-        private SyncVar<bool> isTransformed = new SyncVar<bool>(1, false);
+        private SyncVar<bool> isTransformed = new SyncVar<bool>(0, false);
         private string scannedItemId;
         private bool wasKilled;
         private GameObject transformedItem;
@@ -28,11 +37,12 @@ namespace BiReJeJoCo.Character
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
         private int collectedItems;
+        private MovementMultiplier hitMultiplier;
 
         #region Initialization
         protected override void OnBehaviourInitialized()
         {
-            Health = maxHealth;
+            Resistance = maxResistance;
             gameUI.UpdateHealthBar(1);
 
             if (!Owner.IsLocalPlayer)
@@ -55,7 +65,6 @@ namespace BiReJeJoCo.Character
                 gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(scannedItemId));
             }
         }
-
         protected override void OnBeforeDestroy()
         {
             base.OnBeforeDestroy();
@@ -69,14 +78,15 @@ namespace BiReJeJoCo.Character
 
         void ConnectEvents()
         {
+            tickSystem.Register(this, "update");
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             messageHub.RegisterReceiver<HuntedScannedItemMsg>(this, OnScannedItem);
             messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
             photonMessageHub.RegisterReceiver<HuntedHitByBulletPhoMsg>(this, OnHitByBullet);
         }
-
         void DisconnectEvents() 
         {
+            tickSystem.Unregister(this);
             messageHub.UnregisterReceiver(this);
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
@@ -147,8 +157,8 @@ namespace BiReJeJoCo.Character
             if (speedUpCooldownTimer.State != TimerState.Finished ||
                 speedUpDurationTimer.State == TimerState.Counting) return;
 
-            var tmp = localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed;
-            localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed *= speedUpMultiplier;
+            var multiplier = new MovementMultiplier(speedUpMultiplier);
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddMultiplier(multiplier);
 
             speedUpDurationTimer.Start(
                 () => // update 
@@ -157,7 +167,7 @@ namespace BiReJeJoCo.Character
                 }, 
                 (Action)(() => // finish
                 {
-                    localPlayer.PlayerCharacter.ControllerSetup.WalkController.movementSpeed = tmp;
+                    localPlayer.PlayerCharacter.ControllerSetup.WalkController.RemoveMultiplier(multiplier);
 
                     speedUpCooldownTimer.Start(() => // update 
                     {
@@ -167,25 +177,63 @@ namespace BiReJeJoCo.Character
         }
         #endregion
 
+        #region Resistance 
+        public void Tick(float deltaTime)
+        {
+            var allHunter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunter).ToList();
+            if (allHunter.Count == 0) return;
+
+            int hitting = 0;
+            foreach (var hunter in allHunter)
+            {
+                if (hunter.PlayerCharacter == null) continue;
+
+                if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().isHitting.GetValue())
+                    hitting++;
+            }
+
+            if (hitting == 0)
+            {
+                Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
+            }
+            else
+            {
+                float damagePercentage = hitting / allHunter.Count;
+                Resistance = Mathf.MoveTowards(Resistance, maxResistance - (maxResistanceLoss * damagePercentage), resistanceLossRate * Time.deltaTime);
+            }
+
+            var minResistance = maxResistance - maxResistanceLoss;
+            var percentage = Mathf.InverseLerp(minResistance, maxResistance, Resistance); // -> 0
+            var negPercentage = 1 - percentage;  // -> 1
+
+            hitMultiplier.Set(1 - (negPercentage * maxResistanceSlowdown));
+            uiManager.GetInstanceOf<GameUI>().UpdateHitOverlay(negPercentage);
+        }
+        #endregion
+
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed += OnShootPressed;
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial2Pressed += OnSpeedUpPressed;
+            
             var mover = localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.GetComponent<Mover>();
             isGrounded = () => mover.IsGrounded();
+
+            hitMultiplier = new MovementMultiplier(1);
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddMultiplier(hitMultiplier);
         }
 
         void OnHitByBullet(PhotonMessage msg) 
         {
             var casted = msg as HuntedHitByBulletPhoMsg;
 
-            Health -= casted.dmg;
-            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Health / 100);
+            Resistance -= casted.dmg;
+            uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Resistance / 100);
 
-            if (Health <= 0 && !wasKilled)
+            if (Resistance <= 0 && !wasKilled)
             {
-                Health = 0;
+                Resistance = 0;
                 photonMessageHub.ShoutMessage<HuntedKilledPhoMsg>(PhotonMessageTarget.MasterClient);
                 wasKilled = true;
             }

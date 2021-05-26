@@ -43,7 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6495ce45bba9eea44a4d861336938df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxResistance: 100
+  resistanceRegenerationRate: 45
+  resistanceLossRate: 80
+  maxResistanceLoss: 45
+  maxResistanceSlowdown: 0.8
   startTransformationItem: transformable_barrel
   transformationDurationTimer:
     duration: 15

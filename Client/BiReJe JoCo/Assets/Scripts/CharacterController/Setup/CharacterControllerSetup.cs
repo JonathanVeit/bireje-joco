@@ -37,6 +37,11 @@ namespace BiReJeJoCo.Character
         public AdvancedWalkerController WalkController => walkController;
         public Mover Mover => mover;
         public BaseBehaviour Behaviour => behaviour;
+        public TBehaviour GetBehaviourAs<TBehaviour>()
+            where TBehaviour : BaseBehaviour
+        {
+            return Behaviour as TBehaviour;
+        }
         #endregion
     }
 }

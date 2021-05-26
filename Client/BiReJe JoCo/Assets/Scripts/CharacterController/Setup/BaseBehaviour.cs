@@ -2,7 +2,7 @@ using BiReJeJoCo.Backend;
 
 namespace BiReJeJoCo.Character
 {
-    public abstract class BaseBehaviour : TickBehaviour, IPlayerObserved
+    public abstract class BaseBehaviour : SystemBehaviour, IPlayerObserved
     {
         public Player Owner => controller.Player;
         protected PlayerControlled controller;

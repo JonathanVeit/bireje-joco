@@ -53,7 +53,9 @@ MonoBehaviour:
     timeScale: 1
   gun: {fileID: 0}
   shootRange: 10
-  autoAimAngle: 12
+  autoAimAngle: 35
   shootTargetLayer:
     serializedVersion: 2
     m_Bits: 1537
+  isHitting:
+    value: 0
