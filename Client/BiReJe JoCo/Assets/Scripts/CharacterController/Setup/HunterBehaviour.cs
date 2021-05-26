@@ -12,22 +12,27 @@ namespace BiReJeJoCo.Character
         [Header("Settings")]
         [SerializeField] Transform cameraRoot;
         [SerializeField] Transform fpsSetup;
-        [SerializeField] Timer pingDurationTimer;
-        [SerializeField] Timer pingCooldownTimer;   
 
-        [Space(10)]
+        [Header("Ping")]
+        [SerializeField] Timer pingDurationTimer;
+        [SerializeField] Timer pingCooldownTimer;
+
+        [Header("Shock Gun")]
         [SerializeField] ShockGun gun;
+        [SerializeField] Counter ammoCounter;
+        [SerializeField] Timer reloadTimer;
         [SerializeField] float shootRange;
         [SerializeField] [Range(0, 360)] float autoAimAngle;
         [SerializeField] LayerMask shootTargetLayer;
 
         [Header("Runtime")]
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
-        
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
+        private Transform huntedTransform => GetHuntedRoot();
+
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
-        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private HunterPingFloaty pingFloaty;
+        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
 
         #region Initialization
         protected override void OnBehaviourInitialized()
@@ -41,7 +46,14 @@ namespace BiReJeJoCo.Character
             {
                 if (localPlayer.Role == PlayerRole.Hunter)
                     pingPosition.OnValueReceived += OnPingUpdated;
-                shootPosition.OnValueReceived += (x) => gun.Shoot(x);
+
+                shootPosition.OnValueReceived += (x) =>
+                {
+                    if (isHitting.GetValue() && x.HasValue)
+                        gun.Shoot(huntedTransform.position);
+                    else
+                        gun.Shoot(x);
+                };
             }
         }
 
@@ -63,8 +75,6 @@ namespace BiReJeJoCo.Character
         {
             messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnClosEMatch);
-
-        
         }
         private void DisconnectEvents() 
         {
@@ -91,9 +101,17 @@ namespace BiReJeJoCo.Character
         #region Shoot
         private void OnShootHold(float duration)
         {
+            if (reloadTimer.State != TimerState.Finished) return;
+
             shootPosition.SetValue(CalculateShootTarget());
-            shootPosition.ForceSend();
             gun.Shoot(shootPosition.GetValue().Value);
+
+            ammoCounter.CountUp(() =>
+            {
+                OnShootReleased();
+                reloadTimer.Start(() => gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress), null);
+            });
+            gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
         }
         private void OnShootReleased()
         {
@@ -104,36 +122,51 @@ namespace BiReJeJoCo.Character
 
         private Vector3 CalculateShootTarget()
         {
-            var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
-
-            if (allHunted.Length > 0)
+            var ray = new Ray()
             {
-                var huntedRoot =  allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
+                origin = Camera.main.transform.position,
+                direction = Camera.main.transform.forward,
+            };
 
-                if (Vector3.Distance(gun.RayOrigin.position, huntedRoot.position) < shootRange)
+            if (huntedTransform == null)
+                return CastToTarget(ray);
+
+            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < shootRange)
+
+            {
+                var dirToHunted = huntedTransform.position - gun.RayOrigin.position;
+                var gunDir = gun.RayOrigin.forward;
+                var angle = Vector3.Angle(dirToHunted, gunDir);
+                
+                if (angle <= autoAimAngle)
                 {
-                    var dirToHunted = huntedRoot.position - gun.RayOrigin.position;
-                    var gunDir = gun.RayOrigin.forward;
-                    var angle = Vector3.Angle(dirToHunted, gunDir);
-
-                    if (angle <= autoAimAngle)
-                    {
-                        isHitting.SetValue(true);
-                        return huntedRoot.position;
-                    }
+                    ray.origin = gun.RayOrigin.position;
+                    ray.direction = dirToHunted;
                 }
             }
-            isHitting.SetValue(false);
 
+            return CastToTarget(ray);
+        }
+        private Vector3 CastToTarget(Ray ray) 
+        {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootRange, shootTargetLayer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, shootRange, shootTargetLayer, QueryTriggerInteraction.Ignore))
             {
+                isHitting.SetValue(hit.collider.gameObject.layer == 10);
                 return hit.point;
             }
-            else
-            {
-                return Camera.main.transform.position + Camera.main.transform.forward * shootRange;
-            }
+
+            isHitting.SetValue(false);
+            return Camera.main.transform.position + Camera.main.transform.forward * shootRange;
+        }
+
+        private Transform GetHuntedRoot() 
+        {
+            var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
+            if (allHunted.Length == 0)
+                return null;
+
+            return allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
         }
         #endregion
 

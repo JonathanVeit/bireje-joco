@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 5466656235926523168}
   - component: {fileID: 7804400286899360117}
   m_Layer: 5
-  m_Name: cooldown_bar
+  m_Name: ammo_bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4142,7 +4142,7 @@ MonoBehaviour:
   durationLabel: {fileID: 4272577061395499730}
   hunterHUD: {fileID: 8683413718078249583}
   crosshairGO: {fileID: 179511231}
-  shootingCooldownBar:
+  ammoBar:
     type: 1
     target: {fileID: 7527750700268005132}
     speed: 5

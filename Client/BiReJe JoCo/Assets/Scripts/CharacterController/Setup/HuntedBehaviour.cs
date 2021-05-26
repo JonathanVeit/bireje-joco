@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] float minResistance = 20f;
         [SerializeField] float resistanceRegenerationRate = 1;
         [SerializeField] float resistanceLossRate = 1;
+        [SerializeField] [Range(0, 1)] float resistanceLossByAmount = 1;
         [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
 
         [Space(10)]
@@ -183,8 +184,23 @@ namespace BiReJeJoCo.Character
         #region Resistance 
         public void Tick(float deltaTime)
         {
+            float hitPercentage = HittingHunterPercentage();
+            if (hitPercentage == 0)
+            {
+                RegenerateResistance();
+            }
+            else
+            {
+                DecreaseResistance(hitPercentage);
+            }
+
+            UpdateResistanceInfluence();
+        }
+
+        private float HittingHunterPercentage()
+        {
             var allHunter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunter).ToList();
-            if (allHunter.Count == 0) return;
+            if (allHunter.Count == 0) return 0;
 
             int hittingHunter = 0;
             foreach (var hunter in allHunter)
@@ -195,29 +211,49 @@ namespace BiReJeJoCo.Character
                     hittingHunter++;
             }
 
-            if (hittingHunter == 0)
+            if (hittingHunter == 0) return 0;
+
+            return (float)hittingHunter / (float)allHunter.Count;
+        }
+
+        private void RegenerateResistance()
+        {
+            Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
+            isHitted = false;
+        }
+        private void DecreaseResistance(float hitPercentage)
+        {
+            isHitted = true;
+            if (isTransformed.GetValue())
             {
-                Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
-                isHitted = false;
-            }
-            else
-            {
-                float hitPercentage = (float) hittingHunter / (float) allHunter.Count;
-                Resistance = Mathf.MoveTowards(Resistance, minResistance, resistanceLossRate * hitPercentage * Time.deltaTime);
-
-                isHitted = true;
-                if (isTransformed.GetValue())
-                {
-                    TransformBack();
-                }
+                TransformBack();
             }
 
-            var percentage = Mathf.InverseLerp(minResistance, maxResistance, Resistance); // -> 0
-            var negPercentage = 1 - percentage;  // -> 1
+            // lose till how much?
+            var appliedMinResistance = minResistance;
 
-            hitMultiplier.Set(1 - (negPercentage * maxResistanceSlowdown));
-            uiManager.GetInstanceOf<GameUI>().UpdateHitOverlay(negPercentage);
-            Debug.Log(Resistance + " hitting: " + hittingHunter);
+            // rate depending on amount of hitting hunters  
+            var lossRate = resistanceLossRate * hitPercentage;
+
+            // how strong is the influence of hunter?
+            var appliedLossRate = Mathf.Lerp(lossRate, resistanceLossRate, resistanceLossByAmount);
+
+            // move resistance
+            Resistance = Mathf.MoveTowards(Resistance, appliedMinResistance, appliedLossRate * Time.deltaTime);
+        }
+        private void UpdateResistanceInfluence()
+        {
+            // how much resistance has been lost compared to max?
+            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, Resistance); // -> 0
+
+            // update ui
+            uiManager.GetInstanceOf<GameUI>().UpdateHitOverlay(1 - resistancePercentage);
+
+            // max resistance lost? -> max slow 
+            var negResistancePercentage = 1 - resistancePercentage; // -> 1
+            hitMultiplier.Set(1 - (maxResistanceSlowdown * negResistancePercentage));
+
+            Debug.Log("Resistance: " + Resistance);
         }
         #endregion
 

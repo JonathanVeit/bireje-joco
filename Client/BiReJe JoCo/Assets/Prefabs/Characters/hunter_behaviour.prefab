@@ -52,10 +52,16 @@ MonoBehaviour:
     duration: 3
     timeScale: 1
   gun: {fileID: 0}
+  ammoCounter:
+    maxValue: 6
+    timeScale: 1
+  reloadTimer:
+    duration: 3
+    timeScale: 1
   shootRange: 12.5
   autoAimAngle: 40
   shootTargetLayer:
     serializedVersion: 2
-    m_Bits: 1537
+    m_Bits: 1793
   isHitting:
     value: 0
