@@ -12,9 +12,9 @@ namespace BiReJeJoCo.Character
     {
         [Header("Settings")]
         [SerializeField] float maxResistance = 100f;
+        [SerializeField] float minResistance = 20f;
         [SerializeField] float resistanceRegenerationRate = 1;
         [SerializeField] float resistanceLossRate = 1;
-        [SerializeField] float maxResistanceLoss = 1;
         [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
 
         [Space(10)]
@@ -37,6 +37,8 @@ namespace BiReJeJoCo.Character
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
         private int collectedItems;
+
+        private bool isHitted;
         private MovementMultiplier hitMultiplier;
 
         #region Initialization
@@ -99,7 +101,8 @@ namespace BiReJeJoCo.Character
         #region Transformation
         private void OnShootPressed()
         {
-            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId))
+            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId) ||
+                isHitted)
                 return;
 
             if (isTransformed.GetValue())
@@ -183,31 +186,38 @@ namespace BiReJeJoCo.Character
             var allHunter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunter).ToList();
             if (allHunter.Count == 0) return;
 
-            int hitting = 0;
+            int hittingHunter = 0;
             foreach (var hunter in allHunter)
             {
                 if (hunter.PlayerCharacter == null) continue;
 
                 if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().isHitting.GetValue())
-                    hitting++;
+                    hittingHunter++;
             }
 
-            if (hitting == 0)
+            if (hittingHunter == 0)
             {
                 Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
+                isHitted = false;
             }
             else
             {
-                float damagePercentage = hitting / allHunter.Count;
-                Resistance = Mathf.MoveTowards(Resistance, maxResistance - (maxResistanceLoss * damagePercentage), resistanceLossRate * Time.deltaTime);
+                float hitPercentage = hittingHunter / allHunter.Count;
+                Resistance = Mathf.MoveTowards(Resistance, minResistance, resistanceLossRate * hitPercentage * Time.deltaTime);
+
+                isHitted = true;
+                if (isTransformed.GetValue())
+                {
+                    TransformBack();
+                }
             }
 
-            var minResistance = maxResistance - maxResistanceLoss;
             var percentage = Mathf.InverseLerp(minResistance, maxResistance, Resistance); // -> 0
             var negPercentage = 1 - percentage;  // -> 1
 
             hitMultiplier.Set(1 - (negPercentage * maxResistanceSlowdown));
             uiManager.GetInstanceOf<GameUI>().UpdateHitOverlay(negPercentage);
+            Debug.Log(Resistance);
         }
         #endregion
 
@@ -226,9 +236,6 @@ namespace BiReJeJoCo.Character
 
         void OnHitByBullet(PhotonMessage msg) 
         {
-            var casted = msg as HuntedHitByBulletPhoMsg;
-
-            Resistance -= casted.dmg;
             uiManager.GetInstanceOf<GameUI>().UpdateHealthBar(Resistance / 100);
 
             if (Resistance <= 0 && !wasKilled)

@@ -172,7 +172,7 @@ namespace BiReJeJoCo.Items
             RaycastHit hit;
             var dir = currentTarget.Value - rayOrigin.position;
 
-            if (Physics.Raycast(rayOrigin.position, dir, out hit, dir.magnitude + 1, hitLayerMask))
+            if (Physics.Raycast(rayOrigin.position, dir, out hit, dir.magnitude + 0.1f, hitLayerMask))
             {
                 var point = hit.point;
                 point += hit.normal * trailHeight;
