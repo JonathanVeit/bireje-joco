@@ -10,9 +10,11 @@ namespace BiReJeJoCo.Items
         [Header("Settings")]
         [SerializeField] LineRenderer lineRenderer;
         [SerializeField] ParticleSystem lineParticleSystem;
-        [SerializeField] ParticleSystem targetParticleSystem;
-        [SerializeField] TrailRenderer targetTrailRenderer;
+        [SerializeField] ParticleSystem hitParticleSystem;
+        [SerializeField] TrailRenderer hitTrailRenderer;
+        [SerializeField] ParticleSystem damageParticleSystem;
         [SerializeField] Transform rayOrigin;
+        [SerializeField] float trailHeight;
 
         [Header("Appearance")]
         [SerializeField] [Range(.1f, 5f)] float density;
@@ -21,6 +23,7 @@ namespace BiReJeJoCo.Items
         [SerializeField] float minWidth;
         [SerializeField] float maxWidth;
         [SerializeField] LayerMask hitLayerMask;
+        [SerializeField] LayerMask huntedLayerMask;
 
         [Header("Noise")]
         [SerializeField] float noise;
@@ -63,14 +66,15 @@ namespace BiReJeJoCo.Items
                 lineParticleSystem.enableEmission = true;
                 
                 RefreshRay(currentTarget.Value);
-                SetHitSFX();
+                UpdateSFX();
             }
             else
             {
                 lineRenderer.enabled = false;
                 lineParticleSystem.enableEmission = false;
-                targetParticleSystem.enableEmission = false;
-                targetTrailRenderer.emitting = false;
+                hitParticleSystem.enableEmission = false;
+                hitTrailRenderer.emitting = false;
+                damageParticleSystem.enableEmission = false;
             }
         }
 
@@ -157,19 +161,43 @@ namespace BiReJeJoCo.Items
             lineRenderer.widthCurve = curve;
         }
 
-        private void SetHitSFX() 
+        private void UpdateSFX()
         {
-            if (Physics.CheckSphere(currentTarget.Value, 0.1f, hitLayerMask))
+            UpdateHitSFX();
+            UpdateDamageSFX();
+        }
+
+        private void UpdateHitSFX()
+        {
+            RaycastHit hit;
+            var dir = currentTarget.Value - rayOrigin.position;
+
+            if (Physics.Raycast(rayOrigin.position, dir, out hit, dir.magnitude + 1, hitLayerMask))
             {
-                targetParticleSystem.enableEmission = true;
-                targetTrailRenderer.emitting = true;
-                targetParticleSystem.transform.position = currentTarget.Value;
-                targetTrailRenderer.transform.position = currentTarget.Value;
+                var point = hit.point;
+                point += hit.normal * trailHeight;
+
+                hitParticleSystem.enableEmission = true;
+                hitTrailRenderer.emitting = true;
+                hitParticleSystem.transform.position = point;
+                hitTrailRenderer.transform.position = point;
             }
             else
             {
-                targetParticleSystem.enableEmission = false;
-                targetTrailRenderer.emitting = false;
+                hitParticleSystem.enableEmission = false;
+                hitTrailRenderer.emitting = false;
+            }
+        }
+        private void UpdateDamageSFX()
+        {
+            if (Physics.CheckSphere(currentTarget.Value, 0.1f, huntedLayerMask))
+            {
+                damageParticleSystem.enableEmission = true;
+                damageParticleSystem.transform.position = currentTarget.Value;
+            }
+            else
+            {
+                damageParticleSystem.enableEmission = false;
             }
         }
         #endregion

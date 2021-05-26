@@ -215,7 +215,7 @@ namespace BiReJeJoCo.Character
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed += OnShootPressed;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial2Pressed += OnSpeedUpPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed += OnSpeedUpPressed;
             
             var mover = localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.GetComponent<Mover>();
             isGrounded = () => mover.IsGrounded();
