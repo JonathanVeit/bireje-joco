@@ -202,7 +202,7 @@ namespace BiReJeJoCo.Character
             }
             else
             {
-                float hitPercentage = hittingHunter / allHunter.Count;
+                float hitPercentage = (float) hittingHunter / (float) allHunter.Count;
                 Resistance = Mathf.MoveTowards(Resistance, minResistance, resistanceLossRate * hitPercentage * Time.deltaTime);
 
                 isHitted = true;
@@ -217,7 +217,7 @@ namespace BiReJeJoCo.Character
 
             hitMultiplier.Set(1 - (negPercentage * maxResistanceSlowdown));
             uiManager.GetInstanceOf<GameUI>().UpdateHitOverlay(negPercentage);
-            Debug.Log(Resistance);
+            Debug.Log(Resistance + " hitting: " + hittingHunter);
         }
         #endregion
 
