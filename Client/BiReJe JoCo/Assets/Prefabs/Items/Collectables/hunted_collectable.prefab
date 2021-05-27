@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0972c82c964444a4bb3259b58c372804, type: 2}
+  - {fileID: 2100000, guid: 515d6a2acf2de9648accdf968f0a04d5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,7 +157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6027167e29d77854aa2053e85fa34674, type: 2}
+  - {fileID: 2100000, guid: 0090417a4976e8f46b6943215e231029, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -253,4 +253,5 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  drawGizmos: 0
   uniqueId: collectable_01

@@ -33,17 +33,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - CloudIntensity: 2
-    - CloudIntersectFade: 0.01
+    - CloudIntensity: 0.45
+    - CloudIntersectFade: 0.02
     - FogAmount: 17.21
     - FogDensity: 0.9
-    - NoiseIntensity: 1
-    - NoiseScale: 3
+    - NoiseIntensity: 0.75
+    - NoiseScale: 150
     - Opacity: -0.99
-    - TextureSpeed: 0.02
+    - TextureSpeed: 0.001
     - UseNoise: 1
     m_Colors:
-    - MainColor: {r: 0.8160377, g: 0.9116981, b: 1, a: 0}
+    - MainColor: {r: 0.8632076, g: 0.933059, b: 1, a: 0}
     - WindDirection: {r: 0, g: 1, b: 0, a: 0}
     - extraColor: {r: 0.8867924, g: 0.1045746, b: 0.1045746, a: 0}
   m_BuildTextureStacks: []
