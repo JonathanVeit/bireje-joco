@@ -164,5 +164,9 @@ namespace BiReJeJoCo
             this.itemId = itemId;
         }
     }
+
+    public class PlayerCollectedTrapMsg : BaseMessage
+    {
+    }
     #endregion
 }

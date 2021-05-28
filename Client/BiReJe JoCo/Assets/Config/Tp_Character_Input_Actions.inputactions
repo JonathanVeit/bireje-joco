@@ -76,6 +76,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ThrowTrap",
+                    "type": "Button",
+                    "id": "faa451c5-09ce-470c-a461-423bd69fb8cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -318,6 +326,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Special2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fc87a9e-a2e1-451d-8f44-663b6fdf5703",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ThrowTrap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -45,6 +45,9 @@ namespace BiReJeJoCo.Character
         public event Action onSpecial1Pressed;
         public event Action onSpecial2Pressed;
 
+        // throw trap
+        public event Action onThrowTrapPressed;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
@@ -181,6 +184,11 @@ namespace BiReJeJoCo.Character
                     StopCoroutine(onShootHoldInvoker);
             }
 
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                onThrowTrapPressed?.Invoke();
+            }
+
             if (BlockState.HasFlag(InputBlockState.Look))
                 return;
 
@@ -229,14 +237,15 @@ namespace BiReJeJoCo.Character
                 onSpecial1Pressed?.Invoke();
             }
         }
-        public void SetSpecial2Input(InputAction.CallbackContext inputValue)
+
+        public void SetThrowTrapInput(InputAction.CallbackContext inputValue)
         {
-            if (BlockState.HasFlag(InputBlockState.Interact))
+            if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
 
             if (inputValue.performed)
             {
-                onSpecial2Pressed?.Invoke();
+                onThrowTrapPressed?.Invoke();
             }
         }
         #endregion

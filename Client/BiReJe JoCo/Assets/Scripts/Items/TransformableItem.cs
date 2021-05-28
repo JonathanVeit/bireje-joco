@@ -23,6 +23,7 @@ namespace BiReJeJoCo.Items
             }
             else
             {
+                Debug.Log(Vector3.up * spawnForce);
                 rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
             }
         }

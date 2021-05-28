@@ -71,6 +71,11 @@ namespace BiReJeJoCo.Backend
         }
         public void AddSyncVar(ISyncVar syncVar)
         {
+            if (observedVariables.ContainsKey(syncVar.UniqueId.Value))
+            {
+                throw new System.ArgumentException($"PlayerControlled of player {Player.NickName} already observes SyncVar for Id {syncVar.UniqueId.Value}");
+            }
+
             observedVariables.Add(syncVar.UniqueId.Value, syncVar);
             syncVarHub.RegisterSyncVar(Player, syncVar);
         }
