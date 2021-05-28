@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class ResistanceMechanic : BaseBehaviourMechanic<HunterBehaviour>
+    public class ResistanceMechanic : BaseBehaviourMechanic<HuntedBehaviour>
     {
         [Header("Settings")]
         [SerializeField] float maxResistance = 100f;
@@ -17,7 +17,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
 
         public float Resistance { get; private set; }
-        public bool IsHitted { get; private set; }
+        public bool IsDecreasing { get; private set; }
 
         private MovementMultiplier hitMultiplier;
 
@@ -70,7 +70,7 @@ namespace BiReJeJoCo.Character
             {
                 if (hunter.PlayerCharacter == null) continue;
 
-                if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().isHitting)
+                if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().ShockMechanic.isHitting.GetValue())
                     hittingHunter++;
             }
 
@@ -82,16 +82,16 @@ namespace BiReJeJoCo.Character
         private void RegenerateResistance()
         {
             Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
-            IsHitted = false;
+            IsDecreasing = false;
         }
         private void DecreaseResistance(float hitPercentage)
         {
-            IsHitted = true;
-            //if (isTransformed.GetValue())
-            //{
-            Debug.LogError("need  this");
-            //TransformBack();
-            //}
+            IsDecreasing = true;
+
+            if (Behaviour.TransformationMechanic.IsTransformed)
+            {
+                Behaviour.TransformationMechanic.TransformBack();
+            }
 
             // lose till how much?
             var appliedMinResistance = minResistance;
@@ -117,7 +117,7 @@ namespace BiReJeJoCo.Character
             var negResistancePercentage = 1 - resistancePercentage; // -> 1
             hitMultiplier.Set(1 - (maxResistanceSlowdown * negResistancePercentage));
 
-            Debug.Log("Resistance: " + Resistance);
+            //Debug.Log("Resistance: " + Resistance);
         }
 
         #region Events

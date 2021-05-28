@@ -15,8 +15,6 @@ namespace BiReJeJoCo.Character
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
         private HunterPingFloaty pingFloaty;
 
-        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-
         #region Initialization
         protected override void OnInitializeLocal()
         {

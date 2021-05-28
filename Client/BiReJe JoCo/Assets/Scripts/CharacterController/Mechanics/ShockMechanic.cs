@@ -20,8 +20,6 @@ namespace BiReJeJoCo.Character
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 
-        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-
         #region Initialization
         protected override void OnInitializeLocal()
         {
@@ -92,7 +90,6 @@ namespace BiReJeJoCo.Character
                 return CastToTarget(ray);
 
             if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range)
-
             {
                 var dirToHunted = huntedTransform.position - gun.RayOrigin.position;
                 var gunDir = gun.RayOrigin.forward;
@@ -112,10 +109,11 @@ namespace BiReJeJoCo.Character
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range, targetLayer, QueryTriggerInteraction.Ignore))
             {
+                
                 isHitting.SetValue(hit.collider.gameObject.layer == 10);
                 return hit.point;
             }
-
+            
             isHitting.SetValue(false);
             return Camera.main.transform.position + Camera.main.transform.forward * range;
         }
@@ -126,6 +124,14 @@ namespace BiReJeJoCo.Character
             var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
             if (allHunted.Length == 0)
                 return null;
+
+            var hunted = allHunted[0];
+            var mechanic = hunted.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic;
+            if (mechanic.IsTransformed && 
+                mechanic.TransformedItem != null)
+            {
+                return mechanic.TransformedItem.transform;
+            }
 
             return allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
         }

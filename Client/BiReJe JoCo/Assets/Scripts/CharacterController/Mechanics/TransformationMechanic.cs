@@ -14,11 +14,12 @@ namespace BiReJeJoCo.Character
         [SerializeField] Timer transformationDurationTimer;
         [SerializeField] Timer transformationCooldownTimer;
 
+        public bool IsTransformed => isTransformed.GetValue();
+        public GameObject TransformedItem { get; private set; }
+        
         private SyncVar<bool> isTransformed = new SyncVar<bool>(0, false);
         private string scannedItemId;
-        private GameObject transformedItem;
 
-        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private Func<bool> isGrounded;
 
         #region Initialization
@@ -64,7 +65,8 @@ namespace BiReJeJoCo.Character
 
         public void ToggleTransformation()
         {
-            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId))
+            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId) ||
+                Behaviour.ResistanceMechanic.IsDecreasing)
                 return;
 
             if (isTransformed.GetValue())
@@ -77,7 +79,7 @@ namespace BiReJeJoCo.Character
             }
         }
 
-        private void TransformInto()
+        public void TransformInto()
         {
             isTransformed.SetValue(true);
             OnChangedTransformation(isTransformed.GetValue());
@@ -85,7 +87,7 @@ namespace BiReJeJoCo.Character
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(scannedItemId);
             var root = localPlayer.PlayerCharacter.ControllerSetup.ModelRoot;
-            transformedItem = photonRoomWrapper.Instantiate(prefab.name, root.position, root.rotation);
+            photonRoomWrapper.Instantiate(prefab.name, root.position, root.rotation);
 
             gameUI.UpdateTransformationCooldownBar(0);
             transformationDurationTimer.Start(
@@ -98,14 +100,14 @@ namespace BiReJeJoCo.Character
                 TransformBack();
             });
         }
-        private void TransformBack()
+        public void TransformBack()
         {
             isTransformed.SetValue(false);
             OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, InputBlockState.Free);
 
-            photonRoomWrapper.Destroy(transformedItem);
-            transformedItem = null;
+            photonRoomWrapper.Destroy(TransformedItem);
+            TransformedItem = null;
 
             gameUI.UpdateTransformationDurationBar(0);
             transformationDurationTimer.Stop();
@@ -140,6 +142,11 @@ namespace BiReJeJoCo.Character
             var sfxPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_transformation_sfx");
             var sfx = poolingManager.PoolInstance(sfxPrefab, transform.parent.GetChild(0).position, transform.parent.GetChild(0).rotation);
             sfx.transform.position -= Vector3.up;
+        }
+
+        public void SetTransformedItem(GameObject item)
+        {
+            TransformedItem = item;
         }
 
         #region Events

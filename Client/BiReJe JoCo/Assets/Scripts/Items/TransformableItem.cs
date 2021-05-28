@@ -1,4 +1,5 @@
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.Character;
 using UnityEngine;
 
 namespace BiReJeJoCo.Items
@@ -23,9 +24,23 @@ namespace BiReJeJoCo.Items
             }
             else
             {
-                Debug.Log(Vector3.up * spawnForce);
                 rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
             }
+
+            AssignToTransformationMechanic();
+        }
+        protected override void OnBeforeDestroy()
+        {
+            RemoveFromTransformationMechanic();
+        }
+
+        private void AssignToTransformationMechanic()
+        {
+            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this.gameObject);
+        }
+        private void RemoveFromTransformationMechanic()
+        {
+            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(null);
         }
     }
 }

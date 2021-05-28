@@ -12,8 +12,6 @@ namespace BiReJeJoCo.Character
         [SerializeField] Timer speedUpDurationTimer;
         [SerializeField] Timer speedUpCooldownTimer;
 
-        GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-
         #region Initialization
         protected override void OnInitializeLocal()
         {

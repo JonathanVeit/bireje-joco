@@ -15,7 +15,7 @@ namespace BiReJeJoCo.Character
         }
         private void FindMechanics() 
         {
-            foreach (var mechanic in GetComponents<IBehaviourMechanic>())
+            foreach (var mechanic in GetComponentsInChildren<IBehaviourMechanic>())
             {
                 mechanic.SetBehaviour(this);
             }

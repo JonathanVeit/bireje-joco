@@ -13,7 +13,12 @@ namespace BiReJeJoCo.Character
         [SerializeField] ShockMechanic shockMechanic;
         [SerializeField] TrapMechanic trapMechanic;
         [SerializeField] PingMechanic pingMechanic;
-        public bool isHitting => shockMechanic.isHitting.GetValue();
+
+        #region Access
+        public ShockMechanic ShockMechanic => shockMechanic;
+        public TrapMechanic TrapMechanic => trapMechanic;
+        public PingMechanic PingMechanic => pingMechanic;
+        #endregion
   
         #region Initialization
         protected override void OnBehaviourInitialized()

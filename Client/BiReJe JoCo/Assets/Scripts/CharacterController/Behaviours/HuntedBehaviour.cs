@@ -15,6 +15,12 @@ namespace BiReJeJoCo.Character
         [SerializeField] SpeedUpMechanic speedUpMechanic;
         [SerializeField] ResistanceMechanic resistanceMechanic;
 
+        #region Access
+        public TransformationMechanic TransformationMechanic => transformationMechanic;
+        public SpeedUpMechanic SpeedUpMechanic => speedUpMechanic;
+        public ResistanceMechanic ResistanceMechanic => resistanceMechanic;
+        #endregion
+
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
         private int collectedItems;
 
@@ -62,9 +68,9 @@ namespace BiReJeJoCo.Character
 
         public void Tick(float deltaTime)
         {
-            resistanceMechanic.UpdateResistance();
+            if (Owner.IsLocalPlayer)
+                resistanceMechanic.UpdateResistance();
         }
-
         #endregion
 
         #region Events
