@@ -7,21 +7,32 @@ namespace BiReJeJoCo.Map
     public class TriggeredLamp : SynchronizedTrigger
     {
         [Header("Lamp Settings")]
-        [SerializeField] Light mainLight;
+        [SerializeField] Light[] mainLight;
         [SerializeField] GameObject[] additionalObjects;
 
-        private bool isOn;
+        [SerializeField] bool isOn;
 
         protected override void SetupAsActive()
         {
             base.SetupAsActive();
-            isOn = mainLight.enabled;
+
+            foreach (Light _l in mainLight)
+            {
+                _l.enabled = isOn;
+            }
+
+            foreach (var curObject in additionalObjects)
+                curObject.SetActive(isOn);
         }
 
         protected override void OnTriggerInteracted(byte pointId)
         {
             isOn = !isOn;
-            mainLight.enabled = isOn;
+            foreach (Light _l in mainLight)
+            {
+                _l.enabled = isOn;
+            }
+
             foreach (var curObject in additionalObjects)
                 curObject.SetActive(isOn);
         }
