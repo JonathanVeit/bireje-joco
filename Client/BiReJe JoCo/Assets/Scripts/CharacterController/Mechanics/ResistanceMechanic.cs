@@ -16,15 +16,20 @@ namespace BiReJeJoCo.Character
         [SerializeField] [Range(0, 1)] float resistanceLossByAmount = 1;
         [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
 
-        public float Resistance { get; private set; }
+        [Space(10)]
+        [SerializeField] int catchDifficulty;
+        [SerializeField] AnimationCurve difficultyOverResistance;
+
+        public float CurrentResistance { get; private set; }
         public bool IsDecreasing { get; private set; }
 
         private MovementMultiplier hitMultiplier;
+        private bool catchSucceed;
 
         #region Initialization
         protected override void OnInitializeLocal()
         {
-            Resistance = maxResistance;
+            CurrentResistance = maxResistance;
             ConnectEvents();
         }
         protected override void OnInitializeRemote()
@@ -45,6 +50,7 @@ namespace BiReJeJoCo.Character
         }
         #endregion
 
+        #region Resistance Calculation
         public void UpdateResistance()
         {
             float hitPercentage = HittingHunterPercentage();
@@ -81,7 +87,7 @@ namespace BiReJeJoCo.Character
 
         private void RegenerateResistance()
         {
-            Resistance = Mathf.MoveTowards(Resistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
+            CurrentResistance = Mathf.MoveTowards(CurrentResistance, maxResistance, resistanceRegenerationRate * Time.deltaTime);
             IsDecreasing = false;
         }
         private void DecreaseResistance(float hitPercentage)
@@ -103,12 +109,12 @@ namespace BiReJeJoCo.Character
             var appliedLossRate = Mathf.Lerp(lossRate, resistanceLossRate, resistanceLossByAmount);
 
             // move resistance
-            Resistance = Mathf.MoveTowards(Resistance, appliedMinResistance, appliedLossRate * Time.deltaTime);
+            CurrentResistance = Mathf.MoveTowards(CurrentResistance, appliedMinResistance, appliedLossRate * Time.deltaTime);
         }
         private void UpdateResistanceInfluence()
         {
             // how much resistance has been lost compared to max?
-            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, Resistance); // -> 0
+            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance); // -> 0
 
             // update ui
             gameUI.UpdateHitOverlay(1 - resistancePercentage);
@@ -119,6 +125,27 @@ namespace BiReJeJoCo.Character
 
             //Debug.Log("Resistance: " + Resistance);
         }
+        #endregion
+
+        #region Catching
+        public void TryCatch()
+        {
+            if (catchSucceed) return;
+
+            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance); // -> 0
+            var negResistancePercentage = 1 - resistancePercentage; // -> 1
+
+            var multiplier = difficultyOverResistance.Evaluate(negResistancePercentage);
+            Debug.Log(multiplier);
+            var decision = Random.Range(0, (int)(catchDifficulty * multiplier));
+            
+            if (decision == 0)
+            {
+                photonMessageHub.ShoutMessage<HuntedCatchedPhoMsg>(PhotonMessageTarget.MasterClient);
+                catchSucceed = true;
+            }
+        }
+        #endregion
 
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)

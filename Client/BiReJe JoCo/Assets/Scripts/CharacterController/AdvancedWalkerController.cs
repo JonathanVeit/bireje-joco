@@ -190,6 +190,9 @@ namespace BiReJeJoCo.Character
 			if(currentControllerState == ControllerState.Grounded)
 				_velocity = CalculateMovementVelocity();
 			
+			// add multiplier 
+			_velocity += CalculateMultiplier(_velocity);
+
 			//If local momentum is used, transform momentum into world space first;
 			Vector3 _worldMomentum = momentum;
 			if(useLocalMomentum)
@@ -201,9 +204,6 @@ namespace BiReJeJoCo.Character
 			//If player is grounded or sliding on a slope, extend mover's sensor range;
 			//This enables the player to walk up/down stairs and slopes without losing ground contact;
 			mover.SetExtendSensorRange(IsGrounded());
-
-			// add multiplier 
-			_velocity += CalculateMultiplier(_velocity);
 
 			//Set mover velocity;		
 			mover.SetVelocity(_velocity);

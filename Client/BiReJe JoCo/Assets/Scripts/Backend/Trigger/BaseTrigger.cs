@@ -186,48 +186,58 @@ namespace BiReJeJoCo.Backend
                 return false;
 
             var offset = trigger.root.TransformDirection(trigger.areaOffset);
-            var collisions = Physics.OverlapBox(trigger.root.position + offset, trigger.areaSize / 2, trigger.root.rotation, playerLayer, QueryTriggerInteraction.Ignore);
-            
-            if (collisions.Length == 0 || playerTransform == null) return false;
+            var collisions = BoxCast(trigger.root, trigger.areaSize, trigger.areaOffset, playerLayer);
+
+            if (collisions.Length == 0 || playerTransform == null) 
+                return false;
             return collisions.ToList().Find(x => x.transform == playerTransform) != null;
         }
+        protected Collider[] BoxCast(Transform root, Vector3 areaSize, Vector3 areaOffset, LayerMask mask) 
+        {
+            var offset = root.TransformDirection(areaOffset);
+            return Physics.OverlapBox(root.position + offset, areaSize / 2, root.rotation, mask, QueryTriggerInteraction.Ignore);
+        }
+
         void OnDrawGizmos()
         {
             if (!drawGizmos) return;
 
             foreach (var curTrigger in triggerPoints)
             {
-                var root = curTrigger.root;
-                var offset = curTrigger.root.TransformDirection(curTrigger.areaOffset);
-                var corner = root.position + offset + (root.right * -0.5f * curTrigger.areaSize.x) + (root.up * -0.5f * curTrigger.areaSize.y) + (root.forward * -0.5f * curTrigger.areaSize.z);
-                var color = Color.green;
-
-                // directions 
-                var forward = root.forward * curTrigger.areaSize.z;
-                var right = root.right * curTrigger.areaSize.x;
-                var up = root.up * curTrigger.areaSize.y;
-
-                // bottom part
-                Debug.DrawRay(corner, right, color);
-                Debug.DrawRay(corner, forward, color);
-
-                Debug.DrawRay(corner + forward, right, color);
-                Debug.DrawRay(corner + right, forward, color);
-
-                // top part 
-                Debug.DrawRay(corner + up, right, color);
-                Debug.DrawRay(corner + up, forward, color);
-
-                Debug.DrawRay(corner + forward + up, right, color);
-                Debug.DrawRay(corner + right + up, forward, color);
-
-                // up part
-                Debug.DrawRay(corner, up, color);
-                Debug.DrawRay(corner + right, up, color);
-
-                Debug.DrawRay(corner + forward, up, color);
-                Debug.DrawRay(corner + right + forward, up, color);
+                DrawBox(curTrigger.root, curTrigger.areaSize, curTrigger.areaOffset);
             }
+        }
+        protected void DrawBox(Transform root, Vector3 areaSize, Vector3 areaOffset)
+        {
+            var offset = root.TransformDirection(areaOffset);
+            var corner = root.position + offset + (root.right * -0.5f * areaSize.x) + (root.up * -0.5f * areaSize.y) + (root.forward * -0.5f * areaSize.z);
+            var color = Color.green;
+
+            // directions 
+            var forward = root.forward * areaSize.z;
+            var right = root.right * areaSize.x;
+            var up = root.up * areaSize.y;
+
+            // bottom part
+            Debug.DrawRay(corner, right, color);
+            Debug.DrawRay(corner, forward, color);
+
+            Debug.DrawRay(corner + forward, right, color);
+            Debug.DrawRay(corner + right, forward, color);
+
+            // top part 
+            Debug.DrawRay(corner + up, right, color);
+            Debug.DrawRay(corner + up, forward, color);
+
+            Debug.DrawRay(corner + forward + up, right, color);
+            Debug.DrawRay(corner + right + up, forward, color);
+
+            // up part
+            Debug.DrawRay(corner, up, color);
+            Debug.DrawRay(corner + right, up, color);
+
+            Debug.DrawRay(corner + forward, up, color);
+            Debug.DrawRay(corner + right + forward, up, color);
         }
 
         protected virtual IEnumerator CoolDown(TriggerSetup trigger)

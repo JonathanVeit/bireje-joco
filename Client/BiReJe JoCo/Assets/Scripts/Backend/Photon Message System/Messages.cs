@@ -112,7 +112,7 @@ namespace BiReJeJoCo.Backend
     /// <summary>
     /// Fired by the hunted when beeing killed
     /// </summary>
-    public class HuntedKilledPhoMsg : PhotonMessage
+    public class HuntedCatchedPhoMsg : PhotonMessage
     { 
     }
 

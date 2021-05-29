@@ -11,7 +11,6 @@ namespace BiReJeJoCo.Items
         [SerializeField] LineRenderer lineRenderer;
         [SerializeField] ParticleSystem lineParticleSystem;
         [SerializeField] ParticleSystem hitParticleSystem;
-        [SerializeField] TrailRenderer hitTrailRenderer;
         [SerializeField] ParticleSystem damageParticleSystem;
         [SerializeField] Transform rayOrigin;
         [SerializeField] float trailHeight;
@@ -34,7 +33,9 @@ namespace BiReJeJoCo.Items
         private float counter;
 
         public Transform RayOrigin => rayOrigin;
-        
+
+        private TrailRenderer currentTrail;
+
         private PlayerControlled controller;
         public Player Owner => controller.Player;
 
@@ -73,8 +74,8 @@ namespace BiReJeJoCo.Items
                 lineRenderer.enabled = false;
                 lineParticleSystem.enableEmission = false;
                 hitParticleSystem.enableEmission = false;
-                hitTrailRenderer.emitting = false;
                 damageParticleSystem.enableEmission = false;
+                DestroyCurrentTrail();
             }
         }
 
@@ -178,14 +179,18 @@ namespace BiReJeJoCo.Items
                 point += hit.normal * trailHeight;
 
                 hitParticleSystem.enableEmission = true;
-                hitTrailRenderer.emitting = true;
                 hitParticleSystem.transform.position = point;
-                hitTrailRenderer.transform.position = point;
+
+                if (!currentTrail)
+                {
+                    currentTrail = SpawnNewTrail();
+                }
+                currentTrail.transform.position = point;
             }
             else
             {
                 hitParticleSystem.enableEmission = false;
-                hitTrailRenderer.emitting = false;
+                DestroyCurrentTrail();
             }
         }
         private void UpdateDamageSFX()
@@ -198,6 +203,23 @@ namespace BiReJeJoCo.Items
             else
             {
                 damageParticleSystem.enableEmission = false;
+            }
+        }
+
+        private TrailRenderer SpawnNewTrail() 
+        {
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("shock_gun_trail");
+            var instance = poolingManager.PoolInstance(prefab);
+            var trailRenderer = instance.GetComponent<TrailRenderer>();
+            trailRenderer.emitting = true;
+            return trailRenderer;
+        }
+        private void DestroyCurrentTrail()
+        {
+            if (currentTrail)
+            {
+                currentTrail.emitting = false;
+                currentTrail = null;
             }
         }
         #endregion

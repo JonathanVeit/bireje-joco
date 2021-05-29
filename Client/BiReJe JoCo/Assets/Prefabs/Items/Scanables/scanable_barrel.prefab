@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 952522802584706858}
   - component: {fileID: 4222073954988871823}
   - component: {fileID: 2122082376385995845}
+  - component: {fileID: 5760708160079078811}
   - component: {fileID: 4503255421708084727}
   m_Layer: 8
   m_Name: scanable_barrel
@@ -84,6 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5760708160079078811
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464955831993304464}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.939697, y: 0.918394, z: 0.9356885}
+  m_Center: {x: 0, y: 0.459197, z: -0.0040172487}
 --- !u!114 &4503255421708084727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +126,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  drawGizmos: 0
   id: transformable_barrel
 --- !u!1 &4441926195744000379
 GameObject:

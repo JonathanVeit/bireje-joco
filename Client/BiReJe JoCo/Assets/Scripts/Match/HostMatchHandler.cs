@@ -18,7 +18,7 @@ namespace BiReJeJoCo
         {
             base.ConnectEvents();
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
-            photonMessageHub.RegisterReceiver<HuntedKilledPhoMsg>(this, OnHuntedKilled);
+            photonMessageHub.RegisterReceiver<HuntedCatchedPhoMsg>(this, OnHuntedKilled);
             photonMessageHub.RegisterReceiver<HuntedFinishedObjectivePhoMsg>(this, OnHuntedFinishedObjective);
         }
         #endregion

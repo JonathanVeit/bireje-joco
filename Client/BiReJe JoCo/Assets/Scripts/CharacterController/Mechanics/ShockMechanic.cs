@@ -54,6 +54,7 @@ namespace BiReJeJoCo.Character
             }
             
             messageHub.UnregisterReceiver(this);
+            reloadTimer.Stop();
         }
         #endregion
 
