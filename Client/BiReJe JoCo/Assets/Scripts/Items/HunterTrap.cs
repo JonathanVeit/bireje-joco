@@ -165,7 +165,7 @@ namespace BiReJeJoCo.Items
         }
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.name = "Trap";
+            floaty.SetDescription ("Collect trap");
         }
         protected override bool PlayerIsInArea(TriggerSetup trigger)
         {
