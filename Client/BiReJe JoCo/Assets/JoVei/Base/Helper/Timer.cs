@@ -10,14 +10,14 @@ namespace JoVei.Base.Helper
         Counting = 2,   
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Timer
     {
         [SerializeField] float duration = 1;
         [SerializeField] float timeScale = 1;
 
-        public float Duration { get { return duration; } set { duration = value; } }
-        public float TimeScale { get { return timeScale; } set { timeScale = value; } }
+        public float Duration { get { return duration; } private set { duration = value; } }
+        public float TimeScale { get { return timeScale; } private set { timeScale = value; } }
         public TimerState State { get; private set; } = TimerState.Finished;
         public float Progress { get; private set; }
         public float RelativeProgress { get; private set; }

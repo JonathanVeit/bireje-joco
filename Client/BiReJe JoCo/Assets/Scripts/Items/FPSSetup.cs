@@ -8,7 +8,7 @@ namespace BiReJeJoCo.Items
         [Header("Settings")]
         [SerializeField] Transform target;
         [SerializeField] float speed;
-        [SerializeField] SyncVar<Vector3> rotation = new SyncVar<Vector3>(2);
+        [SerializeField] SyncVar<Vector3> rotation = new SyncVar<Vector3>(5);
         
         public Player Owner => controller.Player;
         private PlayerControlled controller;

@@ -1,95 +1,65 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
-using UnityEngine;
-using JoVei.Base.UI;
 using JoVei.Base.Helper;
+using JoVei.Base.UI;
+using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class HunterBehaviour : TickBehaviour, IPlayerObserved
+    public class PingMechanic : BaseBehaviourMechanic<HunterBehaviour>
     {
         [Header("Settings")]
-        [SerializeField] Transform cameraRoot;
-        [SerializeField] Transform fpsSetup;
         [SerializeField] Timer pingDurationTimer;
         [SerializeField] Timer pingCooldownTimer;
 
-        public Player Owner => controller.Player;
-        private PlayerControlled controller;
-
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
-        private GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-        private HunterPingFloaty pingFloaty; 
+        private HunterPingFloaty pingFloaty;
 
         #region Initialization
-        public void Initialize(PlayerControlled controller)
+        protected override void OnInitializeLocal()
         {
-            this.controller = controller;
-
-            if (Owner.IsLocalPlayer)
-            {
-                ConnectEvents();
-                SetupPerspective();
-            }
-            else if (localPlayer.Role == PlayerRole.Hunter)
-            {
+            ConnectEvents();
+        }
+        protected override void OnInitializeRemote()
+        {
+            if (localPlayer.Role == PlayerRole.Hunter)
                 pingPosition.OnValueReceived += OnPingUpdated;
-            }
+            
+            ConnectEvents();
         }
-
-        private void SetupPerspective()
-        {
-            Camera.main.transform.SetParent(cameraRoot);
-            Camera.main.transform.position = cameraRoot.position;
-            Camera.main.transform.rotation = cameraRoot.rotation;
-
-            fpsSetup.SetParent(cameraRoot);
-        }
-
         protected override void OnBeforeDestroy()
         {
             DisconnectEvents();
-       
+        }
+
+        private void ConnectEvents()
+        {
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
+        }
+        private void DisconnectEvents()
+        {
             if (syncVarHub)
                 syncVarHub.UnregisterSyncVar(pingPosition);
-            if (localPlayer.PlayerCharacter)
-                localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed -= OnSpecial1Pressed;
-            pingPosition.OnValueReceived -= OnPingUpdated;
-        }
-
-        private void ConnectEvents() 
-        {
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
-            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnClosEMatch);
-        }
-        private void DisconnectEvents() 
-        {
-            messageHub.UnregisterReceiver(this);
-
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
+
+            pingPosition.OnValueReceived -= OnPingUpdated;
+            messageHub.UnregisterReceiver(this);
         }
         #endregion
 
-        private void OnSpecial1Pressed() 
+        public void SpawnPing()
         {
             if (pingCooldownTimer.State == TimerState.Counting) return;
 
-            pingPosition.SetValue(transform.position + Vector3.up);
+            pingPosition.SetValue(transform.position);
             pingPosition.ForceSend();
             pingCooldownTimer.Start(
                 () => // update
                 {
                     gameUI.UpdatePingCooldown(pingCooldownTimer.RelativeProgress);
-                },null);
+                }, null);
         }
-
-        #region Events
-        void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
-        {
-            localPlayer.PlayerCharacter.controllerSetup.characterInput.onSpecial1Pressed += OnSpecial1Pressed;
-        }
-
         private void OnPingUpdated(Vector3 position)
         {
             if (position.magnitude == 0) return;
@@ -122,16 +92,13 @@ namespace BiReJeJoCo.Character
                 });
         }
 
-        private void OnClosEMatch(PhotonMessage obj)
+        private void OnCloseMatch(PhotonMessage obj)
         {
             pingDurationTimer.Stop();
             pingCooldownTimer.Stop();
 
             if (pingFloaty)
                 pingFloaty.RequestDestroyFloaty();
-
-            Camera.main.transform.parent = null;
         }
-        #endregion
     }
 }

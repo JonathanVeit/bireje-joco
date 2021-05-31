@@ -46,7 +46,7 @@ namespace BiReJeJoCo.Items
 
         public override void Tick(float deltaTime)
         {
-            uiManager.GetInstanceOf<GameUI>().UpdateShootCooldown(coolDownCounter / coolDown);
+            uiManager.GetInstanceOf<GameUI>().UpdateAmmoBar(coolDownCounter / coolDown);
             coolDownCounter = Mathf.Clamp(coolDownCounter += Time.deltaTime, 0, coolDown);
         }
 
@@ -77,7 +77,7 @@ namespace BiReJeJoCo.Items
         #region Events
         private void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            var input = localPlayer.PlayerCharacter.controllerSetup.characterInput;
+            var input = localPlayer.PlayerCharacter.ControllerSetup.CharacterInput;
             input.onShootPressed += OnShootPressed;
         }
 

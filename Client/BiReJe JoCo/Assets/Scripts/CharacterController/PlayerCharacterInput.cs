@@ -37,10 +37,16 @@ namespace BiReJeJoCo.Character
 
         // shooting 
         public event Action onShootPressed;
+        public event Action<float> onShootHold;
+        public event Action onShootReleased;
+        private Coroutine onShootHoldInvoker;
 
         // special 1
         public event Action onSpecial1Pressed;
         public event Action onSpecial2Pressed;
+
+        // throw trap
+        public event Action onThrowTrapPressed;
 
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
@@ -139,16 +145,48 @@ namespace BiReJeJoCo.Character
             if (inputValue.performed)
             {
                 onShootPressed?.Invoke();
+                onShootHoldInvoker = StartCoroutine(OnShootHoldInvoker());
+            }
+            else if (inputValue.canceled)
+            {
+                onShootReleased?.Invoke();
+                if (onShootHoldInvoker != null)
+                    StopCoroutine(onShootHoldInvoker);
             }
         }
+        private IEnumerator OnShootHoldInvoker()
+        {
+            float duration = 0;
+
+            while (true)
+            {
+                onShootHold?.Invoke(duration);
+                duration += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+
         private void Update()
         {
             if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
-            
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 onShootPressed?.Invoke();
+                onShootHoldInvoker = StartCoroutine(OnShootHoldInvoker());
+            }
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
+            {
+                onShootReleased?.Invoke();
+                if (onShootHoldInvoker != null)
+                    StopCoroutine(onShootHoldInvoker);
+            }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                onThrowTrapPressed?.Invoke();
             }
 
             if (BlockState.HasFlag(InputBlockState.Look))
@@ -199,14 +237,15 @@ namespace BiReJeJoCo.Character
                 onSpecial1Pressed?.Invoke();
             }
         }
-        public void SetSpecial2Input(InputAction.CallbackContext inputValue)
+
+        public void SetThrowTrapInput(InputAction.CallbackContext inputValue)
         {
-            if (BlockState.HasFlag(InputBlockState.Interact))
+            if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
 
             if (inputValue.performed)
             {
-                onSpecial2Pressed?.Invoke();
+                onThrowTrapPressed?.Invoke();
             }
         }
         #endregion
@@ -288,4 +327,3 @@ namespace BiReJeJoCo.Character
 
     }
 }
-

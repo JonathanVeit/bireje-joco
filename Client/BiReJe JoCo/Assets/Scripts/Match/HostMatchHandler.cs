@@ -18,7 +18,7 @@ namespace BiReJeJoCo
         {
             base.ConnectEvents();
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
-            photonMessageHub.RegisterReceiver<HuntedKilledPhoMsg>(this, OnHuntedKilled);
+            photonMessageHub.RegisterReceiver<HuntedCatchedPhoMsg>(this, OnHuntedCatched);
             photonMessageHub.RegisterReceiver<HuntedFinishedObjectivePhoMsg>(this, OnHuntedFinishedObjective);
         }
         #endregion
@@ -204,12 +204,12 @@ namespace BiReJeJoCo
             photonMessageHub.ShoutMessage<CloseMatchPhoMsg>(PhotonMessageTarget.AllViaServer, mode);
         }
         
-        private void OnHuntedKilled(PhotonMessage msg)
+        private void OnHuntedCatched(PhotonMessage msg)
         {
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunter,
-                message = "Monster has been killed!",
+                message = "Monster has been catched!",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);

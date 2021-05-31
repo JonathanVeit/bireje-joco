@@ -162,7 +162,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8526853731205187677}
   - {fileID: 6000063909719280288}
   m_Father: {fileID: 4266439846296965328}
   m_RootOrder: 0
@@ -243,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca92af7d25cd0a042b79024172a4fb7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behaviour: {fileID: 5575739276421319279}
   characterRoot: {fileID: 4266439846296965328}
   modelRoot: {fileID: 983172082398528564}
   rigidBody: {fileID: 4316337145549554978}
@@ -554,10 +554,14 @@ MonoBehaviour:
     m_ActionId: 345fe285-9088-4d20-a207-4c99896c2159
     m_ActionName: Player/Special1[/Keyboard/q]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5
+    m_ActionName: Player/Special2[/Keyboard/ctrl]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4262046799928769267}
         m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetSpecial2Input
+        m_MethodName: SetThrowTrapInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -567,8 +571,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5
-    m_ActionName: Player/Special2[/Keyboard/ctrl]
+    m_ActionId: faa451c5-09ce-470c-a461-423bd69fb8cb
+    m_ActionName: Player/ThrowTrap[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -611,9 +615,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 983172082398528564}
     m_Modifications:
+    - target: {fileID: 2946704866473463054, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7396179318448528176, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7396179318448528176, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -660,13 +668,17 @@ PrefabInstance:
       value: hunter_behaviour
       objectReference: {fileID: 0}
     - target: {fileID: 8683224742474013695, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
-      propertyPath: fpsSetup
+      propertyPath: gun
       value: 
-      objectReference: {fileID: 8526853731205187677}
+      objectReference: {fileID: 0}
     - target: {fileID: 8683224742474013695, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
       propertyPath: cameraRoot
       value: 
       objectReference: {fileID: 3799054180910594970}
+    - target: {fileID: 8683224742474013695, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+      propertyPath: trapSpawnPoint
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
 --- !u!4 &6000063909719280288 stripped
@@ -674,69 +686,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7396179318448528176, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
   m_PrefabInstance: {fileID: 3882106939068551568}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &9176625456571716268
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 983172082398528564}
-    m_Modifications:
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5083639540993610607, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6980374521982044247, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-      propertyPath: m_Name
-      value: fps_setup
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
---- !u!4 &8526853731205187677 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 652059259314412273, guid: 5992c264796cbc141b2714ea124a85b8, type: 3}
-  m_PrefabInstance: {fileID: 9176625456571716268}
+--- !u!114 &5575739276421319279 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8683224742474013695, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+  m_PrefabInstance: {fileID: 3882106939068551568}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ce63fb74dc8d74ba90009bbc79535e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca92af7d25cd0a042b79024172a4fb7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behaviour: {fileID: 2499563852156931643}
   characterRoot: {fileID: 3986011578950118073}
   modelRoot: {fileID: 1123382873885243662}
   rigidBody: {fileID: 6268242092879492245}
@@ -1713,6 +1714,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5
     m_ActionName: Player/Special2[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6922469825186454421}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetThrowTrapInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: faa451c5-09ce-470c-a461-423bd69fb8cb
+    m_ActionName: Player/ThrowTrap[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1857,3 +1874,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5355064504545400266, guid: 7f1fb3b2fd18c45428fe1e886e2bfb39, type: 3}
   m_PrefabInstance: {fileID: 7557390781154319344}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2499563852156931643 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5355064504545400267, guid: 7f1fb3b2fd18c45428fe1e886e2bfb39, type: 3}
+  m_PrefabInstance: {fileID: 7557390781154319344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6495ce45bba9eea44a4d861336938df9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

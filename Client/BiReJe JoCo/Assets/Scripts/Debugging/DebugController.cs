@@ -240,11 +240,11 @@ namespace BiReJeJoCo.Debugging
                 globalVariables.SetVar("rot_sync_speed", value);
             }));
 
-            RegisterCommand(new DebugCommand("reset_player_character", "Reset the local player character", "reset_player_character", () =>
+            RegisterCommand(new DebugCommand("jump_to_hunted", "Set player character to hunted position", "jump_to_hunted", () =>
             {
-                var mover = localPlayer.PlayerCharacter.GetComponentInChildren<Character.Mover>();
-                mover.transform.position = new Vector3(0, 2, 0);
-                mover.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                var playerManager = DIContainer.GetImplementationFor<PlayerManager>();
+                var targetPosition = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter.ControllerSetup.CharacterRoot.position;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.position = targetPosition;
             }));
 
             RegisterCommand(new DebugCommand<string>("restart_match", "Restart the current match with the given mode", "restart_match <string>", (value) =>

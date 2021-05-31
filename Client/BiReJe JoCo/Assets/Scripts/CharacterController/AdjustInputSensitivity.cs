@@ -19,8 +19,8 @@ namespace BiReJeJoCo.Character
         [SerializeField] CinemachineVirtualCamera cinemaVirtual;
         [SerializeField] CinemachineFreeLook cinemaFreeLook;
 
-        PlayerCharacterInput characterInput => localPlayer.PlayerCharacter.controllerSetup.characterInput;
-        PlayerInput playerInput => localPlayer.PlayerCharacter.controllerSetup.playerInput;
+        PlayerCharacterInput characterInput => localPlayer.PlayerCharacter.ControllerSetup.CharacterInput;
+        PlayerInput playerInput => localPlayer.PlayerCharacter.ControllerSetup.PlayerInput;
 
         string currentControlScheme;
 

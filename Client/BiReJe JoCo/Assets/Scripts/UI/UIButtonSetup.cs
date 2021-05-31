@@ -12,7 +12,7 @@ namespace BiReJeJoCo.UI
 
         private void OnEnable()
         {
-            var scheme = localPlayer.PlayerCharacter.controllerSetup.playerInput.currentControlScheme;
+            var scheme = localPlayer.PlayerCharacter.ControllerSetup.PlayerInput.currentControlScheme;
             
             if (scheme == "Keyboard")
             {

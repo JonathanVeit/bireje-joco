@@ -19,7 +19,7 @@ namespace BiReJeJoCo.UI
         [Header("Hunter")]
         [SerializeField] GameObject hunterHUD;
         [SerializeField] GameObject crosshairGO;
-        [SerializeField] UIBarHandler shootingCooldownBar;
+        [SerializeField] UIBarHandler ammoBar;
         [SerializeField] UIBarHandler pingCooldownBar;
 
         [Header("Hunted")]
@@ -30,6 +30,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] UIBarHandler speedUpBar;
         [SerializeField] Image scannedItemIcon;
         [SerializeField] Text collectableLabel;
+        [SerializeField] Image hitOverlay;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
@@ -110,12 +111,12 @@ namespace BiReJeJoCo.UI
             target.gameObject.SetActive(false);
         }
 
-        public void UpdateShootCooldown(float value)
+        public void UpdateAmmoBar(float value)
         {
             if (value == 0)
-                shootingCooldownBar.OverrideValue(0);
+                ammoBar.OverrideValue(0);
             else
-                shootingCooldownBar.SetValue(value);
+                ammoBar.SetValue(value);
         }
         public void UpdatePingCooldown(float value)
         {
@@ -166,6 +167,12 @@ namespace BiReJeJoCo.UI
                 speedUpBar.OverrideValue(value);
             else
                 speedUpBar.SetValue(value);
+        }
+        public void UpdateHitOverlay(float alpha)
+        {
+            var col = hitOverlay.color;
+            col.a = alpha;
+            hitOverlay.color = col;
         }
         #endregion
 

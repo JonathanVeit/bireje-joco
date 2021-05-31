@@ -66,7 +66,7 @@ namespace BiReJeJoCo.Backend
         #region Update Transform
         public override void Tick(float deltaTime)
         {
-            if (controller.PhotonView.IsMine || !this.enabled) return;
+            if (controller.PhotonView.IsMine || ! this.enabled) return;
 
             if (type.HasFlag(SyncedTransformType.Position))
                 UpdatePosition();

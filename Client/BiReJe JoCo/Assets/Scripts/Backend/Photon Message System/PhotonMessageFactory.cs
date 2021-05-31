@@ -34,7 +34,7 @@ namespace BiReJeJoCo.Backend
                 case 9:
                     return JsonConvert.DeserializeObject<HuntedHitByBulletPhoMsg>(serializedMessage);
                 case 10:
-                    return JsonConvert.DeserializeObject<HuntedKilledPhoMsg>(serializedMessage);
+                    return JsonConvert.DeserializeObject<HuntedCatchedPhoMsg>(serializedMessage);
                 case 11:
                     return JsonConvert.DeserializeObject<CollectItemPhoMsg>(serializedMessage);
                 case 12:
@@ -67,7 +67,7 @@ namespace BiReJeJoCo.Backend
                     return 8;
                 case HuntedHitByBulletPhoMsg casted:
                     return 9;
-                case HuntedKilledPhoMsg casted:
+                case HuntedCatchedPhoMsg casted:
                     return 10;
                 case CollectItemPhoMsg casted:
                     return 11;

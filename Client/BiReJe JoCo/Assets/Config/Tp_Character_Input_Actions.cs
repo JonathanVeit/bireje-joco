@@ -89,6 +89,14 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ThrowTrap"",
+                    ""type"": ""Button"",
+                    ""id"": ""faa451c5-09ce-470c-a461-423bd69fb8cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -333,6 +341,17 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""action"": ""Special2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fc87a9e-a2e1-451d-8f44-663b6fdf5703"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ThrowTrap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -400,6 +419,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Special1 = m_Player.FindAction("Special1", throwIfNotFound: true);
         m_Player_Special2 = m_Player.FindAction("Special2", throwIfNotFound: true);
+        m_Player_ThrowTrap = m_Player.FindAction("ThrowTrap", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -461,6 +481,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Special1;
     private readonly InputAction m_Player_Special2;
+    private readonly InputAction m_Player_ThrowTrap;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -474,6 +495,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @Special1 => m_Wrapper.m_Player_Special1;
         public InputAction @Special2 => m_Wrapper.m_Player_Special2;
+        public InputAction @ThrowTrap => m_Wrapper.m_Player_ThrowTrap;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -510,6 +532,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Special2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
                 @Special2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
                 @Special2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
+                @ThrowTrap.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
+                @ThrowTrap.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
+                @ThrowTrap.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -541,6 +566,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Special2.started += instance.OnSpecial2;
                 @Special2.performed += instance.OnSpecial2;
                 @Special2.canceled += instance.OnSpecial2;
+                @ThrowTrap.started += instance.OnThrowTrap;
+                @ThrowTrap.performed += instance.OnThrowTrap;
+                @ThrowTrap.canceled += instance.OnThrowTrap;
             }
         }
     }
@@ -607,6 +635,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnSpecial1(InputAction.CallbackContext context);
         void OnSpecial2(InputAction.CallbackContext context);
+        void OnThrowTrap(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {
