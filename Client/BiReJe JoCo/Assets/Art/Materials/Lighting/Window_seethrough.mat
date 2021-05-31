@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Window_01
+  m_Name: Window_seethrough
   m_Shader: {fileID: -6465566751694194690, guid: cddd49faf8df78e449a18d015e84babb, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -36,7 +36,7 @@ Material:
     - CloudIntensity: 0
     - CloudIntersectFade: 0.01
     - FogAmount: 17.21
-    - FogDensity: 1
+    - FogDensity: 0.9
     - GradientHight: -0.51
     - GradientIntensity: 0.804
     - GradientMax: 1
