@@ -65,6 +65,14 @@ namespace BiReJeJoCo.Items
             if (!Owner.IsLocalPlayer)
                 DisconnectEvents();
         }
+
+        protected override void DisconnectEvents()
+        {
+            base.DisconnectEvents();
+
+            startDelay.Stop();
+            catchDuration.Stop()
+        }
         #endregion
 
         #region Catching

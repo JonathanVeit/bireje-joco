@@ -136,7 +136,7 @@ namespace BiReJeJoCo.Character
             var negResistancePercentage = 1 - resistancePercentage; // -> 1
 
             var multiplier = difficultyOverResistance.Evaluate(negResistancePercentage);
-            Debug.Log(multiplier);
+
             var decision = Random.Range(0, (int)(catchDifficulty * multiplier));
             
             if (decision == 0)
