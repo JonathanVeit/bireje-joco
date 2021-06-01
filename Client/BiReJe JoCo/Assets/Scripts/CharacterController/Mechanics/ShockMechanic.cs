@@ -17,6 +17,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] LayerMask targetLayer;
 
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
+        public ShockGun Gun => gun;
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 

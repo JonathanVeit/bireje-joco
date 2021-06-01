@@ -1,5 +1,6 @@
 using BiReJeJoCo.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BiReJeJoCo.Character
 {

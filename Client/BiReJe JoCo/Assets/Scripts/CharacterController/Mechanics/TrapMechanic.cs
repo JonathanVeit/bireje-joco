@@ -13,8 +13,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] Vector3 extraThrowForce;
         [SerializeField] float trapThrowRange;
 
-        private SyncVar<object[]> trapPosition = new SyncVar<object[]>(4);
-        private GameObject trap;
+        private GameObject thrownTrap;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -23,7 +22,6 @@ namespace BiReJeJoCo.Character
         }
         protected override void OnInitializeRemote()
         {
-            trapPosition.OnValueReceived += (x => ThrowTrapInternal(x));
         }
         protected override void OnBeforeDestroy()
         {
@@ -36,15 +34,13 @@ namespace BiReJeJoCo.Character
         }
         private void DisconnectEvents() 
         {
-            if (syncVarHub)
-                syncVarHub.UnregisterSyncVar(trapPosition);
             messageHub.UnregisterReceiver(this);
         }
         #endregion
 
         public void ThrowTrap()
         {
-            if (trap) return;
+            if (thrownTrap) return;
 
             var ray = new Ray()
             {
@@ -53,8 +49,10 @@ namespace BiReJeJoCo.Character
             };
 
             var trapTarget = CalculateTrapTarget(ray);
-            trapPosition.SetValue(new object[2] { trapSpawnPoint.position, trapTarget });
-            ThrowTrapInternal(trapPosition.GetValue());
+            thrownTrap = photonRoomWrapper.Instantiate("hunter_trap", trapSpawnPoint.position, trapSpawnPoint.rotation);
+
+            var force = (trapTarget - trapSpawnPoint.position) * throwForce + extraThrowForce;
+            thrownTrap.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         }
         private Vector3 CalculateTrapTarget(Ray ray)
         {
@@ -67,28 +65,10 @@ namespace BiReJeJoCo.Character
             return Camera.main.transform.position + Camera.main.transform.forward * trapThrowRange;
         }
 
-        private void ThrowTrapInternal(object[] positions)
-        {
-            if (positions == null) return;
-            if (positions[0] == null)
-            {
-                Destroy(trap);
-                trap = null;
-                return;
-            }
-
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_trap");
-            trap = Instantiate(prefab, (Vector3)positions[0], Quaternion.identity);
-            var comp = trap.GetComponent<HunterTrap>();
-            Controller.AddObservedComponent(comp);
-
-            var force = ((Vector3)positions[1] - trapSpawnPoint.position) * throwForce + extraThrowForce;
-            comp.rigidBody.AddForce(force, ForceMode.Impulse);
-        }
         private void OnTrapCollected(PlayerCollectedTrapMsg msg)
         {
-            trapPosition.SetValue(new object[1] { null });
-            ThrowTrapInternal(trapPosition.GetValue());
+            photonRoomWrapper.Destroy(thrownTrap);
+            thrownTrap = null;
         }
     }
 }

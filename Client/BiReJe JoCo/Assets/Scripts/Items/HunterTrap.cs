@@ -52,27 +52,18 @@ namespace BiReJeJoCo.Items
             {
                 StartCatch();
             });
-        }
-        protected override void SetupAsActive()
-        {
+
             if (!Owner.IsLocalPlayer)
             {
                 tickSystem.Unregister(this);
+                rigidBody.isKinematic = true;
             }
         }
 
-        protected override void ConnectEvents()
+        protected override void OnBeforeDestroy()
         {
-            base.ConnectEvents();
-
-            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnFinishMatch);
-        }
-        protected override void DisconnectEvents()
-        {
-            base.DisconnectEvents();
-
-            if (photonMessageHub)
-                photonMessageHub.UnregisterReceiver(this);
+            if (!Owner.IsLocalPlayer)
+                DisconnectEvents();
         }
         #endregion
 
@@ -141,19 +132,30 @@ namespace BiReJeJoCo.Items
                 yield return null;
             }
         }
-
-        private void OnFinishMatch(PhotonMessage obj)
-        {
-            catchDuration.Stop(true);
-            SetSFX(false);
-        }
         #endregion
 
         #region Trigger Stuff
+        protected override void OnTriggerHold(float duration)
+        {
+            foreach (var curTrigger in triggerPoints)
+            {
+                if (PlayerIsInArea(curTrigger) &&
+                    !curTrigger.isCoolingDown)
+                {
+                    if (curTrigger.pressDuration <= duration)
+                    {
+                        OnTriggerInteracted(curTrigger.Id);
+                    }
+                    else
+                    {
+                        UpdateTriggerProgress(curTrigger, duration);
+                    }
+                }
+            }
+        }
         protected override void OnTriggerInteracted(byte pointId)
         {
             DisconnectEvents();
-
             foreach (var floaty in floaties)
             {
                 if (floaty.Value)
@@ -161,7 +163,6 @@ namespace BiReJeJoCo.Items
             }
 
             messageHub.ShoutMessage<PlayerCollectedTrapMsg>(this);
-            Destroy(gameObject);
         }
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
