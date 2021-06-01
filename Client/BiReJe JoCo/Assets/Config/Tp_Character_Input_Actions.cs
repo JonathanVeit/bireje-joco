@@ -105,6 +105,14 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleFlashlight"",
+                    ""type"": ""Button"",
+                    ""id"": ""c965650b-80be-4d5d-a60e-0480317660f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -393,6 +401,28 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4328f6ea-99a5-457b-934e-f6cca51cb37f"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleFlashlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a723138-1c63-45c0-989e-775938a25caa"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleFlashlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -462,6 +492,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Special2 = m_Player.FindAction("Special2", throwIfNotFound: true);
         m_Player_ThrowTrap = m_Player.FindAction("ThrowTrap", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+        m_Player_ToggleFlashlight = m_Player.FindAction("ToggleFlashlight", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -525,6 +556,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Special2;
     private readonly InputAction m_Player_ThrowTrap;
     private readonly InputAction m_Player_Reload;
+    private readonly InputAction m_Player_ToggleFlashlight;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -540,6 +572,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Special2 => m_Wrapper.m_Player_Special2;
         public InputAction @ThrowTrap => m_Wrapper.m_Player_ThrowTrap;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
+        public InputAction @ToggleFlashlight => m_Wrapper.m_Player_ToggleFlashlight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -582,6 +615,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @ToggleFlashlight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
+                @ToggleFlashlight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
+                @ToggleFlashlight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -619,6 +655,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @ToggleFlashlight.started += instance.OnToggleFlashlight;
+                @ToggleFlashlight.performed += instance.OnToggleFlashlight;
+                @ToggleFlashlight.canceled += instance.OnToggleFlashlight;
             }
         }
     }
@@ -687,6 +726,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnSpecial2(InputAction.CallbackContext context);
         void OnThrowTrap(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnToggleFlashlight(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

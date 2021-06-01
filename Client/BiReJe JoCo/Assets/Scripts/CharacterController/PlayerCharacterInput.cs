@@ -51,6 +51,9 @@ namespace BiReJeJoCo.Character
         // throw trap
         public event Action onThrowTrapPressed;
 
+        // shooting 
+        public event Action onToggleFlashlight;
+
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
 
@@ -171,12 +174,23 @@ namespace BiReJeJoCo.Character
 
         public void SetReloadInput(InputAction.CallbackContext inputValue)
         {
-            if (BlockState.HasFlag(InputBlockState.Shoot))
+            if (BlockState.HasFlag(InputBlockState.Interact))
                 return;
 
             if (inputValue.performed)
             {
                 onReloadPressed?.Invoke();
+            }
+        }
+
+        public void SetToggleFlashlight(InputAction.CallbackContext inputValue)
+        {
+            if (BlockState.HasFlag(InputBlockState.Interact))
+                return;
+
+            if (inputValue.performed)
+            {
+                onToggleFlashlight?.Invoke();
             }
         }
 
