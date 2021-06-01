@@ -93,7 +93,7 @@ Shader "Unlit/DecalProjection"
 
             // Required by all Universal Render Pipeline shaders.
             // It will include Unity built-in shader variables (except the lighting variables)
-            // (https://docs.unity3d.com/Manual/SL-UnityShaderVariables.html
+            // (https://docs.unity3d.com/Manual/SL-UnityShaderVariables.html)
             // It will also include many utilitary functions. 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
