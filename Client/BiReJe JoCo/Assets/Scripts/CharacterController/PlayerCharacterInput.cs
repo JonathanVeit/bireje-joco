@@ -41,6 +41,9 @@ namespace BiReJeJoCo.Character
         public event Action onShootReleased;
         private Coroutine onShootHoldInvoker;
 
+        // reloading 
+        public event Action onReloadPressed;
+
         // special 1
         public event Action onSpecial1Pressed;
         public event Action onSpecial2Pressed;
@@ -166,6 +169,16 @@ namespace BiReJeJoCo.Character
             }
         }
 
+        public void SetReloadInput(InputAction.CallbackContext inputValue)
+        {
+            if (BlockState.HasFlag(InputBlockState.Shoot))
+                return;
+
+            if (inputValue.performed)
+            {
+                onReloadPressed?.Invoke();
+            }
+        }
 
         private void Update()
         {

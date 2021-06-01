@@ -35,7 +35,7 @@ namespace BiReJeJoCo.Character
                 else
                     gun.Shoot(x);
             };
-            
+
             ConnectEvents();
         }
         protected override void OnBeforeDestroy()
@@ -53,7 +53,7 @@ namespace BiReJeJoCo.Character
                 syncVarHub.UnregisterSyncVar(isHitting);
                 syncVarHub.UnregisterSyncVar(shootPosition);
             }
-            
+
             messageHub.UnregisterReceiver(this);
             reloadTimer.Stop();
         }
@@ -68,8 +68,7 @@ namespace BiReJeJoCo.Character
 
             ammoCounter.CountUp(() =>
             {
-                StopShooting();
-                reloadTimer.Start(() => gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress), null);
+                Reload();
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
         }
@@ -78,6 +77,22 @@ namespace BiReJeJoCo.Character
             shootPosition.SetValue(null);
             gun.Shoot(null);
             isHitting.SetValue(false);
+        }
+        public void Reload ()
+        {
+            if (ammoCounter.RelativeProgress == 0) return;
+
+            StopShooting();
+            reloadTimer.Start(
+                () =>
+                {
+                    gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress);
+
+                },   // update 
+                () => 
+                {
+                    ammoCounter.SetValue(0);
+                }); // finish
         }
 
         private Vector3 CalculateShootTarget()

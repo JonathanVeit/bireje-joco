@@ -97,6 +97,14 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""7137f111-cbf1-498b-95b0-f7707fedd791"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -352,6 +360,39 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""action"": ""ThrowTrap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63daa295-a672-4b94-b14a-0684c19824f0"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ThrowTrap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""faae7eed-c1f4-472d-bcd1-88f023889e6f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24b96919-c05b-41af-8152-2db26f036a30"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -420,6 +461,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Special1 = m_Player.FindAction("Special1", throwIfNotFound: true);
         m_Player_Special2 = m_Player.FindAction("Special2", throwIfNotFound: true);
         m_Player_ThrowTrap = m_Player.FindAction("ThrowTrap", throwIfNotFound: true);
+        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -482,6 +524,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Special1;
     private readonly InputAction m_Player_Special2;
     private readonly InputAction m_Player_ThrowTrap;
+    private readonly InputAction m_Player_Reload;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -496,6 +539,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Special1 => m_Wrapper.m_Player_Special1;
         public InputAction @Special2 => m_Wrapper.m_Player_Special2;
         public InputAction @ThrowTrap => m_Wrapper.m_Player_ThrowTrap;
+        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -535,6 +579,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @ThrowTrap.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
                 @ThrowTrap.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
                 @ThrowTrap.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
+                @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -569,6 +616,9 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @ThrowTrap.started += instance.OnThrowTrap;
                 @ThrowTrap.performed += instance.OnThrowTrap;
                 @ThrowTrap.canceled += instance.OnThrowTrap;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -636,6 +686,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnSpecial1(InputAction.CallbackContext context);
         void OnSpecial2(InputAction.CallbackContext context);
         void OnThrowTrap(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

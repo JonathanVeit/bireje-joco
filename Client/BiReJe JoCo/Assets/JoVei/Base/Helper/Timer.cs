@@ -46,7 +46,7 @@ namespace JoVei.Base.Helper
         {
             Start(null);
         }
-        public void Start(Action onFinished) 
+        public void Start(Action onFinished, float relativeStart = 0) 
         {
             Start(null, onFinished);
         }
@@ -84,9 +84,9 @@ namespace JoVei.Base.Helper
                 yield return null;
                 onUpdate?.Invoke();
 
-                counter += Time.deltaTime * timeScale;
                 Progress = counter;
                 RelativeProgress = counter / Duration;
+                counter += Time.deltaTime * timeScale;
             }
             onFinishedCallback?.Invoke();
         }
