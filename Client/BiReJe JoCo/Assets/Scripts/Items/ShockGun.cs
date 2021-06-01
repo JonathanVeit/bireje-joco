@@ -2,6 +2,7 @@ using BiReJeJoCo.Backend;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using JoVei.Base.Helper;
 
 namespace BiReJeJoCo.Items
 {
@@ -17,7 +18,7 @@ namespace BiReJeJoCo.Items
 
         [Header("Appearance")]
         [SerializeField] [Range(.1f, 5f)] float density;
-        [SerializeField] [Range(.01f, 1f)] float frequence;
+        [SerializeField] Counter frequence;
         [SerializeField] [Range(0f, 2f)] float widthVariance;
         [SerializeField] float minWidth;
         [SerializeField] float maxWidth;
@@ -29,11 +30,8 @@ namespace BiReJeJoCo.Items
         [SerializeField] int bigNoiseChance;
         [SerializeField] float bigNoise;
 
-        private Vector3? currentTarget;
-        private float counter;
-
         public Transform RayOrigin => rayOrigin;
-
+        private Vector3? currentTarget;
         private TrailRenderer currentTrail;
 
         private PlayerControlled controller;
@@ -65,8 +63,11 @@ namespace BiReJeJoCo.Items
             {
                 lineRenderer.enabled = true;
                 lineParticleSystem.enableEmission = true;
-                
-                RefreshRay(currentTarget.Value);
+
+                frequence.CountUp(() => 
+                {
+                    RefreshRay(currentTarget.Value);
+                });
                 UpdateSFX();
             }
             else
@@ -76,19 +77,12 @@ namespace BiReJeJoCo.Items
                 hitParticleSystem.enableEmission = false;
                 damageParticleSystem.enableEmission = false;
                 DestroyCurrentTrail();
+                frequence.SetValue(frequence.MaxValue);
             }
         }
 
         private void RefreshRay(Vector3 targetPosition)
         {
-            if (counter < frequence)
-            {
-                lineRenderer.SetPosition(0, rayOrigin.position);
-                counter += Time.deltaTime;
-                return;
-            }
-            counter = 0;
-
             var dist = Vector3.Distance(rayOrigin.position, targetPosition);
             var direction = (targetPosition - rayOrigin.position).normalized;
             int amount = Mathf.Clamp(Mathf.FloorToInt(dist * density), 1, int.MaxValue);
@@ -184,6 +178,7 @@ namespace BiReJeJoCo.Items
                 if (!currentTrail)
                 {
                     currentTrail = SpawnNewTrail(point);
+                    currentTrail.SetPositions(new Vector3[1] { point });
                 }
                 currentTrail.transform.position = point;
             }

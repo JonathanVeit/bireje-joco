@@ -14666,7 +14666,9 @@ MonoBehaviour:
   rayOrigin: {fileID: 2144261364397566033}
   trailHeight: 0
   density: 1.5
-  frequence: 0.02
+  frequence:
+    maxValue: 0.03
+    timeScale: 1
   widthVariance: 2
   minWidth: 0.6
   maxWidth: 1.2

@@ -55,8 +55,15 @@ namespace BiReJeJoCo.Items
 
             if (!Owner.IsLocalPlayer)
             {
-                tickSystem.Unregister(this);
                 rigidBody.isKinematic = true;
+            }
+        }
+
+        protected override void SetupAsActive()
+        {
+            if (!Owner.IsLocalPlayer)
+            {
+                tickSystem.Unregister(this);
             }
         }
 
@@ -65,13 +72,12 @@ namespace BiReJeJoCo.Items
             if (!Owner.IsLocalPlayer)
                 DisconnectEvents();
         }
-
         protected override void DisconnectEvents()
         {
             base.DisconnectEvents();
 
             startDelay.Stop();
-            catchDuration.Stop()
+            catchDuration.Stop();
         }
         #endregion
 
