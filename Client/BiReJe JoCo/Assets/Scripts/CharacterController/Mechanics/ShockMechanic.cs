@@ -119,7 +119,7 @@ namespace BiReJeJoCo.Character
             return Camera.main.transform.position + Camera.main.transform.forward * range;
         }
 
-        #region Helpre
+        #region Helper
         private Transform GetHuntedRoot()
         {
             var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);

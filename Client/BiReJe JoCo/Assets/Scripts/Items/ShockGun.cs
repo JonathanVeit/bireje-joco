@@ -183,7 +183,7 @@ namespace BiReJeJoCo.Items
 
                 if (!currentTrail)
                 {
-                    currentTrail = SpawnNewTrail();
+                    currentTrail = SpawnNewTrail(point);
                 }
                 currentTrail.transform.position = point;
             }
@@ -206,10 +206,10 @@ namespace BiReJeJoCo.Items
             }
         }
 
-        private TrailRenderer SpawnNewTrail() 
+        private TrailRenderer SpawnNewTrail(Vector3 position) 
         {
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("shock_gun_trail");
-            var instance = poolingManager.PoolInstance(prefab);
+            var instance = poolingManager.PoolInstance(prefab, position, Quaternion.identity);
             var trailRenderer = instance.GetComponent<TrailRenderer>();
             trailRenderer.emitting = true;
             return trailRenderer;
