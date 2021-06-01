@@ -53,6 +53,7 @@ namespace BiReJeJoCo.Character
 
             var force = (trapTarget - trapSpawnPoint.position) * throwForce + extraThrowForce;
             thrownTrap.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+            gameUI.SetTrapIcon(false);
         }
         private Vector3 CalculateTrapTarget(Ray ray)
         {
@@ -69,6 +70,7 @@ namespace BiReJeJoCo.Character
         {
             photonRoomWrapper.Destroy(thrownTrap);
             thrownTrap = null;
+            gameUI.SetTrapIcon(true);
         }
     }
 }
