@@ -12,6 +12,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] float throwForce;
         [SerializeField] Vector3 extraThrowForce;
         [SerializeField] float trapThrowRange;
+        [SerializeField] float trapTorque;
 
         private GameObject thrownTrap;
 
@@ -53,6 +54,7 @@ namespace BiReJeJoCo.Character
 
             var force = (trapTarget - trapSpawnPoint.position) * throwForce + extraThrowForce;
             thrownTrap.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+            thrownTrap.GetComponent<Rigidbody>().AddTorque(thrownTrap.transform.up * trapTorque);
             gameUI.SetTrapIcon(false);
         }
         private Vector3 CalculateTrapTarget(Ray ray)
@@ -68,6 +70,7 @@ namespace BiReJeJoCo.Character
 
         private void OnTrapCollected(PlayerCollectedTrapMsg msg)
         {
+            if (thrownTrap == null) return;
             photonRoomWrapper.Destroy(thrownTrap);
             thrownTrap = null;
             gameUI.SetTrapIcon(true);
