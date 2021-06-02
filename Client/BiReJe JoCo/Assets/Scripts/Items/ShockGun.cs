@@ -24,6 +24,7 @@ namespace BiReJeJoCo.Items
         [SerializeField] float maxWidth;
         [SerializeField] LayerMask hitLayerMask;
         [SerializeField] LayerMask huntedLayerMask;
+        [SerializeField] float maxTrailDist;
 
         [Header("Noise")]
         [SerializeField] float noise;
@@ -33,6 +34,7 @@ namespace BiReJeJoCo.Items
         public Transform RayOrigin => rayOrigin;
         private Vector3? currentTarget;
         private TrailRenderer currentTrail;
+        private Vector3 lastTrailPos;
 
         private PlayerControlled controller;
         public Player Owner => controller.Player;
@@ -175,12 +177,19 @@ namespace BiReJeJoCo.Items
                 hitParticleSystem.enableEmission = true;
                 hitParticleSystem.transform.position = point;
 
+                if (Vector3.Distance(lastTrailPos, point) > maxTrailDist)
+                {
+                    DestroyCurrentTrail();
+                }
+
                 if (!currentTrail)
                 {
                     currentTrail = SpawnNewTrail(point);
                     currentTrail.SetPositions(new Vector3[1] { point });
                 }
+
                 currentTrail.transform.position = point;
+                lastTrailPos = point;
             }
             else
             {

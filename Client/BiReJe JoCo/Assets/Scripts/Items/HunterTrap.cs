@@ -36,6 +36,7 @@ namespace BiReJeJoCo.Items
         private bool isBlocked = true;
         private float lightIntensity;
         private FloatingElement locationFloaty;
+        private Coroutine setLightCoroutine;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -136,10 +137,12 @@ namespace BiReJeJoCo.Items
             return new Vector3 (dir2D.x, 0, dir2D.y) * suctionStrength;
         }
 
-
         private void SetSFX(bool show)
         {
-            StartCoroutine(SetLight(show));
+            if (setLightCoroutine != null)
+                StopCoroutine(setLightCoroutine);
+
+            setLightCoroutine = StartCoroutine(SetLight(show));
             foreach (var pS in particleSystems)
                 pS.enableEmission = show;
         }
@@ -156,9 +159,10 @@ namespace BiReJeJoCo.Items
         #endregion
 
         # region Floaty
-        void Update()
+        protected override void OnTicked()
         {
-            if (!Owner.IsLocalPlayer) return;
+            if (!Owner.IsLocalPlayer || 
+                !Owner.PlayerCharacter) return;
 
             var dist = Vector3.Distance(rigidBody.position, Owner.PlayerCharacter.ControllerSetup.ModelRoot.position);
 

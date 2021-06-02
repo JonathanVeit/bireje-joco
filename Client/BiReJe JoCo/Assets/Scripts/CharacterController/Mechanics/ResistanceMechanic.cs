@@ -64,6 +64,7 @@ namespace BiReJeJoCo.Character
             }
 
             UpdateResistanceInfluence();
+            gameUI.UpdateHealthBar(CalculatResistancePercentage());
         }
 
         private float HittingHunterPercentage()
@@ -114,7 +115,7 @@ namespace BiReJeJoCo.Character
         private void UpdateResistanceInfluence()
         {
             // how much resistance has been lost compared to max?
-            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance); // -> 0
+            var resistancePercentage = CalculatResistancePercentage();
 
             // update ui
             gameUI.UpdateHitOverlay(1 - resistancePercentage);
@@ -124,6 +125,11 @@ namespace BiReJeJoCo.Character
             hitMultiplier.Set(1 - (maxResistanceSlowdown * negResistancePercentage));
 
             //Debug.Log("Resistance: " + Resistance);
+        }
+
+        private float CalculatResistancePercentage() 
+        {
+            return Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance);
         }
         #endregion
 
