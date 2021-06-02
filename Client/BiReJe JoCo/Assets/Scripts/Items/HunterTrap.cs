@@ -56,6 +56,7 @@ namespace BiReJeJoCo.Items
             startDelay.Start(() =>
             {
                 StartCatch();
+                isBlocked = false;
             });
 
             if (!Owner.IsLocalPlayer)
@@ -103,8 +104,6 @@ namespace BiReJeJoCo.Items
             () => // finish
             {
                 SetSFX(false);
-
-                isBlocked = false;
             });
         }
         private void TryCatchLocal()
@@ -157,30 +156,7 @@ namespace BiReJeJoCo.Items
             }
         }
         #endregion
-
-        # region Floaty
-        protected override void OnTicked()
-        {
-            if (!Owner.IsLocalPlayer || 
-                !Owner.PlayerCharacter) return;
-
-            var dist = Vector3.Distance(rigidBody.position, Owner.PlayerCharacter.ControllerSetup.ModelRoot.position);
-
-            if (dist >= showFloatyAt)
-            {
-                if (locationFloaty) return;
-
-                var config = new FloatingElementConfig("trap_location", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, rigidBody.transform);
-                locationFloaty = floatingManager.GetElementAs<FloatingElement>(config);
-            }
-            else if (locationFloaty)
-            {
-                locationFloaty.RequestDestroyFloaty();
-                locationFloaty = null;
-            }
-        }
-        # endregion
-
+ 
         #region Trigger Stuff
         protected override void OnTriggerHold(float duration)
         {
