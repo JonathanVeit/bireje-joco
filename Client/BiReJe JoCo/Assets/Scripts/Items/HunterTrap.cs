@@ -82,7 +82,9 @@ namespace BiReJeJoCo.Items
 
             startDelay.Stop();
             catchDuration.Stop();
-            locationFloaty.RequestDestroyFloaty();
+            
+            if (locationFloaty)
+                locationFloaty.RequestDestroyFloaty();
         }
         #endregion
 
