@@ -4,6 +4,7 @@ using UnityEngine;
 using JoVei.Base.Helper;
 using System.Collections;
 using BiReJeJoCo.Character;
+using JoVei.Base.UI;
 
 namespace BiReJeJoCo.Items
 {
@@ -15,10 +16,12 @@ namespace BiReJeJoCo.Items
         [SerializeField] Timer catchDuration;
         [SerializeField] Transform centerPoint;
         [SerializeField] LayerMask huntedLayer;
+        [SerializeField] float showFloatyAt;
 
         [Header("Catch Settings")]
         [SerializeField] Vector3 catchArea;
         [SerializeField] Vector3 catchAreaOffset;
+
         [Header("Suction")]
         [SerializeField] Vector3 suctionArea;
         [SerializeField] Vector3 suctionAreaOffset;
@@ -32,6 +35,7 @@ namespace BiReJeJoCo.Items
         
         private bool isBlocked = true;
         private float lightIntensity;
+        private FloatingElement locationFloaty;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -78,6 +82,7 @@ namespace BiReJeJoCo.Items
 
             startDelay.Stop();
             catchDuration.Stop();
+            locationFloaty.RequestDestroyFloaty();
         }
         #endregion
 
@@ -147,6 +152,28 @@ namespace BiReJeJoCo.Items
             }
         }
         #endregion
+
+        # region Floaty
+        void Update()
+        {
+            if (!Owner.IsLocalPlayer) return;
+
+            var dist = Vector3.Distance(rigidBody.position, Owner.PlayerCharacter.ControllerSetup.ModelRoot.position);
+
+            if (dist >= showFloatyAt)
+            {
+                if (locationFloaty) return;
+
+                var config = new FloatingElementConfig("trap_location", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, rigidBody.transform);
+                locationFloaty = floatingManager.GetElementAs<FloatingElement>(config);
+            }
+            else if (locationFloaty)
+            {
+                locationFloaty.RequestDestroyFloaty();
+                locationFloaty = null;
+            }
+        }
+        # endregion
 
         #region Trigger Stuff
         protected override void OnTriggerHold(float duration)
