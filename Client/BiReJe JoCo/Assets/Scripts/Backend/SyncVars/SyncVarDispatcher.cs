@@ -27,9 +27,9 @@ namespace BiReJeJoCo.Backend
             StartCoroutine(RegisterAsync());
         }
 
-        private IEnumerator RegisterAsync() 
+        private IEnumerator RegisterAsync()
         {
-            yield return new WaitUntil(()=> syncVarHub != null);
+            yield return new WaitUntil(() => syncVarHub != null);
 
             syncVarHub.RegisterDispatcher(player, this);
             this.gameObject.name = $"{player.NickName}'s Dispatcher";
@@ -47,6 +47,13 @@ namespace BiReJeJoCo.Backend
 
             observedVariables.Add(syncVar.UniqueId.Value, syncVar);
             syncedVariables.Add(syncVar.UniqueId.Value);
+
+            if (syncVar.SkipInitialSend)
+            {
+                if (!variableCache.ContainsKey(syncVar.UniqueId.Value))
+                    variableCache.Add(syncVar.UniqueId.Value, default);
+                variableCache[syncVar.UniqueId.Value] = syncVar.GetSerializedString();
+            }
         }
 
         public bool TryUnregisterSyncVar(ISyncVar syncVar)
@@ -55,6 +62,9 @@ namespace BiReJeJoCo.Backend
             {
                 observedVariables.Remove(syncVar.UniqueId.Value);
                 syncedVariables.Remove(syncVar.UniqueId.Value);
+                if (variableCache.ContainsKey(syncVar.UniqueId.Value))
+                    variableCache.Remove(syncVar.UniqueId.Value);
+
                 return true;
             }
 

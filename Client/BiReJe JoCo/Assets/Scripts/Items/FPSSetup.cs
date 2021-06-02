@@ -10,7 +10,7 @@ namespace BiReJeJoCo.Items
         [SerializeField] float speed;
         [SerializeField] Light flashlight;
         [SerializeField] SyncVar<Vector3> rotation = new SyncVar<Vector3>(5);
-        [SerializeField] SyncVar<bool> flashLightIsOn = new SyncVar<bool>(6);
+        [SerializeField] SyncVar<bool> flashLightIsOn = new SyncVar<bool>(6, true, true);
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
