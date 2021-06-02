@@ -189,9 +189,6 @@ namespace BiReJeJoCo.Character
 			Vector3 _velocity = Vector3.zero;
 			if(currentControllerState == ControllerState.Grounded)
 				_velocity = CalculateMovementVelocity();
-			
-			// add multiplier 
-			_velocity += CalculateMultiplier(_velocity);
 
 			//If local momentum is used, transform momentum into world space first;
 			Vector3 _worldMomentum = momentum;
@@ -240,10 +237,21 @@ namespace BiReJeJoCo.Character
 
 			return result;
 		}
+		private float CalculateMultiplier(float velocity)
+		{
+			float result = 0;
+			foreach (var entry in multipliers)
+			{
+				float increase = velocity * entry.Value - velocity;
+				result += increase;
+			}
 
-        //Calculate and return movement direction based on player input;
-        //This function can be overridden by inheriting scripts to implement different player controls;
-        protected virtual Vector3 CalculateMovementDirection()
+			return result;
+		}
+
+		//Calculate and return movement direction based on player input;
+		//This function can be overridden by inheriting scripts to implement different player controls;
+		protected virtual Vector3 CalculateMovementDirection()
 		{
 			//If no character input script is attached to this object, return;
 			if(characterInput == null)
@@ -280,6 +288,9 @@ namespace BiReJeJoCo.Character
 
 			//Multiply (normalized) velocity with movement speed;
 			_velocity *= movementSpeed;
+
+			// add multiplier 
+			_velocity += CalculateMultiplier(_velocity);
 
 			return _velocity;
 		}
@@ -509,7 +520,7 @@ namespace BiReJeJoCo.Character
 			if(currentControllerState == ControllerState.Jumping)
 			{
 				momentum = VectorMath.RemoveDotVector(momentum, tr.up);
-				momentum += tr.up * jumpSpeed;
+				momentum += tr.up * CalculateJumpSpeed();
 			}
 
 			if(useLocalMomentum)
@@ -526,7 +537,7 @@ namespace BiReJeJoCo.Character
 				momentum = tr.localToWorldMatrix * momentum;
 
 			//Add jump force to momentum;
-			momentum += tr.up * jumpSpeed;
+			momentum += tr.up * CalculateJumpSpeed();
 
 			//Set jump start time;
 			currentJumpStartTime = Time.time;
@@ -685,6 +696,13 @@ namespace BiReJeJoCo.Character
 				momentum = tr.worldToLocalMatrix * _newMomentum;
 			else
 				momentum = _newMomentum;
+		}
+
+		private float CalculateJumpSpeed() 
+		{
+			var speed = jumpSpeed;
+			speed += CalculateMultiplier(speed);
+			return speed;
 		}
 
 		public void AddMultiplier(MovementMultiplier multiplier)

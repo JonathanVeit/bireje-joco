@@ -106,7 +106,8 @@ namespace BiReJeJoCo.Character
             if (huntedTransform == null)
                 return CastToTarget(ray);
 
-            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range)
+            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range && 
+                !HuntedIsTranformed())
             {
                 var dirToHunted = huntedTransform.position - gun.RayOrigin.position;
                 var gunDir = gun.RayOrigin.forward;
@@ -151,6 +152,14 @@ namespace BiReJeJoCo.Character
             }
 
             return allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
+        }
+        private bool HuntedIsTranformed() 
+        {
+            var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
+            if (allHunted.Length == 0)
+                return false;
+
+            return allHunted[0].PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.IsTransformed;
         }
         #endregion
     }
