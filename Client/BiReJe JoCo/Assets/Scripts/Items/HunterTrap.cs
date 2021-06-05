@@ -33,6 +33,7 @@ namespace BiReJeJoCo.Items
         [SerializeField] float lightSpeed;
         [SerializeField] ParticleSystem[] particleSystems;
         [SerializeField] Transform catchSign;
+        [SerializeField] float catchSignSize;
 
         private bool isBlocked = true;
         private float lightIntensity;
@@ -109,15 +110,15 @@ namespace BiReJeJoCo.Items
                 {
                     var hunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0];
                     var catchProgress = hunted.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.RelativeCatchProgress.GetValue();
-                    catchSign.transform.localScale = new Vector3(catchProgress, 2, catchProgress);
+                    catchSign.transform.localScale = new Vector3(catchProgress * catchSignSize, 1, catchProgress* catchSignSize);
                 }
                 else
-                    catchSign.transform.localScale = new Vector3(0, 2, 0);
+                    catchSign.transform.localScale = new Vector3(0, 1, 0);
             },
             () => // finish
             {
                 SetSFX(false);
-                catchSign.transform.localScale = new Vector3(0, 2, 0);
+                catchSign.transform.localScale = new Vector3(0, 1, 0);
             });
         }
         private void TryCatchLocal()
