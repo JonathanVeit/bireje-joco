@@ -113,7 +113,7 @@ namespace BiReJeJoCo
 
         private static Player GetRandomHunted(List<Player> allPlayer)
         {
-            var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted);
+            var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted || x.PreferedRole == PlayerRole.None);
             if (preferedHunted.Length == 0)
                 return allPlayer[Random.Range(0, allPlayer.Count)];
             return preferedHunted[Random.Range(0, preferedHunted.Length)];

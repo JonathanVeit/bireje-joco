@@ -32,11 +32,13 @@ namespace BiReJeJoCo.Items
         [SerializeField] Light light;
         [SerializeField] float lightSpeed;
         [SerializeField] ParticleSystem[] particleSystems;
-        
+        [SerializeField] Transform catchSign;
+
         private bool isBlocked = true;
         private float lightIntensity;
         private FloatingElement locationFloaty;
         private Coroutine setLightCoroutine;
+        private float curCatchDuration;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -100,10 +102,22 @@ namespace BiReJeJoCo.Items
             {
                 if (localPlayer.Role == PlayerRole.Hunted)
                     TryCatchLocal();
+
+                var catchHits = BoxCast(centerPoint, catchArea, catchAreaOffset, huntedLayer);
+                DrawBox(centerPoint, catchArea, catchAreaOffset);
+                if (catchHits.Length != 0)
+                {
+                    var hunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0];
+                    var catchProgress = hunted.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.RelativeCatchProgress.GetValue();
+                    catchSign.transform.localScale = new Vector3(catchProgress, 2, catchProgress);
+                }
+                else
+                    catchSign.transform.localScale = new Vector3(0, 2, 0);
             },
             () => // finish
             {
                 SetSFX(false);
+                catchSign.transform.localScale = new Vector3(0, 2, 0);
             });
         }
         private void TryCatchLocal()
@@ -120,8 +134,11 @@ namespace BiReJeJoCo.Items
             DrawBox(centerPoint, catchArea, catchAreaOffset);
             if (catchHits.Length != 0)
             {
-                localPlayer.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.TryCatch();
+                curCatchDuration += Time.deltaTime;
+                localPlayer.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.TryCatch(curCatchDuration);
             }
+            else
+                curCatchDuration = 0;
         }
         private Vector3 CalculateSuctionForce()
         {
@@ -197,6 +214,25 @@ namespace BiReJeJoCo.Items
                 return false;
 
             return base.PlayerIsInArea(trigger);
+        }
+        #endregion
+
+        #region Floaty
+        protected override void OnTicked()
+        {
+            if (!localPlayer.PlayerCharacter)
+                return;
+
+            if (Vector3.Distance(rigidBody.position, localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.position) >= showFloatyAt)
+            {
+                if (!locationFloaty)
+                {
+                    var config = new FloatingElementConfig("trap_location", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, transform);
+                    locationFloaty = floatingManager.GetElementAs<FloatingElement>(config);
+                }
+            }
+            else if (locationFloaty)
+                locationFloaty.RequestDestroyFloaty();
         }
         #endregion
     }

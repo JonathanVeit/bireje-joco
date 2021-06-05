@@ -42,13 +42,6 @@ namespace BiReJeJoCo.Items
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
-
-            if (Owner.IsLocalPlayer)
-            {
-
-            }
-            //else
-            //    playerShot.OnValueReceived += OnShotFired;
         }
 
         #region Public Methods 
@@ -70,6 +63,8 @@ namespace BiReJeJoCo.Items
                 {
                     RefreshRay(currentTarget.Value);
                 });
+                lineRenderer.SetPosition(0, RayOrigin.position);
+
                 UpdateSFX();
             }
             else

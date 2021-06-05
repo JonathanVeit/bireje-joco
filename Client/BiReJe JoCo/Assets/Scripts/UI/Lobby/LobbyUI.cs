@@ -8,11 +8,15 @@ namespace BiReJeJoCo.UI
 {
     public class LobbyUI : UIElement
     {
+        const string DURATION_KEY = "LastSetDuration";
+        const string PREFERED_ROLE_KEY = "PreferedRole";
+
         [Header("Settings")]
         [SerializeField] UIList<LobbyMemberEntry> memberList;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Button startButton;
         [SerializeField] Dropdown durationDropdown;
+        [SerializeField] Dropdown preferedRoleDropdown;
         [SerializeField] string matchMode = "default_match";
 
         private Dictionary<string, LobbyMemberEntry> memberEntries
@@ -26,10 +30,15 @@ namespace BiReJeJoCo.UI
             Cursor.lockState = CursorLockMode.Confined;
 
             durationDropdown.interactable = localPlayer.IsHost;
-            if (PlayerPrefs.HasKey("LastSetDuration"))
+            if (PlayerPrefs.HasKey(DURATION_KEY))
             {
-                durationDropdown.value = PlayerPrefs.GetInt("LastSetDuration");
-                SetMatchDuration(PlayerPrefs.GetInt("LastSetDuration"));
+                durationDropdown.value = PlayerPrefs.GetInt(DURATION_KEY);
+                SetMatchDuration(durationDropdown.value);
+            }
+            if (PlayerPrefs.HasKey(PREFERED_ROLE_KEY))
+            {
+                preferedRoleDropdown.value = PlayerPrefs.GetInt(PREFERED_ROLE_KEY);
+                SetPlayerPreferedRole(preferedRoleDropdown.value);
             }
         }
         protected override void OnBeforeDestroy()
@@ -121,12 +130,17 @@ namespace BiReJeJoCo.UI
             switch (role)
             {
                 case 0:
-                    localPlayer.SetPreferedRole(PlayerRole.Hunter);
+                    localPlayer.SetPreferedRole(PlayerRole.None);
                     break;
                 case 1:
+                    localPlayer.SetPreferedRole(PlayerRole.Hunter);
+                    break;
+                case 2:
                     localPlayer.SetPreferedRole(PlayerRole.Hunted);
                     break;
             }
+
+            PlayerPrefs.SetInt(PREFERED_ROLE_KEY, role);
         }
 
         public void SetMatchDuration(int duration)
@@ -150,7 +164,7 @@ namespace BiReJeJoCo.UI
                     break;
             }
 
-            PlayerPrefs.SetInt("LastSetDuration", duration);
+            PlayerPrefs.SetInt(DURATION_KEY, duration);
         }
         #endregion
     }

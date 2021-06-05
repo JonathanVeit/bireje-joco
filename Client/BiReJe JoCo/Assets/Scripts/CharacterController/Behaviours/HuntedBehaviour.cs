@@ -27,7 +27,7 @@ namespace BiReJeJoCo.Character
         #region Initialization
         protected override void OnBehaviourInitialized()
         {
-            gameUI.UpdateHealthBar(1);
+            gameUI.UpdateResistanceBar(1);
 
             if (Owner.IsLocalPlayer)
             {

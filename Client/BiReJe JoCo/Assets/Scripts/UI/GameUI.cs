@@ -131,7 +131,7 @@ namespace BiReJeJoCo.UI
                 pingCooldownBar.SetValue(value);
         }
 
-        public void UpdateHealthBar(float value)
+        public void UpdateResistanceBar(float value)
         {
             healthBar.SetValue(value);
         }
