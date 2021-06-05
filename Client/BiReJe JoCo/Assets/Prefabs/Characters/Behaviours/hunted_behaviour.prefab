@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxResistance: 100
-  resistanceRegenerationRate: 60
-  resistanceLossRate: 40
+  resistanceRegenerationRate: 50
+  resistanceLossRate: 30
   resistanceLossByHunterAmount: 1
   maxResistanceSlowdown: 0.8
   maxCatchDuration: 10
@@ -82,7 +82,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  catchCounter: 0
+  RelativeCatchProgress:
+    value: 0
   curCatchDuration: 0
   catchSucceed: 0
 --- !u!1 &5355064504545400264
