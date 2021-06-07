@@ -135,7 +135,7 @@ namespace BiReJeJoCo.Character
             RelativeCatchProgress.SetValue(trapDuration / curCatchDuration);
             if (trapDuration >= curCatchDuration)
             {
-                photonMessageHub.ShoutMessage<HuntedCatchedPhoMsg>(PhotonMessageTarget.MasterClient);
+                photonMessageHub.ShoutMessage<HuntedCatchedPhoMsg>(PhotonMessageTarget.AllViaServer);
                 catchSucceed = true;
             }
         }
