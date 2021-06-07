@@ -7,53 +7,31 @@ namespace BiReJeJoCo.Map
 {
     public class TriggeredDoor : SynchronizedTrigger
     {
-        private enum Direction
-        {
-            Right, 
-            Forward,
-        }
-
         [Header("Door Settings")]
-        [SerializeField] GameObject door;
-        [SerializeField] Direction direction;
-        [SerializeField] float doorOffset; // closed -> open
-        [SerializeField] float moveSpeed = 5;
+        private Animator anim;
+        [SerializeField] float coolDownTime = 1;
 
         [Header("Runtime")]
         [SerializeField] private bool isOpen;
 
         private Vector3 targetDoorPosition;
-        private bool doorIsMoving => Vector3.Distance(door.transform.position, targetDoorPosition) > 0.01f;
 
         protected override void SetupAsActive()
         {
             base.SetupAsActive();
-            targetDoorPosition = door.transform.position;
+            anim = this.GetComponent<Animator>();
+            anim.SetBool("isOpen", isOpen);
         }
 
         protected override void OnTriggerInteracted(byte pointId)
         {
-            if (doorIsMoving)
-                return;
-
             isOpen = !isOpen;
-
-            switch (direction)
-            {
-                case Direction.Right:
-                    targetDoorPosition = door.transform.position + door.transform.right * (doorOffset * (isOpen ? -1 : 1));
-                    break;
-                case Direction.Forward:
-                    targetDoorPosition = door.transform.position + door.transform.forward * (doorOffset * (isOpen ? -1 : 1));
-                    break;
-            }
+            anim.SetBool("isOpen", isOpen);
         }
+
         public void Update()
         {
-            if (doorIsMoving)
-            {
-                door.transform.position = Vector3.MoveTowards(door.transform.position, targetDoorPosition, moveSpeed * Time.deltaTime);
-            }
+            
         }
 
         protected override void OnSychronizedTriggerReceived(PhotonMessage msg)
@@ -68,14 +46,17 @@ namespace BiReJeJoCo.Map
                     StartCoroutine(CoolDown(curTrigger));
             }
         }
+
+        
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
             TryHideFloaty(trigger);
-            yield return new WaitUntil(() => !doorIsMoving);
+            yield return new WaitForSecondsRealtime(coolDownTime);
             TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
         }
+        
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
