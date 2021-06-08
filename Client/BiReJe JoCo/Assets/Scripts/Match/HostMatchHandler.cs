@@ -113,7 +113,7 @@ namespace BiReJeJoCo
 
         private static Player GetRandomHunted(List<Player> allPlayer)
         {
-            var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted);
+            var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted || x.PreferedRole == PlayerRole.None);
             if (preferedHunted.Length == 0)
                 return allPlayer[Random.Range(0, allPlayer.Count)];
             return preferedHunted[Random.Range(0, preferedHunted.Length)];
@@ -144,6 +144,7 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunted,
+                condition = WinCondition.TimeOver,
                 message = "Time is over!",
             };
             photonMessageHub.ShoutMessage(new FinishMatchPhoMsg() { result = result }, PhotonMessageTarget.AllViaServer);
@@ -209,6 +210,7 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunter,
+                condition = WinCondition.CatchedHuned,
                 message = "Monster has been catched!",
             };
 
@@ -219,6 +221,7 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunted,
+                condition = WinCondition.FoundCollectables,
                 message = "Monster collected all items!",
             };
 

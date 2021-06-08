@@ -101,13 +101,21 @@ namespace BiReJeJoCo.Items
         private void OnItemCollected(PhotonMessage msg)
         {
             var castedMsg = msg as CollectItemPhoMsg;
-            var itemId = items[castedMsg.InstanceId].UniqueId;
-            Destroy((items[castedMsg.InstanceId] as Component).gameObject);
-            items.Remove(castedMsg.InstanceId);
 
-            if (castedMsg.playerNumber == localPlayer.NumberInRoom)
+            if (items.ContainsKey(castedMsg.InstanceId))
             {
-                messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, itemId);
+                var itemId = items[castedMsg.InstanceId].UniqueId;
+                Destroy((items[castedMsg.InstanceId] as Component).gameObject);
+                items.Remove(castedMsg.InstanceId);
+
+                if (castedMsg.playerNumber == localPlayer.NumberInRoom)
+                {
+                    messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, itemId);
+                }
+            } 
+            else
+            {
+                Debug.LogError($"No Collectable with instance id {castedMsg.InstanceId}.");
             }
         }
         #endregion

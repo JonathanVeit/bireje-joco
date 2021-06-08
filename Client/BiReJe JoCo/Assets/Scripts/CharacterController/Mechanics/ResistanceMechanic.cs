@@ -1,5 +1,4 @@
 using BiReJeJoCo.Backend;
-using BiReJeJoCo.Items;
 using BiReJeJoCo.UI;
 using System.Linq;
 using UnityEngine;
@@ -10,21 +9,24 @@ namespace BiReJeJoCo.Character
     {
         [Header("Settings")]
         [SerializeField] float maxResistance = 100f;
-        [SerializeField] float minResistance = 20f;
-        [SerializeField] float resistanceRegenerationRate = 1;
-        [SerializeField] float resistanceLossRate = 1;
-        [SerializeField] [Range(0, 1)] float resistanceLossByAmount = 1;
+        [SerializeField] [Range(0.1f, 100)] float resistanceRegenerationRate = 1;
+        [SerializeField] [Range(0.1f, 100)]  float resistanceLossRate = 1;
+        [SerializeField] [Range(0, 1)] float resistanceLossByHunterAmount = 1;
         [SerializeField] [Range(0, 1)] float maxResistanceSlowdown = 1;
 
         [Space(10)]
-        [SerializeField] int catchDifficulty;
-        [SerializeField] AnimationCurve difficultyOverResistance;
+        [SerializeField] float maxCatchDuration;
+        [SerializeField] AnimationCurve catchDurationOverResistance;
+        public SyncVar<float> RelativeCatchProgress = new SyncVar<float>(7, 0);
 
         public float CurrentResistance { get; private set; }
+        public float RelativeResistance => CurrentResistance / maxResistance;
         public bool IsDecreasing { get; private set; }
 
+        [Header("Runtime")]
+        [SerializeField] float curCatchDuration;
+        [SerializeField] bool catchSucceed;
         private MovementMultiplier hitMultiplier;
-        private bool catchSucceed;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -47,6 +49,8 @@ namespace BiReJeJoCo.Character
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+            if (syncVarHub)
+                syncVarHub.UnregisterSyncVar(RelativeCatchProgress);
         }
         #endregion
 
@@ -64,6 +68,7 @@ namespace BiReJeJoCo.Character
             }
 
             UpdateResistanceInfluence();
+            gameUI.UpdateResistanceBar(RelativeResistance);
         }
 
         private float HittingHunterPercentage()
@@ -82,7 +87,7 @@ namespace BiReJeJoCo.Character
 
             if (hittingHunter == 0) return 0;
 
-            return (float)hittingHunter / (float)allHunter.Count;
+            return (float)hittingHunter / allHunter.Count;
         }
 
         private void RegenerateResistance()
@@ -99,49 +104,38 @@ namespace BiReJeJoCo.Character
                 Behaviour.TransformationMechanic.TransformBack();
             }
 
-            // lose till how much?
-            var appliedMinResistance = minResistance;
-
             // rate depending on amount of hitting hunters  
-            var lossRate = resistanceLossRate * hitPercentage;
+            var minResistanceLoss = resistanceLossRate * hitPercentage;
 
             // how strong is the influence of hunter?
-            var appliedLossRate = Mathf.Lerp(lossRate, resistanceLossRate, resistanceLossByAmount);
+            var appliedResistanceLoss = Mathf.Lerp(minResistanceLoss, resistanceLossRate, 1 - resistanceLossByHunterAmount);
 
             // move resistance
-            CurrentResistance = Mathf.MoveTowards(CurrentResistance, appliedMinResistance, appliedLossRate * Time.deltaTime);
+            CurrentResistance = Mathf.MoveTowards(CurrentResistance, 0, appliedResistanceLoss * Time.deltaTime);
         }
         private void UpdateResistanceInfluence()
         {
-            // how much resistance has been lost compared to max?
-            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance); // -> 0
-
             // update ui
-            gameUI.UpdateHitOverlay(1 - resistancePercentage);
+            gameUI.UpdateHitOverlay(1 - RelativeResistance);
 
             // max resistance lost? -> max slow 
-            var negResistancePercentage = 1 - resistancePercentage; // -> 1
-            hitMultiplier.Set(1 - (maxResistanceSlowdown * negResistancePercentage));
-
-            //Debug.Log("Resistance: " + Resistance);
+            var negRelativeResistance = 1 - RelativeResistance; // -> 1
+            hitMultiplier.Set(1 - (maxResistanceSlowdown * negRelativeResistance));
         }
         #endregion
 
         #region Catching
-        public void TryCatch()
+        public void TryCatch(float trapDuration)
         {
             if (catchSucceed) return;
 
-            var resistancePercentage = Mathf.InverseLerp(minResistance, maxResistance, CurrentResistance); // -> 0
-            var negResistancePercentage = 1 - resistancePercentage; // -> 1
+            var negRelativeResistance = 1 - RelativeResistance; // -> 1
+            curCatchDuration = maxCatchDuration * catchDurationOverResistance.Evaluate(negRelativeResistance);
 
-            var multiplier = difficultyOverResistance.Evaluate(negResistancePercentage);
-            Debug.Log(multiplier);
-            var decision = Random.Range(0, (int)(catchDifficulty * multiplier));
-            
-            if (decision == 0)
+            RelativeCatchProgress.SetValue(trapDuration / curCatchDuration);
+            if (trapDuration >= curCatchDuration)
             {
-                photonMessageHub.ShoutMessage<HuntedCatchedPhoMsg>(PhotonMessageTarget.MasterClient);
+                photonMessageHub.ShoutMessage<HuntedCatchedPhoMsg>(PhotonMessageTarget.AllViaServer);
                 catchSucceed = true;
             }
         }

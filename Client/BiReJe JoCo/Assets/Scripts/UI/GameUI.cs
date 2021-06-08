@@ -21,6 +21,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject crosshairGO;
         [SerializeField] UIBarHandler ammoBar;
         [SerializeField] UIBarHandler pingCooldownBar;
+        [SerializeField] Image trapIcon;
 
         [Header("Hunted")]
         [SerializeField] GameObject huntedHUD;
@@ -118,6 +119,10 @@ namespace BiReJeJoCo.UI
             else
                 ammoBar.SetValue(value);
         }
+        public void SetTrapIcon(bool visible)
+        {
+            trapIcon.gameObject.SetActive(visible);
+        }
         public void UpdatePingCooldown(float value)
         {
             if (value == 0f)
@@ -126,7 +131,7 @@ namespace BiReJeJoCo.UI
                 pingCooldownBar.SetValue(value);
         }
 
-        public void UpdateHealthBar(float value)
+        public void UpdateResistanceBar(float value)
         {
             healthBar.SetValue(value);
         }

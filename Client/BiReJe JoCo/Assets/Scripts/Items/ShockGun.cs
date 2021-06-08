@@ -2,6 +2,7 @@ using BiReJeJoCo.Backend;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using JoVei.Base.Helper;
 
 namespace BiReJeJoCo.Items
 {
@@ -17,24 +18,23 @@ namespace BiReJeJoCo.Items
 
         [Header("Appearance")]
         [SerializeField] [Range(.1f, 5f)] float density;
-        [SerializeField] [Range(.01f, 1f)] float frequence;
+        [SerializeField] Counter frequence;
         [SerializeField] [Range(0f, 2f)] float widthVariance;
         [SerializeField] float minWidth;
         [SerializeField] float maxWidth;
         [SerializeField] LayerMask hitLayerMask;
         [SerializeField] LayerMask huntedLayerMask;
+        [SerializeField] float maxTrailDist;
 
         [Header("Noise")]
         [SerializeField] float noise;
         [SerializeField] int bigNoiseChance;
         [SerializeField] float bigNoise;
 
-        private Vector3? currentTarget;
-        private float counter;
-
         public Transform RayOrigin => rayOrigin;
-
+        private Vector3? currentTarget;
         private TrailRenderer currentTrail;
+        private Vector3 lastTrailPos;
 
         private PlayerControlled controller;
         public Player Owner => controller.Player;
@@ -42,13 +42,6 @@ namespace BiReJeJoCo.Items
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
-
-            if (Owner.IsLocalPlayer)
-            {
-
-            }
-            //else
-            //    playerShot.OnValueReceived += OnShotFired;
         }
 
         #region Public Methods 
@@ -65,8 +58,13 @@ namespace BiReJeJoCo.Items
             {
                 lineRenderer.enabled = true;
                 lineParticleSystem.enableEmission = true;
-                
-                RefreshRay(currentTarget.Value);
+
+                frequence.CountUp(() => 
+                {
+                    RefreshRay(currentTarget.Value);
+                });
+                lineRenderer.SetPosition(0, RayOrigin.position);
+
                 UpdateSFX();
             }
             else
@@ -76,19 +74,12 @@ namespace BiReJeJoCo.Items
                 hitParticleSystem.enableEmission = false;
                 damageParticleSystem.enableEmission = false;
                 DestroyCurrentTrail();
+                frequence.SetValue(frequence.MaxValue);
             }
         }
 
         private void RefreshRay(Vector3 targetPosition)
         {
-            if (counter < frequence)
-            {
-                lineRenderer.SetPosition(0, rayOrigin.position);
-                counter += Time.deltaTime;
-                return;
-            }
-            counter = 0;
-
             var dist = Vector3.Distance(rayOrigin.position, targetPosition);
             var direction = (targetPosition - rayOrigin.position).normalized;
             int amount = Mathf.Clamp(Mathf.FloorToInt(dist * density), 1, int.MaxValue);
@@ -181,11 +172,19 @@ namespace BiReJeJoCo.Items
                 hitParticleSystem.enableEmission = true;
                 hitParticleSystem.transform.position = point;
 
+                if (Vector3.Distance(lastTrailPos, point) > maxTrailDist)
+                {
+                    DestroyCurrentTrail();
+                }
+
                 if (!currentTrail)
                 {
                     currentTrail = SpawnNewTrail(point);
+                    currentTrail.SetPositions(new Vector3[1] { point });
                 }
+
                 currentTrail.transform.position = point;
+                lastTrailPos = point;
             }
             else
             {

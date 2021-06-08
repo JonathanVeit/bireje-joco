@@ -4,6 +4,7 @@ using UnityEngine;
 using JoVei.Base.Helper;
 using System.Collections;
 using BiReJeJoCo.Character;
+using JoVei.Base.UI;
 
 namespace BiReJeJoCo.Items
 {
@@ -15,10 +16,12 @@ namespace BiReJeJoCo.Items
         [SerializeField] Timer catchDuration;
         [SerializeField] Transform centerPoint;
         [SerializeField] LayerMask huntedLayer;
+        [SerializeField] float showFloatyAt;
 
         [Header("Catch Settings")]
         [SerializeField] Vector3 catchArea;
         [SerializeField] Vector3 catchAreaOffset;
+
         [Header("Suction")]
         [SerializeField] Vector3 suctionArea;
         [SerializeField] Vector3 suctionAreaOffset;
@@ -29,9 +32,14 @@ namespace BiReJeJoCo.Items
         [SerializeField] Light light;
         [SerializeField] float lightSpeed;
         [SerializeField] ParticleSystem[] particleSystems;
-        
+        [SerializeField] Transform catchSign;
+        [SerializeField] float catchSignSize;
+
         private bool isBlocked = true;
         private float lightIntensity;
+        private FloatingElement locationFloaty;
+        private Coroutine setLightCoroutine;
+        private float curCatchDuration;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -51,8 +59,15 @@ namespace BiReJeJoCo.Items
             startDelay.Start(() =>
             {
                 StartCatch();
+                isBlocked = false;
             });
+
+            if (!Owner.IsLocalPlayer)
+            {
+                rigidBody.isKinematic = true;
+            }
         }
+
         protected override void SetupAsActive()
         {
             if (!Owner.IsLocalPlayer)
@@ -61,18 +76,20 @@ namespace BiReJeJoCo.Items
             }
         }
 
-        protected override void ConnectEvents()
+        protected override void OnBeforeDestroy()
         {
-            base.ConnectEvents();
-
-            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnFinishMatch);
+            if (!Owner.IsLocalPlayer)
+                DisconnectEvents();
         }
         protected override void DisconnectEvents()
         {
             base.DisconnectEvents();
 
-            if (photonMessageHub)
-                photonMessageHub.UnregisterReceiver(this);
+            startDelay.Stop();
+            catchDuration.Stop();
+            
+            if (locationFloaty)
+                locationFloaty.RequestDestroyFloaty();
         }
         #endregion
 
@@ -86,12 +103,22 @@ namespace BiReJeJoCo.Items
             {
                 if (localPlayer.Role == PlayerRole.Hunted)
                     TryCatchLocal();
+
+                var catchHits = BoxCast(centerPoint, catchArea, catchAreaOffset, huntedLayer);
+                DrawBox(centerPoint, catchArea, catchAreaOffset);
+                if (catchHits.Length != 0)
+                {
+                    var hunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0];
+                    var catchProgress = hunted.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.RelativeCatchProgress.GetValue();
+                    catchSign.transform.localScale = new Vector3(catchProgress * catchSignSize, 1, catchProgress* catchSignSize);
+                }
+                else
+                    catchSign.transform.localScale = new Vector3(0, 1, 0);
             },
             () => // finish
             {
                 SetSFX(false);
-
-                isBlocked = false;
+                catchSign.transform.localScale = new Vector3(0, 1, 0);
             });
         }
         private void TryCatchLocal()
@@ -108,8 +135,11 @@ namespace BiReJeJoCo.Items
             DrawBox(centerPoint, catchArea, catchAreaOffset);
             if (catchHits.Length != 0)
             {
-                localPlayer.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.TryCatch();
+                curCatchDuration += Time.deltaTime;
+                localPlayer.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.TryCatch(curCatchDuration);
             }
+            else
+                curCatchDuration = 0;
         }
         private Vector3 CalculateSuctionForce()
         {
@@ -124,10 +154,12 @@ namespace BiReJeJoCo.Items
             return new Vector3 (dir2D.x, 0, dir2D.y) * suctionStrength;
         }
 
-
         private void SetSFX(bool show)
         {
-            StartCoroutine(SetLight(show));
+            if (setLightCoroutine != null)
+                StopCoroutine(setLightCoroutine);
+
+            setLightCoroutine = StartCoroutine(SetLight(show));
             foreach (var pS in particleSystems)
                 pS.enableEmission = show;
         }
@@ -141,19 +173,30 @@ namespace BiReJeJoCo.Items
                 yield return null;
             }
         }
-
-        private void OnFinishMatch(PhotonMessage obj)
-        {
-            catchDuration.Stop(true);
-            SetSFX(false);
-        }
         #endregion
-
+ 
         #region Trigger Stuff
+        protected override void OnTriggerHold(float duration)
+        {
+            foreach (var curTrigger in triggerPoints)
+            {
+                if (PlayerIsInArea(curTrigger) &&
+                    !curTrigger.isCoolingDown)
+                {
+                    if (curTrigger.pressDuration <= duration)
+                    {
+                        OnTriggerInteracted(curTrigger.Id);
+                    }
+                    else
+                    {
+                        UpdateTriggerProgress(curTrigger, duration);
+                    }
+                }
+            }
+        }
         protected override void OnTriggerInteracted(byte pointId)
         {
             DisconnectEvents();
-
             foreach (var floaty in floaties)
             {
                 if (floaty.Value)
@@ -161,7 +204,6 @@ namespace BiReJeJoCo.Items
             }
 
             messageHub.ShoutMessage<PlayerCollectedTrapMsg>(this);
-            Destroy(gameObject);
         }
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
@@ -173,6 +215,25 @@ namespace BiReJeJoCo.Items
                 return false;
 
             return base.PlayerIsInArea(trigger);
+        }
+        #endregion
+
+        #region Floaty
+        protected override void OnTicked()
+        {
+            if (!localPlayer.PlayerCharacter)
+                return;
+
+            if (Vector3.Distance(rigidBody.position, localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.position) >= showFloatyAt)
+            {
+                if (!locationFloaty)
+                {
+                    var config = new FloatingElementConfig("trap_location", uiManager.GetInstanceOf<GameUI>().floatingElementGrid, transform);
+                    locationFloaty = floatingManager.GetElementAs<FloatingElement>(config);
+                }
+            }
+            else if (locationFloaty)
+                locationFloaty.RequestDestroyFloaty();
         }
         #endregion
     }

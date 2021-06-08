@@ -100,6 +100,7 @@ MonoBehaviour:
   throwForce: 1.5
   extraThrowForce: {x: 0, y: 1, z: 0}
   trapThrowRange: 10
+  trapTorque: 100
 --- !u!1 &2488023294696167022
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,8 +181,8 @@ MonoBehaviour:
   reloadTimer:
     duration: 3
     timeScale: 1
-  range: 17
-  autoAimAngle: 40
+  range: 20
+  autoAimAngle: 50
   targetLayer:
     serializedVersion: 2
     m_Bits: 1793

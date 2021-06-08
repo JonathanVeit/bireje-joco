@@ -79,7 +79,10 @@ namespace BiReJeJoCo.Backend
                     DestroyTriggerFloaty(curTrigger);
                 }
             }
+
+            OnTicked();
         }
+        protected virtual void OnTicked() { }
 
         protected virtual void SpawnTriggerFloaty(TriggerSetup trigger)
         {

@@ -1,8 +1,6 @@
 using PhotonPlayer = Photon.Realtime.Player;
 using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
-using Newtonsoft.Json;
 using UnityEngine;
-using BiReJeJoCo.Character;
 
 namespace BiReJeJoCo.Backend
 {

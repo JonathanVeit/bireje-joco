@@ -17,6 +17,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] LayerMask targetLayer;
 
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
+        public ShockGun Gun => gun;
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 
@@ -34,7 +35,7 @@ namespace BiReJeJoCo.Character
                 else
                     gun.Shoot(x);
             };
-            
+
             ConnectEvents();
         }
         protected override void OnBeforeDestroy()
@@ -52,7 +53,7 @@ namespace BiReJeJoCo.Character
                 syncVarHub.UnregisterSyncVar(isHitting);
                 syncVarHub.UnregisterSyncVar(shootPosition);
             }
-            
+
             messageHub.UnregisterReceiver(this);
             reloadTimer.Stop();
         }
@@ -67,8 +68,7 @@ namespace BiReJeJoCo.Character
 
             ammoCounter.CountUp(() =>
             {
-                StopShooting();
-                reloadTimer.Start(() => gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress), null);
+                Reload();
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
         }
@@ -77,6 +77,22 @@ namespace BiReJeJoCo.Character
             shootPosition.SetValue(null);
             gun.Shoot(null);
             isHitting.SetValue(false);
+        }
+        public void Reload ()
+        {
+            if (ammoCounter.RelativeProgress == 0) return;
+
+            StopShooting();
+            reloadTimer.Start(
+                () =>
+                {
+                    gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress);
+
+                },   // update 
+                () => 
+                {
+                    ammoCounter.SetValue(0);
+                }); // finish
         }
 
         private Vector3 CalculateShootTarget()
@@ -90,7 +106,8 @@ namespace BiReJeJoCo.Character
             if (huntedTransform == null)
                 return CastToTarget(ray);
 
-            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range)
+            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range && 
+                !HuntedIsTranformed())
             {
                 var dirToHunted = huntedTransform.position - gun.RayOrigin.position;
                 var gunDir = gun.RayOrigin.forward;
@@ -135,6 +152,14 @@ namespace BiReJeJoCo.Character
             }
 
             return allHunted[0].PlayerCharacter.ControllerSetup.ModelRoot;
+        }
+        private bool HuntedIsTranformed() 
+        {
+            var allHunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted);
+            if (allHunted.Length == 0)
+                return false;
+
+            return allHunted[0].PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.IsTransformed;
         }
         #endregion
     }

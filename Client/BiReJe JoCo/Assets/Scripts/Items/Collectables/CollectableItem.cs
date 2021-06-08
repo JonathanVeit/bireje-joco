@@ -11,10 +11,12 @@ namespace BiReJeJoCo.Items
 
         public string InstanceId { get; private set; }
         public string UniqueId => uniqueId;
+        private bool wasCollected = false;
 
         public void InitializeCollectable(string instanceId)
         {
             InstanceId = instanceId;
+            wasCollected = false;
         }
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
@@ -24,6 +26,8 @@ namespace BiReJeJoCo.Items
 
         protected override void OnTriggerInteracted(byte pointId)
         {
+            if (wasCollected) return;
+
             DisconnectEvents();
 
             collectablesManager.CollectItem(InstanceId);
@@ -32,6 +36,7 @@ namespace BiReJeJoCo.Items
                 if (curFloaty)
                     curFloaty.RequestDestroyFloaty();
             }
+            wasCollected = true;
         }
     }
 }

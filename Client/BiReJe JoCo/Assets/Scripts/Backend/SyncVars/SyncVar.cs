@@ -17,6 +17,7 @@ namespace BiReJeJoCo.Backend
         SyncVarStatus Status { get; }
         byte? UniqueId { get; }
         bool IsForced { get; }
+        bool SkipInitialSend { get; }
 
         void SetConnected(SyncVarStatus type);
         
@@ -32,15 +33,19 @@ namespace BiReJeJoCo.Backend
 
         public SyncVarStatus Status { get; private set; }
         public byte? UniqueId { get; private set; }
+        
         public bool IsForced => forceSendAmount > 0;
         private int forceSendAmount = 0;
 
+        public bool SkipInitialSend { get; private set; }
+
         [SerializeField] private TValue value;
 
-        public SyncVar(byte uniqueId) : this(uniqueId, default) { }
-        public SyncVar(byte uniqueId, TValue initialValue)
+        public SyncVar(byte uniqueId, bool skipInit = false) : this(uniqueId, default, skipInit) { }
+        public SyncVar(byte uniqueId, TValue initialValue, bool skipInit = false)
         {
             this.UniqueId = uniqueId;
+            SkipInitialSend = skipInit;
             SetValue(initialValue);
         }
 

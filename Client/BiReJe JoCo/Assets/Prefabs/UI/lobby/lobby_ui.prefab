@@ -1539,6 +1539,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: Random
+      m_Image: {fileID: 0}
     - m_Text: Hunter
       m_Image: {fileID: 0}
     - m_Text: Hunted
@@ -3729,7 +3731,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hunter
+  m_Text: Random
 --- !u!1 &7872359897278600575
 GameObject:
   m_ObjectHideFlags: 0
@@ -4062,6 +4064,7 @@ MonoBehaviour:
   loadingOverlay: {fileID: 852688933633875583}
   startButton: {fileID: 1456206639}
   durationDropdown: {fileID: 8580205856800593819}
+  preferedRoleDropdown: {fileID: 6600811822944068702}
   matchMode: default_match
 --- !u!1 &8945790014983855893
 GameObject:

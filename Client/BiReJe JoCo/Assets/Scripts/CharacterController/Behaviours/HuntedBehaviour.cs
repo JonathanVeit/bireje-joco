@@ -1,9 +1,6 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
 using JoVei.Base;
-using JoVei.Base.Helper;
-using System;
-using System.Linq;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
@@ -27,12 +24,8 @@ namespace BiReJeJoCo.Character
         #region Initialization
         protected override void OnBehaviourInitialized()
         {
-            gameUI.UpdateHealthBar(1);
-
-            if (Owner.IsLocalPlayer)
-            {
-                ConnectEvents();
-            }
+            gameUI.UpdateResistanceBar(1);
+            ConnectEvents();
         }
         protected override void OnBeforeDestroy()
         {
@@ -42,9 +35,14 @@ namespace BiReJeJoCo.Character
 
         void ConnectEvents()
         {
-            tickSystem.Register(this, "update");
-            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
-            messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
+            if (Owner.IsLocalPlayer)
+            {
+                tickSystem.Register(this, "update");
+                messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
+                messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
+            }
+
+            photonMessageHub.RegisterReceiver<HuntedCatchedPhoMsg>(this, OnHuntedCatched);
         }
         void DisconnectEvents()
         {
@@ -89,6 +87,12 @@ namespace BiReJeJoCo.Character
             {
                 photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
             }
+        }
+
+        private void OnHuntedCatched(PhotonMessage msg)
+        {
+            var castedMsg = msg as HuntedCatchedPhoMsg;
+            Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.SetActive(false);
         }
         #endregion
     }

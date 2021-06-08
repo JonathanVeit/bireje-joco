@@ -44,45 +44,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxResistance: 100
-  minResistance: 20
-  resistanceRegenerationRate: 60
-  resistanceLossRate: 25
-  resistanceLossByAmount: 0
+  resistanceRegenerationRate: 50
+  resistanceLossRate: 30
+  resistanceLossByHunterAmount: 1
   maxResistanceSlowdown: 0.8
-  catchDifficulty: 1000
-  difficultyOverResistance:
+  maxCatchDuration: 10
+  catchDurationOverResistance:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -0.39487305
-      outSlope: -0.066666685
-      tangentMode: 65
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.75
-      value: 0.95
-      inSlope: -0.066666685
-      outSlope: -3.3999999
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.45109135
-      outWeight: 1
-    - serializedVersion: 3
-      time: 1
-      value: 0.1
-      inSlope: -3.3999999
-      outSlope: -2.9883423
-      tangentMode: 5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.9
+      inSlope: -0.4000001
+      outSlope: -0.4000001
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  RelativeCatchProgress:
+    value: 0
+  curCatchDuration: 0
+  catchSucceed: 0
 --- !u!1 &5355064504545400264
 GameObject:
   m_ObjectHideFlags: 0
