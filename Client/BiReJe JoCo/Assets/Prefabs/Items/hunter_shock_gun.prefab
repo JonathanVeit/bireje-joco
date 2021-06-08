@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4198522486400915149}
   - component: {fileID: 2987382080448175006}
   - component: {fileID: 4182684893851210930}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: damage_particle_system
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4826,7 +4826,7 @@ GameObject:
   - component: {fileID: 4705928607945963944}
   - component: {fileID: 3315983996303448749}
   - component: {fileID: 3704148681314086536}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: particle_system
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9641,7 +9641,7 @@ GameObject:
   - component: {fileID: 5134364232573651070}
   - component: {fileID: 4246393016194116509}
   - component: {fileID: 7681843228599440226}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: hit_particle_system
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14455,7 +14455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 129390101423933507}
   - component: {fileID: -8666756813070436094}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: hunter_shock_gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14526,7 +14526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144261364397566033}
   - component: {fileID: 1432307849840231483}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14712,6 +14712,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3a8c8ca9787f0904699434d79e46b1ac, type: 3}
       propertyPath: m_Name
       value: hunter_gun_prototype
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3a8c8ca9787f0904699434d79e46b1ac, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a8c8ca9787f0904699434d79e46b1ac, type: 3}

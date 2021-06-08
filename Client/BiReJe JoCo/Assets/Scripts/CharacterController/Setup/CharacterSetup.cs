@@ -10,6 +10,9 @@ namespace BiReJeJoCo.Character
         [SerializeField] Material hunterMat;
         [SerializeField] Material huntedMat;
 
+        [Header("Others")]
+        [SerializeField] LayerMask keepLayers;
+
         [Header("Runtime")]
         [SerializeField] Camera cam;
         [SerializeField] CharacterControllerSetup controllerSetup;
@@ -117,7 +120,9 @@ namespace BiReJeJoCo.Character
         #region Helper
         private void SetLayerRecursively(GameObject target, int layer)
         {
-            target.layer = layer;
+            if (keepLayers != (keepLayers | (1 << target.layer))) {
+                target.layer = layer;
+            }
 
             foreach (Transform child in target.transform)
             {
