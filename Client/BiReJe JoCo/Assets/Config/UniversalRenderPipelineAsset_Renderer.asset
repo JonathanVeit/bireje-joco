@@ -15,30 +15,30 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: FirstPersonObjectsOpaque
-    Event: 250
+    Event: 500
     filterSettings:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 24576
+        m_Bits: 8192
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 1
-    depthCompareFunction: 4
+    overrideDepthState: 0
+    depthCompareFunction: 5
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 0
       stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
+      stencilCompareFunction: 4
+      passOperation: 3
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
       overrideCamera: 1
       restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 55
+      offset: {x: 0, y: 0, z: -0.5, w: 1}
+      cameraFieldOfView: 40
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: FirstPersonObjectsTransparent
-    Event: 500
+    Event: 600
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -119,4 +119,4 @@ MonoBehaviour:
       overrideCamera: 1
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 35
+      cameraFieldOfView: 40
