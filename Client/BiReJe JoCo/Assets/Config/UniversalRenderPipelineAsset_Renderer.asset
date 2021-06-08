@@ -51,10 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
   m_Name: UniversalRenderPipelineAsset_Renderer
   m_EditorClassIdentifier: 
-  m_RendererFeatures:
-  - {fileID: -7579300133328314379}
-  - {fileID: 2981457160677253569}
-  m_RendererFeatureMap: f51fe582afead096c16136bf7d436029
+  m_RendererFeatures: []
+  m_RendererFeatureMap: 
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -67,10 +65,10 @@ MonoBehaviour:
     materialErrorPS: {fileID: 4800000, guid: 5fd9a8feb75a4b5894c241777f519d4e, type: 3}
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 4294942719
+    m_Bits: 4294950911
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 4294942719
+    m_Bits: 4294950911
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
