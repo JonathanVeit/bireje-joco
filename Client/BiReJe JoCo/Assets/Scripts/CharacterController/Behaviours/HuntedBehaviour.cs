@@ -11,11 +11,13 @@ namespace BiReJeJoCo.Character
         [SerializeField] TransformationMechanic transformationMechanic;
         [SerializeField] SpeedUpMechanic speedUpMechanic;
         [SerializeField] ResistanceMechanic resistanceMechanic;
+        [SerializeField] CrystalMechanic crystalMechanic;
 
         #region Access
         public TransformationMechanic TransformationMechanic => transformationMechanic;
         public SpeedUpMechanic SpeedUpMechanic => speedUpMechanic;
         public ResistanceMechanic ResistanceMechanic => resistanceMechanic;
+        public CrystalMechanic CrystalMechanic => crystalMechanic;
         #endregion
 
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
@@ -24,7 +26,7 @@ namespace BiReJeJoCo.Character
         #region Initialization
         protected override void OnBehaviourInitialized()
         {
-            gameUI.UpdateResistanceBar(1);
+            gameUI.UpdateCrystalAmmoBar(1);
             ConnectEvents();
         }
         protected override void OnBeforeDestroy()
@@ -39,7 +41,6 @@ namespace BiReJeJoCo.Character
             {
                 tickSystem.Register(this, "update");
                 messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
-                messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
             }
 
             photonMessageHub.RegisterReceiver<HuntedCatchedPhoMsg>(this, OnHuntedCatched);
@@ -64,6 +65,11 @@ namespace BiReJeJoCo.Character
             speedUpMechanic.UseSpeed();
         }
 
+        private void OnThrowTrapPressed() 
+        {
+            crystalMechanic.SpawnCrystals();
+        }
+
         public void Tick(float deltaTime)
         {
             if (Owner.IsLocalPlayer)
@@ -76,17 +82,7 @@ namespace BiReJeJoCo.Character
         {
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed += OnShootPressed;
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed += OnSpeedUpPressed;
-        }
-
-        void OnItemCollected(ItemCollectedByPlayerMsg msg)
-        {
-            collectedItems++;
-            gameUI.UpdateCollectedItemAmount(collectedItems);
-
-            if (collectedItems >= matchHandler.MatchConfig.Mode.huntedCollectables)
-            {
-                photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
-            }
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onThrowTrapPressed += OnThrowTrapPressed;
         }
 
         private void OnHuntedCatched(PhotonMessage msg)

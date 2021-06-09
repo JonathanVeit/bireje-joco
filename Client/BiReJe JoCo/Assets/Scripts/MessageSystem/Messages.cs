@@ -155,6 +155,18 @@ namespace BiReJeJoCo
         }
     }
 
+    public class CollectableItemCreated : BaseMessage
+    {
+        public string itemId;
+        public string instanceId;
+
+        public CollectableItemCreated(string itemId, string instanceId)
+        {
+            this.itemId = itemId;
+            this.instanceId = instanceId;
+        }
+    }
+
     public class ItemCollectedByPlayerMsg : BaseMessage
     {
         public string itemId;

@@ -6,12 +6,12 @@ namespace BiReJeJoCo.Items
 {
     public class CollectableItem : LocalTrigger, ICollectableItem
     {
-        [Header("Settings")]
+        [Header("Collectable Settings")]
         [SerializeField] string uniqueId;
 
         public string InstanceId { get; private set; }
         public string UniqueId => uniqueId;
-        private bool wasCollected = false;
+        protected bool wasCollected = false;
 
         public void InitializeCollectable(string instanceId)
         {

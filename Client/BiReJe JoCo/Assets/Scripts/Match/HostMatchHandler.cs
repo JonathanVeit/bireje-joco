@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using BiReJeJoCo.UI;
 using BiReJeJoCo.Items;
+using BiReJeJoCo.Character;
 
 namespace BiReJeJoCo
 {
@@ -141,12 +142,29 @@ namespace BiReJeJoCo
 
             uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration("");
 
-            var result = new MatchResult()
+            var hunterCharacter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter;
+            var totalCrystals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CrystalMechanic.TotalCrystals;
+
+            MatchResult result;
+            if (totalCrystals >= MatchConfig.Mode.crystalsToWin)
             {
-                winner = PlayerRole.Hunted,
-                condition = WinCondition.TimeOver,
-                message = "Time is over!",
-            };
+                result = new MatchResult()
+                {
+                    winner = PlayerRole.Hunted,
+                    condition = WinCondition.CrystalsCreated,
+                    message = $"Time is over! The monster created {totalCrystals} crystals and won.",
+                };
+            }
+            else
+            {
+                result = new MatchResult()
+                {
+                    winner = PlayerRole.Hunted,
+                    condition = WinCondition.TimeOver,
+                    message = $"Time is over! The monster only created {totalCrystals} crystals and lost.",
+                };
+            }
+
             photonMessageHub.ShoutMessage(new FinishMatchPhoMsg() { result = result }, PhotonMessageTarget.AllViaServer);
         }
 
@@ -221,12 +239,13 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunted,
-                condition = WinCondition.FoundCollectables,
-                message = "Monster collected all items!",
+                condition = WinCondition.CrystalsCreated,
+                message = $"The monster created {MatchConfig.Mode.maxCrystals} crystals.",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);
         }
+
         protected override void OnMatchClosed(PhotonMessage msg)
         {
             var casted = msg as CloseMatchPhoMsg;

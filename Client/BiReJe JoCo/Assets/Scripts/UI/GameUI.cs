@@ -15,6 +15,8 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Text startInformation;
         [SerializeField] Text durationLabel;
+        [SerializeField] UIBarHandler totalCrystalsBar;
+        [SerializeField] RectTransform totalCrystalBarSeperator;
 
         [Header("Hunter")]
         [SerializeField] GameObject hunterHUD;
@@ -25,12 +27,11 @@ namespace BiReJeJoCo.UI
 
         [Header("Hunted")]
         [SerializeField] GameObject huntedHUD;
-        [SerializeField] UIBarHandler healthBar;
+        [SerializeField] UIBarHandler crystalAmmoBar;
         [SerializeField] UIBarHandler transformationBar;
         [SerializeField] UIBarHandler transformationCooldownBar;
         [SerializeField] UIBarHandler speedUpBar;
         [SerializeField] Image scannedItemIcon;
-        [SerializeField] Text collectableLabel;
         [SerializeField] Image hitOverlay;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
@@ -75,11 +76,15 @@ namespace BiReJeJoCo.UI
             }
 
             UpdateTransformationDurationBar(0);
+
+            var pos = totalCrystalBarSeperator.anchoredPosition;
+            var percentage = matchHandler.MatchConfig.Mode.crystalsToWin / (float) matchHandler.MatchConfig.Mode.maxCrystals;
+            pos.x = totalCrystalsBar.TargetImage.GetComponent<RectTransform>().rect.width * percentage;
+            totalCrystalBarSeperator.anchoredPosition = pos;
         }
         private void InitializeAsHunted()
         {
             hunterHUD.SetActive(false);
-            UpdateCollectedItemAmount(0);
             startInformation.text = "You are the monster!\nTry to hide!";
             UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey("empty"));
             StartCoroutine(FadeText(3, startInformation));
@@ -92,6 +97,7 @@ namespace BiReJeJoCo.UI
             StartCoroutine(FadeText(3, startInformation));
         }
 
+        // all player
         public void UpdateMatchDuration(string duration)
         {
             durationLabel.text = duration;
@@ -111,7 +117,12 @@ namespace BiReJeJoCo.UI
 
             target.gameObject.SetActive(false);
         }
+        public void UpdateTotalCrystalAmount(float value) 
+        {
+            totalCrystalsBar.SetValue(value);
+        }
 
+        // hunter
         public void UpdateAmmoBar(float value)
         {
             if (value == 0)
@@ -131,9 +142,10 @@ namespace BiReJeJoCo.UI
                 pingCooldownBar.SetValue(value);
         }
 
-        public void UpdateResistanceBar(float value)
+        // hunted
+        public void UpdateCrystalAmmoBar(float value)
         {
-            healthBar.SetValue(value);
+            crystalAmmoBar.SetValue(value);
         }
         public void UpdateTransformationDurationBar(float value)
         {
@@ -161,10 +173,6 @@ namespace BiReJeJoCo.UI
         public void UpdateScannedItemIcon(Sprite icon)
         {
             scannedItemIcon.sprite = icon;
-        }
-        public void UpdateCollectedItemAmount(int amount)
-        {
-            collectableLabel.text = string.Format("{0} / {1}", amount, matchHandler.MatchConfig.Mode.huntedCollectables);
         }
         public void UpdateSpeedUpBar(float value)
         {

@@ -68,7 +68,6 @@ namespace BiReJeJoCo.Character
             }
 
             UpdateResistanceInfluence();
-            gameUI.UpdateResistanceBar(RelativeResistance);
         }
 
         private float HittingHunterPercentage()

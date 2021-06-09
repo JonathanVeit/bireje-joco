@@ -10,11 +10,13 @@ namespace BiReJeJoCo.Items
     public class CollectableSpawnConfig
     {
         [JsonIgnore]
-        public string PrefabId => i;
+        public string ItemId => i;
         [JsonIgnore]
         public string InstanceId => i2;
         [JsonIgnore]
         public int SpawnPointIndex => s;
+        [JsonIgnore]
+        public Vector3? OverridePosition => p;
 
         /// <summary>
         /// Prefab Id
@@ -28,6 +30,10 @@ namespace BiReJeJoCo.Items
         /// Spawnpoint index
         /// </summary>
         public int s;
+        /// <summary>
+        /// overridable spawnposition
+        /// </summary>
+        public Vector3? p;
     }
 
     public class CollectablesManager : SystemBehaviour
@@ -67,20 +73,25 @@ namespace BiReJeJoCo.Items
         }
         #endregion
 
-        public void CreateCollectable(CollectableSpawnConfig config)
+        public ICollectableItem CreateCollectable(CollectableSpawnConfig config)
         {
             if (root == null)
                 CreateItemRoot();
             var scene = matchHandler.MatchConfig.matchScene;
             var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.SpawnPointIndex);
+            if (config.OverridePosition.HasValue)
+                spawnPoint = config.p.Value;
 
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.PrefabId);
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.ItemId);
             var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
             instance.transform.SetParent(root);
 
             var item = instance.GetComponent<ICollectableItem>();
             item.InitializeCollectable(config.InstanceId);
             items.Add(config.InstanceId, item);
+
+            messageHub.ShoutMessage(this, new CollectableItemCreated(config.ItemId, config.InstanceId));
+            return item;
         }
 
         public void CollectItem(string instanceId)
@@ -115,7 +126,7 @@ namespace BiReJeJoCo.Items
             } 
             else
             {
-                Debug.LogError($"No Collectable with instance id {castedMsg.InstanceId}.");
+                Debug.Log($"No Collectable with instance id {castedMsg.InstanceId}.");
             }
         }
         #endregion

@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] float range;
         [SerializeField] [Range(0, 360)] float autoAimAngle;
         [SerializeField] LayerMask targetLayer;
+        [SerializeField] float pushStrength;
 
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
         public ShockGun Gun => gun;
@@ -63,7 +64,8 @@ namespace BiReJeJoCo.Character
         {
             if (reloadTimer.State != TimerState.Finished) return;
 
-            shootPosition.SetValue(CalculateShootTarget());
+            var shootTarget = CalculateShootTarget();
+            shootPosition.SetValue(shootTarget);
             gun.Shoot(shootPosition.GetValue().Value);
 
             ammoCounter.CountUp(() =>
@@ -71,6 +73,9 @@ namespace BiReJeJoCo.Character
                 Reload();
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
+
+            if (isHitting.GetValue())
+                PushToPosition(shootTarget);
         }
         public void StopShooting()
         {
@@ -104,7 +109,7 @@ namespace BiReJeJoCo.Character
             };
 
             if (huntedTransform == null)
-                return CastToTarget(ray);
+                return CastToTarget(ray, out var b);
 
             if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range && 
                 !HuntedIsTranformed())
@@ -120,20 +125,32 @@ namespace BiReJeJoCo.Character
                 }
             }
 
-            return CastToTarget(ray);
+            var hitPoint =  CastToTarget(ray, out bool isHittingHunted);
+            isHitting.SetValue(isHittingHunted);
+            if (isHittingHunted)
+            {
+                return hitPoint;
+            }
+
+            ray.direction = gun.RayOrigin.forward;
+            return CastToTarget(ray, out isHittingHunted);
         }
-        private Vector3 CastToTarget(Ray ray)
+        private Vector3 CastToTarget(Ray ray, out bool isHittingHunted)
         {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range, targetLayer, QueryTriggerInteraction.Ignore))
             {
-                
-                isHitting.SetValue(hit.collider.gameObject.layer == 10);
+                isHittingHunted = hit.collider.gameObject.layer == 10;
                 return hit.point;
             }
             
-            isHitting.SetValue(false);
+            isHittingHunted = false;
             return Camera.main.transform.position + Camera.main.transform.forward * range;
+        }
+
+        private void PushToPosition(Vector3 target) 
+        {
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.SetMomentum((target - transform.position).normalized * pushStrength);
         }
 
         #region Helper
