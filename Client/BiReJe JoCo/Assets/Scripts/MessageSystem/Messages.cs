@@ -170,10 +170,12 @@ namespace BiReJeJoCo
     public class ItemCollectedByPlayerMsg : BaseMessage
     {
         public string itemId;
+        public int playerNumber;
 
-        public ItemCollectedByPlayerMsg(string itemId) 
+        public ItemCollectedByPlayerMsg(int playerNumber, string itemId) 
         {
             this.itemId = itemId;
+            this.playerNumber = playerNumber;
         }
     }
 

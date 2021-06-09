@@ -1,23 +1,25 @@
 using BiReJeJoCo.Backend;
-using BiReJeJoCo.Items;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
-    public class CrystalMechanic : BaseBehaviourMechanic<HuntedBehaviour>
+    public class CoralMechanic : BaseBehaviourMechanic<HuntedBehaviour>
     {
         [Header("Settings")]
         [SerializeField] Transform spawnPoint;
         [SerializeField] int maxCrystals;
         [SerializeField] int crystalsPerCollectable;
-        [SerializeField] string collectableId = "collectable_crystal";
+        [SerializeField] string collectableId = "collectable_coral";
 
         [Header("Runtime")]
         [SerializeField] int crystalAmmo = 0;
-       
-        public int TotalCrystals { get; private set; } = 0;
+        [SerializeField] int totalCorals;
+
+        public int TotalCorals => totalCorals;
 
         private SyncVar<object[]> onSpawnCrystals = new SyncVar<object[]>(8, true);
+
+        private int seed;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -37,6 +39,7 @@ namespace BiReJeJoCo.Character
 
         private void ConnectEvents()
         {
+            messageHub.RegisterReceiver<CollectableItemCreated>(this, OnItemCreatedCollected);
             messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
         }
         private void DisconnectEvents()
@@ -52,17 +55,20 @@ namespace BiReJeJoCo.Character
             if (crystalAmmo == 0)
                 return;
 
-            var args = new object[3] 
+            if (!Owner.PlayerCharacter.ControllerSetup.WalkController.IsGrounded())
+                return;
+
+            var args = new object[2] 
             {
-                spawnPoint.position, 
-                Random.Range(0, int.MaxValue),
-                System.Guid.NewGuid().ToString(),
+                spawnPoint.position,
+                seed,
             };
 
             onSpawnCrystals.SetValue(args);
             SpawnCrystalsInternal(onSpawnCrystals.GetValue());
 
             crystalAmmo--;
+            seed++;
             gameUI.UpdateCrystalAmmoBar(crystalAmmo / (float)maxCrystals);
         }
 
@@ -70,22 +76,15 @@ namespace BiReJeJoCo.Character
         {
             var pos = (Vector3)args[0];
             var seed = (int)args[1];
-            var instanceId = (string)args[2];
 
-            var config = new CollectableSpawnConfig()
-            {
-                i = collectableId,
-                i2 = instanceId,
-                p = pos,
-            };
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("coral_grower");
+            var instance = Instantiate(prefab, pos, Quaternion.identity);
+            var coralGrower = instance.GetComponent<CoralGrower>();
+            coralGrower.Grow(seed);
 
-            var crystalSpawner = (CollectableCrystal) collectablesManager.CreateCollectable(config);
-            crystalSpawner.Grow(seed);
+            gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
 
-            TotalCrystals++;
-            gameUI.UpdateTotalCrystalAmount(TotalCrystals / (float) matchHandler.MatchConfig.Mode.maxCrystals);
-
-            if (TotalCrystals == matchHandler.MatchConfig.Mode.maxCrystals &&
+            if (TotalCorals == matchHandler.MatchConfig.Mode.maxCorals &&
                 Owner.IsLocalPlayer)
             {
                 photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
@@ -93,6 +92,24 @@ namespace BiReJeJoCo.Character
         }
 
         #region Events
+        private void OnItemCreatedCollected(CollectableItemCreated msg)
+        {
+            switch (msg.itemId)
+            {
+                case "collectable_coral":
+                    totalCorals++;
+                    gameUI.UpdateTotalCoralAmount(TotalCorals / matchHandler.MatchConfig.Mode.maxCorals);
+                    break;
+            }
+
+            if (Owner.IsLocalPlayer)
+            {
+                if (TotalCorals == matchHandler.MatchConfig.Mode.maxCorals)
+                {
+                    photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient); 
+                }
+            }
+        }
         private void OnItemCollected(ItemCollectedByPlayerMsg msg)
         {
             switch (msg.itemId)
@@ -104,10 +121,9 @@ namespace BiReJeJoCo.Character
                     gameUI.UpdateCrystalAmmoBar(crystalAmmo / (float)maxCrystals);
                     break;
 
-                case "collectable_crystal":
-
-                    TotalCrystals--;
-                    gameUI.UpdateTotalCrystalAmount(TotalCrystals / matchHandler.MatchConfig.Mode.maxCrystals);
+                case "collectable_coral":
+                    totalCorals--;
+                    gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
                     break;
             }
         }

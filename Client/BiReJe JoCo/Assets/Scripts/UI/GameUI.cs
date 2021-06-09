@@ -78,7 +78,7 @@ namespace BiReJeJoCo.UI
             UpdateTransformationDurationBar(0);
 
             var pos = totalCrystalBarSeperator.anchoredPosition;
-            var percentage = matchHandler.MatchConfig.Mode.crystalsToWin / (float) matchHandler.MatchConfig.Mode.maxCrystals;
+            var percentage = matchHandler.MatchConfig.Mode.coralsToWin / (float) matchHandler.MatchConfig.Mode.maxCorals;
             pos.x = totalCrystalsBar.TargetImage.GetComponent<RectTransform>().rect.width * percentage;
             totalCrystalBarSeperator.anchoredPosition = pos;
         }
@@ -117,9 +117,12 @@ namespace BiReJeJoCo.UI
 
             target.gameObject.SetActive(false);
         }
-        public void UpdateTotalCrystalAmount(float value) 
+        public void UpdateTotalCoralAmount(float value) 
         {
-            totalCrystalsBar.SetValue(value);
+            if (value == 0)
+                totalCrystalsBar.OverrideValue(value);
+            else
+                totalCrystalsBar.SetValue(value);
         }
 
         // hunter

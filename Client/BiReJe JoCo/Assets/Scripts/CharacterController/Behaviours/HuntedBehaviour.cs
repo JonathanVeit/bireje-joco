@@ -11,13 +11,13 @@ namespace BiReJeJoCo.Character
         [SerializeField] TransformationMechanic transformationMechanic;
         [SerializeField] SpeedUpMechanic speedUpMechanic;
         [SerializeField] ResistanceMechanic resistanceMechanic;
-        [SerializeField] CrystalMechanic crystalMechanic;
+        [SerializeField] CoralMechanic coralMechanic;
 
         #region Access
         public TransformationMechanic TransformationMechanic => transformationMechanic;
         public SpeedUpMechanic SpeedUpMechanic => speedUpMechanic;
         public ResistanceMechanic ResistanceMechanic => resistanceMechanic;
-        public CrystalMechanic CrystalMechanic => crystalMechanic;
+        public CoralMechanic CoralMechanic => coralMechanic;
         #endregion
 
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
@@ -67,7 +67,7 @@ namespace BiReJeJoCo.Character
 
         private void OnThrowTrapPressed() 
         {
-            crystalMechanic.SpawnCrystals();
+            coralMechanic.SpawnCrystals();
         }
 
         public void Tick(float deltaTime)

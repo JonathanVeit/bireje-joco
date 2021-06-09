@@ -15,7 +15,8 @@ namespace BiReJeJoCo.Character
         [SerializeField] float range;
         [SerializeField] [Range(0, 360)] float autoAimAngle;
         [SerializeField] LayerMask targetLayer;
-        [SerializeField] float pushStrength;
+        [SerializeField] float coralDestroyRadius;
+        [SerializeField] LayerMask coralLayer;
 
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
         public ShockGun Gun => gun;
@@ -73,9 +74,6 @@ namespace BiReJeJoCo.Character
                 Reload();
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
-
-            if (isHitting.GetValue())
-                PushToPosition(shootTarget);
         }
         public void StopShooting()
         {
@@ -93,7 +91,7 @@ namespace BiReJeJoCo.Character
                 {
                     gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress);
 
-                },   // update 
+                }, // update 
                 () => 
                 {
                     ammoCounter.SetValue(0);
@@ -129,18 +127,21 @@ namespace BiReJeJoCo.Character
             isHitting.SetValue(isHittingHunted);
             if (isHittingHunted)
             {
+                DestroyCorals(hitPoint);
                 return hitPoint;
             }
 
             ray.direction = gun.RayOrigin.forward;
-            return CastToTarget(ray, out isHittingHunted);
+            hitPoint = CastToTarget(ray, out isHittingHunted);
+            DestroyCorals(hitPoint);
+            return hitPoint;
         }
         private Vector3 CastToTarget(Ray ray, out bool isHittingHunted)
         {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range, targetLayer, QueryTriggerInteraction.Ignore))
             {
-                isHittingHunted = hit.collider.gameObject.layer == 10;
+                isHittingHunted = hit.collider.gameObject.layer == 10;            
                 return hit.point;
             }
             
@@ -148,9 +149,12 @@ namespace BiReJeJoCo.Character
             return Camera.main.transform.position + Camera.main.transform.forward * range;
         }
 
-        private void PushToPosition(Vector3 target) 
+        private void DestroyCorals(Vector3 point) 
         {
-            localPlayer.PlayerCharacter.ControllerSetup.WalkController.SetMomentum((target - transform.position).normalized * pushStrength);
+            var collider = Physics.OverlapSphere(point, coralDestroyRadius, coralLayer);
+
+            foreach (var col in collider)
+                col.gameObject.GetComponent<CollectableCoral>().Destroy();
         }
 
         #region Helper

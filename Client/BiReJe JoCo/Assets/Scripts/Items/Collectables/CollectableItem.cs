@@ -38,5 +38,9 @@ namespace BiReJeJoCo.Items
             }
             wasCollected = true;
         }
+
+        public virtual void OnCollect()
+        {
+        }
     }
 }

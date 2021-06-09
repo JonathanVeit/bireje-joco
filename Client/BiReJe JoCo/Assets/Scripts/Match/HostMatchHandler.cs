@@ -143,10 +143,10 @@ namespace BiReJeJoCo
             uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration("");
 
             var hunterCharacter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter;
-            var totalCrystals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CrystalMechanic.TotalCrystals;
+            var totalCrystals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.TotalCorals;
 
             MatchResult result;
-            if (totalCrystals >= MatchConfig.Mode.crystalsToWin)
+            if (totalCrystals >= MatchConfig.Mode.coralsToWin)
             {
                 result = new MatchResult()
                 {
@@ -240,7 +240,7 @@ namespace BiReJeJoCo
             {
                 winner = PlayerRole.Hunted,
                 condition = WinCondition.CrystalsCreated,
-                message = $"The monster created {MatchConfig.Mode.maxCrystals} crystals.",
+                message = $"The monster created {MatchConfig.Mode.maxCorals} crystals.",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);

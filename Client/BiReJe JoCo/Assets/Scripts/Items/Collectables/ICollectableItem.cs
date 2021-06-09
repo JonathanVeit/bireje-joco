@@ -7,5 +7,6 @@ namespace BiReJeJoCo.Items
         string InstanceId { get; }
 
         void InitializeCollectable(string instanceId);
+        void OnCollect();
     }
 }

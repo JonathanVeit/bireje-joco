@@ -39,7 +39,7 @@ namespace BiReJeJoCo.Items
     public class CollectablesManager : SystemBehaviour
     {
         private Dictionary<string, ICollectableItem> items;
-        private Transform root;
+        public Transform Root { get; private set; }
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -57,7 +57,7 @@ namespace BiReJeJoCo.Items
         private void Setup()
         {
             items = new Dictionary<string, ICollectableItem>();
-            root = null;
+            Root = null;
         }
 
         void ConnectEvents()
@@ -75,7 +75,7 @@ namespace BiReJeJoCo.Items
 
         public ICollectableItem CreateCollectable(CollectableSpawnConfig config)
         {
-            if (root == null)
+            if (Root == null)
                 CreateItemRoot();
             var scene = matchHandler.MatchConfig.matchScene;
             var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.SpawnPointIndex);
@@ -84,16 +84,24 @@ namespace BiReJeJoCo.Items
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.ItemId);
             var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
-            instance.transform.SetParent(root);
+            instance.transform.SetParent(Root);
 
             var item = instance.GetComponent<ICollectableItem>();
             item.InitializeCollectable(config.InstanceId);
-            items.Add(config.InstanceId, item);
-
-            messageHub.ShoutMessage(this, new CollectableItemCreated(config.ItemId, config.InstanceId));
+            RegisterCollectableItem(item);
             return item;
         }
 
+        public void RegisterCollectableItem(ICollectableItem item)
+        {
+            items.Add(item.InstanceId, item);
+            messageHub.ShoutMessage(this, new CollectableItemCreated(item.UniqueId, item.InstanceId));
+        }
+
+        public void CollectItem(ICollectableItem item)
+        {
+            CollectItem(item.InstanceId);
+        }
         public void CollectItem(string instanceId)
         {
             photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.AllViaServer);
@@ -116,14 +124,12 @@ namespace BiReJeJoCo.Items
             if (items.ContainsKey(castedMsg.InstanceId))
             {
                 var itemId = items[castedMsg.InstanceId].UniqueId;
+                items[castedMsg.InstanceId].OnCollect();
                 Destroy((items[castedMsg.InstanceId] as Component).gameObject);
                 items.Remove(castedMsg.InstanceId);
 
-                if (castedMsg.playerNumber == localPlayer.NumberInRoom)
-                {
-                    messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, itemId);
-                }
-            } 
+                messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, castedMsg.playerNumber, itemId);
+            }
             else
             {
                 Debug.Log($"No Collectable with instance id {castedMsg.InstanceId}.");
@@ -134,7 +140,7 @@ namespace BiReJeJoCo.Items
         #region Helper
         private void CreateItemRoot()
         {
-            root = new GameObject("collectables_root").transform;
+            Root = new GameObject("collectables_root").transform;
         }
         #endregion
     }
