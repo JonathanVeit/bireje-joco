@@ -67,7 +67,7 @@ namespace BiReJeJoCo.Character
 
         private void OnThrowTrapPressed() 
         {
-            coralMechanic.SpawnCrystals();
+            coralMechanic.SpawnCorals();
         }
 
         public void Tick(float deltaTime)

@@ -154,7 +154,7 @@ namespace BiReJeJoCo.Character
             var collider = Physics.OverlapSphere(point, coralDestroyRadius, coralLayer);
 
             foreach (var col in collider)
-                col.gameObject.GetComponent<CollectableCoral>().Destroy();
+                col.gameObject.GetComponent<DestroyableCoral>().Destroy();
         }
 
         #region Helper

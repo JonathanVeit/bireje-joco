@@ -1,9 +1,11 @@
 using JoVei.Base;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
+using System.Linq;
+using System;
+using JoVei.Base.Helper;
 
 namespace BiReJeJoCo.Items
 {
@@ -38,8 +40,11 @@ namespace BiReJeJoCo.Items
 
     public class CollectablesManager : SystemBehaviour
     {
-        private Dictionary<string, ICollectableItem> items;
+        private Dictionary<string, ICollectable> collectables;
+        private Dictionary<int, List<ICollectable>> spawnPointWorkload;
         public Transform Root { get; private set; }
+
+        public ICollectable[] AllCollectables => collectables.Values.ToArray();
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -56,14 +61,15 @@ namespace BiReJeJoCo.Items
 
         private void Setup()
         {
-            items = new Dictionary<string, ICollectableItem>();
+            collectables = new Dictionary<string, ICollectable>();
+            spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
             Root = null;
         }
 
         void ConnectEvents()
         {
             photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
-            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
+            photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnMatchRulesDefined);
             messageHub.UnregisterReceiver(this);
         }
         void DisconnectEvents()
@@ -73,7 +79,32 @@ namespace BiReJeJoCo.Items
         }
         #endregion
 
-        public ICollectableItem CreateCollectable(CollectableSpawnConfig config)
+        #region Access
+        public ICollectable[] GetAllCollectables(Func<ICollectable, bool> predicate)
+        {
+            return GetAllCollectablesAs<ICollectable>(predicate);
+        }
+        public TCollectable[] GetAllCollectablesAs<TCollectable>(Func<ICollectable, bool> predicate)
+            where TCollectable : ICollectable
+        {
+            var result = new List<TCollectable>();
+            foreach (ICollectable collectable in collectables.Values)
+            {
+                if (predicate(collectable))
+                    result.Add((TCollectable) collectable);
+            }
+
+            return result.ToArray();
+        }
+
+        public int[] GetFreeSpawnPoints()
+        {
+            var freepoints = spawnPointWorkload.Where(x => x.Value.Count == 0).ToArray();
+            return freepoints.Select(x => x.Key).ToArray();
+        }
+        #endregion
+
+        public ICollectable CreateCollectable(CollectableSpawnConfig config)
         {
             if (Root == null)
                 CreateItemRoot();
@@ -86,19 +117,28 @@ namespace BiReJeJoCo.Items
             var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
             instance.transform.SetParent(Root);
 
-            var item = instance.GetComponent<ICollectableItem>();
-            item.InitializeCollectable(config.InstanceId);
-            RegisterCollectableItem(item);
-            return item;
+            var collectable = instance.GetComponent<ICollectable>();
+            collectable.InitializeCollectable(config.InstanceId, config.SpawnPointIndex);
+            RegisterCollectableItem(collectable);
+
+            return collectable;
         }
 
-        public void RegisterCollectableItem(ICollectableItem item)
+        public void RegisterCollectableItem(ICollectable collectable)
         {
-            items.Add(item.InstanceId, item);
-            messageHub.ShoutMessage(this, new CollectableItemCreated(item.UniqueId, item.InstanceId));
+            collectables.Add(collectable.InstanceId, collectable);
+
+            if (!spawnPointWorkload.ContainsKey(collectable.SpawnPointIndex))
+                spawnPointWorkload.Add(collectable.SpawnPointIndex, new List<ICollectable>());
+            spawnPointWorkload[collectable.SpawnPointIndex].Add(collectable);
+
+            messageHub.ShoutMessage(this, new CollectableItemCreated(collectable.UniqueId, collectable.InstanceId));
+            
+            if (globalVariables.GetVar<bool>("debug_mode")) 
+                DebugHelper.Print(LogType.Log, $"Created collectable {collectable.InstanceId} ({collectable.UniqueId}).");
         }
 
-        public void CollectItem(ICollectableItem item)
+        public void CollectItem(ICollectable item)
         {
             CollectItem(item.InstanceId);
         }
@@ -112,23 +152,38 @@ namespace BiReJeJoCo.Items
         {
             ConnectEvents();
         }
-        private void OnCloseMatch(PhotonMessage msg)
+
+        private void OnMatchRulesDefined(PhotonMessage msg) 
         {
+            var castedMsg = msg as DefinedMatchRulesPhoMsg;
             Setup();
+
+            var sceneConfig = MapConfigMapping.GetMapping().GetElementForKey(castedMsg.config.Mode.gameScene);
+            for (int i = 0; i < sceneConfig.GetCollectableSpawnPointCount(); i++)
+            {
+                spawnPointWorkload.Add(i, new List<ICollectable>());
+            }
         }
 
         private void OnItemCollected(PhotonMessage msg)
         {
             var castedMsg = msg as CollectItemPhoMsg;
 
-            if (items.ContainsKey(castedMsg.InstanceId))
+            if (collectables.ContainsKey(castedMsg.InstanceId))
             {
-                var itemId = items[castedMsg.InstanceId].UniqueId;
-                items[castedMsg.InstanceId].OnCollect();
-                Destroy((items[castedMsg.InstanceId] as Component).gameObject);
-                items.Remove(castedMsg.InstanceId);
+                var collectable = collectables[castedMsg.InstanceId];
+                var itemId = collectable.UniqueId;
+
+                collectable.OnCollect();
+                Destroy((collectables[collectable.InstanceId] as Component).gameObject);
+
+                spawnPointWorkload[collectable.SpawnPointIndex].Remove(collectable);
+                collectables.Remove(collectable.InstanceId);
 
                 messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, castedMsg.playerNumber, itemId);
+
+                if (globalVariables.GetVar<bool>("debug_mode"))
+                    DebugHelper.Print(LogType.Log, $"Collected collectable {collectable.InstanceId} ({collectable.UniqueId}).");
             }
             else
             {

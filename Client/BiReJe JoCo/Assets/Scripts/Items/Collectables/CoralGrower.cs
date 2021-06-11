@@ -17,9 +17,9 @@ namespace BiReJeJoCo
         [SerializeField] [Range(0, 90)] float randomRotation;
         [SerializeField] float growSpeed;
         [SerializeField] LayerMask targetLayer;
-        [SerializeField] CollectableCoral crystalPrefab;
+        [SerializeField] DestroyableCoral crystalPrefab;
 
-        #region Grow Crystals
+        #region Grow
         public void Grow(int seed)
         {
             var rnd = new System.Random(seed);
@@ -42,14 +42,14 @@ namespace BiReJeJoCo
                 collection.Crystals.Add(crystal.transform, RandomScale(rnd));
                 crystal.transform.SetParent(collectablesManager.Root);
 
-                crystal.InitializeCollectable(rnd.NextDouble().ToString());
+                crystal.InitializeCollectable(rnd.NextDouble().ToString(), -1);
                 collectablesManager.RegisterCollectableItem(crystal);
             }
 
             StartCoroutine(GrowCrystals(collection));
         }
 
-        private CollectableCoral SpawnCristal(CrystalSpawnPoint spawnPoint, System.Random rnd)
+        private DestroyableCoral SpawnCristal(CrystalSpawnPoint spawnPoint, System.Random rnd)
         {
             var crystal = Instantiate(crystalPrefab, spawnPoint.point, Quaternion.identity);
             crystal.transform.up = RandomizeDirection(spawnPoint.direction, rnd);
@@ -130,6 +130,8 @@ namespace BiReJeJoCo
                 if (finished) break;
                 yield return null;
             }
+
+            Destroy(this.gameObject);
         }
 
         private struct CrystalSpawnPoint

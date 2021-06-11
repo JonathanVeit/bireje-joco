@@ -119,7 +119,7 @@ namespace BiReJeJoCo.UI
         }
         public void UpdateTotalCoralAmount(float value) 
         {
-            if (value == 0)
+            if (value <= 0.02f)
                 totalCrystalsBar.OverrideValue(value);
             else
                 totalCrystalsBar.SetValue(value);

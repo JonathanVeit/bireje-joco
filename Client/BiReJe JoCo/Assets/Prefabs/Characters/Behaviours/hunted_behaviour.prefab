@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1990202493015257827}
-  maxCrystals: 10
-  crystalsPerCollectable: 2
+  maxCoralAmmo: 1
+  coralsPerCollectable: 1
   collectableId: collectable_crystal
-  crystalAmmo: 0
+  minShootDistance: 10
+  coralAmmo: 0
+  totalCorals: 0
 --- !u!1 &1660343460130698187
 GameObject:
   m_ObjectHideFlags: 0

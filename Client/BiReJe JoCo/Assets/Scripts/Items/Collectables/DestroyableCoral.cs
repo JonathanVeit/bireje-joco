@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BiReJeJoCo
 {
-    public class CollectableCoral : SystemBehaviour, ICollectableItem
+    public class DestroyableCoral : SystemBehaviour, ICollectable
     {
         [Header("Collectable Settings")]
         [SerializeField] string uniqueId;
@@ -12,11 +12,13 @@ namespace BiReJeJoCo
         private bool isCollected;
 
         public string InstanceId { get; private set; }
+        public int SpawnPointIndex { get; private set; }
         public string UniqueId => uniqueId;
 
-        public void InitializeCollectable(string instanceId)
+        public void InitializeCollectable(string instanceId, int spawnPointIndex)
         {
             InstanceId = instanceId;
+            SpawnPointIndex = spawnPointIndex;
         }
 
         public void Destroy() 
@@ -26,7 +28,6 @@ namespace BiReJeJoCo
             collectablesManager.CollectItem(this);
             isCollected = true;
         }
-
         public void OnCollect() 
         {
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("coral_destroy_sfx");
