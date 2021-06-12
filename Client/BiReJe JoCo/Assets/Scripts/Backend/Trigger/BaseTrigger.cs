@@ -299,13 +299,11 @@ namespace BiReJeJoCo.Backend
 
         protected void SetDisplayed(BaseTrigger instance, TriggerSetup trigger)
         {
-            Debug.Log("show " + trigger.isCoolingDown, this.gameObject);
             DisplayedInstance = instance;
             DisplayedTrigger = trigger;
         }
         protected void ResetDisplayed() 
         {
-            Debug.Log("hide ", this.gameObject);
             DisplayedInstance = null;
             DisplayedTrigger = null;
         }

@@ -43,7 +43,6 @@ namespace BiReJeJoCo.Backend
 
         protected sealed override void OnTriggerPressed()
         {
-            Debug.Log(this.gameObject.name);
             photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, DisplayedTrigger.Id, localPlayer.NumberInRoom), messageTarget);
             DisplayedTrigger.isCoolingDown = true;
             ResetDisplayed();

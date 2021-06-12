@@ -52,7 +52,6 @@ namespace BiReJeJoCo.Map
         {
             if (doorIsMoving)
             {
-                Debug.Log(this.gameObject.name);
                 door.transform.position = Vector3.MoveTowards(door.transform.position, targetDoorPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -63,7 +62,6 @@ namespace BiReJeJoCo.Map
 
             if (castedMsg.i == triggerId)
             {
-                Debug.Log(this.gameObject.name);
                 OnTriggerInteracted(castedMsg.ti);
 
                 foreach(var curTrigger in triggerPoints)
