@@ -1,5 +1,7 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Items;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
@@ -12,6 +14,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] int coralsPerCollectable;
         [SerializeField] string collectableId = "collectable_coral";
         [SerializeField] float minShootDistance;
+        [SerializeField] float minAmmoRespawnDistance;
 
         [Header("Runtime")]
         [SerializeField] int coralAmmo = 0;
@@ -116,9 +119,39 @@ namespace BiReJeJoCo.Character
             {
                 i = "hunted_collectable",
                 i2 = rnd.NextDouble().ToString(),
-                s = freeSpawnPoints[rnd.Next(0, freeSpawnPoints.Length)],
+                s = GetSuitableSpawnPoint(rnd),
             };
             collectablesManager.CreateCollectable(spawnConfig);
+        }
+        private int GetSuitableSpawnPoint(System.Random rnd) 
+        {
+            // all free avaiable spawnpoint indices 
+            var freeSpawnPointsIndices = collectablesManager.GetFreeSpawnPoints().ToList();
+            var rejectedSpawnPointIndices = new List<int>();
+
+            // current scene configuration
+            var sceneConfig = MapConfigMapping.GetMapping().GetElementForKey(matchHandler.MatchConfig.Mode.gameScene);
+
+            // search for a point that is not too close to the hunteds current position
+            while (freeSpawnPointsIndices.Count > 0)
+            {
+                var rndIndex = freeSpawnPointsIndices[rnd.Next(0, freeSpawnPointsIndices.Count)];
+                var distToHunted = Vector3.Distance(transform.position, sceneConfig.GetCollectableSpawnPoint(rndIndex));
+
+                // far enough? -> return
+                if (distToHunted >= minAmmoRespawnDistance)
+                {
+                    Debug.Log($"Found suitable index {rndIndex} with distance of {distToHunted}!");
+                    return rndIndex;
+                }
+                // too close? -> add to rejected 
+                rejectedSpawnPointIndices.Add(rndIndex);
+                freeSpawnPointsIndices.Remove(rndIndex);
+                Debug.Log($"Rejected index {rndIndex} with distance of {distToHunted}!");
+            }
+
+            // no point found that is far enough? -> return one of the rejected ones
+            return freeSpawnPointsIndices[rnd.Next(0, rejectedSpawnPointIndices.Count)];
         }
 
         #region Events

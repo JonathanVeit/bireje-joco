@@ -226,10 +226,12 @@ namespace BiReJeJoCo.UI
 
         void OnPauseMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
         {
+            if (resultPopup.IsOpen) return;
             ToggleMenu();
         }
         void OnPauseMenuClosed(PauseMenuClosedMsg onGameMenuOpenedMsg)
         {
+            if (resultPopup.IsOpen) return;
             ToggleMenu();
         }
         private void ToggleMenu() 
@@ -242,6 +244,7 @@ namespace BiReJeJoCo.UI
 
         private void ShowResult(MatchResult result) 
         {
+            pausePopup.Hide();
             resultPopup.Show(result);
             crosshairGO.SetActive(false);
         }

@@ -16,7 +16,7 @@ namespace BiReJeJoCo.Map
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.SetDescription("Teleport");
+            floaty.SetDescription("Use Pipe");
         }
     }
 }
