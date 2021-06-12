@@ -19,6 +19,9 @@ namespace BiReJeJoCo.Backend
         protected Transform playerTransform;
         protected Dictionary<byte, InteractionFloaty> floaties;
 
+        protected static BaseTrigger DisplayedInstance { get; private set; }
+        protected static TriggerSetup DisplayedTrigger { get; private set; }
+
         #region Initialization
         protected sealed override void OnSystemsInitialized()
         {
@@ -55,28 +58,38 @@ namespace BiReJeJoCo.Backend
 
             if (localPlayer.PlayerCharacter)
             {
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerPressed -= OnTriggerPressed;
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerHold -= OnTriggerHold;
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerReleased -= OnTriggerReleased;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerPressed -= OnTriggerPressedInternal;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerHold -= OnTriggerHoldInternal;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerReleased -= OnTriggerReleasedInternal;
             }
         }
         #endregion
 
-        public void Tick(float deltaTime)
+        public virtual void Tick(float deltaTime)
         {
+            if (DisplayedInstance != this && DisplayedInstance != null)
+                return;
+
             foreach (var curTrigger in triggerPoints)
             {
                 if (PlayerIsInArea(curTrigger))
                 {
                     if (floaties[curTrigger.Id] == null &&
-                        !curTrigger.isCoolingDown)
+                        !curTrigger.isCoolingDown &&
+                        DisplayedInstance == null)
                     {
                         SpawnTriggerFloaty(curTrigger);
+                        SetDisplayed(this, curTrigger);
                     }
                 }
                 else 
                 {
                     DestroyTriggerFloaty(curTrigger);
+
+                    if (curTrigger == DisplayedTrigger)
+                    {
+                        ResetDisplayed();
+                    }
                 }
             }
 
@@ -106,38 +119,54 @@ namespace BiReJeJoCo.Backend
         protected virtual void OnFloatySpawned(int pointId, InteractionFloaty floaty) { }
 
         #region Events
+        private void OnTriggerPressedInternal()
+        {
+            if (DisplayedInstance != this)
+                return;
+
+            if (DisplayedTrigger.pressDuration == 0)
+            {
+                OnTriggerPressed();
+            }
+        }
         protected virtual void OnTriggerPressed()
         {
-            foreach (var curTrigger in triggerPoints)
+                OnTriggerInteracted(DisplayedTrigger.Id);
+                StartCoroutine(CoolDown(DisplayedTrigger));
+                ResetDisplayed();
+        }
+
+        private void OnTriggerHoldInternal(float duration)
+        {
+            if (DisplayedInstance != this)
+                return;
+
+            if (DisplayedTrigger.pressDuration > 0)
             {
-                if (curTrigger.pressDuration == 0 && 
-                    PlayerIsInArea(curTrigger) && 
-                    !curTrigger.isCoolingDown)
-                {
-                    OnTriggerInteracted(curTrigger.Id);
-                    StartCoroutine(CoolDown(curTrigger));
-                }
+                OnTriggerHold(duration);
             }
         }
         protected virtual void OnTriggerHold(float duration)
         {
-            foreach (var curTrigger in triggerPoints)
+            if (DisplayedTrigger.pressDuration <= duration)
             {
-                if (PlayerIsInArea(curTrigger) &&
-                    !curTrigger.isCoolingDown)
-                {
-                    if (curTrigger.pressDuration <= duration)
-                    {
-                        OnTriggerInteracted(curTrigger.Id);
-                        StartCoroutine(CoolDown(curTrigger));
-                        UpdateTriggerProgress(curTrigger, 0);
-                    }
-                    else
-                    {
-                        UpdateTriggerProgress(curTrigger, duration);
-                    }
-                }
+                OnTriggerInteracted(DisplayedTrigger.Id);
+                StartCoroutine(CoolDown(DisplayedTrigger));
+                UpdateTriggerProgress(DisplayedTrigger, 0);
+                ResetDisplayed();
             }
+            else
+            {
+                UpdateTriggerProgress(DisplayedTrigger, duration);
+            }
+        }
+
+        private void OnTriggerReleasedInternal()
+        {
+            if (DisplayedInstance != this)
+                return;
+
+            OnTriggerReleased();
         }
         protected virtual void OnTriggerReleased() 
         {
@@ -151,9 +180,9 @@ namespace BiReJeJoCo.Backend
         {
             tickSystem.Register(this, "update_quarter_second");
             playerTransform = localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerPressed += OnTriggerPressed;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerHold += OnTriggerHold;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerReleased += OnTriggerReleased;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerPressed += OnTriggerPressedInternal;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerHold += OnTriggerHoldInternal;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onTriggerReleased += OnTriggerReleasedInternal;
         }
         protected virtual void OnCloseMatch(PhotonMessage msg)
         {
@@ -185,13 +214,14 @@ namespace BiReJeJoCo.Backend
        
         protected virtual bool PlayerIsInArea(TriggerSetup trigger)
         {
-            if (Vector3.Distance(trigger.root.position, playerTransform.position) > trigger.areaSize.magnitude)
+            if (playerTransform == null ||
+                Vector3.Distance(trigger.root.position, playerTransform.position) > trigger.areaSize.magnitude)
                 return false;
 
             var offset = trigger.root.TransformDirection(trigger.areaOffset);
             var collisions = BoxCast(trigger.root, trigger.areaSize, trigger.areaOffset, playerLayer);
 
-            if (collisions.Length == 0 || playerTransform == null) 
+            if (collisions.Length == 0)
                 return false;
             return collisions.ToList().Find(x => x.transform == playerTransform) != null;
         }
@@ -246,9 +276,8 @@ namespace BiReJeJoCo.Backend
         protected virtual IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            TryHideFloaty(trigger);
-             yield return new WaitForSeconds(trigger.coolDown);
-            TryUnhideFloaty(trigger);
+            DestroyTriggerFloaty(trigger);
+            yield return new WaitForSeconds(trigger.coolDown);
             trigger.isCoolingDown = false;
         }
         protected virtual void TryHideFloaty(TriggerSetup trigger)
@@ -266,6 +295,19 @@ namespace BiReJeJoCo.Backend
         {
             if (floaties[trigger.Id])
                 floaties[trigger.Id].UpdateProgress(duration / trigger.pressDuration);
+        }
+
+        protected void SetDisplayed(BaseTrigger instance, TriggerSetup trigger)
+        {
+            Debug.Log("show " + trigger.isCoolingDown, this.gameObject);
+            DisplayedInstance = instance;
+            DisplayedTrigger = trigger;
+        }
+        protected void ResetDisplayed() 
+        {
+            Debug.Log("hide ", this.gameObject);
+            DisplayedInstance = null;
+            DisplayedTrigger = null;
         }
 
         [System.Serializable]

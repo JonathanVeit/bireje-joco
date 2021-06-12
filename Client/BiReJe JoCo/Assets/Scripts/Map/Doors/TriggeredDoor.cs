@@ -52,6 +52,7 @@ namespace BiReJeJoCo.Map
         {
             if (doorIsMoving)
             {
+                Debug.Log(this.gameObject.name);
                 door.transform.position = Vector3.MoveTowards(door.transform.position, targetDoorPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -62,7 +63,8 @@ namespace BiReJeJoCo.Map
 
             if (castedMsg.i == triggerId)
             {
-                OnTriggerInteracted(castedMsg.pi);
+                Debug.Log(this.gameObject.name);
+                OnTriggerInteracted(castedMsg.ti);
 
                 foreach(var curTrigger in triggerPoints)
                     StartCoroutine(CoolDown(curTrigger));
@@ -71,9 +73,8 @@ namespace BiReJeJoCo.Map
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            TryHideFloaty(trigger);
+            DestroyTriggerFloaty(trigger); 
             yield return new WaitUntil(() => !doorIsMoving);
-            TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
         }
 
