@@ -292,7 +292,7 @@ namespace BiReJeJoCo.Debugging
                 photonClient.LeaveLobby();
             }));
 
-            RegisterCommand(new DebugCommand<bool>("force_hunter", "force the player to become hunter", "force_hunter <bool>", (mode) =>
+            RegisterCommand(new DebugCommand<bool>("force_hunter", "Force the player to become hunter", "force_hunter <bool>", (mode) =>
             {
                 if (!localPlayer.IsHost) return;
 

@@ -9,6 +9,7 @@ namespace BiReJeJoCo.Items
         [Header("Settings")]
         [SerializeField] Rigidbody rb;
         [SerializeField] float spawnForce;
+        [SerializeField] GameObject cameraRig;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -25,6 +26,7 @@ namespace BiReJeJoCo.Items
             else
             {
                 rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
+                cameraRig.SetActive(true);
             }
 
             AssignToTransformationMechanic();

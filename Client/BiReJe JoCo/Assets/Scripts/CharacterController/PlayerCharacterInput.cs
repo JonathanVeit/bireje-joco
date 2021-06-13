@@ -73,9 +73,6 @@ namespace BiReJeJoCo.Character
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
-            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
-
             messageHub.RegisterReceiver<BlockPlayerControlsMsg>(this, BlockPlayerControls);
             messageHub.RegisterReceiver<UnblockPlayerControlsMsg>(this, UnblockPlayerControls);
 
@@ -312,15 +309,6 @@ namespace BiReJeJoCo.Character
 
         #region Events
         void OnMatchStarted(PhotonMessage msg)
-        {
-            SetBlockState(InputBlockState.Free);
-        }
-
-        void OnPauseMenuOpened(PauseMenuOpenedMsg msg)
-        {
-            SetBlockState(InputBlockState.Menu);
-        }
-        void OnPauseMenuClosed(PauseMenuClosedMsg msg)
         {
             SetBlockState(InputBlockState.Free);
         }

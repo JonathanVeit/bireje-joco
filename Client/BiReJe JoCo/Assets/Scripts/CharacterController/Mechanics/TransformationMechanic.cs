@@ -154,6 +154,13 @@ namespace BiReJeJoCo.Character
         {
             scannedItemId = msg.itemId;
             gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(msg.itemId));
+
+            transformationCooldownTimer.Stop(false);
+            transformationCooldownTimer.Start(
+                () => // update
+                {
+                    gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
+                }, null);
         }
         #endregion
     }

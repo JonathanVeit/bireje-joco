@@ -22,6 +22,8 @@ namespace BiReJeJoCo.Backend
         protected static BaseTrigger DisplayedInstance { get; private set; }
         protected static TriggerSetup DisplayedTrigger { get; private set; }
 
+        private float? initialPressDuration;
+
         #region Initialization
         protected sealed override void OnSystemsInitialized()
         {
@@ -141,9 +143,12 @@ namespace BiReJeJoCo.Backend
             if (DisplayedInstance != this)
                 return;
 
+            if (!initialPressDuration.HasValue)
+                initialPressDuration = duration;
+
             if (DisplayedTrigger.pressDuration > 0)
             {
-                OnTriggerHold(duration);
+                OnTriggerHold(duration - initialPressDuration.Value);
             }
         }
         protected virtual void OnTriggerHold(float duration)
@@ -165,7 +170,8 @@ namespace BiReJeJoCo.Backend
         {
             if (DisplayedInstance != this)
                 return;
-
+            
+            initialPressDuration = null;
             OnTriggerReleased();
         }
         protected virtual void OnTriggerReleased() 
@@ -306,6 +312,7 @@ namespace BiReJeJoCo.Backend
         {
             DisplayedInstance = null;
             DisplayedTrigger = null;
+            initialPressDuration = null;
         }
 
         [System.Serializable]

@@ -26,12 +26,14 @@ namespace BiReJeJoCo.UI
             quitButton.gameObject.SetActive(localPlayer.IsHost);
 
             Cursor.lockState = CursorLockMode.Confined;
+            messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
         }
 
         public override void Hide()
         {
             base.Hide();
             Cursor.lockState = CursorLockMode.Locked;
+            messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
         }
 
         #region UI Input

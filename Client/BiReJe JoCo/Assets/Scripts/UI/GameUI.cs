@@ -85,16 +85,11 @@ namespace BiReJeJoCo.UI
         private void InitializeAsHunted()
         {
             hunterHUD.SetActive(false);
-            startInformation.text = "You are the monster!\nTry to hide!";
             UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey("empty"));
-            StartCoroutine(FadeText(3, startInformation));
         }
         private void InitializeAsHunter()
         {
             huntedHUD.SetActive(false);
-
-            startInformation.text = "You are the Hunter!\nTry to kill the monster!";
-            StartCoroutine(FadeText(3, startInformation));
         }
 
         // all player
@@ -212,6 +207,17 @@ namespace BiReJeJoCo.UI
         private void OnMatchStart(PhotonMessage msg)
         {
             loadingOverlay.gameObject.SetActive(false);
+
+            if (localPlayer.Role == PlayerRole.Hunted)
+            {
+                startInformation.text = "You are the monster!\nTry to hide and place corals!";
+                StartCoroutine(FadeText(3, startInformation));
+            }
+            else if (localPlayer.Role == PlayerRole.Hunter)
+            {
+                startInformation.text = "You are the Hunter!\nTry to catch the monster!";
+                StartCoroutine(FadeText(3, startInformation));
+            }
         }
         private void OnMatchFinished(PhotonMessage msg)
         {
