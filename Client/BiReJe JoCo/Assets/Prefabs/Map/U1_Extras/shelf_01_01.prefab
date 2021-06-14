@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2984509721974126613}
   - component: {fileID: 2217108378364721072}
   - component: {fileID: 4116350649105924986}
+  - component: {fileID: 2601969513928335992}
   m_Layer: 0
   m_Name: shelf_01_01
   m_TagString: Untagged
@@ -60,8 +61,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 17595bc26b8bf2a489e66ce97d5c0f54, type: 2}
-  - {fileID: 2100000, guid: ec4747382f80a82448ef92acddf87d4c, type: 2}
+  - {fileID: 2100000, guid: feadf5a6c5512144a9625b8999c3e3b1, type: 2}
+  - {fileID: 2100000, guid: dba066d6d804a094c8f76a9ef982ed6d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2601969513928335992
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2459189057306485423}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.373455, y: 2.2862768, z: 0.96164465}
+  m_Center: {x: 0.000000059604645, y: 1.1431384, z: 0}
