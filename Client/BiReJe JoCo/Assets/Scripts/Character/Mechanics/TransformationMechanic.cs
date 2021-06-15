@@ -4,6 +4,7 @@ using BiReJeJoCo.UI;
 using JoVei.Base.Helper;
 using System;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace BiReJeJoCo.Character
 {
@@ -21,6 +22,7 @@ namespace BiReJeJoCo.Character
         public string ScannedItemId { get; private set; }
 
         private Func<bool> isGrounded;
+        private PositionConstraint pConstraint;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -117,7 +119,8 @@ namespace BiReJeJoCo.Character
                     gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
                 }, null);
 
-            //Destroy(Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.GetComponent<PositionConstraint>());
+            if (Owner.IsLocalPlayer)
+                Destroy(pConstraint);
         }
 
         void OnChangedTransformation(bool isTransformed)
@@ -150,16 +153,16 @@ namespace BiReJeJoCo.Character
         {
             TransformedItem = item;
 
-            //if (item)
-            //{
-            //    var cmp = Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.AddComponent<PositionConstraint>();
-            //    cmp.constraintActive = true;
-            //    cmp.AddSource(new ConstraintSource()
-            //    {
-            //        sourceTransform = item.transform,
-            //        weight = 1,
-            //    });
-            //}
+            if (item && Owner.IsLocalPlayer)
+            {
+                pConstraint = Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.AddComponent<PositionConstraint>();
+                pConstraint.constraintActive = true;
+                pConstraint.AddSource(new ConstraintSource()
+                {
+                    sourceTransform = item.transform,
+                    weight = 1,
+                });
+            }
         }
 
         #region Events

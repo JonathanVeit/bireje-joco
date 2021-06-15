@@ -25,12 +25,10 @@ namespace BiReJeJoCo.Items
             {
                 rb.isKinematic = true;
                 rb.useGravity = false;
+                return;
             }
-            else
-            {
-                rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
-                cameraRig.SetActive(true);
-            }
+            rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
+            cameraRig.SetActive(true);
 
             AssignToTransformationMechanic();
         }

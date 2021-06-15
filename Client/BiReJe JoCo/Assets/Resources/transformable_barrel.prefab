@@ -348,7 +348,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
@@ -397,11 +397,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2147483647
-  m_UseLocal: 1
-  teleportAt: 0
+  m_UseLocal: 0
+  teleportAt: 100
   movementTarget: {fileID: 4088883677278243804}
   rotationTarget: {fileID: 4088883677278243804}
   rigidBody: {fileID: 4554295321473936445}
+  smoothSyncSpeed: 2
   snapGroundTreshold: 0.2
   m_Distance: 0
   m_Angle: 0
