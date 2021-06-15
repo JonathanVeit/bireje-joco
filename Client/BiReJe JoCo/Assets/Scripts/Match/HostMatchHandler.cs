@@ -85,7 +85,7 @@ namespace BiReJeJoCo
             {
                 var spawnConfig = new CollectableSpawnConfig()
                 {
-                    i = "collectable_coral",
+                    i = "collectable_coral_ammo",
                     i2 = i.ToString(),
                     s = collectableSpawnPoints[i]
                 };

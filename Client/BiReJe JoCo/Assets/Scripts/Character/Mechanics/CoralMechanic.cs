@@ -114,10 +114,9 @@ namespace BiReJeJoCo.Character
         {
             var rnd = new System.Random(seed);
 
-            var freeSpawnPoints = collectablesManager.GetFreeSpawnPoints();
             var spawnConfig = new CollectableSpawnConfig()
             {
-                i = "hunted_collectable",
+                i = "collectable_coral_ammo",
                 i2 = rnd.NextDouble().ToString(),
                 s = GetSuitableSpawnPoint(rnd),
             };
@@ -159,7 +158,7 @@ namespace BiReJeJoCo.Character
         {
             switch (msg.itemId)
             {
-                case "collectable_coral":
+                case "destroyable_coral":
                     totalCorals++;
                     gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
                     break;
@@ -177,14 +176,14 @@ namespace BiReJeJoCo.Character
         {
             switch (msg.itemId)
             {
-                case "hunted_collectable":
+                case "collectable_coral_ammo":
                     if (!Owner.IsLocalPlayer)
                         break;
                     coralAmmo = Mathf.Clamp(coralAmmo + coralsPerCollectable, 0, maxCoralAmmo);
                     gameUI.UpdateCrystalAmmoBar(coralAmmo / (float) maxCoralAmmo);
                     break;
 
-                case "collectable_coral":
+                case "destroyable_coral":
                     totalCorals--;
                     gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
                     break;

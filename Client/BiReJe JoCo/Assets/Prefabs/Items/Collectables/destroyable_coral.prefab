@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6091383347047835642}
   - component: {fileID: -5384521047888755104}
   m_Layer: 14
-  m_Name: collectable_coral
+  m_Name: destroyable_coral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93919e4b3d6648d4f9fcacb21fc6e8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueId: collectable_coral
+  uniqueId: destroyable_coral
 --- !u!65 &-5384521047888755104
 BoxCollider:
   m_ObjectHideFlags: 0
