@@ -422,12 +422,11 @@ namespace BiReJeJoCo.Character
         {
 			if (jumpCooldown.State == TimerState.Counting)
 				return;
-			Debug.Log(1);
+
             if (currentControllerState == ControllerState.Grounded)
             {
                 if ((jumpKeyIsPressed == true || jumpKeyWasPressed) && !jumpInputIsLocked)
                 {
-					Debug.Log(2);
 					//Call events;
 					OnGroundContactLost();
                     OnJumpStart();
