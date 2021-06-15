@@ -422,13 +422,14 @@ namespace BiReJeJoCo.Character
         {
 			if (jumpCooldown.State == TimerState.Counting)
 				return;
-
+			Debug.Log(1);
             if (currentControllerState == ControllerState.Grounded)
             {
                 if ((jumpKeyIsPressed == true || jumpKeyWasPressed) && !jumpInputIsLocked)
                 {
-                    //Call events;
-                    OnGroundContactLost();
+					Debug.Log(2);
+					//Call events;
+					OnGroundContactLost();
                     OnJumpStart();
 
                     currentControllerState = ControllerState.Jumping;
@@ -837,7 +838,7 @@ namespace BiReJeJoCo.Character
 			var delta = timer / Duration; // -> 1
 
 			Value = Mathf.Lerp(minValue, 1.0f, delta);
-			Debug.Log(Value);
+	
 			if (timer >= Duration)
 			{
 				UnregisterSelf();
