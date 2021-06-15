@@ -10,9 +10,12 @@ namespace BiReJeJoCo.Items
         [SerializeField] Rigidbody rb;
         [SerializeField] float spawnForce;
         [SerializeField] GameObject cameraRig;
+        [SerializeField] Transform lookTransforms;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
+
+        public Transform LookTransforms => lookTransforms;
 
         public void Initialize(PlayerControlled controller)
         {
@@ -38,7 +41,7 @@ namespace BiReJeJoCo.Items
 
         private void AssignToTransformationMechanic()
         {
-            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this.gameObject);
+            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this);
         }
         private void RemoveFromTransformationMechanic()
         {

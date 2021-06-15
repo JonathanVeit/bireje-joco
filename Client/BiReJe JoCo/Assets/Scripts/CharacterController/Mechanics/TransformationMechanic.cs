@@ -1,8 +1,10 @@
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.Items;
 using BiReJeJoCo.UI;
 using JoVei.Base.Helper;
 using System;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace BiReJeJoCo.Character
 {
@@ -14,7 +16,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] Timer transformationCooldownTimer;
 
         public bool IsTransformed => isTransformed.GetValue();
-        public GameObject TransformedItem { get; private set; }
+        public TransformableItem TransformedItem { get; private set; }
         
         private SyncVar<bool> isTransformed = new SyncVar<bool>(0, false);
         public string ScannedItemId { get; private set; }
@@ -105,7 +107,7 @@ namespace BiReJeJoCo.Character
             OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, InputBlockState.Free);
 
-            photonRoomWrapper.Destroy(TransformedItem);
+            photonRoomWrapper.Destroy(TransformedItem.gameObject);
             TransformedItem = null;
 
             gameUI.UpdateTransformationDurationBar(0);
@@ -115,6 +117,8 @@ namespace BiReJeJoCo.Character
                 {
                     gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
                 }, null);
+
+            Destroy(Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.GetComponent<PositionConstraint>());
         }
 
         void OnChangedTransformation(bool isTransformed)
@@ -143,9 +147,20 @@ namespace BiReJeJoCo.Character
             sfx.transform.position -= Vector3.up;
         }
 
-        public void SetTransformedItem(GameObject item)
+        public void SetTransformedItem(TransformableItem item)
         {
             TransformedItem = item;
+
+            if (item)
+            {
+                var cmp = Owner.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.AddComponent<PositionConstraint>();
+                cmp.constraintActive = true;
+                cmp.AddSource(new ConstraintSource()
+                {
+                    sourceTransform = item.transform,
+                    weight = 1,
+                });
+            }
         }
 
         #region Events

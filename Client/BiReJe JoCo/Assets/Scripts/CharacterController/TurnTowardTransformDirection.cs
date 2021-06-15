@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BiReJeJoCo.Character
 {
 	//This script rotates an object toward the 'forward' direction of another target transform;
-	public class TurnTowardTransformDirection : MonoBehaviour {
+	public class TurnTowardTransformDirection : TickBehaviour {
 
 		[SerializeField] Transform targetTransform;
 		[SerializeField] bool mainCamera;
@@ -13,11 +11,12 @@ namespace BiReJeJoCo.Character
 		Transform tr;
 		Transform parentTransform;
 
-		//Setup;
-		void Start () {
+        //Setup;
+        protected override void OnSystemsInitialized()
+        {
 			tr = transform;
 			parentTransform = transform.parent;
-
+			tickSystem.Register(this, "late_update");
 			if (targetTransform != null) return;
 
 			if (mainCamera)
@@ -28,10 +27,10 @@ namespace BiReJeJoCo.Character
 
 			Debug.LogWarning("No target transform has been assigned to this script.", this);
 		}
-		
-		//Update;
-		void LateUpdate () {
 
+        //Update;
+        public override void Tick(float deltaTime)
+        {
 			if(!targetTransform)
 				return;
 
