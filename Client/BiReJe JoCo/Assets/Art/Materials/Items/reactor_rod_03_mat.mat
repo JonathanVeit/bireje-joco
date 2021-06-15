@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base_07_mat
+  m_Name: reactor_rod_03_mat
   m_Shader: {fileID: -6465566751694194690, guid: 3c973a3d97932894c9ee2d4ce8b200d6, type: 3}
   m_ShaderKeywords: ADDITIONAL_LIGHT_CALCULATE_SHADOWS MAIN_LIGHT_CALCULATE_SHADOWS
     _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
@@ -33,7 +33,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - MainTextureTopTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 16e98f81315afb344b0be9863794cf9c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - MetallicMap:
@@ -45,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - SideTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 16e98f81315afb344b0be9863794cf9c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_223377E2:
@@ -102,14 +102,14 @@ Material:
     - UseDownstairsGradient: 1
     - UseGI: 1
     - Vector1_8606F96E: 0
-    - WorldTilable: 0
+    - WorldTilable: 1
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _SHADOWS_SOFT: 1
     - _Smoothness: 0.5
-    - isTriplanar: 0
+    - isTriplanar: 1
     m_Colors:
     - EmissionColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
-    - MainColor: {r: 0.6792453, g: 0.618558, b: 0.60555357, a: 1}
+    - MainColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
     - MixedShadowsColor: {r: 0.5799246, g: 1, b: 0, a: 0}
     - Tiling: {r: 0.8, g: 0.8, b: 0, a: 0}
     - _MainColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
