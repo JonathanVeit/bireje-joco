@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3082124485380051563}
   m_Layer: 6
   m_Name: light
-  m_TagString: LocalPlayer
+  m_TagString: FPS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 6633558340003606658}
   m_Layer: 6
   m_Name: Arm_l
-  m_TagString: Untagged
+  m_TagString: FPS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 5137680670829877375}
   m_Layer: 6
   m_Name: flashlight
-  m_TagString: Untagged
+  m_TagString: FPS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 6674541621089487356}
   m_Layer: 6
   m_Name: Arm_r
-  m_TagString: Untagged
+  m_TagString: FPS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 8613124743704060780}
   m_Layer: 6
   m_Name: fps_setup
-  m_TagString: Untagged
+  m_TagString: FPS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -408,6 +408,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3922555339989683901, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}
+      propertyPath: m_TagString
+      value: FPS
+      objectReference: {fileID: 0}
+    - target: {fileID: 4851603558354138860, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}
+      propertyPath: m_TagString
+      value: FPS
+      objectReference: {fileID: 0}
     - target: {fileID: 6364896663837316921, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}
       propertyPath: m_CastShadows
       value: 0
@@ -419,6 +427,10 @@ PrefabInstance:
     - target: {fileID: 6652738096216307494, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}
       propertyPath: m_Name
       value: hunter_shock_gun
+      objectReference: {fileID: 0}
+    - target: {fileID: 6652738096216307494, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}
+      propertyPath: m_TagString
+      value: FPS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61b9eb672920e2543879c4131fdd9b95, type: 3}

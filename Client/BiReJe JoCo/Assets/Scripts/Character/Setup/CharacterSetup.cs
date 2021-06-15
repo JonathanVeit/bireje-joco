@@ -10,8 +10,8 @@ namespace BiReJeJoCo.Character
         [SerializeField] Material hunterMat;
         [SerializeField] Material huntedMat;
 
-        [Header("Others")]
-        [SerializeField] LayerMask keepLayers;
+        [Header("Setup")]
+        [SerializeField] int fpsLayer;
 
         [Header("Runtime")]
         [SerializeField] Camera cam;
@@ -120,7 +120,12 @@ namespace BiReJeJoCo.Character
         #region Helper
         private void SetLayerRecursively(GameObject target, int layer)
         {
-            if (keepLayers != (keepLayers | (1 << target.layer))) {
+            if (target.tag == "FPS" && Owner.IsLocalPlayer)
+            {
+                target.layer = fpsLayer;
+            }
+            else
+            {
                 target.layer = layer;
             }
 
