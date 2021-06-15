@@ -30,7 +30,8 @@ namespace BiReJeJoCo.Character
 
         private void DisconnectEvents()
         {
-            if (Behaviour.Owner.PlayerCharacter)
+            if (Behaviour.Owner.PlayerCharacter &&
+                Behaviour.Owner.PlayerCharacter.ControllerSetup.WalkController)
                 walkController.OnLand -= OnPlayerLand;
         }
         #endregion
