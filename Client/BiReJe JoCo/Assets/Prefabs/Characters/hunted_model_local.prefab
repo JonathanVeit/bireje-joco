@@ -1522,12 +1522,16 @@ MonoBehaviour:
   airControlRate: 15
   jumpSpeed: 5
   jumpDuration: 0.13
+  jumpCooldown:
+    duration: 0.5
+    timeScale: 1
   airFriction: 0.5
   groundFriction: 100
   gravity: 30
   slideGravity: 5
   slopeLimit: 50
   useLocalMomentum: 1
+  currentControllerState: 2
   cameraTransform: {fileID: 0}
 --- !u!114 &6922469825186454421
 MonoBehaviour:

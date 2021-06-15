@@ -26,7 +26,7 @@ namespace BiReJeJoCo.Character
         [Header("Runtime")]
         [SerializeField] float curCatchDuration;
         [SerializeField] bool catchSucceed;
-        private MovementMultiplier hitMultiplier;
+        private SimpleMovementModification hitModification;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -119,7 +119,7 @@ namespace BiReJeJoCo.Character
 
             // max resistance lost? -> max slow 
             var negRelativeResistance = 1 - RelativeResistance; // -> 1
-            hitMultiplier.Set(1 - (maxResistanceSlowdown * negRelativeResistance));
+            hitModification.Set(1 - (maxResistanceSlowdown * negRelativeResistance));
         }
         #endregion
 
@@ -143,8 +143,8 @@ namespace BiReJeJoCo.Character
         #region Events
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
-            hitMultiplier = new MovementMultiplier(1);
-            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddMultiplier(hitMultiplier);
+            hitModification = new SimpleMovementModification(1);
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddModification(hitModification);
         }
         #endregion
     }

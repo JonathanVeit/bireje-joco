@@ -46,8 +46,8 @@ namespace BiReJeJoCo.Character
             if (speedUpCooldownTimer.State != TimerState.Finished ||
                 speedUpDurationTimer.State == TimerState.Counting) return;
 
-            var multiplier = new MovementMultiplier(speedUpMultiplier);
-            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddMultiplier(multiplier);
+            var modification = new SimpleMovementModification(speedUpMultiplier);
+            localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddModification(modification);
 
             speedUpDurationTimer.Start(
                 () => // update 
@@ -56,7 +56,7 @@ namespace BiReJeJoCo.Character
                 },
                 () => // finish
                 {
-                    localPlayer.PlayerCharacter.ControllerSetup.WalkController.RemoveMultiplier(multiplier);
+                    localPlayer.PlayerCharacter.ControllerSetup.WalkController.RemoveModification(modification);
 
                     speedUpCooldownTimer.Start(() => // update 
                     {

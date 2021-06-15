@@ -339,6 +339,5 @@ namespace BiReJeJoCo.Character
             BlockState = state;
             onBlockStateChanged?.Invoke(state);
         }
-
     }
 }

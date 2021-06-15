@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JoVei.Base;
+using JoVei.Base.Helper;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +24,7 @@ namespace BiReJeJoCo.Character
 		bool jumpKeyWasLetGo = false;
 		bool jumpKeyIsPressed = false;
 
-		//Movement speed;
+		[Header("Settings")]
 		public float movementSpeed = 7f;
 		private float movementSpeedSave;
 
@@ -33,11 +35,13 @@ namespace BiReJeJoCo.Character
 		//Higher values result in more air control;
 		public float airControlRate = 2f;
 
+		[Space(10)]
 		//Jump speed;
 		public float jumpSpeed = 10f;
 
 		//Jump duration variables;
 		public float jumpDuration = 0.2f;
+		public Timer jumpCooldown;
 		float currentJumpStartTime = 0f;
 
 		//'AirFriction' determines how fast the controller loses its momentum while in the air;
@@ -54,6 +58,7 @@ namespace BiReJeJoCo.Character
 		//Saved horizontal movement velocity from last frame;
 		Vector3 savedMovementVelocity = Vector3.zero;
 
+		[Space(10)]
 		//Amount of downward gravity;
 		public float gravity = 30f;
 		[Tooltip("How fast the character will slide down steep slopes.")]
@@ -75,13 +80,14 @@ namespace BiReJeJoCo.Character
 			Jumping
 		}
 		
-		ControllerState currentControllerState = ControllerState.Falling;
+		[Header("Runtime")]
+		[SerializeField] ControllerState currentControllerState = ControllerState.Falling;
 
 		[Tooltip("Optional camera transform used for calculating movement direction. If assigned, character movement will take camera view into account.")]
 		public Transform cameraTransform;
 
-		private List<MovementMultiplier> multipliers
-			= new List<MovementMultiplier>();
+		private List<IMovementModification> modifications
+			= new List<IMovementModification>();
 
 		//Get references to all necessary components;
 		void Awake () 
@@ -197,7 +203,7 @@ namespace BiReJeJoCo.Character
 
 			//Add current momentum to velocity;
 			_velocity += _worldMomentum;
-			
+
 			//If player is grounded or sliding on a slope, extend mover's sensor range;
 			//This enables the player to walk up/down stairs and slopes without losing ground contact;
 			mover.SetExtendSensorRange(IsGrounded());
@@ -220,10 +226,10 @@ namespace BiReJeJoCo.Character
 				ceilingDetector.ResetFlags();
 		}
 
-		private Vector3 CalculateMultiplier(Vector3 velocity)
+		private Vector3 CalculateModifications(Vector3 velocity)
 		{
 			var result = Vector3.zero;
-			foreach (var entry in multipliers)
+			foreach (var entry in modifications)
 			{
 				var increase = new Vector3()
 				{
@@ -240,7 +246,7 @@ namespace BiReJeJoCo.Character
 		private float CalculateMultiplier(float velocity)
 		{
 			float result = 0;
-			foreach (var entry in multipliers)
+			foreach (var entry in modifications)
 			{
 				float increase = velocity * entry.Value - velocity;
 				result += increase;
@@ -290,7 +296,7 @@ namespace BiReJeJoCo.Character
 			_velocity *= movementSpeed;
 
 			// add multiplier 
-			_velocity += CalculateMultiplier(_velocity);
+			_velocity += CalculateModifications(_velocity);
 
 			return _velocity;
 		}
@@ -319,6 +325,7 @@ namespace BiReJeJoCo.Character
 					OnGroundContactLost();
 					return ControllerState.Sliding;
 				}
+
 				return ControllerState.Grounded;
 			}
 
@@ -413,6 +420,9 @@ namespace BiReJeJoCo.Character
         //Check if player has initiated a jump;
         void HandleJumping()
         {
+			if (jumpCooldown.State == TimerState.Counting)
+				return;
+
             if (currentControllerState == ControllerState.Grounded)
             {
                 if ((jumpKeyIsPressed == true || jumpKeyWasPressed) && !jumpInputIsLocked)
@@ -551,6 +561,8 @@ namespace BiReJeJoCo.Character
 
 			if(useLocalMomentum)
 				momentum = tr.worldToLocalMatrix * momentum;
+
+			jumpCooldown.Start();
 		}
 
 		//This function is called when the controller has lost ground contact, i.e. is either falling or rising, or generally in the air;
@@ -599,7 +611,6 @@ namespace BiReJeJoCo.Character
 
 				OnLand(_collisionVelocity);
 			}
-				
 		}
 
 		//This function is called when the controller has collided with a ceiling while jumping or moving upwards;
@@ -705,24 +716,36 @@ namespace BiReJeJoCo.Character
 			return speed;
 		}
 
-		public void AddMultiplier(MovementMultiplier multiplier)
+		public void AddModification(IMovementModification multiplier)
 		{
-			multipliers.Add(multiplier);
+			modifications.Add(multiplier);
+			multiplier.OnApplied(this);
 		}
-		public void RemoveMultiplier(MovementMultiplier multiplier)
+		public void RemoveModification(IMovementModification multiplier)
 		{
-			multipliers.Remove(multiplier);
+			modifications.Remove(multiplier);
 		}
 	}
 
-	public class MovementMultiplier
+	public interface IMovementModification
+	{
+		float Value { get; }
+		void Add(float value);
+		void Set(float value);
+
+		void OnApplied(AdvancedWalkerController walkController);
+	}
+
+	public class SimpleMovementModification : IMovementModification
 	{
 		public float Value { get; private set; }
+		protected AdvancedWalkerController walkController;
 
-		public MovementMultiplier(float value)
+		public SimpleMovementModification(float value)
 		{
 			Value = value;
 		}
+		
 		public void Add(float value)
 		{
 			Value += value;
@@ -731,5 +754,59 @@ namespace BiReJeJoCo.Character
 		{
 			Value = value;
 		}
+
+
+		public void OnApplied(AdvancedWalkerController walkController) 
+		{
+			this.walkController = walkController;
+		}
 	}
+
+	public class TimedMovementModification : SystemAccessor, IMovementModification, ITickable
+	{
+		public float Value { get; private set; }
+		public float Duration { get; private set; }
+		protected AdvancedWalkerController walkController;
+
+		public event Action OnDetermined;
+
+		private float timer;
+
+		public TimedMovementModification(float value, float duration)
+		{
+			Value = value;
+			Duration = duration;
+		}
+		
+		public void Add(float value)
+		{
+			Value += value;
+		}
+		public void Set(float value)
+		{
+			Value = value;
+		}
+
+		public void OnApplied(AdvancedWalkerController walkController)
+		{
+			this.walkController = walkController;
+			tickSystem.Register(this);
+		}
+
+        public void Tick(float deltaTime)
+        {
+			timer += deltaTime;
+			if (timer >= Duration)
+			{
+				UnregisterSelf();
+			}
+		}
+
+        private void UnregisterSelf()
+        {
+			walkController.RemoveModification(this);
+			tickSystem.Unregister(this);
+			OnDetermined?.Invoke();
+		}
+    }
 }
