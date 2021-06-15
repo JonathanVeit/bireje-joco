@@ -1,5 +1,4 @@
 using BiReJeJoCo.Backend;
-using BiReJeJoCo.Items;
 using BiReJeJoCo.UI;
 using JoVei.Base.Helper;
 using System;
@@ -18,7 +17,7 @@ namespace BiReJeJoCo.Character
         public GameObject TransformedItem { get; private set; }
         
         private SyncVar<bool> isTransformed = new SyncVar<bool>(0, false);
-        private string scannedItemId;
+        public string ScannedItemId { get; private set; }
 
         private Func<bool> isGrounded;
 
@@ -26,13 +25,13 @@ namespace BiReJeJoCo.Character
         protected override void OnInitializeLocal()
         {
             isGrounded = () => localPlayer.PlayerCharacter.ControllerSetup.Mover.IsGrounded();
-            scannedItemId = startTransformationItem;
+            ScannedItemId = startTransformationItem;
 
             transformationCooldownTimer.Start(() => // update 
             {
                 gameUI.UpdateTransformationCooldownBar(transformationCooldownTimer.RelativeProgress);
             }, null);
-            gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(scannedItemId));
+            gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(ScannedItemId));
 
             ConnectEvents();
         }
@@ -65,7 +64,7 @@ namespace BiReJeJoCo.Character
 
         public void ToggleTransformation()
         {
-            if (!isGrounded() || string.IsNullOrEmpty(scannedItemId) ||
+            if (!isGrounded() || string.IsNullOrEmpty(ScannedItemId) ||
                 Behaviour.ResistanceMechanic.IsDecreasing)
                 return;
 
@@ -85,7 +84,7 @@ namespace BiReJeJoCo.Character
             OnChangedTransformation(isTransformed.GetValue());
             messageHub.ShoutMessage<BlockPlayerControlsMsg>(this, InputBlockState.Transformation);
 
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(scannedItemId);
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(ScannedItemId);
             var root = localPlayer.PlayerCharacter.ControllerSetup.ModelRoot;
             photonRoomWrapper.Instantiate(prefab.name, root.position, root.rotation);
 
@@ -152,7 +151,7 @@ namespace BiReJeJoCo.Character
         #region Events
         private void OnScannedItem(HuntedScannedItemMsg msg)
         {
-            scannedItemId = msg.itemId;
+            ScannedItemId = msg.itemId;
             gameUI.UpdateScannedItemIcon(SpriteMapping.GetMapping().GetElementForKey(msg.itemId));
 
             transformationCooldownTimer.Stop(false);
