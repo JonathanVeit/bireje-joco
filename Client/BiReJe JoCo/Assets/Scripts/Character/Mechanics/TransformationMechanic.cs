@@ -4,7 +4,6 @@ using BiReJeJoCo.UI;
 using JoVei.Base.Helper;
 using System;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace BiReJeJoCo.Character
 {

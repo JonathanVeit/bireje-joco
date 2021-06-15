@@ -730,9 +730,6 @@ namespace BiReJeJoCo.Character
 	public interface IMovementModification
 	{
 		float Value { get; }
-		void Add(float value);
-		void Set(float value);
-
 		void OnApplied(AdvancedWalkerController walkController);
 	}
 
@@ -809,4 +806,49 @@ namespace BiReJeJoCo.Character
 			OnDetermined?.Invoke();
 		}
     }
+
+	public class LinearMovementModification : SystemAccessor, IMovementModification, ITickable
+	{
+		public float Value { get; private set; }
+		public float Duration { get; private set; }
+		protected AdvancedWalkerController walkController;
+
+		public event Action OnDetermined;
+
+		private float timer;
+		private float minValue;
+
+		public LinearMovementModification(float value, float duration)
+		{
+			Value = value;
+			minValue = value;
+			Duration = duration;
+		}
+
+		public void OnApplied(AdvancedWalkerController walkController)
+		{
+			this.walkController = walkController;
+			tickSystem.Register(this);
+		}
+
+		public void Tick(float deltaTime)
+		{
+			timer += deltaTime;
+			var delta = timer / Duration; // -> 1
+
+			Value = Mathf.Lerp(minValue, 1.0f, delta);
+			Debug.Log(Value);
+			if (timer >= Duration)
+			{
+				UnregisterSelf();
+			}
+		}
+
+		private void UnregisterSelf()
+		{
+			walkController.RemoveModification(this);
+			tickSystem.Unregister(this);
+			OnDetermined?.Invoke();
+		}
+	}
 }

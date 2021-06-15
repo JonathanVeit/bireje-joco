@@ -43,7 +43,7 @@ namespace BiReJeJoCo.Character
 
             if (velocity.y <= -fallSlowDownVelocity)
             {
-                var multiplier = new TimedMovementModification(fallSlowDownStrength, fallSlowDownDuration);
+                var multiplier = new LinearMovementModification(fallSlowDownStrength, fallSlowDownDuration);
                 multiplier.OnDetermined += () =>
                 {
                     isApplied = false;
