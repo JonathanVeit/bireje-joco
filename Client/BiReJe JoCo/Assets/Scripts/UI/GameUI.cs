@@ -174,7 +174,7 @@ namespace BiReJeJoCo.UI
         }
         public void UpdateSpeedUpBar(float value)
         {
-            if (value == 0)
+            if (value == 0 || value == 1)
                 speedUpBar.OverrideValue(value);
             else
                 speedUpBar.SetValue(value);
