@@ -9,6 +9,7 @@ namespace BiReJeJoCo.Character
         [Header("Settings")]
         [SerializeField] Transform cameraRoot;
         [SerializeField] Transform fpsSetup;
+        [SerializeField] Vector3 fpsSetupPosition;
 
         [Header("Mechanics")]
         [SerializeField] ShockMechanic shockMechanic;
@@ -38,6 +39,7 @@ namespace BiReJeJoCo.Character
             Camera.main.transform.rotation = cameraRoot.rotation;
 
             fpsSetup.SetParent(cameraRoot);
+            fpsSetup.transform.localPosition = fpsSetupPosition;
         }
 
         protected override void OnBeforeDestroy()
