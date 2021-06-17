@@ -67,7 +67,7 @@ namespace BiReJeJoCo.Character
 
         public void ToggleTransformation()
         {
-            if (!isGrounded() || string.IsNullOrEmpty(ScannedItemId) ||
+            if (string.IsNullOrEmpty(ScannedItemId) ||
                 Behaviour.ResistanceMechanic.IsDecreasing)
                 return;
 
@@ -75,7 +75,7 @@ namespace BiReJeJoCo.Character
             {
                 TransformBack();
             }
-            else if (transformationCooldownTimer.State == TimerState.Finished)
+            else if (transformationCooldownTimer.State == TimerState.Finished! && isGrounded())
             {
                 TransformInto();
             }

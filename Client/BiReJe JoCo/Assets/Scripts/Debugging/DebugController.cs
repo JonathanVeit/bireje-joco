@@ -298,6 +298,12 @@ namespace BiReJeJoCo.Debugging
 
                 globalVariables.SetVar<bool>("force_hunter", mode);
             }));
+
+            RegisterCommand(new DebugCommand("anti_stuck", "Try to unstuck the player", "anti_stuck", () =>
+            {
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position += Vector3.up * 2;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            }));
         }
 
         private static void SetGlobalVariables()
