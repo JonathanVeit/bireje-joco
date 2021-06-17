@@ -39,11 +39,13 @@ namespace BiReJeJoCo.Items
 
         private void AssignToTransformationMechanic()
         {
-            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this);
+            if (Owner.PlayerCharacter)
+                Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this);
         }
         private void RemoveFromTransformationMechanic()
         {
-            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(null);
+            if (Owner.PlayerCharacter)
+                Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(null);
         }
     }
 }
