@@ -39,7 +39,7 @@ namespace BiReJeJoCo.UI
         #region UI Input
         public void Continue()
         {
-            messageHub.ShoutMessage<PauseMenuClosedMsg>(this);
+            Hide();
         }
 
         public void Rehost() 
@@ -47,6 +47,11 @@ namespace BiReJeJoCo.UI
             (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.ReturnToLobby);
         }
 
+        public void ShowControls() 
+        {
+            Hide();
+            uiManager.GetInstanceOf<ControlsPopup>().Show();
+        }
         public void Quit()
         {
             if (matchHandler is HostMatchHandler asHostHandler)

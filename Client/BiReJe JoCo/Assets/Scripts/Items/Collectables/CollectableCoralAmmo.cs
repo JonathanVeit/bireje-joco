@@ -1,6 +1,7 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Character;
 using BiReJeJoCo.UI;
+using System;
 using UnityEngine;
 
 namespace BiReJeJoCo.Items
@@ -15,6 +16,10 @@ namespace BiReJeJoCo.Items
         public string UniqueId => uniqueId;
         protected bool wasCollected = false;
 
+        private HuntedBehaviour huntedBehaviour 
+            => playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>();
+
+        #region Initialization
         public void InitializeCollectable(string instanceId, int spawnPoinIndex)
         {
             InstanceId = instanceId;
@@ -22,9 +27,23 @@ namespace BiReJeJoCo.Items
             wasCollected = false;
         }
 
+        protected override void ConnectEvents()
+        {
+            base.ConnectEvents();
+            huntedBehaviour.CoralMechanic.onSpawnedCorals += OnCoralsSpawned;
+        }
+        protected override void DisconnectEvents()
+        {
+            base.DisconnectEvents();
+            huntedBehaviour.CoralMechanic.onSpawnedCorals -= OnCoralsSpawned;
+        }
+        #endregion
+
+        #region Events
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.SetDescription("Collect");
+            blockInteraction = huntedBehaviour.CoralMechanic.AmmoIsFull;
+            floaty.SetDescription(blockInteraction ? "Already full" : "Collect");
         }
 
         protected override void OnTriggerInteracted(byte pointId)
@@ -42,17 +61,19 @@ namespace BiReJeJoCo.Items
             wasCollected = true;
         }
 
-        protected override bool PlayerIsInArea(TriggerSetup trigger)
-        {
-            var huntedCharacter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter;
-            if (huntedCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.AmmoIsFull)
-                return false;
-
-            return base.PlayerIsInArea(trigger);
-        }
-
         public virtual void OnCollect()
         {
         }
+
+        private void OnCoralsSpawned()
+        {
+            foreach (var trigger in triggerPoints)
+            {
+                DestroyTriggerFloaty(trigger);
+            }
+
+            ResetActiveInstance();
+        }
+        #endregion
     }
 }

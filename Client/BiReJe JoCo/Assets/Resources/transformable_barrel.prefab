@@ -834,6 +834,7 @@ GameObject:
   - component: {fileID: 3593604827721258203}
   - component: {fileID: 7558421440238686020}
   - component: {fileID: 4174078939017119684}
+  - component: {fileID: 7437195419618218736}
   - component: {fileID: 1784874107864461680}
   m_Layer: 6
   m_Name: Third_Person_Rig
@@ -979,6 +980,24 @@ MonoBehaviour:
   PlayerIndex: -1
   XYAxis: {fileID: 6561440820922708895, guid: 9e363adc030a23f4f865d0333b052406, type: 3}
   ZAxis: {fileID: 0}
+--- !u!114 &7437195419618218736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7909118230716715393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4b0b74fac9bdb41906c4c77dce5de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  yAxisKeyboard: 0.001
+  xAxisKeyboard: 0.1
+  yAxisController: 0.05
+  xAxisController: 4
+  cinemaVirtual: {fileID: 0}
+  cinemaFreeLook: {fileID: 7558421440238686020}
 --- !u!114 &1784874107864461680
 MonoBehaviour:
   m_ObjectHideFlags: 0

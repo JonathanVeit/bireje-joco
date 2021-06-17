@@ -1,5 +1,6 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace BiReJeJoCo.Character
 
         public int TotalCorals => totalCorals;
         public bool AmmoIsFull => coralAmmo == maxCoralAmmo;
+        public event Action onSpawnedCorals;
 
         private SyncVar<object[]> onSpawnCrystals = new SyncVar<object[]>(8, true);
 
@@ -73,6 +75,7 @@ namespace BiReJeJoCo.Character
             coralAmmo--;
             seed++;
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
+            onSpawnedCorals?.Invoke();
         }
         private bool CanSpawn() 
         {
@@ -140,13 +143,11 @@ namespace BiReJeJoCo.Character
                 // far enough? -> return
                 if (distToHunted >= minAmmoRespawnDistance)
                 {
-                    Debug.Log($"Found suitable index {rndIndex} with distance of {distToHunted}!");
                     return rndIndex;
                 }
                 // too close? -> add to rejected 
                 rejectedSpawnPointIndices.Add(rndIndex);
                 freeSpawnPointsIndices.Remove(rndIndex);
-                Debug.Log($"Rejected index {rndIndex} with distance of {distToHunted}!");
             }
 
             // no point found that is far enough? -> return one of the rejected ones

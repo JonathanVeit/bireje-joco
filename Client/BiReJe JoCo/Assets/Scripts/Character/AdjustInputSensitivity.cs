@@ -42,6 +42,7 @@ namespace BiReJeJoCo.Character
         }
         protected override void OnBeforeDestroy()
         {
+            characterInput.onBlockStateChanged -= OnBlockStateChanged;
         }
         #endregion
 

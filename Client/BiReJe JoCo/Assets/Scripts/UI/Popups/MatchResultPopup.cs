@@ -26,14 +26,15 @@ namespace BiReJeJoCo.UI
 
             resultLabel.text = result.winner == PlayerRole.Hunted ? "Hunted wins!" : "Hunter win!";
             resultMessageLabel.text = result.message;
-            Cursor.lockState = CursorLockMode.Confined;
 
+            Cursor.lockState = CursorLockMode.Confined;
             messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
         }
 
         public override void Hide()
         {
             base.Hide();
+
             Cursor.lockState = CursorLockMode.Locked;
             messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
         }

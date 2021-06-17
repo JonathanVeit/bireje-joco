@@ -18,6 +18,7 @@ namespace BiReJeJoCo.Backend
 
         protected Transform playerTransform;
         protected Dictionary<byte, InteractionFloaty> floaties;
+        protected bool blockInteraction = false;
 
         protected static BaseTrigger DisplayedInstance { get; private set; }
         protected static TriggerSetup DisplayedTrigger { get; private set; }
@@ -81,7 +82,7 @@ namespace BiReJeJoCo.Backend
                         DisplayedInstance == null)
                     {
                         SpawnTriggerFloaty(curTrigger);
-                        SetDisplayed(this, curTrigger);
+                        SetActiveInstance(this, curTrigger);
                     }
                 }
                 else 
@@ -90,7 +91,7 @@ namespace BiReJeJoCo.Backend
 
                     if (curTrigger == DisplayedTrigger)
                     {
-                        ResetDisplayed();
+                        ResetActiveInstance();
                     }
                 }
             }
@@ -123,7 +124,8 @@ namespace BiReJeJoCo.Backend
         #region Events
         private void OnTriggerPressedInternal()
         {
-            if (DisplayedInstance != this)
+            if (DisplayedInstance != this ||
+                blockInteraction)
                 return;
 
             if (DisplayedTrigger.pressDuration == 0)
@@ -135,12 +137,13 @@ namespace BiReJeJoCo.Backend
         {
                 OnTriggerInteracted(DisplayedTrigger.Id);
                 StartCoroutine(CoolDown(DisplayedTrigger));
-                ResetDisplayed();
+                ResetActiveInstance();
         }
 
         private void OnTriggerHoldInternal(float duration)
         {
-            if (DisplayedInstance != this)
+            if (DisplayedInstance != this ||
+                blockInteraction)
                 return;
 
             if (!initialPressDuration.HasValue)
@@ -158,7 +161,7 @@ namespace BiReJeJoCo.Backend
                 OnTriggerInteracted(DisplayedTrigger.Id);
                 StartCoroutine(CoolDown(DisplayedTrigger));
                 UpdateTriggerProgress(DisplayedTrigger, 0);
-                ResetDisplayed();
+                ResetActiveInstance();
             }
             else
             {
@@ -168,7 +171,8 @@ namespace BiReJeJoCo.Backend
 
         private void OnTriggerReleasedInternal()
         {
-            if (DisplayedInstance != this)
+            if (DisplayedInstance != this ||
+                blockInteraction)
                 return;
             
             initialPressDuration = null;
@@ -303,12 +307,12 @@ namespace BiReJeJoCo.Backend
                 floaties[trigger.Id].UpdateProgress(duration / trigger.pressDuration);
         }
 
-        protected void SetDisplayed(BaseTrigger instance, TriggerSetup trigger)
+        protected void SetActiveInstance(BaseTrigger instance, TriggerSetup trigger)
         {
             DisplayedInstance = instance;
             DisplayedTrigger = trigger;
         }
-        protected void ResetDisplayed() 
+        protected void ResetActiveInstance() 
         {
             DisplayedInstance = null;
             DisplayedTrigger = null;

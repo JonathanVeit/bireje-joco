@@ -181,7 +181,7 @@ namespace BiReJeJoCo.Items
             if (DisplayedTrigger.pressDuration <= duration)
             {
                 OnTriggerInteracted(DisplayedTrigger.Id);
-                ResetDisplayed();
+                ResetActiveInstance();
             }
             else
             {

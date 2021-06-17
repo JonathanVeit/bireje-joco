@@ -35,6 +35,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] Image hitOverlay;
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
+        private ControlsPopup controlsPopup => uiManager.GetInstanceOf<ControlsPopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
 
         #region Inizialization
@@ -49,9 +50,6 @@ namespace BiReJeJoCo.UI
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<PauseMenuOpenedMsg>(this, OnPauseMenuOpened);
-            messageHub.RegisterReceiver<PauseMenuClosedMsg>(this, OnPauseMenuClosed);
-
             photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
             photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
@@ -191,15 +189,7 @@ namespace BiReJeJoCo.UI
         public void SetMenuInput(InputAction.CallbackContext inputValue)
         {
             if (!inputValue.performed) return;
-
-            if (pausePopup.IsOpen)
-            {
-                messageHub.ShoutMessage<PauseMenuClosedMsg>(this);
-            }
-            else
-            {
-                messageHub.ShoutMessage<PauseMenuOpenedMsg>(this);
-            }
+                ToggleMenu();
         }
         #endregion
 
@@ -230,18 +220,12 @@ namespace BiReJeJoCo.UI
             DisconnectEvents();
         }
 
-        void OnPauseMenuOpened(PauseMenuOpenedMsg onGameMenuOpenedMsg)
-        {
-            if (resultPopup.IsOpen) return;
-            ToggleMenu();
-        }
-        void OnPauseMenuClosed(PauseMenuClosedMsg onGameMenuOpenedMsg)
-        {
-            if (resultPopup.IsOpen) return;
-            ToggleMenu();
-        }
         private void ToggleMenu() 
         {
+            if (controlsPopup.IsOpen ||
+                resultPopup.IsOpen)
+                return;
+
             if (pausePopup.IsOpen)
                 pausePopup.Hide();
             else
@@ -251,6 +235,8 @@ namespace BiReJeJoCo.UI
         private void ShowResult(MatchResult result) 
         {
             pausePopup.Hide();
+            controlsPopup.Hide();
+
             resultPopup.Show(result);
             crosshairGO.SetActive(false);
         }
