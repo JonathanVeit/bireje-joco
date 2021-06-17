@@ -21,3 +21,8 @@ namespace BiReJeJoCo.UI
 
         public void HideAndReshow()
         {
+            Hide();
+            History[History.Count - 1].Show();
+        }
+    }
+}
