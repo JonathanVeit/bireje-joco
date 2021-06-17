@@ -200,7 +200,7 @@ namespace BiReJeJoCo.UI
 
             if (localPlayer.Role == PlayerRole.Hunted)
             {
-                startInformation.text = "You are the monster!\nTry to hide and place corals!";
+                startInformation.text = "You are the monster!\nTry to hide and place spores!";
                 StartCoroutine(FadeText(3, startInformation));
             }
             else if (localPlayer.Role == PlayerRole.Hunter)
