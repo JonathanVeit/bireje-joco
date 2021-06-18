@@ -160,6 +160,7 @@ namespace BiReJeJoCo.Items
             UpdateHitSFX();
             UpdateDamageSFX();
             muzzleFlash.SetActive(true);
+            muzzleFlash.transform.RotateAround(muzzleFlash.transform.position, muzzleFlash.transform.up, Random.Range(0, 360f));
         }
 
         private void UpdateHitSFX()
