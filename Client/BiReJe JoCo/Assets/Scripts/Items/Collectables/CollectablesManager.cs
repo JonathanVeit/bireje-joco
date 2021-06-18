@@ -138,6 +138,11 @@ namespace BiReJeJoCo.Items
                 DebugHelper.Print(LogType.Log, $"Created collectable {collectable.InstanceId} ({collectable.UniqueId}).");
         }
 
+        public bool HasCollectable(string id)
+        {
+            return collectables.ContainsKey(id);
+        }
+
         public void CollectItem(ICollectable item)
         {
             CollectItem(item.InstanceId);

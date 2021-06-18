@@ -42,7 +42,11 @@ namespace BiReJeJoCo
                 collection.Crystals.Add(crystal.transform, RandomScale(rnd));
                 crystal.transform.SetParent(collectablesManager.Root);
 
-                crystal.InitializeCollectable(rnd.NextDouble().ToString(), -1);
+                int id = rnd.Next();
+                while (collectablesManager.HasCollectable(id.ToString()))
+                    id = rnd.Next();
+        
+                crystal.InitializeCollectable(id.ToString(), -1);
                 collectablesManager.RegisterCollectableItem(crystal);
             }
 
