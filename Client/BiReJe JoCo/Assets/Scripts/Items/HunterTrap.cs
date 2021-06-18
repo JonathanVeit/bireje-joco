@@ -227,7 +227,10 @@ namespace BiReJeJoCo.Items
                 }
             }
             else if (locationFloaty)
+            {
                 locationFloaty.RequestDestroyFloaty();
+                locationFloaty = null;
+            }
         }
         #endregion
     }

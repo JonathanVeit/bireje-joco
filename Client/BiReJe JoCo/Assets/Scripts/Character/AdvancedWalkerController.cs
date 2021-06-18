@@ -766,6 +766,7 @@ namespace BiReJeJoCo.Character
 		protected AdvancedWalkerController walkController;
 
 		public event Action OnDetermined;
+		public event Action<float, float> OnTick; // total / relative progres
 
 		private float timer;
 
@@ -793,6 +794,9 @@ namespace BiReJeJoCo.Character
         public void Tick(float deltaTime)
         {
 			timer += deltaTime;
+			var delta = timer / Duration; // -> 1
+
+			OnTick?.Invoke(timer, delta);
 			if (timer >= Duration)
 			{
 				UnregisterSelf();
@@ -814,6 +818,7 @@ namespace BiReJeJoCo.Character
 		protected AdvancedWalkerController walkController;
 
 		public event Action OnDetermined;
+		public event Action<float, float> OnTick; // total / relative progres
 
 		private float timer;
 		private float minValue;
@@ -837,7 +842,8 @@ namespace BiReJeJoCo.Character
 			var delta = timer / Duration; // -> 1
 
 			Value = Mathf.Lerp(minValue, 1.0f, delta);
-	
+			OnTick?.Invoke(timer, delta);
+
 			if (timer >= Duration)
 			{
 				UnregisterSelf();

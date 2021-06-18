@@ -44,6 +44,11 @@ namespace BiReJeJoCo.Character
             if (velocity.y <= -fallSlowDownVelocity)
             {
                 var multiplier = new LinearMovementModification(fallSlowDownStrength, fallSlowDownDuration);
+                multiplier.OnTick += (total, delta) =>
+                {
+                    gameUI.UpdateSlowOverlay(1 - delta);
+                };
+
                 multiplier.OnDetermined += () =>
                 {
                     isApplied = false;

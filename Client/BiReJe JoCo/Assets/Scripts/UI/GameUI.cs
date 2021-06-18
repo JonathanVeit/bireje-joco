@@ -24,6 +24,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] UIBarHandler ammoBar;
         [SerializeField] UIBarHandler pingCooldownBar;
         [SerializeField] Image trapIcon;
+        [SerializeField] Image slowOverlay;
 
         [Header("Hunted")]
         [SerializeField] GameObject huntedHUD;
@@ -136,6 +137,12 @@ namespace BiReJeJoCo.UI
                 pingCooldownBar.OverrideValue(0);
             else
                 pingCooldownBar.SetValue(value);
+        }
+        public void UpdateSlowOverlay(float alpha)
+        {
+            var col = hitOverlay.color;
+            col.a = alpha;
+            slowOverlay.color = col;
         }
 
         // hunted
