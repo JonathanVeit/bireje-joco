@@ -73,8 +73,10 @@ MonoBehaviour:
   drawGizmos: 0
   triggerId: 1
   messageTarget: 5
-  mainLight: {fileID: 5100420059540986499}
+  mainLight:
+  - {fileID: 5100420059540986499}
   additionalObjects: []
+  isOn: 0
 --- !u!1 &5100420059540986496
 GameObject:
   m_ObjectHideFlags: 0
