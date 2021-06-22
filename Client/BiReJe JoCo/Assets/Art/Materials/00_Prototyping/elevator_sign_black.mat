@@ -7,9 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ToonShader_mat_green
-  m_Shader: {fileID: -6465566751694194690, guid: bf4ff9691d17c574691d8a56de6bbf4a, type: 3}
+  m_Name: elevator_sign_black
+  m_Shader: {fileID: -6465566751694194690, guid: 3c973a3d97932894c9ee2d4ce8b200d6, type: 3}
   m_ShaderKeywords: MAIN_LIGHT_CALCULATE_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
+    ADDITIONAL_LIGHT_CALCULATE_SHADOWS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,6 +20,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Albedo:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - AmbientOcclusion:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -35,11 +40,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - SideTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_223377E2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_300EB541:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - TopTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -69,20 +82,30 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - ADDITIONAL_LIGHTS_SHADOWS: 0
+    - ADDITIONAL_LIGHT_CALCULATE_SHADOWS: 1
     - BakedIntensity: 0.5
-    - EmissionIntensity: 0
+    - EmissionIntensity: 0.17
     - LIGHTMAP: 0
     - MAIN_LIGHT_CALCULATE_SHADOWS: 1
+    - MAIN_LIGHT_SHADOWS: 0
     - MainShadowIntensity: 1
+    - SHADOW_CASCADE: 0
+    - SOFT_SHADOWS: 0
     - ShadowSmoothness: 0.32
-    - Smoothness: 10
+    - Smoothness: 0.7
+    - TextureIntensity: 1
+    - UseDownstairsGradient: 1
     - UseGI: 0
     - Vector1_8606F96E: 0
+    - WorldTilable: 0
     - _MAIN_LIGHT_SHADOWS_CASCADE: 1
     - _SHADOWS_SOFT: 1
     - _Smoothness: 0.5
+    - isTriplanar: 0
     m_Colors:
-    - MainColor: {r: 0.035337735, g: 0.9056604, b: 0, a: 1}
+    - EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - MainColor: {r: 0, g: 0, b: 0, a: 1}
     - MixedShadowsColor: {r: 1, g: 1, b: 1, a: 0}
     - Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _MainColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
