@@ -94,6 +94,7 @@ Material:
     - AlphaClip: 0.25
     - Fill: 0.049
     - FresnelIntensity: 1.2
+    - IsDisplacement: 1
     - NoiseIntensity: 0.11
     - NoiseScale: 10
     - Speed: 0.15
@@ -128,7 +129,7 @@ Material:
     - FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - SecondaryColor: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 1, g: 0, b: 0.78266525, a: 1}
-    - _Color: {r: 0.8551844, g: 0.45882356, b: 0.9607843, a: 1}
+    - _Color: {r: 0.45882356, g: 0.9607843, b: 0.5901353, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
