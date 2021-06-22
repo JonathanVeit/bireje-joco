@@ -8,18 +8,15 @@ namespace BiReJeJoCo.Map
     public class TriggeredDoor : SynchronizedTrigger
     {
         [Header("Door Settings")]
-        private Animator anim;
+        [SerializeField] Animator anim;
         [SerializeField] float coolDownTime = 1;
 
         [Header("Runtime")]
         [SerializeField] private bool isOpen;
 
-        private Vector3 targetDoorPosition;
-
         protected override void SetupAsActive()
         {
             base.SetupAsActive();
-            anim = this.GetComponent<Animator>();
             anim.SetBool("isOpen", isOpen);
         }
 
@@ -27,11 +24,6 @@ namespace BiReJeJoCo.Map
         {
             isOpen = !isOpen;
             anim.SetBool("isOpen", isOpen);
-        }
-
-        public void Update()
-        {
-            
         }
 
         protected override void OnSychronizedTriggerReceived(PhotonMessage msg)
@@ -55,12 +47,18 @@ namespace BiReJeJoCo.Map
             yield return new WaitForSecondsRealtime(coolDownTime);
             TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
+
+
+            if (trigger.Id == 2 &&
+                floaties.ContainsKey(trigger.Id) && 
+                floaties[trigger.Id] != null)
+                floaties[trigger.Id].SetDescription(isOpen ? "Close Door" : "Open Door");
         }
         
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-           floaty.SetDescription("Door");
+           floaty.SetDescription(isOpen? "Close Door" : "Open Door");
         }
     }
 }

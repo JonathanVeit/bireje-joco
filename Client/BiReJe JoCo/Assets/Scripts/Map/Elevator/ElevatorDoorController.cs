@@ -6,39 +6,56 @@ namespace BiReJeJoCo.Map
 {
     public class ElevatorDoorController : SystemBehaviour
     {
+        public enum ElevatorDoorPoint
+        {
+            UpperDoors = 0,
+            LowerDoors = 1,
+        }
+
         [Header("Settings")]
-        [SerializeField] Animator[] animators;
+        [SerializeField] Animator plattformAnim;
+        [SerializeField] Animator upperAnim;
+        [SerializeField] Animator lowerAnim;
 
         public bool DoorsAreOpen { get; private set; }
 
-        public void Open(Action onFinishCallback) 
+        public void Open(ElevatorDoorPoint point, Action onFinishCallback) 
         {
-            TriggerAnimators("Open");
+            TriggerAnimators(point, "Open");
             StartCoroutine(AwaitAnimations(() => 
             {
-                Debug.Log("Animations Finsihed!");
                 DoorsAreOpen = true;
                 onFinishCallback?.Invoke(); 
             }));
         }
-        public void Close(Action onFinishCallback) 
+        public void Close(ElevatorDoorPoint point, Action onFinishCallback) 
         {
             DoorsAreOpen = false;
-            TriggerAnimators("Close");
+            TriggerAnimators(point, "Close");
             StartCoroutine(AwaitAnimations(() =>
             {
-                Debug.Log("Animations Finsihed!");
                 onFinishCallback?.Invoke();
             }));
         }
 
-        private void TriggerAnimators(string trigger)
+        private void TriggerAnimators(ElevatorDoorPoint point, string trigger)
         {
-            foreach (var anim in animators)
+            TriggerAnimtor(plattformAnim, trigger);
+
+            switch (point)
             {
-                anim.ResetTrigger(trigger);
-                anim.SetTrigger(trigger);
+                case ElevatorDoorPoint.UpperDoors:
+                    TriggerAnimtor(upperAnim, trigger);
+                    break;
+                case ElevatorDoorPoint.LowerDoors:
+                    TriggerAnimtor(lowerAnim, trigger);
+                    break;
             }
+        }
+        private void TriggerAnimtor(Animator anim, string trigger)
+        {
+            anim.ResetTrigger(trigger);
+            anim.SetTrigger(trigger);
         }
 
         private IEnumerator AwaitAnimations(Action callback)
@@ -60,13 +77,14 @@ namespace BiReJeJoCo.Map
         }
         private bool AnimatorsFinished()
         {
-            foreach (var anim in animators)
+            return AnimatorIsFinished(plattformAnim) && AnimatorIsFinished(upperAnim) && AnimatorIsFinished(lowerAnim);
+        }
+        private bool AnimatorIsFinished(Animator anim) 
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 ||
+                anim.IsInTransition(0))
             {
-                if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 ||
-                    anim.IsInTransition(0))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;

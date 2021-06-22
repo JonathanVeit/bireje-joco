@@ -152,6 +152,7 @@ MonoBehaviour:
   drawGizmos: 0
   triggerId: 0
   messageTarget: 0
+  anim: {fileID: 1892729756940544959}
   coolDownTime: 1
   isOpen: 0
 --- !u!95 &1892729756940544959
@@ -173,51 +174,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2260602647510520920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8104256360900060459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 875f223b341872548acda57e1008d63d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerPoints:
-  - target: 3
-    Id: 1
-    root: {fileID: 7961329895575121971}
-    areaSize: {x: 4, y: 4, z: 3}
-    areaOffset: {x: 0, y: 0, z: 1.5}
-    pressDuration: 0
-    coolDown: 0
-    floatingElementId: default_trigger
-    hideInCooldown: 1
-    floatingElementTarget: {fileID: 7961329895575121971}
-    floatingElementOffset: {x: 0, y: 0}
-    isCoolingDown: 0
-  - target: 3
-    Id: 2
-    root: {fileID: 2214657972748132512}
-    areaSize: {x: 4, y: 4, z: 3}
-    areaOffset: {x: 0, y: 0, z: 1.5}
-    pressDuration: 0
-    coolDown: 0
-    floatingElementId: default_trigger
-    hideInCooldown: 1
-    floatingElementTarget: {fileID: 2214657972748132512}
-    floatingElementOffset: {x: 0, y: 0}
-    isCoolingDown: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 1088
-  drawGizmos: 0
-  triggerId: 0
-  messageTarget: 0
-  coolDownTime: 1
-  isOpen: 0
 --- !u!65 &2725139729954653165
 BoxCollider:
   m_ObjectHideFlags: 0

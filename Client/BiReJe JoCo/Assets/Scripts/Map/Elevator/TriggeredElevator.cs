@@ -33,12 +33,13 @@ namespace BiReJeJoCo.Map
             {
                 // go down 
                 case 0:
-                    doorController.Close(() => 
+                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
+                        () => 
                     {
                         board.SetTarget(lowerPosition.target, () =>
                         {
                             ResetSigns();
-                            doorController.Open(null);
+                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, null);
                         });
                         currentPointIndex = 0;
                         UpdateSigns(false);
@@ -48,12 +49,13 @@ namespace BiReJeJoCo.Map
 
                 // go up
                 case 1:
-                    doorController.Close(() =>
+                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, 
+                        () =>
                     {
                         board.SetTarget(upperPosition.target, () =>
                         {
                             ResetSigns();
-                            doorController.Open(null);
+                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.UpperDoors, null);
                         });
                         currentPointIndex = 1;
                         UpdateSigns(true);
@@ -96,7 +98,8 @@ namespace BiReJeJoCo.Map
             trigger.isCoolingDown = false;
 
             if (trigger.Id == 2 &&
-                floaties.ContainsKey(trigger.Id))
+                floaties.ContainsKey(trigger.Id) &&
+                floaties[trigger.Id] != null)
                 floaties[trigger.Id].SetDescription(currentPointIndex == 0 ? "Up" : "Down");
         }
 
