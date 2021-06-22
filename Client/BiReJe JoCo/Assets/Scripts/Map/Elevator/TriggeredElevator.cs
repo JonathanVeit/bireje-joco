@@ -33,6 +33,7 @@ namespace BiReJeJoCo.Map
             {
                 // go down 
                 case 0:
+                    UpdateSigns(false);
                     doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
                         () => 
                     {
@@ -42,13 +43,13 @@ namespace BiReJeJoCo.Map
                             doorController.Open(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, null);
                         });
                         currentPointIndex = 0;
-                        UpdateSigns(false);
                     });
 
                     break;
 
                 // go up
                 case 1:
+                    UpdateSigns(true);
                     doorController.Close(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, 
                         () =>
                     {
@@ -58,7 +59,6 @@ namespace BiReJeJoCo.Map
                             doorController.Open(ElevatorDoorController.ElevatorDoorPoint.UpperDoors, null);
                         });
                         currentPointIndex = 1;
-                        UpdateSigns(true);
                     });
 
                     break;
