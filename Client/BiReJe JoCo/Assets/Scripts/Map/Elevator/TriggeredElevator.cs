@@ -94,6 +94,10 @@ namespace BiReJeJoCo.Map
             yield return new WaitUntil(() => board.ReachedTarget && doorController.DoorsAreOpen);
             TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
+
+            if (trigger.Id == 2 &&
+                floaties.ContainsKey(trigger.Id))
+                floaties[trigger.Id].SetDescription(currentPointIndex == 0 ? "Up" : "Down");
         }
 
 
