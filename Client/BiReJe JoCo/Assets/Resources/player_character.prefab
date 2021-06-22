@@ -84,6 +84,10 @@ MonoBehaviour:
   syncedTransform: {fileID: -1423901199056105189}
   hunterMat: {fileID: 2100000, guid: 0898905fbf1b8a64281839dabef2b2c5, type: 2}
   huntedMat: {fileID: 2100000, guid: 7f3417a9bbe76fc449b0e9f479e110ea, type: 2}
+  fpsLayer: 13
+  keepLayer:
+    serializedVersion: 2
+    m_Bits: 54
   cam: {fileID: 0}
   controllerSetup: {fileID: 0}
   fogUpstairs: {fileID: 0}
@@ -106,7 +110,8 @@ MonoBehaviour:
   movementTarget: {fileID: 0}
   rotationTarget: {fileID: 0}
   rigidBody: {fileID: 0}
-  snapGroundTreshold: 0.4
+  smoothSyncSpeed: 1
+  snapGroundTreshold: 0.7
   m_Distance: 0
   m_Angle: 0
   m_Direction: {x: 0, y: 0, z: 0}

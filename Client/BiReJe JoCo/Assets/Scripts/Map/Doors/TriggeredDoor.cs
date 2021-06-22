@@ -32,7 +32,7 @@ namespace BiReJeJoCo.Map
 
             if (castedMsg.i == triggerId)
             {
-                OnTriggerInteracted(castedMsg.pi);
+                OnTriggerInteracted(castedMsg.ti);
 
                 foreach(var curTrigger in triggerPoints)
                     StartCoroutine(CoolDown(curTrigger));
@@ -43,9 +43,8 @@ namespace BiReJeJoCo.Map
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            TryHideFloaty(trigger);
+            DestroyTriggerFloaty(trigger); 
             yield return new WaitForSecondsRealtime(coolDownTime);
-            TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
 
 

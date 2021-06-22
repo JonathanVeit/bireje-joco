@@ -12,6 +12,7 @@ namespace BiReJeJoCo.Backend
         private static Dictionary<byte, SynchronizedTrigger> instances
             = new Dictionary<byte, SynchronizedTrigger>();
 
+
         #region Initialization
         protected override void SetupAsActive()
         {
@@ -42,36 +43,30 @@ namespace BiReJeJoCo.Backend
 
         protected sealed override void OnTriggerPressed()
         {
-            foreach (var curTrigger in triggerPoints)
-            {
-                if (curTrigger.pressDuration == 0 &&
-                    PlayerIsInArea(curTrigger) && 
-                    !curTrigger.isCoolingDown)
-                {
-                    photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
-                    curTrigger.isCoolingDown = true;
-                }
-            }
+            photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, DisplayedTrigger.Id, localPlayer.NumberInRoom), messageTarget);
+            DisplayedTrigger.isCoolingDown = true;
+            ResetActiveInstance();
         }
         protected sealed override void OnTriggerHold(float duration)
         {
+            if (DisplayedTrigger.pressDuration <= duration)
+            {
+                photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, DisplayedTrigger.Id, localPlayer.NumberInRoom), messageTarget);
+                DisplayedTrigger.isCoolingDown = true;
+
+                UpdateTriggerProgress(DisplayedTrigger, 0);
+                ResetActiveInstance();
+            }
+            else
+            {
+                UpdateTriggerProgress(DisplayedTrigger, duration);
+            }
+        }
+        protected sealed override void OnTriggerReleased()
+        {
             foreach (var curTrigger in triggerPoints)
             {
-                if (PlayerIsInArea(curTrigger) &&
-                    !curTrigger.isCoolingDown)
-                {
-                    if (curTrigger.pressDuration <= duration)
-                    {
-                        photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, curTrigger.Id, localPlayer.NumberInRoom), messageTarget);
-                        curTrigger.isCoolingDown = true;
-
-                        UpdateTriggerProgress(curTrigger, 0);
-                    }
-                    else
-                    {
-                        UpdateTriggerProgress(curTrigger, duration);
-                    }
-                }
+                UpdateTriggerProgress(curTrigger, 0);
             }
         }
 
@@ -81,8 +76,8 @@ namespace BiReJeJoCo.Backend
 
             if (castedMsg.i == triggerId)
             {
-                OnTriggerInteracted(castedMsg.pi);
-                StartCoroutine(CoolDown(triggerPoints.Find(x => x.Id == castedMsg.pi)));
+                OnTriggerInteracted(castedMsg.ti);
+                StartCoroutine(CoolDown(triggerPoints.Find(x => x.Id == castedMsg.ti)));
             }
         }
 

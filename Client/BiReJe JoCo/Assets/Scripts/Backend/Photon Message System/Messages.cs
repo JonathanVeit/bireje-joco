@@ -122,14 +122,14 @@ namespace BiReJeJoCo.Backend
     public class TriggerPointInteractedPhoMsg : PhotonMessage
     {
         public byte i;
-        public byte pi;
+        public byte ti;
         public int a;
 
         public TriggerPointInteractedPhoMsg() { }
         public TriggerPointInteractedPhoMsg(byte id, byte pointId, int actor)
         {
             i = id;
-            pi = pointId;
+            ti = pointId;
             a = actor;
         }
     }

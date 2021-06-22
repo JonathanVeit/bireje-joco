@@ -92,9 +92,8 @@ namespace BiReJeJoCo.Map
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            TryHideFloaty(trigger);
+            DestroyTriggerFloaty(trigger);
             yield return new WaitUntil(() => board.ReachedTarget && doorController.DoorsAreOpen);
-            TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
 
             if (trigger.Id == 2 &&

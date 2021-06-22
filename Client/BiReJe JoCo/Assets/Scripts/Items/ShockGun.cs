@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Items
         [SerializeField] ParticleSystem damageParticleSystem;
         [SerializeField] Transform rayOrigin;
         [SerializeField] float trailHeight;
+        [SerializeField] GameObject muzzleFlash;
 
         [Header("Appearance")]
         [SerializeField] [Range(.1f, 5f)] float density;
@@ -75,6 +76,7 @@ namespace BiReJeJoCo.Items
                 damageParticleSystem.enableEmission = false;
                 DestroyCurrentTrail();
                 frequence.SetValue(frequence.MaxValue);
+                muzzleFlash.SetActive(false);
             }
         }
 
@@ -141,7 +143,7 @@ namespace BiReJeJoCo.Items
                 var value = Random.Range(minWidth, maxWidth);
                 if (i == amount - 1)
                 {
-                    value = 0;
+                    value *= 0.5f;
                 }
            
                 var key = new Keyframe(position, value);
@@ -157,6 +159,8 @@ namespace BiReJeJoCo.Items
         {
             UpdateHitSFX();
             UpdateDamageSFX();
+            muzzleFlash.SetActive(true);
+            muzzleFlash.transform.RotateAround(muzzleFlash.transform.position, muzzleFlash.transform.up, Random.Range(0, 360f));
         }
 
         private void UpdateHitSFX()
