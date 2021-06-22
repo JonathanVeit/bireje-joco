@@ -13,9 +13,8 @@ namespace BiReJeJoCo.Map
         [SerializeField] PlattformTarget upperPosition;
         [SerializeField] [Range (0, 1)] byte startPointIndex;
         [SerializeField] ElevatorPlattform board;
-        [SerializeField] GameObject lowerEntry;
-        [SerializeField] GameObject upperEntry;
         [SerializeField] ElevatorSign[] signs;
+        [SerializeField] ElevatorDoorController doorController;
 
         private byte currentPointIndex;
 
@@ -34,24 +33,32 @@ namespace BiReJeJoCo.Map
             {
                 // go down 
                 case 0:
-                    board.SetTarget(lowerPosition.target, () =>
+                    doorController.Close(() => 
                     {
-                        SetLowerEntry(true);
-                        ResetSigns();
+                        board.SetTarget(lowerPosition.target, () =>
+                        {
+                            ResetSigns();
+                            doorController.Open(null);
+                        });
+                        currentPointIndex = 0;
+                        UpdateSigns(false);
                     });
-                    currentPointIndex = 0;
-                    UpdateSigns(false);
+
                     break;
 
                 // go up
                 case 1:
-                    board.SetTarget(upperPosition.target, () =>
+                    doorController.Close(() =>
                     {
-                        SetUpperEntry(true);
-                        ResetSigns();
+                        board.SetTarget(upperPosition.target, () =>
+                        {
+                            ResetSigns();
+                            doorController.Open(null);
+                        });
+                        currentPointIndex = 1;
+                        UpdateSigns(true);
                     });
-                    currentPointIndex = 1;
-                    UpdateSigns(true);
+
                     break;
 
                 // toggle on plattform 
@@ -67,38 +74,34 @@ namespace BiReJeJoCo.Map
                         return;
                     }
             }
-
-            SetLowerEntry(false);
-            SetUpperEntry(false);
         }
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.SetDescription("Elevator");
+            if (pointId == 0 ||
+                pointId == 1)
+            {
+                floaty.SetDescription("Call Elevator");
+                return;
+            }
+
+            floaty.SetDescription(currentPointIndex == 0? "Up" : "Down");
         }
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
             TryHideFloaty(trigger);
-            yield return new WaitUntil(() => board.ReachedTarget);
+            yield return new WaitUntil(() => board.ReachedTarget && doorController.DoorsAreOpen);
             TryUnhideFloaty(trigger);
             trigger.isCoolingDown = false;
         }
+
 
         #region Helper
         [Serializable]
         public struct PlattformTarget
         {
             public Transform target;
-        }
-
-        private void SetLowerEntry(bool open)
-        {
-            lowerEntry.SetActive(!open);
-        }
-        private void SetUpperEntry(bool open) 
-        {
-            upperEntry.SetActive(!open);
         }
 
         private void UpdateSigns(bool up) 
@@ -110,6 +113,12 @@ namespace BiReJeJoCo.Map
         {
             foreach (var sign in signs)
                 sign.Reset();
+        }
+
+        protected override bool PlayerIsInArea(TriggerSetup trigger)
+        {
+            if (trigger.Id == currentPointIndex) return false;
+            return base.PlayerIsInArea(trigger);
         }
         #endregion
     }
