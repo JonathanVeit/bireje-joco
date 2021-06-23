@@ -5,5 +5,7 @@ namespace BiReJeJoCo.Backend
     {
         public string gameScene;
         public int huntedCollectables;
+        public int coralsToWin;
+        public int maxCorals;
     }
 }

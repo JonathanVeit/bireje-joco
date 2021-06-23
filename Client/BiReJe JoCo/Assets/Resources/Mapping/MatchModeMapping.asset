@@ -16,8 +16,12 @@ MonoBehaviour:
   - ID: default_match
     Element:
       gameScene: game_scene_5
-      huntedCollectables: 5
+      huntedCollectables: 15
+      coralsToWin: 25
+      maxCorals: 100
   - ID: debug_match
     Element:
       gameScene: game_scene
       huntedCollectables: 5
+      coralsToWin: 75
+      maxCorals: 150

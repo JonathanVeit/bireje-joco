@@ -292,11 +292,17 @@ namespace BiReJeJoCo.Debugging
                 photonClient.LeaveLobby();
             }));
 
-            RegisterCommand(new DebugCommand<bool>("force_hunter", "force the player to become hunter", "force_hunter <bool>", (mode) =>
+            RegisterCommand(new DebugCommand<bool>("force_hunter", "Force the player to become hunter", "force_hunter <bool>", (mode) =>
             {
                 if (!localPlayer.IsHost) return;
 
                 globalVariables.SetVar<bool>("force_hunter", mode);
+            }));
+
+            RegisterCommand(new DebugCommand("anti_stuck", "Try to unstuck the player", "anti_stuck", () =>
+            {
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position += Vector3.up * 2;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }));
         }
 

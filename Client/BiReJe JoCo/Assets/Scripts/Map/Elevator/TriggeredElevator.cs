@@ -13,9 +13,8 @@ namespace BiReJeJoCo.Map
         [SerializeField] PlattformTarget upperPosition;
         [SerializeField] [Range (0, 1)] byte startPointIndex;
         [SerializeField] ElevatorPlattform board;
-        [SerializeField] GameObject lowerEntry;
-        [SerializeField] GameObject upperEntry;
         [SerializeField] ElevatorSign[] signs;
+        [SerializeField] ElevatorDoorController doorController;
 
         private byte currentPointIndex;
 
@@ -34,24 +33,34 @@ namespace BiReJeJoCo.Map
             {
                 // go down 
                 case 0:
-                    board.SetTarget(lowerPosition.target, () =>
-                    {
-                        SetLowerEntry(true);
-                        ResetSigns();
-                    });
-                    currentPointIndex = 0;
                     UpdateSigns(false);
+                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
+                        () => 
+                    {
+                        board.SetTarget(lowerPosition.target, () =>
+                        {
+                            ResetSigns();
+                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, null);
+                        });
+                        currentPointIndex = 0;
+                    });
+
                     break;
 
                 // go up
                 case 1:
-                    board.SetTarget(upperPosition.target, () =>
-                    {
-                        SetUpperEntry(true);
-                        ResetSigns();
-                    });
-                    currentPointIndex = 1;
                     UpdateSigns(true);
+                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, 
+                        () =>
+                    {
+                        board.SetTarget(upperPosition.target, () =>
+                        {
+                            ResetSigns();
+                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.UpperDoors, null);
+                        });
+                        currentPointIndex = 1;
+                    });
+
                     break;
 
                 // toggle on plattform 
@@ -67,38 +76,38 @@ namespace BiReJeJoCo.Map
                         return;
                     }
             }
-
-            SetLowerEntry(false);
-            SetUpperEntry(false);
         }
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.SetDescription("Elevator");
+            if (pointId == 0 ||
+                pointId == 1)
+            {
+                floaty.SetDescription("Call Elevator");
+                return;
+            }
+
+            floaty.SetDescription(currentPointIndex == 0? "Up" : "Down");
         }
         protected override IEnumerator CoolDown(TriggerSetup trigger)
         {
             trigger.isCoolingDown = true;
-            TryHideFloaty(trigger);
-            yield return new WaitUntil(() => board.ReachedTarget);
-            TryUnhideFloaty(trigger);
+            DestroyTriggerFloaty(trigger);
+            yield return new WaitUntil(() => board.ReachedTarget && doorController.DoorsAreOpen);
             trigger.isCoolingDown = false;
+
+            if (trigger.Id == 2 &&
+                floaties.ContainsKey(trigger.Id) &&
+                floaties[trigger.Id] != null)
+                floaties[trigger.Id].SetDescription(currentPointIndex == 0 ? "Up" : "Down");
         }
+
 
         #region Helper
         [Serializable]
         public struct PlattformTarget
         {
             public Transform target;
-        }
-
-        private void SetLowerEntry(bool open)
-        {
-            lowerEntry.SetActive(!open);
-        }
-        private void SetUpperEntry(bool open) 
-        {
-            upperEntry.SetActive(!open);
         }
 
         private void UpdateSigns(bool up) 
@@ -110,6 +119,12 @@ namespace BiReJeJoCo.Map
         {
             foreach (var sign in signs)
                 sign.Reset();
+        }
+
+        protected override bool PlayerIsInArea(TriggerSetup trigger)
+        {
+            if (trigger.Id == currentPointIndex) return false;
+            return base.PlayerIsInArea(trigger);
         }
         #endregion
     }

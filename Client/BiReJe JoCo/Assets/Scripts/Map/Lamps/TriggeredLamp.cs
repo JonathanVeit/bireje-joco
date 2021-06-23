@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.UI;
+using System.Collections;
 
 namespace BiReJeJoCo.Map
 {
@@ -39,7 +40,16 @@ namespace BiReJeJoCo.Map
 
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {
-            floaty.SetDescription("Lamp");
+            floaty.SetDescription(isOn? "Light off" : "Light on");
+        }
+
+        protected override IEnumerator CoolDown(TriggerSetup trigger)
+        {
+            yield return base.CoolDown(trigger);
+
+            if (floaties.ContainsKey(trigger.Id) &&
+                floaties[trigger.Id] != null)
+                floaties[trigger.Id].SetDescription(isOn ? "Light off" : "Light on");
         }
     }
 }

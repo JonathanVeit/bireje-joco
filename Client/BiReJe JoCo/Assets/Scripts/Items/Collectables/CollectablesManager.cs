@@ -1,20 +1,24 @@
 using JoVei.Base;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
+using System.Linq;
+using System;
+using JoVei.Base.Helper;
 
 namespace BiReJeJoCo.Items
 {
     public class CollectableSpawnConfig
     {
         [JsonIgnore]
-        public string PrefabId => i;
+        public string ItemId => i;
         [JsonIgnore]
         public string InstanceId => i2;
         [JsonIgnore]
         public int SpawnPointIndex => s;
+        [JsonIgnore]
+        public Vector3? OverridePosition => p;
 
         /// <summary>
         /// Prefab Id
@@ -28,12 +32,19 @@ namespace BiReJeJoCo.Items
         /// Spawnpoint index
         /// </summary>
         public int s;
+        /// <summary>
+        /// overridable spawnposition
+        /// </summary>
+        public Vector3? p;
     }
 
     public class CollectablesManager : SystemBehaviour
     {
-        private Dictionary<string, ICollectableItem> items;
-        private Transform root;
+        private Dictionary<string, ICollectable> collectables;
+        private Dictionary<int, List<ICollectable>> spawnPointWorkload;
+        public Transform Root { get; private set; }
+
+        public ICollectable[] AllCollectables => collectables.Values.ToArray();
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -50,14 +61,15 @@ namespace BiReJeJoCo.Items
 
         private void Setup()
         {
-            items = new Dictionary<string, ICollectableItem>();
-            root = null;
+            collectables = new Dictionary<string, ICollectable>();
+            spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
+            Root = null;
         }
 
         void ConnectEvents()
         {
             photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
-            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnCloseMatch);
+            photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnMatchRulesDefined);
             messageHub.UnregisterReceiver(this);
         }
         void DisconnectEvents()
@@ -67,22 +79,74 @@ namespace BiReJeJoCo.Items
         }
         #endregion
 
-        public void CreateCollectable(CollectableSpawnConfig config)
+        #region Access
+        public ICollectable[] GetAllCollectables(Func<ICollectable, bool> predicate)
         {
-            if (root == null)
+            return GetAllCollectablesAs<ICollectable>(predicate);
+        }
+        public TCollectable[] GetAllCollectablesAs<TCollectable>(Func<ICollectable, bool> predicate)
+            where TCollectable : ICollectable
+        {
+            var result = new List<TCollectable>();
+            foreach (ICollectable collectable in collectables.Values)
+            {
+                if (predicate(collectable))
+                    result.Add((TCollectable) collectable);
+            }
+
+            return result.ToArray();
+        }
+
+        public int[] GetFreeSpawnPoints()
+        {
+            var freepoints = spawnPointWorkload.Where(x => x.Value.Count == 0).ToArray();
+            return freepoints.Select(x => x.Key).ToArray();
+        }
+        #endregion
+
+        public ICollectable CreateCollectable(CollectableSpawnConfig config)
+        {
+            if (Root == null)
                 CreateItemRoot();
             var scene = matchHandler.MatchConfig.matchScene;
             var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.SpawnPointIndex);
+            if (config.OverridePosition.HasValue)
+                spawnPoint = config.p.Value;
 
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.PrefabId);
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(config.ItemId);
             var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
-            instance.transform.SetParent(root);
+            instance.transform.SetParent(Root);
 
-            var item = instance.GetComponent<ICollectableItem>();
-            item.InitializeCollectable(config.InstanceId);
-            items.Add(config.InstanceId, item);
+            var collectable = instance.GetComponent<ICollectable>();
+            collectable.InitializeCollectable(config.InstanceId, config.SpawnPointIndex);
+            RegisterCollectableItem(collectable);
+
+            return collectable;
         }
 
+        public void RegisterCollectableItem(ICollectable collectable)
+        {
+            collectables.Add(collectable.InstanceId, collectable);
+
+            if (!spawnPointWorkload.ContainsKey(collectable.SpawnPointIndex))
+                spawnPointWorkload.Add(collectable.SpawnPointIndex, new List<ICollectable>());
+            spawnPointWorkload[collectable.SpawnPointIndex].Add(collectable);
+
+            messageHub.ShoutMessage(this, new CollectableItemCreated(collectable.UniqueId, collectable.InstanceId));
+            
+            if (globalVariables.GetVar<bool>("debug_mode")) 
+                DebugHelper.Print(LogType.Log, $"Created collectable {collectable.InstanceId} ({collectable.UniqueId}).");
+        }
+
+        public bool HasCollectable(string id)
+        {
+            return collectables.ContainsKey(id);
+        }
+
+        public void CollectItem(ICollectable item)
+        {
+            CollectItem(item.InstanceId);
+        }
         public void CollectItem(string instanceId)
         {
             photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.AllViaServer);
@@ -93,29 +157,42 @@ namespace BiReJeJoCo.Items
         {
             ConnectEvents();
         }
-        private void OnCloseMatch(PhotonMessage msg)
+
+        private void OnMatchRulesDefined(PhotonMessage msg) 
         {
+            var castedMsg = msg as DefinedMatchRulesPhoMsg;
             Setup();
+
+            var sceneConfig = MapConfigMapping.GetMapping().GetElementForKey(castedMsg.config.Mode.gameScene);
+            for (int i = 0; i < sceneConfig.GetCollectableSpawnPointCount(); i++)
+            {
+                spawnPointWorkload.Add(i, new List<ICollectable>());
+            }
         }
 
         private void OnItemCollected(PhotonMessage msg)
         {
             var castedMsg = msg as CollectItemPhoMsg;
 
-            if (items.ContainsKey(castedMsg.InstanceId))
+            if (collectables.ContainsKey(castedMsg.InstanceId))
             {
-                var itemId = items[castedMsg.InstanceId].UniqueId;
-                Destroy((items[castedMsg.InstanceId] as Component).gameObject);
-                items.Remove(castedMsg.InstanceId);
+                var collectable = collectables[castedMsg.InstanceId];
+                var itemId = collectable.UniqueId;
 
-                if (castedMsg.playerNumber == localPlayer.NumberInRoom)
-                {
-                    messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, itemId);
-                }
-            } 
+                collectable.OnCollect();
+                Destroy((collectables[collectable.InstanceId] as Component).gameObject);
+
+                spawnPointWorkload[collectable.SpawnPointIndex].Remove(collectable);
+                collectables.Remove(collectable.InstanceId);
+
+                messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, castedMsg.playerNumber, itemId);
+
+                if (globalVariables.GetVar<bool>("debug_mode"))
+                    DebugHelper.Print(LogType.Log, $"Collected collectable {collectable.InstanceId} ({collectable.UniqueId}).");
+            }
             else
             {
-                Debug.LogError($"No Collectable with instance id {castedMsg.InstanceId}.");
+                Debug.Log($"No Collectable with instance id {castedMsg.InstanceId}.");
             }
         }
         #endregion
@@ -123,7 +200,7 @@ namespace BiReJeJoCo.Items
         #region Helper
         private void CreateItemRoot()
         {
-            root = new GameObject("collectables_root").transform;
+            Root = new GameObject("collectables_root").transform;
         }
         #endregion
     }

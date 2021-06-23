@@ -20,9 +20,13 @@ namespace BiReJeJoCo.Items
             this.controller = controller;
 
             if (!Owner.IsLocalPlayer)
+            {
                 flashLightIsOn.OnValueReceived += (x) => flashlight.enabled = x;
+            }
             else
+            {
                 localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onToggleFlashlight += ToggleFlashlight;
+            }
         }
 
         public override void Tick(float deltaTime)

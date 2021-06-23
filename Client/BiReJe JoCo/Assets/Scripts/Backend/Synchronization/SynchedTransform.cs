@@ -19,6 +19,7 @@ namespace BiReJeJoCo.Backend
         [SerializeField] Transform movementTarget;
         [SerializeField] Transform rotationTarget;
         [SerializeField] Rigidbody rigidBody;
+        [SerializeField] [Range(0.1f, 2)]float smoothSyncSpeed = 1f;
 
         [Space(10)]
         [SerializeField] float snapGroundTreshold = 0.2f;
@@ -86,7 +87,7 @@ namespace BiReJeJoCo.Backend
                     return;
                 }
                     
-                var targetPosition = Vector3.MoveTowards(movementTarget.localPosition, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                var targetPosition = Vector3.MoveTowards(movementTarget.localPosition, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate) * smoothSyncSpeed);
                 targetPosition = SnapToGround(targetPosition);
                 movementTarget.localPosition = targetPosition;
             }
@@ -98,7 +99,7 @@ namespace BiReJeJoCo.Backend
                     return;
                 }
 
-                var targetPosition = Vector3.MoveTowards(movementTarget.position, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate));
+                var targetPosition = Vector3.MoveTowards(movementTarget.position, m_NetworkPosition, m_Distance * (1.0f / PhotonNetwork.SerializationRate) * smoothSyncSpeed);
                 targetPosition = SnapToGround(targetPosition);
                 movementTarget.position = targetPosition;
             }
@@ -108,11 +109,11 @@ namespace BiReJeJoCo.Backend
         {
             if (m_UseLocal)
             {
-                rotationTarget.localRotation = Quaternion.RotateTowards(rotationTarget.localRotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+                rotationTarget.localRotation = Quaternion.RotateTowards(rotationTarget.localRotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate) * smoothSyncSpeed);
             }
             else
             {
-                rotationTarget.rotation = Quaternion.RotateTowards(rotationTarget.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate));
+                rotationTarget.rotation = Quaternion.RotateTowards(rotationTarget.rotation, this.m_NetworkRotation, this.m_Angle * (1.0f / PhotonNetwork.SerializationRate) * smoothSyncSpeed);
             }
         }
         #endregion

@@ -178,20 +178,14 @@ namespace BiReJeJoCo.Items
         #region Trigger Stuff
         protected override void OnTriggerHold(float duration)
         {
-            foreach (var curTrigger in triggerPoints)
+            if (DisplayedTrigger.pressDuration <= duration)
             {
-                if (PlayerIsInArea(curTrigger) &&
-                    !curTrigger.isCoolingDown)
-                {
-                    if (curTrigger.pressDuration <= duration)
-                    {
-                        OnTriggerInteracted(curTrigger.Id);
-                    }
-                    else
-                    {
-                        UpdateTriggerProgress(curTrigger, duration);
-                    }
-                }
+                OnTriggerInteracted(DisplayedTrigger.Id);
+                ResetActiveInstance();
+            }
+            else
+            {
+                UpdateTriggerProgress(DisplayedTrigger, duration);
             }
         }
         protected override void OnTriggerInteracted(byte pointId)
@@ -233,7 +227,10 @@ namespace BiReJeJoCo.Items
                 }
             }
             else if (locationFloaty)
+            {
                 locationFloaty.RequestDestroyFloaty();
+                locationFloaty = null;
+            }
         }
         #endregion
     }

@@ -39,7 +39,11 @@ namespace BiReJeJoCo
         {
             return Random.Range(0, huntedSpawnPoints.Length);
         }
-        
+
+        public int GetCollectableSpawnPointCount() 
+        {
+            return collectableSpawnPoints.Length;
+        }
         public int[] GetRandomCollectableSpawnPointIndices(int amount, bool noDuplicated = true)
         {
             var result = new List<int>();

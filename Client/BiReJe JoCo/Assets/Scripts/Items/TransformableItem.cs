@@ -9,9 +9,13 @@ namespace BiReJeJoCo.Items
         [Header("Settings")]
         [SerializeField] Rigidbody rb;
         [SerializeField] float spawnForce;
+        [SerializeField] GameObject cameraRig;
+        [SerializeField] Transform lookTransforms;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
+
+        public Transform LookTransforms => lookTransforms;
 
         public void Initialize(PlayerControlled controller)
         {
@@ -21,11 +25,10 @@ namespace BiReJeJoCo.Items
             {
                 rb.isKinematic = true;
                 rb.useGravity = false;
+                return;
             }
-            else
-            {
-                rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
-            }
+            rb.AddForce(Vector3.up * spawnForce, ForceMode.Impulse);
+            cameraRig.SetActive(true);
 
             AssignToTransformationMechanic();
         }
@@ -36,11 +39,13 @@ namespace BiReJeJoCo.Items
 
         private void AssignToTransformationMechanic()
         {
-            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this.gameObject);
+            if (Owner.PlayerCharacter)
+                Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(this);
         }
         private void RemoveFromTransformationMechanic()
         {
-            Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(null);
+            if (Owner.PlayerCharacter)
+                Owner.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.SetTransformedItem(null);
         }
     }
 }

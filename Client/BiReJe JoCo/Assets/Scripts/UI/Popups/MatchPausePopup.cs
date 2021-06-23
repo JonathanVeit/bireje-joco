@@ -26,18 +26,20 @@ namespace BiReJeJoCo.UI
             quitButton.gameObject.SetActive(localPlayer.IsHost);
 
             Cursor.lockState = CursorLockMode.Confined;
+            messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
         }
 
         public override void Hide()
         {
             base.Hide();
             Cursor.lockState = CursorLockMode.Locked;
+            messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
         }
 
         #region UI Input
         public void Continue()
         {
-            messageHub.ShoutMessage<PauseMenuClosedMsg>(this);
+            Hide();
         }
 
         public void Rehost() 
@@ -45,6 +47,11 @@ namespace BiReJeJoCo.UI
             (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.ReturnToLobby);
         }
 
+        public void ShowControls() 
+        {
+            Hide();
+            uiManager.GetInstanceOf<ControlsPopup>().Show();
+        }
         public void Quit()
         {
             if (matchHandler is HostMatchHandler asHostHandler)

@@ -69,6 +69,8 @@ namespace JoVei.Base.Helper
             State = TimerState.Counting;
 
             var counter = 0f;
+            Progress = RelativeProgress = 0;
+
             onFinishedCallback = () =>
             {
                 Progress = Duration;
