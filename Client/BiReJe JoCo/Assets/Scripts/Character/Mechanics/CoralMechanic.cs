@@ -34,6 +34,7 @@ namespace BiReJeJoCo.Character
         {
             ConnectEvents();
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.onPlaceSporesFinished += OnFinishedPlaceCorals;
         }
         protected override void OnInitializeRemote()
         {
@@ -77,6 +78,7 @@ namespace BiReJeJoCo.Character
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
             onSpawnedCorals?.Invoke();
 
+            messageHub.ShoutMessage<BlockPlayerControlsMsg>(this, new BlockPlayerControlsMsg(InputBlockState.Transformation));
             Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("place_corals");
         }
         private bool CanSpawn() 
@@ -191,6 +193,11 @@ namespace BiReJeJoCo.Character
                     gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
                     break;
             }
+        }
+
+        private void OnFinishedPlaceCorals()
+        {
+            messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, new UnblockPlayerControlsMsg(InputBlockState.Free));
         }
         #endregion
     }

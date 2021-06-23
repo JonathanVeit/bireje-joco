@@ -89,7 +89,7 @@ namespace BiReJeJoCo.Character
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey(ScannedItemId);
             var root = localPlayer.PlayerCharacter.ControllerSetup.ModelRoot;
-            photonRoomWrapper.Instantiate(prefab.name, root.position, root.rotation);
+            photonRoomWrapper.Instantiate(prefab.name, root.position + Vector3.up, root.rotation);
 
             gameUI.UpdateTransformationCooldownBar(0);
             transformationDurationTimer.Start(

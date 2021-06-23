@@ -1,4 +1,5 @@
 ﻿using BiReJeJoCo.Character;
+using System;
 using UnityEngine;
 
 namespace BiReJeJoCo.Backend
@@ -9,11 +10,13 @@ namespace BiReJeJoCo.Backend
 		[SerializeField] Animator anim;
 		[SerializeField] float defaultMoveSpeed;
 		[SerializeField] float moveSpeedSmoothness;
+		[SerializeField] AnimationEventCatcher eventCatcher;
 
 		private IVelocitySource velocitySource;
 		private float curMoveSpeed;
 		private SyncVar<string> syncedTrigger = new SyncVar<string>(4, true);
-
+		
+		public event Action onPlaceSporesFinished;
 
 		private PlayerControlled controller;
 		public Player Owner => controller.Player;
@@ -26,6 +29,7 @@ namespace BiReJeJoCo.Backend
 			if (Owner.IsLocalPlayer)
 			{
 				velocitySource = Owner.PlayerCharacter.ControllerSetup.WalkController;
+				eventCatcher.onAnimationEventTriggered += OnAnimationEventTriggered;
 			}
 			else
 			{
@@ -38,6 +42,7 @@ namespace BiReJeJoCo.Backend
         {
 			if (syncVarHub)
 				syncVarHub.UnregisterSyncVar(syncedTrigger);
+			tickSystem.Unregister(this);
         }
         #endregion
 
@@ -72,6 +77,18 @@ namespace BiReJeJoCo.Backend
 			anim.ResetTrigger(trigger);
 			anim.SetTrigger(trigger);
 		}
-        #endregion
-    }
+		#endregion
+
+		#region Events
+		private void OnAnimationEventTriggered(string args)
+		{
+			switch (args) 
+			{
+				case "place_corals_finished":
+					onPlaceSporesFinished?.Invoke();
+					break;
+			}
+		}
+		#endregion
+	}
 }
