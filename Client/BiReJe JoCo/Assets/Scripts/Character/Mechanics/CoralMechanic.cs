@@ -76,6 +76,8 @@ namespace BiReJeJoCo.Character
             seed++;
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
             onSpawnedCorals?.Invoke();
+
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("place_corals");
         }
         private bool CanSpawn() 
         {

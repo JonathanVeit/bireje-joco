@@ -16,6 +16,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] PlayerCharacterInput characterInput;
         [SerializeField] AdvancedWalkerController walkController;
         [SerializeField] Mover mover;
+        [SerializeField] SynchedAnimator animationController;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
@@ -36,6 +37,7 @@ namespace BiReJeJoCo.Character
         public PlayerCharacterInput CharacterInput => characterInput;
         public AdvancedWalkerController WalkController => walkController;
         public Mover Mover => mover;
+        public SynchedAnimator AnimationController => animationController;
         public BaseBehaviour Behaviour => behaviour;
         public TBehaviour GetBehaviourAs<TBehaviour>()
             where TBehaviour : BaseBehaviour

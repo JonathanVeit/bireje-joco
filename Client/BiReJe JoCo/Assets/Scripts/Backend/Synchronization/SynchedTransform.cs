@@ -10,7 +10,7 @@ namespace BiReJeJoCo.Backend
         Rotation = 1 << 1,
     }
 
-    public class SynchedTransform : TickBehaviour, IPunObservable, IPlayerObserved
+    public class SynchedTransform : TickBehaviour, IPunObservable, IPlayerObserved, IVelocitySource
     {
         [Header("Settings")]
         [SerializeField] SyncedTransformType type;
@@ -31,7 +31,7 @@ namespace BiReJeJoCo.Backend
         [SerializeField] Vector3 m_Direction;
         [SerializeField] Vector3 m_NetworkPosition;
         [SerializeField] Vector3 m_StoredPosition;
-        [SerializeField] float m_NetworkVelocity;
+        [SerializeField] Vector3 m_NetworkVelocity;
 
         [SerializeField] Quaternion m_NetworkRotation;
         [SerializeField] Transform ground;
@@ -156,7 +156,7 @@ namespace BiReJeJoCo.Backend
 
                 if (rigidBody)
                 {
-                    this.m_NetworkVelocity = rigidBody.velocity.y;
+                    this.m_NetworkVelocity = rigidBody.velocity;
                     stream.SendNext(m_NetworkVelocity);
                 }
             }
@@ -207,7 +207,7 @@ namespace BiReJeJoCo.Backend
 
             if (rigidBody)
             {
-                this.m_NetworkVelocity = (float) stream.ReceiveNext();
+                this.m_NetworkVelocity = (Vector3) stream.ReceiveNext();
             }
 
             if (type.HasFlag(SyncedTransformType.Rotation))
@@ -265,6 +265,8 @@ namespace BiReJeJoCo.Backend
         {
             this.ground = ground;
         }
+
+        public Vector3 GetVelocity() { return m_NetworkVelocity; }
         #endregion
 
         #region Helper
@@ -285,7 +287,7 @@ namespace BiReJeJoCo.Backend
             if (!ground)
                 return position;
 
-            if (Mathf.Abs(m_NetworkVelocity) <= snapGroundTreshold || 
+            if (Mathf.Abs(m_NetworkVelocity.y) <= snapGroundTreshold || 
                 position.y < ground.position.y)
             {
                 position.y = ground.position.y;

@@ -1,4 +1,5 @@
-﻿using JoVei.Base;
+﻿using BiReJeJoCo.Backend;
+using JoVei.Base;
 using JoVei.Base.Helper;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace BiReJeJoCo.Character
 	//Advanced walker controller script;
 	//This controller is used as a basis for other controller types ('SidescrollerController');
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
-	public class AdvancedWalkerController : Controller
+	public class AdvancedWalkerController : Controller, IVelocitySource
 	{
 		//References to attached components;
 		protected Transform tr;
@@ -563,6 +564,8 @@ namespace BiReJeJoCo.Character
 				momentum = tr.worldToLocalMatrix * momentum;
 
 			jumpCooldown.Start();
+
+			GetComponent<SynchedAnimator>().SetTrigger("jump");
 		}
 
 		//This function is called when the controller has lost ground contact, i.e. is either falling or rising, or generally in the air;
@@ -611,6 +614,7 @@ namespace BiReJeJoCo.Character
 
 				OnLand(_collisionVelocity);
 			}
+			GetComponent<SynchedAnimator>().SetTrigger("land");
 		}
 
 		//This function is called when the controller has collided with a ceiling while jumping or moving upwards;
