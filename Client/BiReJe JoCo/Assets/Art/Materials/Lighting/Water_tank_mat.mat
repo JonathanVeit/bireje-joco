@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Water
+  m_Shader: {fileID: -6465566751694194690, guid: cddd49faf8df78e449a18d015e84babb, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - CameraFadeDistance: 3
+    - CloudIntensity: 0
+    - CloudIntersectFade: 0.01
+    - EdgeIntensity_Fresnel: 1
+    - FogAmount: 17.21
+    - FogDensity: 1.5
+    - GradientHight: -0.51
+    - GradientIntensity: 0.804
+    - GradientMax: 1
+    - GradientMin: -0.26
+    - IntersectFadeIntensity: 1
+    - NoiseIntensity: 10
+    - NoiseScale: 130.43
+    - Opacity: -0.99
+    - TextureSpeed: 0.3
+    - UseGradient: 0
+    - UseNoise: 0
+    - UseNoiseTexture: 0
+    - UseUVGradient: 0
+    - _Emission: 1
+    m_Colors:
+    - FogColor: {r: 1, g: 0, b: 0, a: 0}
+    - GradientColor: {r: 0.13069598, g: 0.31132078, b: 0.2943208, a: 0}
+    - MainColor: {r: 0.11480952, g: 0.15510207, b: 0.18867922, a: 1}
+    - NoiseColor: {r: 0.88964033, g: 0, b: 1, a: 0}
+    - WindDirection: {r: 0, g: 1, b: 0, a: 0}
+    - extraColor: {r: 0.8867924, g: 0.1045746, b: 0.1045746, a: 0}
+  m_BuildTextureStacks: []

@@ -52,6 +52,9 @@ namespace BiReJeJoCo.Backend
         }
         public void DestroyPlayerCharacter()
         {
+            if (!PlayerCharacter)
+                return;
+
             photonRoomWrapper.Destroy(PlayerCharacter.gameObject);
         }
 

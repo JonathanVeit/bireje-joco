@@ -10,7 +10,6 @@ namespace BiReJeJoCo
     {
         [Header("Grower Settings")]
         [SerializeField] Transform spawnOrigin;
-        [SerializeField] int spawnCount;
         [SerializeField] float range;
         [SerializeField] [Range(0.1f, 1)] float minScale;
         [SerializeField] [Range(0.1f,1)] float maxScale;
@@ -29,7 +28,7 @@ namespace BiReJeJoCo
                 Crystals = new Dictionary<Transform, Vector3>(),
             };
 
-            for (int i = 0; i < spawnCount; i++)
+            for (int i = 0; i < matchHandler.MatchConfig.Mode.coralsPerSpawn; i++)
             {
                 CrystalSpawnPoint? spawnPoint = null;
 
