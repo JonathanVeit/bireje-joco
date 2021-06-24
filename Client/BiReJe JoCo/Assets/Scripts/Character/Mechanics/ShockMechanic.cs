@@ -23,6 +23,8 @@ namespace BiReJeJoCo.Character
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 
+        private bool isShooting;
+
         #region Initialization
         protected override void OnInitializeLocal()
         {
@@ -74,18 +76,34 @@ namespace BiReJeJoCo.Character
                 Reload();
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
+
+            if (!isShooting)
+            {
+                Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("start_shoot");
+                isShooting = true;
+            }
         }
-        public void StopShooting()
+        public void StopShooting(bool callAnimationTrigger = true)
         {
             shootPosition.SetValue(null);
             gun.Shoot(null);
             isHitting.SetValue(false);
+
+            if (isShooting)
+            {
+                if (callAnimationTrigger &&
+                    reloadTimer.State != TimerState.Counting)
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("end_shoot");
+                isShooting = false;
+            }
         }
         public void Reload ()
         {
             if (ammoCounter.RelativeProgress == 0) return;
 
-            StopShooting();
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("reload");
+            StopShooting(false);
+
             reloadTimer.Start(
                 () =>
                 {

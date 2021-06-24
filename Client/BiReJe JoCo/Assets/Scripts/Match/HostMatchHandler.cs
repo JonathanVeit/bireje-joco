@@ -107,6 +107,7 @@ namespace BiReJeJoCo
                 globalVariables.GetVar<bool>("force_hunter"))
             {
                 config.roles[localPlayer.NumberInRoom] = PlayerRole.Hunter;
+                config.spawnPos[localPlayer.NumberInRoom] = 0;
             }
 
             return config;
