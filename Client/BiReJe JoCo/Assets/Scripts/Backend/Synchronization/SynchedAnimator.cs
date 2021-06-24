@@ -14,8 +14,9 @@ namespace BiReJeJoCo.Backend
 
 		private IVelocitySource velocitySource;
 		private float curMoveSpeed;
-		private SyncVar<string> syncedTrigger = new SyncVar<string>(4, true);
-		
+		private SyncVar<string> syncedTrigger = new SyncVar<string>(9, true);
+		private SyncVar<string[]> syncedFloat = new SyncVar<string[]>(10, true);
+
 		public event Action onPlaceSporesFinished;
 
 		private PlayerControlled controller;
@@ -35,13 +36,17 @@ namespace BiReJeJoCo.Backend
 			{
 				velocitySource = Owner.PlayerCharacter.SyncedTransform;
 				syncedTrigger.OnValueReceived += OnTriggerReceived;
+				syncedFloat.OnValueReceived += OnFloatReceived;
 			}
 		}
 
         protected override void OnBeforeDestroy()
         {
 			if (syncVarHub)
+			{
 				syncVarHub.UnregisterSyncVar(syncedTrigger);
+				syncVarHub.UnregisterSyncVar(syncedFloat);
+			}
 			tickSystem.Unregister(this);
         }
         #endregion
@@ -65,17 +70,29 @@ namespace BiReJeJoCo.Backend
 			return vel.magnitude;
 		}
 
-        #region Trigger
+        #region Animator Parameters
         public void SetTrigger(string trigger)
 		{
 			syncedTrigger.SetValue(trigger);
 			OnTriggerReceived(syncedTrigger.GetValue());
 		}
-
 		private void OnTriggerReceived(string trigger)
 		{
 			anim.ResetTrigger(trigger);
 			anim.SetTrigger(trigger);
+		}
+
+		public void SetFloat(string name, float value)
+		{
+			syncedFloat.SetValue(new string[2] { name, value.ToString() });
+			OnFloatReceived(syncedFloat.GetValue());
+		}
+		private void OnFloatReceived(string[] parameters)
+		{
+			string name = parameters[0];
+			float value = float.Parse(parameters[1]);
+
+			anim.SetFloat(name, value);
 		}
 		#endregion
 

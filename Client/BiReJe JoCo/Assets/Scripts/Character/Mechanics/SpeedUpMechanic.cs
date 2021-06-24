@@ -48,6 +48,7 @@ namespace BiReJeJoCo.Character
 
             var modification = new SimpleMovementModification(speedUpMultiplier);
             localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddModification(modification);
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.SetFloat("animation_speed", speedUpMultiplier);
 
             speedUpDurationTimer.Start(
                 () => // update 
@@ -57,6 +58,7 @@ namespace BiReJeJoCo.Character
                 () => // finish
                 {
                     localPlayer.PlayerCharacter.ControllerSetup.WalkController.RemoveModification(modification);
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.SetFloat("animation_speed", 1);
 
                     speedUpCooldownTimer.Start(() => // update 
                     {
