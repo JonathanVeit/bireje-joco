@@ -429,11 +429,11 @@ namespace BiReJeJoCo.Character
                 if ((jumpKeyIsPressed == true || jumpKeyWasPressed) && !jumpInputIsLocked)
                 {
 					//Call events;
-					OnGroundContactLost();
+					OnGroundContactLost(true);
                     OnJumpStart();
 
                     currentControllerState = ControllerState.Jumping;
-                }
+				}
             }
         }
 
@@ -569,7 +569,7 @@ namespace BiReJeJoCo.Character
 		}
 
 		//This function is called when the controller has lost ground contact, i.e. is either falling or rising, or generally in the air;
-		void OnGroundContactLost()
+		void OnGroundContactLost(bool wasJump = false)
 		{
 			//If local momentum is used, transform momentum into world coordinates first;
 			if(useLocalMomentum)
@@ -599,6 +599,9 @@ namespace BiReJeJoCo.Character
 
 			if(useLocalMomentum)
 				momentum = tr.worldToLocalMatrix * momentum;
+
+			if (!wasJump && currentControllerState != ControllerState.Jumping)
+				GetComponent<SynchedAnimator>().SetTrigger("fall");
 		}
 
 		//This function is called when the controller has landed on a surface after being in the air;
