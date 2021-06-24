@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] float range;
         [SerializeField] [Range(0, 360)] float autoAimAngle;
         [SerializeField] LayerMask targetLayer;
+        [SerializeField] Vector3 autoAimOffset;
         [SerializeField] float coralDestroyRadius;
         [SerializeField] LayerMask coralLayer;
 
@@ -35,7 +36,7 @@ namespace BiReJeJoCo.Character
             shootPosition.OnValueReceived += (x) =>
             {
                 if (isHitting.GetValue() && x.HasValue)
-                    gun.Shoot(huntedTransform.position);
+                    gun.Shoot(huntedTransform.position + autoAimOffset);
                 else
                     gun.Shoot(x);
             };
@@ -127,10 +128,10 @@ namespace BiReJeJoCo.Character
             if (huntedTransform == null)
                 return CastToTarget(ray, out var b);
 
-            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position) < range && 
+            if (Vector3.Distance(gun.RayOrigin.position, huntedTransform.position + autoAimOffset) < range && 
                 !HuntedIsTranformed())
             {
-                var dirToHunted = huntedTransform.position - gun.RayOrigin.position;
+                var dirToHunted = huntedTransform.position + autoAimOffset - gun.RayOrigin.position;
                 var gunDir = gun.RayOrigin.forward;
                 var angle = Vector3.Angle(dirToHunted, gunDir);
 
