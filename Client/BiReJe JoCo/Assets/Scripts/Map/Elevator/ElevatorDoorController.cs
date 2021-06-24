@@ -13,9 +13,9 @@ namespace BiReJeJoCo.Map
         }
 
         [Header("Settings")]
-        [SerializeField] Animator plattformAnim;
-        [SerializeField] Animator upperAnim;
-        [SerializeField] Animator lowerAnim;
+        [SerializeField] Animator[] plattformAnim;
+        [SerializeField] Animator[] upperAnim;
+        [SerializeField] Animator[] lowerAnim;
 
         public bool DoorsAreOpen { get; private set; }
 
@@ -40,22 +40,25 @@ namespace BiReJeJoCo.Map
 
         private void TriggerAnimators(ElevatorDoorPoint point, string trigger)
         {
-            TriggerAnimtor(plattformAnim, trigger);
+            TriggerAnimtors(plattformAnim, trigger);
 
             switch (point)
             {
                 case ElevatorDoorPoint.UpperDoors:
-                    TriggerAnimtor(upperAnim, trigger);
+                    TriggerAnimtors(upperAnim, trigger);
                     break;
                 case ElevatorDoorPoint.LowerDoors:
-                    TriggerAnimtor(lowerAnim, trigger);
+                    TriggerAnimtors(lowerAnim, trigger);
                     break;
             }
         }
-        private void TriggerAnimtor(Animator anim, string trigger)
+        private void TriggerAnimtors(Animator[] anim, string trigger)
         {
-            anim.ResetTrigger(trigger);
-            anim.SetTrigger(trigger);
+            foreach (var curAnim in anim)
+            {
+                curAnim.ResetTrigger(trigger);
+                curAnim.SetTrigger(trigger);
+            }
         }
 
         private IEnumerator AwaitAnimations(Action callback)
@@ -77,14 +80,17 @@ namespace BiReJeJoCo.Map
         }
         private bool AnimatorsFinished()
         {
-            return AnimatorIsFinished(plattformAnim) && AnimatorIsFinished(upperAnim) && AnimatorIsFinished(lowerAnim);
+            return AnimatorsAreFinished(plattformAnim) && AnimatorsAreFinished(upperAnim) && AnimatorsAreFinished(lowerAnim);
         }
-        private bool AnimatorIsFinished(Animator anim) 
+        private bool AnimatorsAreFinished(Animator[] anim) 
         {
-            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 ||
-                anim.IsInTransition(0))
+            foreach (var curAnim in anim)
             {
-                return false;
+                if (curAnim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 ||
+                    curAnim.IsInTransition(0))
+                {
+                    return false;
+                }
             }
 
             return true;
