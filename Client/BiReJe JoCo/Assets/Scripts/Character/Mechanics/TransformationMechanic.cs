@@ -14,6 +14,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] string startTransformationItem;
         [SerializeField] Timer transformationDurationTimer;
         [SerializeField] Timer transformationCooldownTimer;
+        [SerializeField] Vector3 transformBackForce;
 
         public bool IsTransformed => isTransformed.GetValue();
         public TransformableItem TransformedItem { get; private set; }
@@ -106,6 +107,7 @@ namespace BiReJeJoCo.Character
         {
             isTransformed.SetValue(false);
             OnChangedTransformation(isTransformed.GetValue());
+            Owner.PlayerCharacter.ControllerSetup.WalkController.AddMomentum(transformBackForce);
             messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, InputBlockState.Free);
 
             photonRoomWrapper.Destroy(TransformedItem.gameObject);
