@@ -29,31 +29,23 @@ namespace BiReJeJoCo.Items
         [SerializeField] float minSuctionDistance;
 
         [Header("SFX")]
-        [SerializeField] Light light;
         [SerializeField] float lightSpeed;
         [SerializeField] ParticleSystem[] particleSystems;
+        [SerializeField] Animator[] animators;
         [SerializeField] Transform catchSign;
         [SerializeField] float catchSignSize;
 
         private bool isBlocked = true;
-        private float lightIntensity;
         private FloatingElement locationFloaty;
-        private Coroutine setLightCoroutine;
         private float curCatchDuration;
 
         public Player Owner => controller.Player;
         private PlayerControlled controller;
 
         #region Initialization
-        private void Awake()
-        {
-            lightIntensity = light.intensity;
-        }
-
         public void Initialize(PlayerControlled controller)
         {
             this.controller = controller;
-            light.intensity = 0;
             SetSFX(false);
 
             startDelay.Start(() =>
@@ -156,21 +148,13 @@ namespace BiReJeJoCo.Items
 
         private void SetSFX(bool show)
         {
-            if (setLightCoroutine != null)
-                StopCoroutine(setLightCoroutine);
-
-            setLightCoroutine = StartCoroutine(SetLight(show));
             foreach (var pS in particleSystems)
                 pS.enableEmission = show;
-        }
-        private IEnumerator SetLight(bool show) 
-        {
-            float target = show ? lightIntensity : 0;
 
-            while (light.intensity != target)
+            if (show)
             {
-                light.intensity = Mathf.MoveTowards(light.intensity, target, lightSpeed * Time.deltaTime);
-                yield return null;
+                foreach (var anim in animators)
+                    anim.SetTrigger("start");
             }
         }
         #endregion

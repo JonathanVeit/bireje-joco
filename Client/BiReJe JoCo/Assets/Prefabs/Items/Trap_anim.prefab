@@ -5245,7 +5245,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8844733678763514759}
   - component: {fileID: 9021966890458643560}
-  - component: {fileID: 9021966890458643561}
   m_Layer: 0
   m_Name: Trap_anim
   m_TagString: Untagged
@@ -5289,58 +5288,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &9021966890458643561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8211503338933600573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebc5a3033c56aba49acce02142c13466, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerPoints:
-  - target: 3
-    Id: 0
-    root: {fileID: 8844733678763514759}
-    areaSize: {x: 3, y: 3, z: 3}
-    areaOffset: {x: 0, y: 1.5, z: 0}
-    pressDuration: 2
-    coolDown: 0
-    floatingElementId: default_trigger
-    hideInCooldown: 1
-    floatingElementTarget: {fileID: 9021966891850271133}
-    floatingElementOffset: {x: 0, y: 0}
-    isCoolingDown: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  drawGizmos: 0
-  rigidBody: {fileID: -3769321889277615473, guid: 14bf372db2ccf4b4285716722f1fea98, type: 3}
-  startDelay:
-    duration: 2
-    timeScale: 1
-  catchDuration:
-    duration: 5
-    timeScale: 1
-  centerPoint: {fileID: 8844733678763514759}
-  huntedLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  catchArea: {x: 2, y: 2, z: 2}
-  catchAreaOffset: {x: 0, y: 1, z: 0}
-  suctionArea: {x: 10, y: 2, z: 10}
-  suctionAreaOffset: {x: 0, y: 1, z: 0}
-  suctionStrength: 5
-  minSuctionDistance: 0.1
-  light: {fileID: 2947335979943119283, guid: 14bf372db2ccf4b4285716722f1fea98, type: 3}
-  lightSpeed: 35
-  particleSystems:
-  - {fileID: 7991416019545256277, guid: 14bf372db2ccf4b4285716722f1fea98, type: 3}
-  - {fileID: 1408873291714137040, guid: 14bf372db2ccf4b4285716722f1fea98, type: 3}
-  - {fileID: 1455495774199940684, guid: 14bf372db2ccf4b4285716722f1fea98, type: 3}
 --- !u!1 &8481161926865863642
 GameObject:
   m_ObjectHideFlags: 0
