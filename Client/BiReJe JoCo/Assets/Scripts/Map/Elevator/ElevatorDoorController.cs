@@ -18,6 +18,7 @@ namespace BiReJeJoCo.Map
         [SerializeField] Animator[] lowerAnim;
 
         public bool DoorsAreOpen { get; private set; }
+        public bool AnimationsArePlaying => !AnimatorsFinished();
 
         public void Open(ElevatorDoorPoint point, Action onFinishCallback) 
         {

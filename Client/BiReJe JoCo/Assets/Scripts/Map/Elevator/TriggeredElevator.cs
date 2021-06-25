@@ -28,6 +28,7 @@ namespace BiReJeJoCo.Map
         protected override void OnTriggerInteracted(byte pointId)
         {
             if (!board.ReachedTarget) return;
+            if (doorController.AnimationsArePlaying) return;
 
             switch (pointId)
             {
