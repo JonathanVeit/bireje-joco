@@ -301,8 +301,23 @@ namespace BiReJeJoCo.Debugging
 
             RegisterCommand(new DebugCommand("anti_stuck", "Try to unstuck the player", "anti_stuck", () =>
             {
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position += Vector3.up * 2;
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                Vector3 pos = default;
+                var scene = matchHandler.MatchConfig.matchScene;
+                var config = MapConfigMapping.GetMapping().GetElementForKey(scene);
+
+                switch (localPlayer.Role)
+                {
+                    case PlayerRole.Hunted:
+                        pos = config.GetHuntedSpawnPoint (config.GetRandomHuntedSpawnPointIndex());
+                        break;
+
+                    case PlayerRole.Hunter:
+                        pos = config.GetHuntedSpawnPoint(config.GetRandomHunterSpawnPointIndex());
+                        break;
+                }
+
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
+                localPlayer.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
             }));
         }
 
