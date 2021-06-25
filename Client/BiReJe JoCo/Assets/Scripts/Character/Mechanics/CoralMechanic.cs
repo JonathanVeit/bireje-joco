@@ -115,6 +115,9 @@ namespace BiReJeJoCo.Character
             }
 
             SpawnRandomCollectable(seed);
+
+            var sfxPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_place_corals");
+            poolingManager.PoolInstance(sfxPrefab, transform.position, transform.rotation);
         }
 
         private void SpawnRandomCollectable(int seed) 

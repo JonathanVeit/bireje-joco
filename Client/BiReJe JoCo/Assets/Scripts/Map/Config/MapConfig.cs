@@ -44,7 +44,7 @@ namespace BiReJeJoCo
         {
             return collectableSpawnPoints.Length;
         }
-        public int[] GetRandomCollectableSpawnPointIndices(int amount, bool noDuplicated = true)
+        public int[] GetRandomCollectableSpawnPointIndices(int amount, bool noDuplicated = true, float minDist = 1f)
         {
             var result = new List<int>();
 
@@ -54,8 +54,12 @@ namespace BiReJeJoCo
                 {
                     var randomIndex = GetRandomCollectableSpawnPointIndex();
 
-                    if (noDuplicated && result.Contains(randomIndex) &&
-                        amount <= collectableSpawnPoints.Length)
+                    if (amount <= collectableSpawnPoints.Length &&
+                        noDuplicated && 
+                        result.Contains(randomIndex))
+                        continue;
+                    if (amount <= collectableSpawnPoints.Length &&
+                        IsInRange(randomIndex, result, collectableSpawnPoints, minDist))
                         continue;
 
                     result.Add(randomIndex);
@@ -96,6 +100,19 @@ namespace BiReJeJoCo
         public void OverrideCollectableSpawnPoints(Vector3[] points)
         {
             collectableSpawnPoints = points;
+        }
+        #endregion
+
+        #region Helper
+        private bool IsInRange(int index, IEnumerable<int> existingIndices, Vector3[] positions, float maxDistance)
+        {
+            foreach (var curIndex in existingIndices)
+            {
+                if (Vector3.Distance(positions[index], positions[curIndex]) <= maxDistance)
+                    return true;
+            }
+
+            return false;
         }
         #endregion
     }
