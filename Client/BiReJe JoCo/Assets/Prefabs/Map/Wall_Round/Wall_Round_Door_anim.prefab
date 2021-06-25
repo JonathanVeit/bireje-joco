@@ -256,13 +256,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2821960326593462405}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -0.951, y: 2.282, z: 2.256}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8266835713843286603}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &3798828874160832661
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,8 +653,8 @@ MonoBehaviour:
   - target: 3
     Id: 1
     root: {fileID: 3597909358202208922}
-    areaSize: {x: 3, y: 3, z: 2}
-    areaOffset: {x: 1.5, y: 0, z: -0.6}
+    areaSize: {x: 2, y: 3, z: 3}
+    areaOffset: {x: 0.6, y: 0, z: 1.5}
     pressDuration: 0
     coolDown: 0
     floatingElementId: default_trigger

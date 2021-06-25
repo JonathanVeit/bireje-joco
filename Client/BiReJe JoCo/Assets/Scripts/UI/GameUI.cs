@@ -14,6 +14,7 @@ namespace BiReJeJoCo.UI
         public Transform floatingElementGrid;
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Text startInformation;
+        [SerializeField] float informationDuration;
         [SerializeField] Text durationLabel;
         [SerializeField] UIBarHandler totalCrystalsBar;
         [SerializeField] RectTransform totalCrystalBarSeperator;
@@ -208,12 +209,12 @@ namespace BiReJeJoCo.UI
             if (localPlayer.Role == PlayerRole.Hunted)
             {
                 startInformation.text = "You are the monster!\nTry to hide and place spores!";
-                StartCoroutine(FadeText(3, startInformation));
+                StartCoroutine(FadeText(informationDuration, startInformation));
             }
             else if (localPlayer.Role == PlayerRole.Hunter)
             {
                 startInformation.text = "You are the Hunter!\nTry to catch the monster!";
-                StartCoroutine(FadeText(3, startInformation));
+                StartCoroutine(FadeText(informationDuration, startInformation));
             }
         }
         private void OnMatchFinished(PhotonMessage msg)
