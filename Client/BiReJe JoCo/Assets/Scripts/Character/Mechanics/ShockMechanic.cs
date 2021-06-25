@@ -81,6 +81,7 @@ namespace BiReJeJoCo.Character
             if (!isShooting)
             {
                 Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("start_shoot");
+                Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall");
                 isShooting = true;
             }
         }
@@ -94,7 +95,10 @@ namespace BiReJeJoCo.Character
             {
                 if (callAnimationTrigger &&
                     reloadTimer.State != TimerState.Counting)
+                {
                     Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("end_shoot");
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall");
+                }
                 isShooting = false;
             }
         }
@@ -114,6 +118,7 @@ namespace BiReJeJoCo.Character
                 () => 
                 {
                     ammoCounter.SetValue(0);
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall");
                 }); // finish
         }
 

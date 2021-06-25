@@ -1,5 +1,7 @@
 ﻿using BiReJeJoCo.Character;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BiReJeJoCo.Backend
@@ -21,6 +23,9 @@ namespace BiReJeJoCo.Backend
 
 		private PlayerControlled controller;
 		public Player Owner => controller.Player;
+
+		private List<string> blockedParameters
+			= new List<string>();
 
 		#region Initialization
 		public void Initialize(PlayerControlled controller)
@@ -70,10 +75,31 @@ namespace BiReJeJoCo.Backend
 			return vel.magnitude;
 		}
 
-        #region Animator Parameters
-        public void SetTrigger(string trigger)
+		#region Animator Parameters
+		public void BlockParameters(params string[] names)
 		{
-			syncedTrigger.SetValue(trigger);
+			foreach (var entry in names)
+			{
+				if (!blockedParameters.Contains(entry))
+					blockedParameters.Add(entry);
+			}
+		}
+
+		public void UnblockParameters(params string[] names)
+		{
+			foreach (var entry in names)
+			{
+				if (blockedParameters.Contains(entry))
+					blockedParameters.Remove(entry);
+			}
+		}
+
+        public void SetTrigger(string name)
+		{
+			if (blockedParameters.Contains(name))
+				return;
+
+			syncedTrigger.SetValue(name);
 			OnTriggerReceived(syncedTrigger.GetValue());
 		}
 		private void OnTriggerReceived(string trigger)
@@ -84,6 +110,9 @@ namespace BiReJeJoCo.Backend
 
 		public void SetFloat(string name, float value)
 		{
+			if (blockedParameters.Contains(name))
+				return;
+
 			syncedFloat.SetValue(new string[2] { name, value.ToString() });
 			OnFloatReceived(syncedFloat.GetValue());
 		}
