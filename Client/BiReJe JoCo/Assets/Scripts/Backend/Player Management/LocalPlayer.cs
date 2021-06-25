@@ -40,7 +40,7 @@ namespace BiReJeJoCo.Backend
             var scene = matchHandler.MatchConfig.matchScene;
             var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];
             var randomPos = Vector3.zero;
-            Debug.Log(posIndex);
+
             if (Role == PlayerRole.Hunted)
                 randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHuntedSpawnPoint (posIndex);
             else if (Role == PlayerRole.Hunter)

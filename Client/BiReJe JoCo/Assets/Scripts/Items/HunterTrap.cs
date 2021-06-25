@@ -150,12 +150,9 @@ namespace BiReJeJoCo.Items
         {
             foreach (var pS in particleSystems)
                 pS.enableEmission = show;
-
-            if (show)
-            {
-                foreach (var anim in animators)
-                    anim.SetTrigger("start");
-            }
+            Debug.Log(show);
+            foreach (var anim in animators)
+                anim.SetTrigger(show ? "start" : "stop");
         }
         #endregion
  

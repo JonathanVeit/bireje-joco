@@ -22,23 +22,25 @@ namespace BiReJeJoCo.Map
         {
             base.SetupAsActive();
 
-            CatchTrigger(startPointIndex, false);
+            CatchTrigger(startPointIndex);
         }
 
         protected override void OnTriggerInteracted(byte pointId)
         {
             CatchTrigger(pointId);
         }
-        private void CatchTrigger(byte pointId, bool waitAnimations = true)
+        private void CatchTrigger(byte pointId)
         {
             if (!board.ReachedTarget) return;
-            if (waitAnimations && doorController.AnimationsArePlaying) return;
+            if (doorController.DoorsAreMoving) return;
 
             switch (pointId)
             {
                 // go down 
                 case 0:
                     UpdateSigns(false);
+                    Debug.Log(doorController, this.gameObject);
+
                     doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
                         () =>
                         {

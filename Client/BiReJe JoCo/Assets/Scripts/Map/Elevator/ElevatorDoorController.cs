@@ -18,24 +18,28 @@ namespace BiReJeJoCo.Map
         [SerializeField] Animator[] lowerAnim;
 
         public bool DoorsAreOpen { get; private set; }
-        public bool AnimationsArePlaying => !AnimatorsFinished();
+        public bool DoorsAreMoving { get; private set; }
 
         public void Open(ElevatorDoorPoint point, Action onFinishCallback) 
         {
+            DoorsAreMoving = true;
             TriggerAnimators(point, "Open");
             StartCoroutine(AwaitAnimations(() => 
             {
                 DoorsAreOpen = true;
-                onFinishCallback?.Invoke(); 
+                onFinishCallback?.Invoke();
+                DoorsAreMoving = false;
             }));
         }
         public void Close(ElevatorDoorPoint point, Action onFinishCallback) 
         {
+            DoorsAreMoving = true;
             DoorsAreOpen = false;
             TriggerAnimators(point, "Close");
             StartCoroutine(AwaitAnimations(() =>
             {
                 onFinishCallback?.Invoke();
+                DoorsAreMoving = false;
             }));
         }
 

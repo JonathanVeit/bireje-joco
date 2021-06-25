@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &87530030882925073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3007178582004769018}
+  m_Layer: 9
+  m_Name: ground
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3007178582004769018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87530030882925073}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.397, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2693876465692959601}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389228117202137444
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +339,7 @@ MonoBehaviour:
   emptyMoveSpeedMultiplier: 1.75
   stopAtDistance: 0.05
   trigger: {fileID: 7194250000335488408}
-  userGround: {fileID: 6409148497797809139}
+  userGround: {fileID: 3007178582004769018}
 --- !u!1 &1930494062968341744
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +434,7 @@ Transform:
   - {fileID: 6710886136530103516}
   - {fileID: 6467067659031546590}
   - {fileID: 6409148497797809139}
+  - {fileID: 3007178582004769018}
   m_Father: {fileID: 1900357452836400118}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -839,16 +870,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: elevator_01_door_plattform
       objectReference: {fileID: 0}
+    - target: {fileID: 9096405274937639203, guid: f83a3420e36954540b84c11e79be391c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f83a3420e36954540b84c11e79be391c, type: 3}
---- !u!95 &3005518148877193262 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 395509566831001961, guid: f83a3420e36954540b84c11e79be391c, type: 3}
-  m_PrefabInstance: {fileID: 3227004015924187463}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6467067659031546590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8464300869441395609, guid: f83a3420e36954540b84c11e79be391c, type: 3}
+  m_PrefabInstance: {fileID: 3227004015924187463}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3005518148877193262 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 395509566831001961, guid: f83a3420e36954540b84c11e79be391c, type: 3}
   m_PrefabInstance: {fileID: 3227004015924187463}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4389402649477941629
@@ -1106,14 +1141,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f83a3420e36954540b84c11e79be391c, type: 3}
---- !u!4 &3538640134332246753 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8464300869441395609, guid: f83a3420e36954540b84c11e79be391c, type: 3}
-  m_PrefabInstance: {fileID: 4930591393023652216}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &4688769912397557777 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 395509566831001961, guid: f83a3420e36954540b84c11e79be391c, type: 3}
+  m_PrefabInstance: {fileID: 4930591393023652216}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3538640134332246753 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8464300869441395609, guid: f83a3420e36954540b84c11e79be391c, type: 3}
   m_PrefabInstance: {fileID: 4930591393023652216}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4975056858725871635
@@ -1233,16 +1268,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: elevator_01_door_lower
       objectReference: {fileID: 0}
+    - target: {fileID: 9096405274937639203, guid: f83a3420e36954540b84c11e79be391c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f83a3420e36954540b84c11e79be391c, type: 3}
---- !u!4 &4215213301400396997 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8464300869441395609, guid: f83a3420e36954540b84c11e79be391c, type: 3}
-  m_PrefabInstance: {fileID: 5694888459658690396}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &5365316828620291637 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 395509566831001961, guid: f83a3420e36954540b84c11e79be391c, type: 3}
+  m_PrefabInstance: {fileID: 5694888459658690396}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4215213301400396997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8464300869441395609, guid: f83a3420e36954540b84c11e79be391c, type: 3}
   m_PrefabInstance: {fileID: 5694888459658690396}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5733753515340564345
@@ -1302,11 +1341,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 625d26c6bc09a634f8ad29ee9735e26f, type: 3}
---- !u!4 &224646354352358305 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5515916524554536152, guid: 625d26c6bc09a634f8ad29ee9735e26f, type: 3}
-  m_PrefabInstance: {fileID: 5733753515340564345}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2765624394680952130 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7634475250030830139, guid: 625d26c6bc09a634f8ad29ee9735e26f, type: 3}
@@ -1318,6 +1352,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 741287a72c6eafa4babe2a6b2260c424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &224646354352358305 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5515916524554536152, guid: 625d26c6bc09a634f8ad29ee9735e26f, type: 3}
+  m_PrefabInstance: {fileID: 5733753515340564345}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8130281736582156232
 PrefabInstance:
   m_ObjectHideFlags: 0
