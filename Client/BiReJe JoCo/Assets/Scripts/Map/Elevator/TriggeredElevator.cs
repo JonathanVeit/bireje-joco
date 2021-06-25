@@ -22,13 +22,17 @@ namespace BiReJeJoCo.Map
         {
             base.SetupAsActive();
 
-            OnTriggerInteracted(startPointIndex);
+            CatchTrigger(startPointIndex, false);
         }
 
         protected override void OnTriggerInteracted(byte pointId)
         {
+            CatchTrigger(pointId);
+        }
+        private void CatchTrigger(byte pointId, bool waitAnimations = true)
+        {
             if (!board.ReachedTarget) return;
-            if (doorController.AnimationsArePlaying) return;
+            if (waitAnimations && doorController.AnimationsArePlaying) return;
 
             switch (pointId)
             {
@@ -36,31 +40,31 @@ namespace BiReJeJoCo.Map
                 case 0:
                     UpdateSigns(false);
                     doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
-                        () => 
-                    {
-                        board.SetTarget(lowerPosition.target, () =>
+                        () =>
                         {
-                            ResetSigns();
-                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, null);
+                            board.SetTarget(lowerPosition.target, () =>
+                            {
+                                ResetSigns();
+                                doorController.Open(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, null);
+                            });
+                            currentPointIndex = 0;
                         });
-                        currentPointIndex = 0;
-                    });
 
                     break;
 
                 // go up
                 case 1:
                     UpdateSigns(true);
-                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.LowerDoors, 
+                    doorController.Close(ElevatorDoorController.ElevatorDoorPoint.LowerDoors,
                         () =>
-                    {
-                        board.SetTarget(upperPosition.target, () =>
                         {
-                            ResetSigns();
-                            doorController.Open(ElevatorDoorController.ElevatorDoorPoint.UpperDoors, null);
+                            board.SetTarget(upperPosition.target, () =>
+                            {
+                                ResetSigns();
+                                doorController.Open(ElevatorDoorController.ElevatorDoorPoint.UpperDoors, null);
+                            });
+                            currentPointIndex = 1;
                         });
-                        currentPointIndex = 1;
-                    });
 
                     break;
 
