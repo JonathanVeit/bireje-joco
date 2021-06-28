@@ -53,6 +53,7 @@ namespace BiReJeJoCo.Character
             if (pingCooldownTimer.State == TimerState.Counting) return;
 
             pingPosition.SetValue(transform.position);
+            OnPingUpdated(pingPosition.GetValue());
             pingPosition.ForceSend();
             pingCooldownTimer.Start(
                 () => // update
@@ -67,9 +68,12 @@ namespace BiReJeJoCo.Character
             if (pingDurationTimer.State == TimerState.Counting)
                 pingDurationTimer.Stop(true);
 
+            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_ping_marker");
+            var target = Instantiate(prefab, transform.position, transform.rotation);
+            
             var parent = uiManager.GetInstanceOf<GameUI>().floatingElementGrid;
-            var target = new GameObject("ping_target");
             target.transform.position = position;
+
             var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
             pingFloaty = floatingManager.GetElementAs<HunterPingFloaty>(config);
             pingFloaty.SetClamped();

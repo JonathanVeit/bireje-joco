@@ -175,6 +175,7 @@ namespace BiReJeJoCo.Items
 
                 hitParticleSystem.enableEmission = true;
                 hitParticleSystem.transform.position = point;
+                hitParticleSystem.transform.up = hit.normal;
 
                 if (Vector3.Distance(lastTrailPos, point) > maxTrailDist)
                 {
