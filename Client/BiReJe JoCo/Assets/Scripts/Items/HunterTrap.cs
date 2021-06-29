@@ -72,8 +72,7 @@ namespace BiReJeJoCo.Items
 
         protected override void OnBeforeDestroy()
         {
-            if (Owner.IsLocalPlayer)
-                DisconnectEvents();
+            DisconnectEvents();
         }
         protected override void DisconnectEvents()
         {
