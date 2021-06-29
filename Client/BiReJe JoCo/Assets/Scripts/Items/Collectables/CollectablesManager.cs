@@ -181,7 +181,6 @@ namespace BiReJeJoCo.Items
                 var itemId = collectable.UniqueId;
 
                 collectable.OnCollect();
-                Destroy((collectables[collectable.InstanceId] as Component).gameObject);
 
                 spawnPointWorkload[collectable.SpawnPointIndex].Remove(collectable);
                 collectables.Remove(collectable.InstanceId);
