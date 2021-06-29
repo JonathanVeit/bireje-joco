@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2873711454937316355}
   - component: {fileID: 1175055511134761894}
   - component: {fileID: 4011112473995085676}
+  - component: {fileID: 1825841957186394247}
   m_Layer: 0
   m_Name: monitor_hanging_01
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1825841957186394247
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218571779751683769}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.97802967, y: 0.802541, z: 0.7376491}
+  m_Center: {x: 0, y: -0.041197672, z: 0.0019368678}

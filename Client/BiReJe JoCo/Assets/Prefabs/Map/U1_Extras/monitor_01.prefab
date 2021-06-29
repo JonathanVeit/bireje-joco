@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4707108657672025762}
   - component: {fileID: 8296006158185037838}
   - component: {fileID: 1631032683558140716}
+  - component: {fileID: 1409719704513836950}
   m_Layer: 0
   m_Name: monitor_01_asset
   m_TagString: Untagged
@@ -128,5 +129,18 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.23558, y: 0.8901726, z: 0.9944762}
-  m_Center: {x: -0.0000003874302, y: 0.4450863, z: 0.000000014901161}
+  m_Size: {x: 1.23558, y: 0.3737649, z: 0.9944762}
+  m_Center: {x: -0.00000035762787, y: 0.18688245, z: 0}
+--- !u!65 &1409719704513836950
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8351015498526624945}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7708019, y: 0.51111066, z: 0.61338866}
+  m_Center: {x: 0.033247367, y: 0.63461727, z: -0.19054377}

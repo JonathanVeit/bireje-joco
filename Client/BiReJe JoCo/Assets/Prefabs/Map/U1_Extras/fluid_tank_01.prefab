@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8753754201330918127}
   - component: {fileID: 5680251360262925642}
   - component: {fileID: 7579762466095520128}
-  - component: {fileID: 4769834834862312422}
+  - component: {fileID: 1801753618850617907}
   m_Layer: 0
   m_Name: fluid_tank_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4769834834862312422
-BoxCollider:
+--- !u!64 &1801753618850617907
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,6 +94,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.501827, y: 4.9999995, z: 4.501826}
-  m_Center: {x: 0.00000011920928, y: 2.4999993, z: 0.00000011920928}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: 097f282105de67343b74c9a09a85447a, type: 3}

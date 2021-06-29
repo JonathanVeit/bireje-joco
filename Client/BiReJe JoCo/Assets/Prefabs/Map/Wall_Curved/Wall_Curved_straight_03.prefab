@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8456449851035025271}
   - component: {fileID: 5962676967492291517}
   - component: {fileID: -641076681022276441}
+  - component: {fileID: 2905914497455632674}
+  - component: {fileID: 862536165341239547}
   m_Layer: 0
   m_Name: Wall_Curved_straight_03
   m_TagString: Untagged
@@ -94,5 +96,31 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.7719116, z: 0.9060879}
-  m_Center: {x: 0, y: 1.3859558, z: -0.45304394}
+  m_Size: {x: 2, y: 2.7719116, z: 0.39396358}
+  m_Center: {x: 0, y: 1.3859558, z: -0.91263735}
+--- !u!65 &2905914497455632674
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314057808833391208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.29815412, z: 0.9060879}
+  m_Center: {x: 0, y: 2.8166542, z: -0.45304394}
+--- !u!65 &862536165341239547
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314057808833391208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.38479334, z: 0.9060879}
+  m_Center: {x: 0, y: 0.0015406385, z: -0.45304394}
