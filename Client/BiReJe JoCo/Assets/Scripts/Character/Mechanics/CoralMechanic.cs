@@ -50,12 +50,17 @@ namespace BiReJeJoCo.Character
         {
             messageHub.RegisterReceiver<CollectableItemCreated>(this, OnItemCreatedCollected);
             messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
+
+            photonMessageHub.RegisterReceiver<SpawnNewCoralAmmoPhoMsg>(this, OnSpawnNewAmmoReceived);
         }
         private void DisconnectEvents()
         {
             messageHub.UnregisterReceiver(this);
             if (syncVarHub)
                 syncVarHub.UnregisterSyncVar(onSpawnCrystals);
+
+            if (photonMessageHub)
+                photonMessageHub.RegisterReceiver<SpawnNewCoralAmmoPhoMsg>(this, OnSpawnNewAmmoReceived);
         }
         #endregion
 
@@ -114,53 +119,71 @@ namespace BiReJeJoCo.Character
                 photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
             }
 
-            SpawnRandomCollectable(seed);
-
             var sfxPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_place_corals");
             poolingManager.PoolInstance(sfxPrefab, transform.position, transform.rotation);
         }
 
-        private void SpawnRandomCollectable(int seed) 
+        private void SpawnRandomCollectable() 
         {
-            var rnd = new System.Random(seed);
+            photonMessageHub.ShoutMessage<SpawnNewCoralAmmoPhoMsg>(PhotonMessageTarget.AllViaServer, GetSuitableSpawnPoint());
+        }
+        private int GetSuitableSpawnPoint() 
+        {
+            // current scene configuration
+            var mapConfig = matchHandler.MatchConfig.mapConfig;
+
+            // all free avaiable spawnpoint indices 
+            var rndIndex = mapConfig.GetRandomCollectableSpawnPointIndex();
+
+            // search for a point that is not too close to the hunteds current position
+            int counter = 0;
+            int maxSearchCount = 1000;
+            while (true)
+            {
+                counter++;
+                if (counter >= maxSearchCount)
+                {
+                    Debug.Log($"Failed to find suitable spawnpoit for coral ammo with {maxSearchCount} tries. Returns random one.");
+                    break;
+                }
+
+                var distToHunted = Vector3.Distance(transform.position, mapConfig.GetCollectableSpawnPoint(rndIndex));
+
+                foreach (var collectable in collectablesManager.AllCollectables)
+                {
+                    var distToCollectable = Vector3.Distance((collectable as Component).transform.position, mapConfig.GetCollectableSpawnPoint(rndIndex));
+
+                    if (distToCollectable < matchHandler.MatchConfig.Mode.minCollectableDistance)
+                        continue;
+                }
+
+                // far enough and not already used? -> return
+                if (distToHunted >= minAmmoRespawnDistance && 
+                    !collectablesManager.HasCollectableAtIndex(rndIndex))
+                {
+                    return rndIndex;
+                }
+
+                rndIndex = mapConfig.GetRandomCollectableSpawnPointIndex();
+            }
+
+            // no point found that is far enough? -> return one of the rejected ones
+            return rndIndex;
+        }
+
+        #region Events
+        private void OnSpawnNewAmmoReceived(PhotonMessage msg) 
+        {
+            var castedMsg = (SpawnNewCoralAmmoPhoMsg)msg;
 
             var spawnConfig = new CollectableSpawnConfig()
             {
                 i = "collectable_coral_ammo",
-                s = GetSuitableSpawnPoint(rnd),
+                s = castedMsg.pointIndex,
             };
             collectablesManager.CreateCollectable(spawnConfig);
         }
-        private int GetSuitableSpawnPoint(System.Random rnd) 
-        {
-            // all free avaiable spawnpoint indices 
-            var freeSpawnPointsIndices = collectablesManager.GetFreeSpawnPoints().ToList();
-            var rejectedSpawnPointIndices = new List<int>();
 
-            // current scene configuration
-            var sceneConfig = matchHandler.MatchConfig.mapConfig;
-
-            // search for a point that is not too close to the hunteds current position
-            while (freeSpawnPointsIndices.Count > 0)
-            {
-                var rndIndex = freeSpawnPointsIndices[rnd.Next(0, freeSpawnPointsIndices.Count)];
-                var distToHunted = Vector3.Distance(transform.position, sceneConfig.GetCollectableSpawnPoint(rndIndex));
-
-                // far enough? -> return
-                if (distToHunted >= minAmmoRespawnDistance)
-                {
-                    return rndIndex;
-                }
-                // too close? -> add to rejected 
-                rejectedSpawnPointIndices.Add(rndIndex);
-                freeSpawnPointsIndices.Remove(rndIndex);
-            }
-
-            // no point found that is far enough? -> return one of the rejected ones
-            return freeSpawnPointsIndices[rnd.Next(0, rejectedSpawnPointIndices.Count)];
-        }
-
-        #region Events
         private void OnItemCreatedCollected(CollectableItemCreated msg)
         {
             switch (msg.itemId)
@@ -188,6 +211,9 @@ namespace BiReJeJoCo.Character
                         break;
                     coralAmmo = Mathf.Clamp(coralAmmo + coralsPerCollectable, 0, maxCoralAmmo);
                     gameUI.UpdateCrystalAmmoBar(coralAmmo / (float) maxCoralAmmo);
+                    
+                    if (Owner.IsLocalPlayer)
+                        SpawnRandomCollectable();
                     break;
 
                 case "destroyable_coral":

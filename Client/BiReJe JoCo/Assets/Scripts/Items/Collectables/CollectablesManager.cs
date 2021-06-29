@@ -96,10 +96,12 @@ namespace BiReJeJoCo.Items
             return result.ToArray();
         }
 
-        public int[] GetFreeSpawnPoints()
+        public bool HasCollectableAtIndex(int index)
         {
-            var freepoints = spawnPointWorkload.Where(x => x.Value.Count == 0).ToArray();
-            return freepoints.Select(x => x.Key).ToArray();
+            if (!spawnPointWorkload.ContainsKey(index))
+                return false;
+
+            return spawnPointWorkload[index].Count > 0;
         }
         #endregion
 
@@ -179,6 +181,7 @@ namespace BiReJeJoCo.Items
                 var itemId = collectable.UniqueId;
 
                 collectable.OnCollect();
+                Destroy((collectables[collectable.InstanceId] as Component).gameObject);
 
                 spawnPointWorkload[collectable.SpawnPointIndex].Remove(collectable);
                 collectables.Remove(collectable.InstanceId);

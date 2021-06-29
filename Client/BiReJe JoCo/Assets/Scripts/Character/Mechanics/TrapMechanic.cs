@@ -15,6 +15,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] float trapTorque;
 
         private GameObject thrownTrap;
+        public bool TrapIsThrown => thrownTrap != null;
 
         #region Initialization
         protected override void OnInitializeLocal()

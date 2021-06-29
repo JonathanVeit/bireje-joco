@@ -48,11 +48,20 @@ namespace BiReJeJoCo
         public int[] GetRandomCollectableSpawnPointIndices(int amount, bool noDuplicated = true, float minDist = 1f)
         {
             var result = new List<int>();
+            int counter = 0;
+            int maxSearchCount = 5000;
 
             for (int i = 0; i < amount; i++)
             {
                 while (true)
                 {
+                    counter++;
+                    if (counter >= maxSearchCount)
+                    {
+                        Debug.Log($"Unable to find {amount} collectable spawnpoints with distance of {minDist} to each other. Distance has been set to 0.");
+                        minDist = 0;
+                    }
+
                     var randomIndex = GetRandomCollectableSpawnPointIndex();
 
                     if (amount <= collectableSpawnPoints.Length &&

@@ -14,6 +14,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] Transform pingSpawnPoint;
         [SerializeField] float throwStrength;
         [SerializeField] Vector3 additionalThrowDirection;
+        [SerializeField] Vector3 throwTorque;
 
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3, true);
         private HunterPingFloaty pingFloaty;
@@ -72,6 +73,7 @@ namespace BiReJeJoCo.Character
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_ping_marker");
             var target = Instantiate(prefab, pingSpawnPoint.position, pingSpawnPoint.rotation);
             target.GetComponent<Rigidbody>().AddForce((pingSpawnPoint.forward + additionalThrowDirection) * throwStrength, ForceMode.Impulse);
+            target.GetComponent<Rigidbody>().AddTorque(throwTorque);
 
             if (!Owner.IsLocalPlayer)
             {

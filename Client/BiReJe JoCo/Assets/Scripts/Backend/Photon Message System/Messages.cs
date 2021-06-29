@@ -117,7 +117,7 @@ namespace BiReJeJoCo.Backend
     }
 
     /// <summary>
-    /// Cally by any player when interacting with a trigger
+    /// Called by any player when interacting with a trigger
     /// </summary>
     public class TriggerPointInteractedPhoMsg : PhotonMessage
     {
@@ -135,7 +135,7 @@ namespace BiReJeJoCo.Backend
     }
 
     /// <summary>
-    /// Cally by any player when collecting an item
+    /// Called by any player when collecting an item
     /// </summary>
     public class CollectItemPhoMsg : PhotonMessage
     {
@@ -152,6 +152,20 @@ namespace BiReJeJoCo.Backend
         {
             i = instanceId;
             n = playerNumber;
+        }
+    }
+
+    /// <summary>
+    /// Called by the hunted to spawn new ammo
+    /// </summary>
+    public class SpawnNewCoralAmmoPhoMsg : PhotonMessage
+    {
+        public int pointIndex;
+
+        public SpawnNewCoralAmmoPhoMsg() { }
+        public SpawnNewCoralAmmoPhoMsg(int pointIndex)
+        {
+            this.pointIndex = pointIndex;
         }
     }
 

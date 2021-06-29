@@ -80,7 +80,7 @@ namespace BiReJeJoCo
             // collectables
             var collectableConfigs = new List<CollectableSpawnConfig>();
             var collectableAmount = MatchModeMapping.GetMapping().GetElementForKey("default_match").huntedCollectables;
-            var collectableSpawnPoints = mapConfig.GetRandomCollectableSpawnPointIndices(collectableAmount, true, 20);
+            var collectableSpawnPoints = mapConfig.GetRandomCollectableSpawnPointIndices(collectableAmount, true, mode.minCollectableDistance);
             for (int i = 0; i < collectableAmount; i++)
             {
                 var spawnConfig = new CollectableSpawnConfig()
