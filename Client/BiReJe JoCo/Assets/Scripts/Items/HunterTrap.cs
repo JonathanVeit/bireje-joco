@@ -34,6 +34,8 @@ namespace BiReJeJoCo.Items
         [SerializeField] Animator[] animators;
         [SerializeField] Transform catchSign;
         [SerializeField] float catchSignSize;
+        [SerializeField] Vector3 catchSignStartPoint;
+        [SerializeField] Vector3 catchSignEndPoint;
 
         private bool isBlocked = true;
         private FloatingElement locationFloaty;
@@ -70,7 +72,7 @@ namespace BiReJeJoCo.Items
 
         protected override void OnBeforeDestroy()
         {
-            if (!Owner.IsLocalPlayer)
+            if (Owner.IsLocalPlayer)
                 DisconnectEvents();
         }
         protected override void DisconnectEvents()
@@ -102,7 +104,8 @@ namespace BiReJeJoCo.Items
                 {
                     var hunted = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0];
                     var catchProgress = hunted.PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().ResistanceMechanic.RelativeCatchProgress.GetValue();
-                    catchSign.transform.localScale = new Vector3(catchProgress * catchSignSize, 1, catchProgress* catchSignSize);
+                    catchSign.transform.localScale = new Vector3(catchProgress * catchSignSize, catchProgress * catchSignSize, catchProgress* catchSignSize);
+                    catchSign.transform.localPosition = Vector3.Lerp(catchSignStartPoint, catchSignEndPoint, catchProgress);
                 }
                 else
                     catchSign.transform.localScale = new Vector3(0, 1, 0);
@@ -111,6 +114,7 @@ namespace BiReJeJoCo.Items
             {
                 SetSFX(false);
                 catchSign.transform.localScale = new Vector3(0, 1, 0);
+                catchSign.transform.localPosition = catchSignStartPoint;
             });
         }
         private void TryCatchLocal()

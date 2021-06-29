@@ -1,5 +1,4 @@
-using BiReJeJoCo.Backend;
-using BiReJeJoCo.Items;
+using JoVei.Base.Helper;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
@@ -9,6 +8,7 @@ namespace BiReJeJoCo.Character
         [Header("Settings")]
         [SerializeField] Transform trapSpawnPoint;
         [SerializeField] LayerMask targetLayer;
+        [SerializeField] Timer coolDownTimer;
         [SerializeField] float throwForce;
         [SerializeField] Vector3 extraThrowForce;
         [SerializeField] float trapThrowRange;
@@ -36,12 +36,13 @@ namespace BiReJeJoCo.Character
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+            coolDownTimer.Stop();
         }
         #endregion
 
         public void ThrowTrap()
         {
-            if (thrownTrap) return;
+            if (coolDownTimer.State == TimerState.Counting) return;
 
             var ray = new Ray()
             {
@@ -55,7 +56,17 @@ namespace BiReJeJoCo.Character
             var force = (trapTarget - trapSpawnPoint.position) * throwForce + extraThrowForce;
             thrownTrap.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
             thrownTrap.GetComponent<Rigidbody>().AddTorque(thrownTrap.transform.up * trapTorque);
-            gameUI.SetTrapIcon(false);
+
+            coolDownTimer.Start(
+                () => 
+                {
+                    gameUI.UpdateTrapIcon(coolDownTimer.RelativeProgress);
+                }, // update
+                () =>
+                {
+                    photonRoomWrapper.Destroy(thrownTrap);
+                    thrownTrap = null;
+                }); // finish
         }
         private Vector3 CalculateTrapTarget(Ray ray)
         {
@@ -71,9 +82,9 @@ namespace BiReJeJoCo.Character
         private void OnTrapCollected(PlayerCollectedTrapMsg msg)
         {
             if (thrownTrap == null) return;
-            photonRoomWrapper.Destroy(thrownTrap);
-            thrownTrap = null;
-            gameUI.SetTrapIcon(true);
+            gameUI.UpdateTrapIcon(1);
+            coolDownTimer.Stop(true);
+
         }
     }
 }

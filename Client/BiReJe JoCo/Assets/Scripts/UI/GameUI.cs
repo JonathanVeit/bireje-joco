@@ -25,7 +25,8 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject crosshairGO;
         [SerializeField] UIBarHandler ammoBar;
         [SerializeField] UIBarHandler pingCooldownBar;
-        [SerializeField] Image trapIcon;
+        [SerializeField] UIBarHandler trapIconFill;
+        [SerializeField] GameObject trapIconRoot;
         [SerializeField] Image slowOverlay;
 
         [Header("Hunted")]
@@ -136,10 +137,15 @@ namespace BiReJeJoCo.UI
             else
                 ammoBar.SetValue(value);
         }
-        public void SetTrapIcon(bool visible)
+        public void UpdateTrapIcon(float value)
         {
-            trapIcon.gameObject.SetActive(visible);
-            trapIcon.GetComponent<Animator>().SetTrigger("pulsate");
+            if (value == 0)
+                trapIconFill.OverrideValue(0);
+            else
+                trapIconFill.SetValue(value);
+
+            if (value == 1)
+                trapIconRoot.GetComponent<Animator>().SetTrigger("pulsate");
         }
         public void UpdatePingCooldown(float value)
         {
