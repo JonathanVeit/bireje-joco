@@ -14,8 +14,6 @@ namespace BiReJeJoCo.Items
         [JsonIgnore]
         public string ItemId => i;
         [JsonIgnore]
-        public string InstanceId => i2;
-        [JsonIgnore]
         public int SpawnPointIndex => s;
         [JsonIgnore]
         public Vector3? OverridePosition => p;
@@ -24,10 +22,6 @@ namespace BiReJeJoCo.Items
         /// Prefab Id
         /// </summary>
         public string i; 
-        /// <summary>
-        /// Instance Id
-        /// </summary>
-        public string i2;
         /// <summary>
         /// Spawnpoint index
         /// </summary>
@@ -42,28 +36,32 @@ namespace BiReJeJoCo.Items
     {
         private Dictionary<string, ICollectable> collectables;
         private Dictionary<int, List<ICollectable>> spawnPointWorkload;
-        public Transform Root { get; private set; }
 
-        public ICollectable[] AllCollectables => collectables.Values.ToArray();
+        public Transform Root { get; private set; }
+        private Dictionary<string, System.Random> randoms;
+        private int seed;
+
+        private const string INSTANCE_ID_FORMAT = "{0}_{1}";
 
         #region Initialization
         protected override void OnSystemsInitialized()
         {
-            Setup();
             DontDestroyOnLoad(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             DIContainer.RegisterImplementation<CollectablesManager>(this);
         }
-        protected override void OnBeforeDestroy() 
-        { 
-            DisconnectEvents(); 
+        protected override void OnBeforeDestroy()
+        {
+            DisconnectEvents();
         }
 
-        private void Setup()
+        private void SetupForMatch(int seed)
         {
             collectables = new Dictionary<string, ICollectable>();
             spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
             Root = null;
+            randoms = new Dictionary<string, System.Random>();
+            this.seed = seed;
         }
 
         void ConnectEvents()
@@ -80,6 +78,7 @@ namespace BiReJeJoCo.Items
         #endregion
 
         #region Access
+        public ICollectable[] AllCollectables => collectables.Values.ToArray();
         public ICollectable[] GetAllCollectables(Func<ICollectable, bool> predicate)
         {
             return GetAllCollectablesAs<ICollectable>(predicate);
@@ -91,7 +90,7 @@ namespace BiReJeJoCo.Items
             foreach (ICollectable collectable in collectables.Values)
             {
                 if (predicate(collectable))
-                    result.Add((TCollectable) collectable);
+                    result.Add((TCollectable)collectable);
             }
 
             return result.ToArray();
@@ -118,7 +117,7 @@ namespace BiReJeJoCo.Items
             instance.transform.SetParent(Root);
 
             var collectable = instance.GetComponent<ICollectable>();
-            collectable.InitializeCollectable(config.InstanceId, config.SpawnPointIndex);
+            collectable.InitializeCollectable(GetInstanceId(config.ItemId), config.SpawnPointIndex);
             RegisterCollectableItem(collectable);
 
             return collectable;
@@ -133,14 +132,14 @@ namespace BiReJeJoCo.Items
             spawnPointWorkload[collectable.SpawnPointIndex].Add(collectable);
 
             messageHub.ShoutMessage(this, new CollectableItemCreated(collectable.UniqueId, collectable.InstanceId));
-            
-            if (globalVariables.GetVar<bool>("debug_mode")) 
+
+            if (globalVariables.GetVar<bool>("debug_mode"))
                 DebugHelper.Print(LogType.Log, $"Created collectable {collectable.InstanceId} ({collectable.UniqueId}).");
         }
 
-        public bool HasCollectable(string id)
+        public bool HasCollectable(string instanceId)
         {
-            return collectables.ContainsKey(id);
+            return collectables.ContainsKey(instanceId);
         }
 
         public void CollectItem(ICollectable item)
@@ -158,10 +157,10 @@ namespace BiReJeJoCo.Items
             ConnectEvents();
         }
 
-        private void OnMatchRulesDefined(PhotonMessage msg) 
+        private void OnMatchRulesDefined(PhotonMessage msg)
         {
             var castedMsg = msg as DefinedMatchRulesPhoMsg;
-            Setup();
+            SetupForMatch(castedMsg.config.collectableSeed);
 
             var sceneConfig = matchHandler.MatchConfig.mapConfig;
             for (int i = 0; i < sceneConfig.GetCollectableSpawnPointCount(); i++)
@@ -201,6 +200,20 @@ namespace BiReJeJoCo.Items
         private void CreateItemRoot()
         {
             Root = new GameObject("collectables_root").transform;
+        }
+
+        public string GetInstanceId(string itemId) 
+        {
+            if (!randoms.ContainsKey(itemId))
+                randoms.Add(itemId, new System.Random(seed));
+
+            string result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].NextDouble().ToString());
+            while (HasCollectable(result)) 
+            {
+                result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].NextDouble().ToString());
+            }
+
+            return result;
         }
         #endregion
     }

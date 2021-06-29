@@ -16,51 +16,50 @@ namespace BiReJeJoCo
         [SerializeField] [Range(0, 90)] float randomRotation;
         [SerializeField] float growSpeed;
         [SerializeField] LayerMask targetLayer;
-        [SerializeField] DestroyableCoral crystalPrefab;
+        [SerializeField] DestroyableCoral[] coralPrefabs;
 
         #region Grow
         public void Grow(int seed)
         {
             var rnd = new System.Random(seed);
 
-            var collection = new CrystalGrowConfig()
+            var collection = new CoralGrowConfig()
             {
                 Crystals = new Dictionary<Transform, Vector3>(),
             };
 
             for (int i = 0; i < matchHandler.MatchConfig.Mode.coralsPerSpawn; i++)
             {
-                CrystalSpawnPoint? spawnPoint = null;
+                CoralSpawnPoint? spawnPoint = null;
 
                 while (!spawnPoint.HasValue)
                 {
                     spawnPoint = CalculateRandomSpawnPoint(rnd);
                 }
 
-                var crystal = SpawnCristal(spawnPoint.Value, rnd);
-                collection.Crystals.Add(crystal.transform, RandomScale(rnd));
-                crystal.transform.SetParent(collectablesManager.Root);
+                var coral = SpawnCoral(spawnPoint.Value, rnd);
+                collection.Crystals.Add(coral.transform, RandomScale(rnd));
+                coral.transform.SetParent(collectablesManager.Root);
 
-                int id = rnd.Next();
-                while (collectablesManager.HasCollectable(id.ToString()))
-                    id = rnd.Next();
-        
-                crystal.InitializeCollectable(id.ToString(), -1);
-                collectablesManager.RegisterCollectableItem(crystal);
+                coral.InitializeCollectable(collectablesManager.GetInstanceId(coral.UniqueId), -1);
+                collectablesManager.RegisterCollectableItem(coral);
             }
 
-            StartCoroutine(GrowCrystals(collection));
+            StartCoroutine(GrowCorals(collection));
         }
 
-        private DestroyableCoral SpawnCristal(CrystalSpawnPoint spawnPoint, System.Random rnd)
+        private DestroyableCoral SpawnCoral(CoralSpawnPoint spawnPoint, System.Random rnd)
         {
-            var crystal = Instantiate(crystalPrefab, spawnPoint.point, Quaternion.identity);
-            crystal.transform.up = RandomizeDirection(spawnPoint.direction, rnd);
-            crystal.transform.localScale = Vector3.zero;
-            return crystal;
+            var prefab = coralPrefabs[rnd.Next(0, coralPrefabs.Length)];
+            var coral = Instantiate(prefab, spawnPoint.point, Quaternion.identity);
+
+            coral.transform.parent = spawnOrigin.parent;
+            coral.transform.up = RandomizeDirection(spawnPoint.direction, rnd);
+            coral.transform.localScale = Vector3.zero;
+            return coral;
         }
 
-        private CrystalSpawnPoint? CalculateRandomSpawnPoint(System.Random rnd)
+        private CoralSpawnPoint? CalculateRandomSpawnPoint(System.Random rnd)
         {
             var origin = spawnOrigin.position;
             var dir = RandomDirection(rnd);
@@ -70,10 +69,11 @@ namespace BiReJeJoCo
 
             if (Physics.Raycast(ray, out hit, range, targetLayer))
             {
-                return new CrystalSpawnPoint()
+                return new CoralSpawnPoint()
                 {
                     point = hit.point,
                     direction = hit.normal,
+                    parent = hit.collider.transform,
                 };
             }
 
@@ -109,7 +109,7 @@ namespace BiReJeJoCo
             return direction;
         }
 
-        private IEnumerator GrowCrystals(CrystalGrowConfig collection)
+        private IEnumerator GrowCorals(CoralGrowConfig collection)
         {
             while (true)
             {
@@ -137,13 +137,14 @@ namespace BiReJeJoCo
             Destroy(this.gameObject);
         }
 
-        private struct CrystalSpawnPoint
+        private struct CoralSpawnPoint
         {
             public Vector3 point;
             public Vector3 direction;
+            public Transform parent;
         }
 
-        private struct CrystalGrowConfig
+        private struct CoralGrowConfig
         {
             public Dictionary<Transform, Vector3> Crystals { get; set; }
         }

@@ -127,7 +127,6 @@ namespace BiReJeJoCo.Character
             var spawnConfig = new CollectableSpawnConfig()
             {
                 i = "collectable_coral_ammo",
-                i2 = rnd.NextDouble().ToString(),
                 s = GetSuitableSpawnPoint(rnd),
             };
             collectablesManager.CreateCollectable(spawnConfig);

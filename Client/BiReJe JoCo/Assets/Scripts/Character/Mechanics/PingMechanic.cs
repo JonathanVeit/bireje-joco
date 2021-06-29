@@ -11,6 +11,9 @@ namespace BiReJeJoCo.Character
         [Header("Settings")]
         [SerializeField] Timer pingDurationTimer;
         [SerializeField] Timer pingCooldownTimer;
+        [SerializeField] Transform pingSpawnPoint;
+        [SerializeField] float throwStrength;
+        [SerializeField] Vector3 additionalThrowDirection;
 
         private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3, true);
         private HunterPingFloaty pingFloaty;
@@ -67,8 +70,9 @@ namespace BiReJeJoCo.Character
                 pingDurationTimer.Stop(true);
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_ping_marker");
-            var target = Instantiate(prefab, transform.position, transform.rotation);
-            
+            var target = Instantiate(prefab, pingSpawnPoint.position, pingSpawnPoint.rotation);
+            target.GetComponent<Rigidbody>().AddForce((pingSpawnPoint.forward + additionalThrowDirection) * throwStrength, ForceMode.Impulse);
+
             if (!Owner.IsLocalPlayer)
             {
                 var parent = uiManager.GetInstanceOf<GameUI>().floatingElementGrid;

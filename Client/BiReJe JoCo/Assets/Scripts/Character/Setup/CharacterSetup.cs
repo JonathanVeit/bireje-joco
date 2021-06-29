@@ -122,7 +122,8 @@ namespace BiReJeJoCo.Character
         #region UI
         private void Update()
         {
-            uiManager.GetInstanceOf<GameUI>().UpdateFloorName(matchHandler.MatchConfig.mapConfig.GetFloorName(controllerSetup.CharacterRoot.position));
+            if (Owner.IsLocalPlayer)
+                uiManager.GetInstanceOf<GameUI>().UpdateFloorName(matchHandler.MatchConfig.mapConfig.GetFloorName(controllerSetup.CharacterRoot.position));
         }
         #endregion
 

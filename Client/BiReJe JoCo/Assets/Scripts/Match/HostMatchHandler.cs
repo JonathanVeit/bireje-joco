@@ -86,7 +86,6 @@ namespace BiReJeJoCo
                 var spawnConfig = new CollectableSpawnConfig()
                 {
                     i = "collectable_coral_ammo",
-                    i2 = i.ToString(),
                     s = collectableSpawnPoints[i]
                 };
 
@@ -99,8 +98,10 @@ namespace BiReJeJoCo
                 roles = playerRoles,
                 spawnPos = spawnPoints,
                 duration = MatchDuration,
-                collectables = collectableConfigs,
                 matchMode = matchMode,
+
+                collectables = collectableConfigs,
+                collectableSeed = System.DateTime.Now.Second,
             };
 
             if (globalVariables.HasVar("force_hunter") && 
