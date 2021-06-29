@@ -16,7 +16,7 @@ namespace BiReJeJoCo.Character
 		//References to attached components;
 		protected Transform tr;
 		protected Mover mover;
-		protected PlayerCharacterInput characterInput;
+		[SerializeField] protected PlayerCharacterInput characterInput;
 		protected CeilingDetector ceilingDetector;
 
         //Jump key variables;
@@ -95,7 +95,6 @@ namespace BiReJeJoCo.Character
 		{
 			mover = GetComponent<Mover>();
 			tr = transform;
-			characterInput = GetComponent<PlayerCharacterInput>();
 			ceilingDetector = GetComponent<CeilingDetector>();
 
 			if(characterInput == null)

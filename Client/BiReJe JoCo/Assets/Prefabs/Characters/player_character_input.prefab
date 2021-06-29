@@ -1,0 +1,289 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1363911522862929904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7450398312240280142}
+  - component: {fileID: 8854573253149403854}
+  - component: {fileID: 1495996023116202576}
+  m_Layer: 0
+  m_Name: player_character_input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7450398312240280142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363911522862929904}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.9724817, z: -0.26140243}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8854573253149403854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363911522862929904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04bab299057d7894f9624a497f700b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 1495996023116202576}
+--- !u!114 &1495996023116202576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363911522862929904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5fa6b8fb898c93548a613afc7d8d27ff, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetMovementInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 10f7f6be-e6cc-4255-afb7-137265df4dd2
+    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetLookInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 294fde9f-6f97-47c7-9ec0-1929f91f34dc
+    m_ActionName: Player/LookAround[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetJumpInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0853c5ea-40cb-421f-9907-c47166eeeace
+    m_ActionName: Player/Ability_01[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5c48a9be-203d-4a18-b019-43f831e3fccf
+    m_ActionName: Ui/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSprintInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: fd14a497-3a66-4887-acef-0617dbc0e7f1
+    m_ActionName: Player/Sprinting[/Keyboard/leftShift,/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4034748907492520522, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.GameUI, Assembly-CSharp
+        m_MethodName: SetMenuInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b5e79723-7215-4f15-9bc4-29c0e51d6262
+    m_ActionName: Player/Menu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetTriggerInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 31d42936-fd5f-4fc6-b6b8-fcca9b30c0b5
+    m_ActionName: Player/Trigger[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetShootInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a22d508e-7c6c-4b5e-9461-b3bdae7485ea
+    m_ActionName: Player/Shoot
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetThrowTrapInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: faa451c5-09ce-470c-a461-423bd69fb8cb
+    m_ActionName: Player/ThrowTrap[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetReloadInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7137f111-cbf1-498b-95b0-f7707fedd791
+    m_ActionName: Player/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetToggleFlashlight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c965650b-80be-4d5d-a60e-0480317660f4
+    m_ActionName: Player/ToggleFlashlight[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSpawnPingInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 05953f9f-c61b-4723-a1f5-792363838938
+    m_ActionName: Player/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSpeedUpPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b03fe6ce-71a5-4417-83ba-19c53213386a
+    m_ActionName: Player/SpeedUp[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8854573253149403854}
+        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
+        m_MethodName: SetSpawnCoralsInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 64c8e80e-f042-41d2-9d83-7575dbd0f89f
+    m_ActionName: Player/SpawnPing1[/Mouse/rightButton]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

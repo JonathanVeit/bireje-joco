@@ -44,15 +44,20 @@ namespace BiReJeJoCo.Character
         // reloading 
         public event Action onReloadPressed;
 
-        // special 1
-        public event Action onSpecial1Pressed;
-        public event Action onSpecial2Pressed;
-
         // throw trap
         public event Action onThrowTrapPressed;
 
-        // shooting 
-        public event Action onToggleFlashlight;
+        // flashlight
+        public event Action onToggleFlashlightPressed;
+
+        // spawning ping 
+        public event Action onSpawnPingPressed;
+
+        // speed up
+        public event Action onSpeedUpPressed;
+
+        // spawn corals
+        public event Action onSpawnCoralsPressed;
 
         //Thoughts
         //key action  .started is called 2 times // .performed called 1; .canceled
@@ -180,6 +185,17 @@ namespace BiReJeJoCo.Character
             }
         }
 
+        public void SetThrowTrapInput(InputAction.CallbackContext inputValue)
+        {
+            if (BlockState.HasFlag(InputBlockState.Interact))
+                return;
+
+            if (inputValue.performed)
+            {
+                onThrowTrapPressed?.Invoke();
+            }
+        }
+
         public void SetToggleFlashlight(InputAction.CallbackContext inputValue)
         {
             if (BlockState.HasFlag(InputBlockState.Interact))
@@ -187,38 +203,7 @@ namespace BiReJeJoCo.Character
 
             if (inputValue.performed)
             {
-                onToggleFlashlight?.Invoke();
-            }
-        }
-
-        private void Update()
-        {
-            if (BlockState.HasFlag(InputBlockState.Shoot))
-                return;
-
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                onShootPressed?.Invoke();
-                onShootHoldInvoker = StartCoroutine(OnShootHoldInvoker());
-            }
-            else if (Mouse.current.leftButton.wasReleasedThisFrame)
-            {
-                onShootReleased?.Invoke();
-                if (onShootHoldInvoker != null)
-                    StopCoroutine(onShootHoldInvoker);
-            }
-
-            if (Mouse.current.rightButton.wasPressedThisFrame)
-            {
-                onThrowTrapPressed?.Invoke();
-            }
-
-            if (BlockState.HasFlag(InputBlockState.Look))
-                return;
-
-            if (playerInput.currentControlScheme == "Keyboard")
-            {
-                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>();
+                onToggleFlashlightPressed?.Invoke();
             }
         }
 
@@ -251,25 +236,66 @@ namespace BiReJeJoCo.Character
             }
         }
 
-        public void SetSpecial1Input(InputAction.CallbackContext inputValue)
+        public void SetSpawnPingInput(InputAction.CallbackContext inputValue)
         {
             if (BlockState.HasFlag(InputBlockState.Interact))
                 return;
-
             if (inputValue.performed)
             {
-                onSpecial1Pressed?.Invoke();
+                onSpawnPingPressed?.Invoke();
             }
         }
 
-        public void SetThrowTrapInput(InputAction.CallbackContext inputValue)
+        public void SetSpeedUpPressed(InputAction.CallbackContext inputValue)
         {
             if (BlockState.HasFlag(InputBlockState.Shoot))
                 return;
 
             if (inputValue.performed)
             {
-                onThrowTrapPressed?.Invoke();
+                onSpeedUpPressed?.Invoke();
+            }
+        }
+        public void SetSpawnCoralsInput(InputAction.CallbackContext inputValue)
+        {
+            if (BlockState.HasFlag(InputBlockState.Shoot))
+                return;
+
+            if (inputValue.performed)
+            {
+                onSpawnCoralsPressed?.Invoke();
+            }
+        }
+        
+        private void Update()
+        {
+            if (BlockState.HasFlag(InputBlockState.Shoot))
+                return;
+            
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                onShootPressed?.Invoke();
+                onShootHoldInvoker = StartCoroutine(OnShootHoldInvoker());
+            }
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
+            {
+                onShootReleased?.Invoke();
+                if (onShootHoldInvoker != null)
+                    StopCoroutine(onShootHoldInvoker);
+            }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                onSpawnPingPressed?.Invoke();
+                onSpawnCoralsPressed?.Invoke();
+            }
+
+            if (BlockState.HasFlag(InputBlockState.Look))
+                return;
+            
+            if (playerInput.currentControlScheme == "Keyboard")
+            {
+                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>();
             }
         }
         #endregion

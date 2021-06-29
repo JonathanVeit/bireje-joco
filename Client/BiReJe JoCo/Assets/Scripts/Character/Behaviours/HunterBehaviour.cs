@@ -61,7 +61,7 @@ namespace BiReJeJoCo.Character
             {
                 localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootHold -= OnShootHold;
                 localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootReleased -= OnShootReleased;
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed -= OnSpecial1Pressed;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpawnPingPressed -= OnSpawnPingPresed;
             }
           
         }
@@ -86,7 +86,7 @@ namespace BiReJeJoCo.Character
             trapMechanic.ThrowTrap();
         }
 
-        private void OnSpecial1Pressed()
+        private void OnSpawnPingPresed()
         {
             pingMechanic.SpawnPing();
         }
@@ -99,7 +99,7 @@ namespace BiReJeJoCo.Character
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootReleased += OnShootReleased;
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onReloadPressed += OnReload;
 
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed += OnSpecial1Pressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpawnPingPressed += OnSpawnPingPresed;
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onThrowTrapPressed += OnThrowTrapPressed;
         }
         #endregion

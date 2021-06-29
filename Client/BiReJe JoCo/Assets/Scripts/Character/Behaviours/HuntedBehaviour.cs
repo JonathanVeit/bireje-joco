@@ -21,7 +21,6 @@ namespace BiReJeJoCo.Character
         #endregion
 
         GameUI gameUI => uiManager.GetInstanceOf<GameUI>();
-        private int collectedItems;
 
         #region Initialization
         protected override void OnBehaviourInitialized()
@@ -51,6 +50,10 @@ namespace BiReJeJoCo.Character
             messageHub.UnregisterReceiver(this);
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
+
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed -= OnShootPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpeedUpPressed -= OnSpeedUpPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpawnCoralsPressed -= OnSpawnCoralsPressed;
         }
         #endregion
 
@@ -65,7 +68,7 @@ namespace BiReJeJoCo.Character
             speedUpMechanic.UseSpeed();
         }
 
-        private void OnThrowTrapPressed() 
+        private void OnSpawnCoralsPressed() 
         {
             coralMechanic.SpawnCorals();
         }
@@ -81,8 +84,8 @@ namespace BiReJeJoCo.Character
         void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
         {
             localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onShootPressed += OnShootPressed;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpecial1Pressed += OnSpeedUpPressed;
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onThrowTrapPressed += OnThrowTrapPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpeedUpPressed += OnSpeedUpPressed;
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onSpawnCoralsPressed += OnSpawnCoralsPressed;
         }
 
         private void OnHuntedCatched(PhotonMessage msg)

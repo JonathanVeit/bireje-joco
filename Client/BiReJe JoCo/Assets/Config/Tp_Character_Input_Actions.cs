@@ -68,24 +68,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Shoot"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""a22d508e-7c6c-4b5e-9461-b3bdae7485ea"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Special1"",
-                    ""type"": ""Button"",
-                    ""id"": ""345fe285-9088-4d20-a207-4c99896c2159"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Special2"",
-                    ""type"": ""Button"",
-                    ""id"": ""eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -110,6 +94,30 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""name"": ""ToggleFlashlight"",
                     ""type"": ""Button"",
                     ""id"": ""c965650b-80be-4d5d-a60e-0480317660f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SpawnPing"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""05953f9f-c61b-4723-a1f5-792363838938"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SpawnCorals"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""64c8e80e-f042-41d2-9d83-7575dbd0f89f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SpeedUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""b03fe6ce-71a5-4417-83ba-19c53213386a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -307,7 +315,7 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""79a7f162-6dcc-433b-84f4-708cb7080622"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Shoot"",
@@ -327,41 +335,8 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ee1fbb21-8ba8-4aae-b770-0edbd7b3c818"",
-                    ""path"": ""<Keyboard>/#(Q)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Special1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b833d37a-3ca6-4f17-9c37-8417bdda56c6"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Special1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3cf50b26-ef84-42a2-a90a-563537e2e5ac"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Special2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""1fc87a9e-a2e1-451d-8f44-663b6fdf5703"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -421,6 +396,72 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""ToggleFlashlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36aa0adb-987f-46e2-b2a3-59c0b3f0fffa"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SpawnPing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44fd83bb-5af0-4ac7-85fb-dba313094085"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SpawnPing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f16edaf-1dcf-4b30-90d1-2057c818af13"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc2ad2fe-cf47-46a6-96df-359f9e6423e6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fc60bc8-a890-4894-aa48-2fd5a4262b09"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SpawnCorals"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4925f7b-2deb-4c6f-a137-8307dd003bc2"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SpawnCorals"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -488,11 +529,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
         m_Player_Trigger = m_Player.FindAction("Trigger", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
-        m_Player_Special1 = m_Player.FindAction("Special1", throwIfNotFound: true);
-        m_Player_Special2 = m_Player.FindAction("Special2", throwIfNotFound: true);
         m_Player_ThrowTrap = m_Player.FindAction("ThrowTrap", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_ToggleFlashlight = m_Player.FindAction("ToggleFlashlight", throwIfNotFound: true);
+        m_Player_SpawnPing = m_Player.FindAction("SpawnPing", throwIfNotFound: true);
+        m_Player_SpawnCorals = m_Player.FindAction("SpawnCorals", throwIfNotFound: true);
+        m_Player_SpeedUp = m_Player.FindAction("SpeedUp", throwIfNotFound: true);
         // Ui
         m_Ui = asset.FindActionMap("Ui", throwIfNotFound: true);
         m_Ui_Newaction = m_Ui.FindAction("New action", throwIfNotFound: true);
@@ -552,11 +594,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Menu;
     private readonly InputAction m_Player_Trigger;
     private readonly InputAction m_Player_Shoot;
-    private readonly InputAction m_Player_Special1;
-    private readonly InputAction m_Player_Special2;
     private readonly InputAction m_Player_ThrowTrap;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_ToggleFlashlight;
+    private readonly InputAction m_Player_SpawnPing;
+    private readonly InputAction m_Player_SpawnCorals;
+    private readonly InputAction m_Player_SpeedUp;
     public struct PlayerActions
     {
         private @Tp_Character_Input_Actions m_Wrapper;
@@ -568,11 +611,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         public InputAction @Menu => m_Wrapper.m_Player_Menu;
         public InputAction @Trigger => m_Wrapper.m_Player_Trigger;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
-        public InputAction @Special1 => m_Wrapper.m_Player_Special1;
-        public InputAction @Special2 => m_Wrapper.m_Player_Special2;
         public InputAction @ThrowTrap => m_Wrapper.m_Player_ThrowTrap;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @ToggleFlashlight => m_Wrapper.m_Player_ToggleFlashlight;
+        public InputAction @SpawnPing => m_Wrapper.m_Player_SpawnPing;
+        public InputAction @SpawnCorals => m_Wrapper.m_Player_SpawnCorals;
+        public InputAction @SpeedUp => m_Wrapper.m_Player_SpeedUp;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -603,12 +647,6 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
-                @Special1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
-                @Special1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
-                @Special1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial1;
-                @Special2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
-                @Special2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
-                @Special2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecial2;
                 @ThrowTrap.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
                 @ThrowTrap.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
                 @ThrowTrap.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrowTrap;
@@ -618,6 +656,15 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @ToggleFlashlight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
                 @ToggleFlashlight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
                 @ToggleFlashlight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleFlashlight;
+                @SpawnPing.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPing;
+                @SpawnPing.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPing;
+                @SpawnPing.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnPing;
+                @SpawnCorals.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCorals;
+                @SpawnCorals.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCorals;
+                @SpawnCorals.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpawnCorals;
+                @SpeedUp.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeedUp;
+                @SpeedUp.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeedUp;
+                @SpeedUp.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeedUp;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -643,12 +690,6 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
-                @Special1.started += instance.OnSpecial1;
-                @Special1.performed += instance.OnSpecial1;
-                @Special1.canceled += instance.OnSpecial1;
-                @Special2.started += instance.OnSpecial2;
-                @Special2.performed += instance.OnSpecial2;
-                @Special2.canceled += instance.OnSpecial2;
                 @ThrowTrap.started += instance.OnThrowTrap;
                 @ThrowTrap.performed += instance.OnThrowTrap;
                 @ThrowTrap.canceled += instance.OnThrowTrap;
@@ -658,6 +699,15 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
                 @ToggleFlashlight.started += instance.OnToggleFlashlight;
                 @ToggleFlashlight.performed += instance.OnToggleFlashlight;
                 @ToggleFlashlight.canceled += instance.OnToggleFlashlight;
+                @SpawnPing.started += instance.OnSpawnPing;
+                @SpawnPing.performed += instance.OnSpawnPing;
+                @SpawnPing.canceled += instance.OnSpawnPing;
+                @SpawnCorals.started += instance.OnSpawnCorals;
+                @SpawnCorals.performed += instance.OnSpawnCorals;
+                @SpawnCorals.canceled += instance.OnSpawnCorals;
+                @SpeedUp.started += instance.OnSpeedUp;
+                @SpeedUp.performed += instance.OnSpeedUp;
+                @SpeedUp.canceled += instance.OnSpeedUp;
             }
         }
     }
@@ -722,11 +772,12 @@ public class @Tp_Character_Input_Actions : IInputActionCollection, IDisposable
         void OnMenu(InputAction.CallbackContext context);
         void OnTrigger(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
-        void OnSpecial1(InputAction.CallbackContext context);
-        void OnSpecial2(InputAction.CallbackContext context);
         void OnThrowTrap(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnToggleFlashlight(InputAction.CallbackContext context);
+        void OnSpawnPing(InputAction.CallbackContext context);
+        void OnSpawnCorals(InputAction.CallbackContext context);
+        void OnSpeedUp(InputAction.CallbackContext context);
     }
     public interface IUiActions
     {

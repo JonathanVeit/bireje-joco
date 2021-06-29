@@ -50,8 +50,8 @@ MonoBehaviour:
   modelRoot: {fileID: 1123382873885243662}
   rigidBody: {fileID: 6268242092879492245}
   mainCollider: {fileID: 5701102482184471912}
-  playerInput: {fileID: 4105779778320399909}
-  characterInput: {fileID: 6922469825186454421}
+  playerInput: {fileID: 9126240886339528230}
+  characterInput: {fileID: 1190622360520216248}
   walkController: {fileID: 6521701395122406316}
   mover: {fileID: 3632402956923623670}
   animationController: {fileID: 290032966730284768}
@@ -1061,8 +1061,6 @@ GameObject:
   - component: {fileID: 6268242092879492245}
   - component: {fileID: 3632402956923623670}
   - component: {fileID: 6521701395122406316}
-  - component: {fileID: 6922469825186454421}
-  - component: {fileID: 4105779778320399909}
   - component: {fileID: 290032966730284768}
   m_Layer: 6
   m_Name: character_controller
@@ -1083,7 +1081,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1123382873885243662}
-  - {fileID: 3480494466539727816}
+  - {fileID: 937050013502314040}
   m_Father: {fileID: 1679596325318083231}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1157,6 +1155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5e44db14072ea4c964da3b192181c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterInput: {fileID: 1190622360520216248}
   movementSpeed: 6
   sprintMultiplyer: 1.45
   airControlRate: 15
@@ -1173,245 +1172,6 @@ MonoBehaviour:
   useLocalMomentum: 1
   currentControllerState: 2
   cameraTransform: {fileID: 0}
---- !u!114 &6922469825186454421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9107639259770389782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04bab299057d7894f9624a497f700b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInput: {fileID: 4105779778320399909}
---- !u!114 &4105779778320399909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9107639259770389782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5fa6b8fb898c93548a613afc7d8d27ff, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.Player_Input, Assembly-CSharp
-        m_MethodName: SetMovementInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 10f7f6be-e6cc-4255-afb7-137265df4dd2
-    m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetLookInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 294fde9f-6f97-47c7-9ec0-1929f91f34dc
-    m_ActionName: Player/LookAround[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetJumpInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 0853c5ea-40cb-421f-9907-c47166eeeace
-    m_ActionName: Player/Ability_01[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5c48a9be-203d-4a18-b019-43f831e3fccf
-    m_ActionName: Ui/New action
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetSprintInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: fd14a497-3a66-4887-acef-0617dbc0e7f1
-    m_ActionName: Player/Sprinting[/Keyboard/leftShift,/DualShock4GamepadHID/leftShoulder]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4034748907492520522, guid: b1a2dbd181d462d4aa817fff54883362, type: 3}
-        m_TargetAssemblyTypeName: BiReJeJoCo.UI.GameUI, Assembly-CSharp
-        m_MethodName: SetMenuInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: b5e79723-7215-4f15-9bc4-29c0e51d6262
-    m_ActionName: Player/Menu[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetTriggerInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 31d42936-fd5f-4fc6-b6b8-fcca9b30c0b5
-    m_ActionName: Player/Trigger[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetShootInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: a22d508e-7c6c-4b5e-9461-b3bdae7485ea
-    m_ActionName: Player/Shoot
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetSpecial1Input
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 345fe285-9088-4d20-a207-4c99896c2159
-    m_ActionName: Player/Special1[/Keyboard/q]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetSpecial2Input
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: eb25ac4f-c25c-4a1d-a1af-a84b723f3cb5
-    m_ActionName: Player/Special2[/Keyboard/ctrl]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetThrowTrapInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: faa451c5-09ce-470c-a461-423bd69fb8cb
-    m_ActionName: Player/ThrowTrap[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetReloadInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 7137f111-cbf1-498b-95b0-f7707fedd791
-    m_ActionName: Player/Reload[/Keyboard/r]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6922469825186454421}
-        m_TargetAssemblyTypeName: BiReJeJoCo.Character.PlayerCharacterInput, Assembly-CSharp
-        m_MethodName: SetToggleFlashlight
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: c965650b-80be-4d5d-a60e-0480317660f4
-    m_ActionName: Player/ToggleFlashlight[/Keyboard/f]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &290032966730284768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,68 +1272,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 8469118092377490099}
---- !u!1001 &2257292076855105827
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 3986011578950118073}
-    m_Modifications:
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395345137517245165, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-      propertyPath: m_Name
-      value: crystal_spawner
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
---- !u!4 &3480494466539727816 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3395345137517245163, guid: d9bc3f70e758d504daadb89bcb34f2b6, type: 3}
-  m_PrefabInstance: {fileID: 2257292076855105827}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6223626295522839890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1631,6 +1329,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
+--- !u!4 &7872576176409664131 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4260336486700980177, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
+  m_PrefabInstance: {fileID: 6223626295522839890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &4296766676229423353 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7926315153062055339, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
@@ -1647,11 +1350,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7872576176409664131 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4260336486700980177, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
-  m_PrefabInstance: {fileID: 6223626295522839890}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7557390781154319344
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1723,5 +1421,89 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6495ce45bba9eea44a4d861336938df9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &7666309430980699254
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3986011578950118073}
+    m_Modifications:
+    - target: {fileID: 1363911522862929904, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_Name
+      value: player_character_input
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.9724817
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.26140243
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+--- !u!4 &937050013502314040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7450398312240280142, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+  m_PrefabInstance: {fileID: 7666309430980699254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1190622360520216248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8854573253149403854, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+  m_PrefabInstance: {fileID: 7666309430980699254}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04bab299057d7894f9624a497f700b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9126240886339528230 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1495996023116202576, guid: db576f70c2c35034f9fd8c8ad39c94a5, type: 3}
+  m_PrefabInstance: {fileID: 7666309430980699254}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

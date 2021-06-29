@@ -25,7 +25,7 @@ namespace BiReJeJoCo.Items
             }
             else
             {
-                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onToggleFlashlight += ToggleFlashlight;
+                localPlayer.PlayerCharacter.ControllerSetup.CharacterInput.onToggleFlashlightPressed += ToggleFlashlight;
             }
         }
 
