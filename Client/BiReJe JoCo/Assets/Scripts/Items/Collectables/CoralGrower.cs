@@ -39,7 +39,6 @@ namespace BiReJeJoCo
 
                 var coral = SpawnCoral(spawnPoint.Value, rnd);
                 collection.Crystals.Add(coral.transform, RandomScale(rnd));
-                coral.transform.SetParent(collectablesManager.Root);
 
                 coral.InitializeCollectable(collectablesManager.GetInstanceId(coral.UniqueId), -1);
                 collectablesManager.RegisterCollectableItem(coral);
@@ -53,7 +52,10 @@ namespace BiReJeJoCo
             var prefab = coralPrefabs[rnd.Next(0, coralPrefabs.Length)];
             var coral = Instantiate(prefab, spawnPoint.point, Quaternion.identity);
 
-            coral.transform.parent = spawnOrigin.parent;
+            var root = new GameObject("coral_root");
+            root.transform.parent = spawnPoint.parent;
+            coral.transform.parent = root.transform;
+
             coral.transform.up = RandomizeDirection(spawnPoint.direction, rnd);
             coral.transform.localScale = Vector3.zero;
             return coral;

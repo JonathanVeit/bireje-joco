@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8830414531942535835}
   - component: {fileID: 6732626849503979089}
   - component: {fileID: -521503364317316208}
-  - component: {fileID: -4436187883213335547}
+  - component: {fileID: 3983708245425344249}
   m_Layer: 16
-  m_Name: coral_01
+  m_Name: destroyable_coral_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueId: destroyable_coral
---- !u!65 &-4436187883213335547
+--- !u!65 &3983708245425344249
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,5 +108,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1031144, y: 6.20241, z: 2.4976838}
-  m_Center: {x: 0.2521368, y: 3.101205, z: 0.48342463}
+  m_Size: {x: 0.4206229, y: 1.240482, z: 0.49953672}
+  m_Center: {x: 0.050427355, y: 0.620241, z: 0.09668492}

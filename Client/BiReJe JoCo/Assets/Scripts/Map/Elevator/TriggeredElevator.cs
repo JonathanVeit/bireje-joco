@@ -39,7 +39,6 @@ namespace BiReJeJoCo.Map
                 // go down 
                 case 0:
                     UpdateSigns(false);
-                    Debug.Log(doorController, this.gameObject);
 
                     doorController.Close(ElevatorDoorController.ElevatorDoorPoint.UpperDoors,
                         () =>

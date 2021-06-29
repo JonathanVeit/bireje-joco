@@ -63,6 +63,7 @@ namespace BiReJeJoCo.Items
 
         public virtual void OnCollect()
         {
+            Destroy(this.gameObject);
         }
 
         private void OnCoralsSpawned()
