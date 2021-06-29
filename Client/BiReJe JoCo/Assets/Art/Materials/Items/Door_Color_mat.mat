@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wood_01_mat
+  m_Name: Door_Color_mat
   m_Shader: {fileID: -6465566751694194690, guid: 3c973a3d97932894c9ee2d4ce8b200d6, type: 3}
   m_ShaderKeywords: ADDITIONAL_LIGHT_CALCULATE_SHADOWS MAIN_LIGHT_CALCULATE_SHADOWS
     _MAIN_LIGHT_SHADOWS_CASCADE _SHADOWS_SOFT
@@ -20,6 +20,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Albedo:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - AmbientOcclusion:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -52,6 +56,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - TopTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Emission_5f3540dd219045549c1e419a8ae95d34_Texture2D223377E2_3118568559:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -81,7 +89,7 @@ Material:
     - ADDITIONAL_LIGHTS_SHADOWS: 0
     - ADDITIONAL_LIGHT_CALCULATE_SHADOWS: 1
     - BakedIntensity: 0.432
-    - EmissionIntensity: 0
+    - EmissionIntensity: 0.125
     - LIGHTMAP: 0
     - MAIN_LIGHT_CALCULATE_SHADOWS: 1
     - MAIN_LIGHT_SHADOWS: 0
@@ -100,8 +108,8 @@ Material:
     - _Smoothness: 0.5
     - isTriplanar: 1
     m_Colors:
-    - EmissionColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
-    - MainColor: {r: 0.2924528, g: 0.2279894, b: 0.16691881, a: 1}
+    - EmissionColor: {r: 1, g: 0.53670347, b: 0, a: 0}
+    - MainColor: {r: 1, g: 0.46599352, b: 0, a: 1}
     - MixedShadowsColor: {r: 0.5799246, g: 1, b: 0, a: 0}
     - Tiling: {r: 0.8, g: 0.8, b: 0, a: 0}
     - _MainColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
