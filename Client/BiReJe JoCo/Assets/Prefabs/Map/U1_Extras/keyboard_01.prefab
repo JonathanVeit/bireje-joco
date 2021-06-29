@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4242435761414659289}
   - component: {fileID: 2867325457451537572}
   - component: {fileID: 1905203812739147368}
+  - component: {fileID: 4551176654766115845}
   m_Layer: 0
   m_Name: keyboard_asset
   m_TagString: Untagged
@@ -115,3 +116,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4551176654766115845
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8496921840553629786}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0783266, y: 0.11172058, z: 0.3435627}
+  m_Center: {x: 0.00000017881393, y: 0.05586029, z: 0}
