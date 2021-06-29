@@ -90,6 +90,10 @@ namespace JoVei.Base.Helper
                 RelativeProgress = counter / Duration;
                 counter += Time.deltaTime * timeScale;
             }
+            Progress = Duration;
+            RelativeProgress = 1;
+
+            onUpdate?.Invoke();
             onFinishedCallback?.Invoke();
         }
     }

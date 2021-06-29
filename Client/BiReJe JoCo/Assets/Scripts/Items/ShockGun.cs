@@ -12,9 +12,10 @@ namespace BiReJeJoCo.Items
         [SerializeField] LineRenderer lineRenderer;
         [SerializeField] ParticleSystem lineParticleSystem;
         [SerializeField] ParticleSystem hitParticleSystem;
+        [SerializeField] Light hitLight;
+        [SerializeField] float lightHeight;
         [SerializeField] ParticleSystem damageParticleSystem;
         [SerializeField] Transform rayOrigin;
-        [SerializeField] float trailHeight;
         [SerializeField] GameObject muzzleFlash;
 
         [Header("Appearance")]
@@ -25,7 +26,6 @@ namespace BiReJeJoCo.Items
         [SerializeField] float maxWidth;
         [SerializeField] LayerMask hitLayerMask;
         [SerializeField] LayerMask huntedLayerMask;
-        [SerializeField] float maxTrailDist;
 
         [Header("Noise")]
         [SerializeField] float noise;
@@ -34,8 +34,6 @@ namespace BiReJeJoCo.Items
 
         public Transform RayOrigin => rayOrigin;
         private Vector3? currentTarget;
-        private TrailRenderer currentTrail;
-        private Vector3 lastTrailPos;
 
         private PlayerControlled controller;
         public Player Owner => controller.Player;
@@ -70,13 +68,7 @@ namespace BiReJeJoCo.Items
             }
             else
             {
-                lineRenderer.enabled = false;
-                lineParticleSystem.enableEmission = false;
-                hitParticleSystem.enableEmission = false;
-                damageParticleSystem.enableEmission = false;
-                DestroyCurrentTrail();
-                frequence.SetValue(frequence.MaxValue);
-                muzzleFlash.SetActive(false);
+                DisableSFX();
             }
         }
 
@@ -171,30 +163,18 @@ namespace BiReJeJoCo.Items
             if (Physics.Raycast(rayOrigin.position, dir, out hit, dir.magnitude + 0.1f, hitLayerMask))
             {
                 var point = hit.point;
-                point += hit.normal * trailHeight;
+                point += hit.normal * lightHeight;
 
                 hitParticleSystem.enableEmission = true;
                 hitParticleSystem.transform.position = point;
                 hitParticleSystem.transform.up = hit.normal;
 
-                if (Vector3.Distance(lastTrailPos, point) > maxTrailDist)
-                {
-                    DestroyCurrentTrail();
-                }
-
-                if (!currentTrail)
-                {
-                    currentTrail = SpawnNewTrail(point);
-                    currentTrail.SetPositions(new Vector3[1] { point });
-                }
-
-                currentTrail.transform.position = point;
-                lastTrailPos = point;
+                hitLight.enabled = true;
+                hitLight.transform.position = point;
             }
             else
             {
                 hitParticleSystem.enableEmission = false;
-                DestroyCurrentTrail();
             }
         }
         private void UpdateDamageSFX()
@@ -210,21 +190,15 @@ namespace BiReJeJoCo.Items
             }
         }
 
-        private TrailRenderer SpawnNewTrail(Vector3 position) 
+        private void DisableSFX()
         {
-            var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("shock_gun_trail");
-            var instance = poolingManager.PoolInstance(prefab, position, Quaternion.identity);
-            var trailRenderer = instance.GetComponent<TrailRenderer>();
-            trailRenderer.emitting = true;
-            return trailRenderer;
-        }
-        private void DestroyCurrentTrail()
-        {
-            if (currentTrail)
-            {
-                currentTrail.emitting = false;
-                currentTrail = null;
-            }
+            lineRenderer.enabled = false;
+            lineParticleSystem.enableEmission = false;
+            hitParticleSystem.enableEmission = false;
+            damageParticleSystem.enableEmission = false;
+            hitLight.enabled = false;
+            frequence.SetValue(frequence.MaxValue);
+            muzzleFlash.SetActive(false);
         }
         #endregion
     }

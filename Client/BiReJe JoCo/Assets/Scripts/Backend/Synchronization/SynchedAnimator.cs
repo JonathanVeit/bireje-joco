@@ -12,6 +12,7 @@ namespace BiReJeJoCo.Backend
 		[SerializeField] Animator anim;
 		[SerializeField] float defaultMoveSpeed;
 		[SerializeField] float moveSpeedSmoothness;
+		[SerializeField] TriggerReset[] triggerResets;
 		[SerializeField] AnimationEventCatcher eventCatcher;
 
 		private IVelocitySource velocitySource;
@@ -104,6 +105,15 @@ namespace BiReJeJoCo.Backend
 		}
 		private void OnTriggerReceived(string trigger)
 		{
+			foreach (var entry in triggerResets)
+			{
+				if (entry.triggerName == trigger)
+				{
+					foreach (var curTrigger in entry.resetTrigger)
+						anim.ResetTrigger(curTrigger);
+				}
+			}
+
 			anim.ResetTrigger(trigger);
 			anim.SetTrigger(trigger);
 		}
@@ -136,5 +146,14 @@ namespace BiReJeJoCo.Backend
 			}
 		}
 		#endregion
-	}
+
+		#region Helper
+		[Serializable]
+		struct TriggerReset
+		{
+			public string triggerName;
+			public string[] resetTrigger;
+		}
+		#endregion
+    }
 }

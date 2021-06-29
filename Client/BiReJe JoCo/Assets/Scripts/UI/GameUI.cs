@@ -18,6 +18,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] Text durationLabel;
         [SerializeField] UIBarHandler totalCrystalsBar;
         [SerializeField] RectTransform totalCrystalBarSeperator;
+        [SerializeField] Text floorNameLabel;
 
         [Header("Hunter")]
         [SerializeField] GameObject hunterHUD;
@@ -119,6 +120,13 @@ namespace BiReJeJoCo.UI
             else
                 totalCrystalsBar.SetValue(value);
         }
+        public void UpdateFloorName(string name)
+        {
+            if (floorNameLabel.text != name)
+                floorNameLabel.GetComponent<Animator>().SetTrigger("pulsate");
+            
+            floorNameLabel.text = name;
+        }
 
         // hunter
         public void UpdateAmmoBar(float value)
@@ -131,6 +139,7 @@ namespace BiReJeJoCo.UI
         public void SetTrapIcon(bool visible)
         {
             trapIcon.gameObject.SetActive(visible);
+            trapIcon.GetComponent<Animator>().SetTrigger("pulsate");
         }
         public void UpdatePingCooldown(float value)
         {
@@ -173,6 +182,9 @@ namespace BiReJeJoCo.UI
                 transformationCooldownBar.OverrideValue(0);
             else
                 transformationCooldownBar.SetValue(value);
+
+            if (value == 1)
+                scannedItemIcon.GetComponent<Animator>().SetTrigger("pulsate");
         }
         public void UpdateScannedItemIcon(Sprite icon)
         {

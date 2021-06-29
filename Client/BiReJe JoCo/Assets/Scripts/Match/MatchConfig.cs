@@ -16,5 +16,8 @@ namespace BiReJeJoCo.Backend
         public MatchMode Mode => MatchModeMapping.GetMapping().GetElementForKey(matchMode);
         [Newtonsoft.Json.JsonIgnore]
         public string matchScene => MatchModeMapping.GetMapping().GetElementForKey(matchMode).gameScene;
+        [Newtonsoft.Json.JsonIgnore]
+        public MapConfig mapConfig => MapConfigMapping.GetMapping().GetElementForKey(matchScene);
+
     }
 }

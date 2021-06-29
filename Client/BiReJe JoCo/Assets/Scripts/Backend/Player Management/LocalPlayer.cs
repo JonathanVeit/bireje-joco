@@ -37,14 +37,13 @@ namespace BiReJeJoCo.Backend
         {
             string prefabId = MatchPrefabMapping.GetMapping().GetElementForKey("player_character").name;
 
-            var scene = matchHandler.MatchConfig.matchScene;
             var posIndex = matchHandler.MatchConfig.spawnPos[NumberInRoom];
             var randomPos = Vector3.zero;
 
             if (Role == PlayerRole.Hunted)
-                randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHuntedSpawnPoint (posIndex);
+                randomPos = matchHandler.MatchConfig.mapConfig.GetHuntedSpawnPoint (posIndex);
             else if (Role == PlayerRole.Hunter)
-                randomPos = MapConfigMapping.GetMapping().GetElementForKey(scene).GetHunterSpawnPoint(posIndex);
+                randomPos = matchHandler.MatchConfig.mapConfig.GetHunterSpawnPoint(posIndex);
 
             var go = photonRoomWrapper.Instantiate(prefabId, randomPos, Quaternion.identity);
 

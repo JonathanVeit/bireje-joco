@@ -104,9 +104,11 @@ namespace BiReJeJoCo.Character
         }
         public void Reload ()
         {
-            if (ammoCounter.RelativeProgress == 0) return;
+            if (ammoCounter.RelativeProgress == 0 ||
+                reloadTimer.State == TimerState.Counting) return;
 
             Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("reload");
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall", "start_shoot");
             StopShooting(false);
 
             reloadTimer.Start(
@@ -118,7 +120,7 @@ namespace BiReJeJoCo.Character
                 () => 
                 {
                     ammoCounter.SetValue(0);
-                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall");
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall", "start_shoot");
                 }); // finish
         }
 

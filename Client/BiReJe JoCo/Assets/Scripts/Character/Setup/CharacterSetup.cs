@@ -1,5 +1,6 @@
 using UnityEngine;
 using BiReJeJoCo.Backend;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo.Character
 {
@@ -115,6 +116,13 @@ namespace BiReJeJoCo.Character
             var root = CreateSFXRoot();
             fogUpstairs = Instantiate(fogUpstairsPrefab, root);
             fogDownstairs = Instantiate(fogDownstairsPrefab, root);
+        }
+        #endregion
+
+        #region UI
+        private void Update()
+        {
+            uiManager.GetInstanceOf<GameUI>().UpdateFloorName(matchHandler.MatchConfig.mapConfig.GetFloorName(controllerSetup.CharacterRoot.position));
         }
         #endregion
 

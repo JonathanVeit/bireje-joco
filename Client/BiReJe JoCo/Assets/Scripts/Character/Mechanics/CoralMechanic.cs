@@ -139,7 +139,7 @@ namespace BiReJeJoCo.Character
             var rejectedSpawnPointIndices = new List<int>();
 
             // current scene configuration
-            var sceneConfig = MapConfigMapping.GetMapping().GetElementForKey(matchHandler.MatchConfig.Mode.gameScene);
+            var sceneConfig = matchHandler.MatchConfig.mapConfig;
 
             // search for a point that is not too close to the hunteds current position
             while (freeSpawnPointsIndices.Count > 0)

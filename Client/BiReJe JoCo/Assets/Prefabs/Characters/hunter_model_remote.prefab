@@ -178,6 +178,22 @@ MonoBehaviour:
   anim: {fileID: 5984685807215904856}
   defaultMoveSpeed: 6
   moveSpeedSmoothness: 6
+  triggerResets:
+  - triggerName: jump
+    resetTrigger:
+    - land
+    - end_shoot
+  - triggerName: fall
+    resetTrigger:
+    - land
+    - end_shoot
+  - triggerName: reload
+    resetTrigger:
+    - land
+    - end_shoot
+  - triggerName: start_shoot
+    resetTrigger:
+    - end_shoot
   eventCatcher: {fileID: 6255435596378082375}
 --- !u!1 &8315579548899864588
 GameObject:

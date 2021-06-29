@@ -9,6 +9,7 @@ namespace BiReJeJoCo
         [SerializeField] Vector3[] hunterSpawnPoints;
         [SerializeField] Vector3[] huntedSpawnPoints;
         [SerializeField] Vector3[] collectableSpawnPoints;
+        [SerializeField] Floor[] floors;
 
         public int[] GetRandomHunterSpawnPointIndeces(int amount, bool noDuplicated = true)
         {
@@ -82,10 +83,21 @@ namespace BiReJeJoCo
         {
             return huntedSpawnPoints[index];
         }
-        
         public Vector3 GetCollectableSpawnPoint(int index)
         {
             return collectableSpawnPoints[index];
+        }
+
+        public string GetFloorName(Vector3 position)
+        {
+            string floorName = string.Empty;
+            foreach (var floor in floors)
+            {
+                if (position.y < floor.startsAtHeight)
+                    floorName = floor.name;
+            }
+
+            return floorName;
         }
 
         #region Override
@@ -113,6 +125,13 @@ namespace BiReJeJoCo
             }
 
             return false;
+        }
+
+        [System.Serializable]
+        public struct Floor
+        {
+            public string name;
+            public float startsAtHeight;
         }
         #endregion
     }

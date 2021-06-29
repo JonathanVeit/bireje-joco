@@ -108,8 +108,8 @@ namespace BiReJeJoCo.Items
         {
             if (Root == null)
                 CreateItemRoot();
-            var scene = matchHandler.MatchConfig.matchScene;
-            var spawnPoint = MapConfigMapping.GetMapping().GetElementForKey(scene).GetCollectableSpawnPoint(config.SpawnPointIndex);
+
+            var spawnPoint = matchHandler.MatchConfig.mapConfig.GetCollectableSpawnPoint(config.SpawnPointIndex);
             if (config.OverridePosition.HasValue)
                 spawnPoint = config.p.Value;
 
@@ -163,7 +163,7 @@ namespace BiReJeJoCo.Items
             var castedMsg = msg as DefinedMatchRulesPhoMsg;
             Setup();
 
-            var sceneConfig = MapConfigMapping.GetMapping().GetElementForKey(castedMsg.config.Mode.gameScene);
+            var sceneConfig = matchHandler.MatchConfig.mapConfig;
             for (int i = 0; i < sceneConfig.GetCollectableSpawnPointCount(); i++)
             {
                 spawnPointWorkload.Add(i, new List<ICollectable>());

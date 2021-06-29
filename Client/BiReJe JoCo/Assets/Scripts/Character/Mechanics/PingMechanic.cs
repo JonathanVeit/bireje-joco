@@ -12,7 +12,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] Timer pingDurationTimer;
         [SerializeField] Timer pingCooldownTimer;
 
-        private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3);
+        private SyncVar<Vector3> pingPosition = new SyncVar<Vector3>(3, true);
         private HunterPingFloaty pingFloaty;
 
         #region Initialization
@@ -63,20 +63,21 @@ namespace BiReJeJoCo.Character
         }
         private void OnPingUpdated(Vector3 position)
         {
-            if (position.magnitude == 0) return;
-
             if (pingDurationTimer.State == TimerState.Counting)
                 pingDurationTimer.Stop(true);
 
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunter_ping_marker");
             var target = Instantiate(prefab, transform.position, transform.rotation);
             
-            var parent = uiManager.GetInstanceOf<GameUI>().floatingElementGrid;
-            target.transform.position = position;
+            if (!Owner.IsLocalPlayer)
+            {
+                var parent = uiManager.GetInstanceOf<GameUI>().floatingElementGrid;
+                target.transform.position = position;
 
-            var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
-            pingFloaty = floatingManager.GetElementAs<HunterPingFloaty>(config);
-            pingFloaty.SetClamped();
+                var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
+                pingFloaty = floatingManager.GetElementAs<HunterPingFloaty>(config);
+                pingFloaty.SetClamped();
+            }
 
             pingDurationTimer.Start(
                 () => // update  
@@ -91,8 +92,10 @@ namespace BiReJeJoCo.Character
                     if (pingFloaty)
                     {
                         pingFloaty.RequestDestroyFloaty();
-                        Destroy(target);
                     }
+
+                    if (target)
+                        Destroy(target);
                 });
         }
 
