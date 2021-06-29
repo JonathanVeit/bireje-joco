@@ -34,6 +34,7 @@ namespace BiReJeJoCo.Character
         {
             ConnectEvents();
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.onPlaceSporesFinished += OnFinishedPlaceCorals;
         }
         protected override void OnInitializeRemote()
         {
@@ -49,7 +50,6 @@ namespace BiReJeJoCo.Character
         {
             messageHub.RegisterReceiver<CollectableItemCreated>(this, OnItemCreatedCollected);
             messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
-            Owner.PlayerCharacter.ControllerSetup.AnimationController.onPlaceSporesFinished += OnFinishedPlaceCorals;
         }
         private void DisconnectEvents()
         {
