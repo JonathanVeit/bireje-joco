@@ -454,6 +454,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 2111586225156994861}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: light_switch
+    soundTarget: {fileID: 2111586225156994861}
     isCoolingDown: 0
   - target: 3
     Id: 1
@@ -466,6 +468,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 5778023785034107590}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: light_switch
+    soundTarget: {fileID: 5778023785034107590}
     isCoolingDown: 0
   - target: 3
     Id: 2
@@ -478,6 +482,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 4637143308737258152}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: light_switch
+    soundTarget: {fileID: 4637143308737258152}
     isCoolingDown: 0
   playerLayer:
     serializedVersion: 2

@@ -153,25 +153,13 @@ namespace BiReJeJoCo.Items
         {
             foreach (var pS in particleSystems)
                 pS.enableEmission = show;
-            Debug.Log(show);
+
             foreach (var anim in animators)
                 anim.SetTrigger(show ? "start" : "stop");
         }
         #endregion
  
         #region Trigger Stuff
-        protected override void OnTriggerHold(float duration)
-        {
-            if (DisplayedTrigger.pressDuration <= duration)
-            {
-                OnTriggerInteracted(DisplayedTrigger.Id);
-                ResetActiveInstance();
-            }
-            else
-            {
-                UpdateTriggerProgress(DisplayedTrigger, duration);
-            }
-        }
         protected override void OnTriggerInteracted(byte pointId)
         {
             DisconnectEvents();

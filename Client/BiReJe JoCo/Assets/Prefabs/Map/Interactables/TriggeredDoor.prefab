@@ -133,6 +133,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 7961329895575121971}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: door_button
+    soundTarget: {fileID: 7961329895575121971}
     isCoolingDown: 0
   - target: 3
     Id: 2
@@ -145,6 +147,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 2214657972748132512}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: door_button
+    soundTarget: {fileID: 2214657972748132512}
     isCoolingDown: 0
   playerLayer:
     serializedVersion: 2
@@ -174,19 +178,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4152837966998412616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8104256360900060459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minAnimationWeight: 0.5
 --- !u!114 &1175743093245957855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +201,19 @@ MonoBehaviour:
     parent: 0
     soundEffects:
     - door_close_1
+--- !u!114 &4152837966998412616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8104256360900060459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAnimationWeight: 0.5
 --- !u!65 &2725139729954653165
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -651,6 +651,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 4601655555599366690}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: door_button
+    soundTarget: {fileID: 4601655555599366690}
     isCoolingDown: 0
   - target: 3
     Id: 1
@@ -663,6 +665,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 3597909358202208922}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: door_button
+    soundTarget: {fileID: 3597909358202208922}
     isCoolingDown: 0
   playerLayer:
     serializedVersion: 2
