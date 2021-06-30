@@ -21,5 +21,7 @@ namespace BiReJeJoCo
         protected static UI.UIManager uiManager => DIContainer.GetImplementationFor<UI.UIManager>();
         protected static MatchHandler matchHandler => DIContainer.GetImplementationFor<MatchHandler>();
         protected static Items.CollectablesManager collectablesManager => DIContainer.GetImplementationFor<Items.CollectablesManager>();
+
+        protected static Sound.SoundEffectManager soundEffectManager => DIContainer.GetImplementationFor<Sound.SoundEffectManager>();
     }
 }

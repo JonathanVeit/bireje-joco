@@ -1234,6 +1234,7 @@ GameObject:
   - component: {fileID: 4260336486700980177}
   - component: {fileID: 7926315153062055339}
   - component: {fileID: -8208343750708091038}
+  - component: {fileID: 5804421204946636825}
   m_Layer: 0
   m_Name: hunted_model
   m_TagString: Untagged
@@ -1288,6 +1289,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minAnimationWeight: 0.5
+--- !u!114 &5804421204946636825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3482428044088626539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5329cb2055623bc43bd0cfc84aa16564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - trigger: step
+    target: {fileID: 8677691786337614120}
+    parent: 0
+    soundEffects:
+    - hunted_step_1
+    - hunted_step_2
+    - hunted_step_3
+  - trigger: jump_end
+    target: {fileID: 8677691786337614120}
+    parent: 0
+    soundEffects:
+    - hunted_jump_end
 --- !u!1 &3516580411059767493
 GameObject:
   m_ObjectHideFlags: 0

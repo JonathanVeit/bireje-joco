@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4190ebf58d0ef34389f13d5e30050d2, type: 3}
+  m_Name: SoundEffectMapping
+  m_EditorClassIdentifier: 
+  MappedContent:
+  - ID: hunter_step_1
+    Element: {fileID: 7879002815477068618, guid: a379201ad19ddbf44ae6c0a9e8db608b, type: 3}
+  - ID: hunter_step_2
+    Element: {fileID: 8815566381560394692, guid: e0bc24ad9fd4acc40a3c8f13d0c62a15, type: 3}
+  - ID: hunter_step_3
+    Element: {fileID: 6601813647547109226, guid: 933a23be1264d4b4e9bb172174b8ab8a, type: 3}
+  - ID: hunter_jump_end
+    Element: {fileID: 6601813647547109226, guid: 8604b5dc69942e14ca8fda31f0e36434, type: 3}
+  - ID: hunted_step_1
+    Element: {fileID: 7879002815477068618, guid: 73f10db713e793848a1954795e4d03ab, type: 3}
+  - ID: hunted_step_2
+    Element: {fileID: 8815566381560394692, guid: 775ccfa94bde6644fb6da62ad97bc432, type: 3}
+  - ID: hunted_step_3
+    Element: {fileID: 6601813647547109226, guid: 2f516d6446703b24bab546037e22665c, type: 3}
+  - ID: hunted_jump_end
+    Element: {fileID: 6601813647547109226, guid: 938779158240f0b4989f0a307e6645ce, type: 3}

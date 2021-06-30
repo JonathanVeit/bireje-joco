@@ -46,7 +46,7 @@ namespace BiReJeJoCo.Character
 			if(ignoreControllerMomentum)
 				_velocity = controller.GetMovementVelocity();
 			else
-				_velocity = controller.GetVelocity();
+				_velocity = controller.GetMovementVelocity();
 
 			//Project velocity onto a plane defined by the 'up' direction of the parent transform;
 			_velocity = Vector3.ProjectOnPlane(_velocity, parentTransform.up);

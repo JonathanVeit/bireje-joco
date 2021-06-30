@@ -15,7 +15,7 @@ namespace BiReJeJoCo.Backend
 		[SerializeField] TriggerReset[] triggerResets;
 		[SerializeField] AnimationEventCatcher eventCatcher;
 
-		private IVelocitySource velocitySource;
+		private IMovementVelocitySource velocitySource;
 		private float curMoveSpeed;
 		private SyncVar<string> syncedTrigger = new SyncVar<string>(9, true);
 		private SyncVar<string[]> syncedFloat = new SyncVar<string[]>(10, true);
@@ -71,9 +71,11 @@ namespace BiReJeJoCo.Backend
 		}
 		private float GetTransformedMagnitude() 
 		{
-			var vel = velocitySource.GetVelocity();
+			var vel = velocitySource.GetMovementVelocity();
 			vel.y = 0;
-			return vel.magnitude;
+			var magnitude = vel.magnitude;
+
+			return magnitude;
 		}
 
 		#region Animator Parameters

@@ -11,7 +11,7 @@ namespace BiReJeJoCo.Character
 	//Advanced walker controller script;
 	//This controller is used as a basis for other controller types ('SidescrollerController');
 	//Custom movement input can be implemented by creating a new script that inherits 'AdvancedWalkerController' and overriding the 'CalculateMovementDirection' function;
-	public class AdvancedWalkerController : Controller, IVelocitySource
+	public class AdvancedWalkerController : Controller
 	{
 		//References to attached components;
 		protected Transform tr;

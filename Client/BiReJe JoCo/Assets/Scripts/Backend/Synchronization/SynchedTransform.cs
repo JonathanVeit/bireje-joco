@@ -10,7 +10,7 @@ namespace BiReJeJoCo.Backend
         Rotation = 1 << 1,
     }
 
-    public class SynchedTransform : TickBehaviour, IPunObservable, IPlayerObserved, IVelocitySource
+    public class SynchedTransform : TickBehaviour, IPunObservable, IPlayerObserved, IMovementVelocitySource
     {
         [Header("Settings")]
         [SerializeField] SyncedTransformType type;
@@ -266,7 +266,7 @@ namespace BiReJeJoCo.Backend
             this.ground = ground;
         }
 
-        public Vector3 GetVelocity() { return m_NetworkVelocity; }
+        public Vector3 GetMovementVelocity() { return m_NetworkVelocity; }
         #endregion
 
         #region Helper
