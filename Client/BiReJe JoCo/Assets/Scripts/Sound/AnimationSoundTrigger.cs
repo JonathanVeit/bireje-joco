@@ -20,7 +20,6 @@ namespace BiReJeJoCo.Sound
         {
             foreach (SoundEffectMapping mappedEffect in effects.FindAll(x => x.trigger == trigger))
             {
-                Debug.Log(trigger);
                 if (mappedEffect.target == null)
                 {
                     soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)]);

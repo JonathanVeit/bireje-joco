@@ -1,56 +1,64 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace BiReJeJoCo.Sound
 {
-
-    [RequireComponent(typeof(AnimationEventCatcher))]
     public class AmbientSoundManager : TickBehaviour
     {
         [Header("Settings")]
-        [SerializeField] List<SourceMapping> audioSources;
-        [SerializeField] float transitionThreshold;
-        private Transform PlayerTransform => playerManager.LocalPlayer.PlayerCharacter? playerManager.LocalPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform : null;
-        
+        [SerializeField] GroupMapping[] groups;
+        [SerializeField] AudioMixer mixer;
+        [SerializeField] AnimationCurve blendCurve;
+        [SerializeField] float blendSpeed;
+
+        private Transform PlayerRoot;
+        private float posY;
+
         protected override void OnSystemsInitialized()
         {
-            GetComponent<AnimationEventCatcher>().onAnimationEventTriggered += OnAnimationEventTriggered;
-        }
+            base.OnSystemsInitialized();
+            messageHub.RegisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
 
-        private void OnAnimationEventTriggered(string obj)
+            foreach (var mapping in groups)
+            {
+                mixer.SetFloat(mapping.audioGroup, -80);
+            }
+        }
+        protected override void OnBeforeDestroy()
         {
-            throw new System.NotImplementedException();
+            base.OnBeforeDestroy();
+            messageHub.UnregisterReceiver<PlayerCharacterSpawnedMsg>(this, OnPlayerCharacterSpawned);
         }
 
+        private void OnPlayerCharacterSpawned(PlayerCharacterSpawnedMsg msg)
+        {
+            PlayerRoot = localPlayer.PlayerCharacter.ControllerSetup.ModelRoot;
+            posY = PlayerRoot.transform.position.y;
+        }
+   
         public override void Tick(float deltaTime)
         {
-            if (PlayerTransform == null)
+            if (PlayerRoot == null)
                 return;
 
-            var yPos = PlayerTransform.position.y;
-            var previousHeight = int.MaxValue;
-
-            foreach (var mappedSource in audioSources)
+            posY = Mathf.Lerp(posY, PlayerRoot.position.y, blendSpeed * deltaTime);
+            foreach (var mapping in groups)
             {
-                if (mappedSource.height >= yPos &&
-                    mappedSource.height < previousHeight - transitionThreshold)
-                {
-                    mappedSource.audioSource.volume = 1;
-                }
-                else if (yPos >= mappedSource.height - transitionThreshold)
-                {
+                var delta = Mathf.InverseLerp(mapping.minHeight, mapping.maxHeight, posY); 
+                var volumeDelta = 1 - blendCurve.Evaluate(delta);
+                var value = -80f * volumeDelta;
 
-                }
-
-                previousHeight = mappedSource.height;
+                mixer.SetFloat(mapping.audioGroup, value);
             }
         }
 
         [System.Serializable]
-        private struct SourceMapping 
+        private struct GroupMapping 
         {
-            public AudioSource audioSource;
-            public int height;
+            public string name;
+            public int minHeight;
+            public int maxHeight;
+            public string audioGroup;
         }
     }
 }
