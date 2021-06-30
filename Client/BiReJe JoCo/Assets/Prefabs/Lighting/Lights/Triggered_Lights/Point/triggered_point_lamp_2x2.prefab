@@ -386,6 +386,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 160851329944446346}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: light_switch
+    soundTarget: {fileID: 160851329944446346}
     isCoolingDown: 0
   - target: 3
     Id: 1
@@ -398,6 +400,8 @@ MonoBehaviour:
     hideInCooldown: 1
     floatingElementTarget: {fileID: 5717604576347854945}
     floatingElementOffset: {x: 0, y: 0}
+    soundEffectId: light_switch
+    soundTarget: {fileID: 5717604576347854945}
     isCoolingDown: 0
   playerLayer:
     serializedVersion: 2

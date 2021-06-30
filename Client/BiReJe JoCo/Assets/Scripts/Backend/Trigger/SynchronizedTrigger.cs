@@ -45,6 +45,8 @@ namespace BiReJeJoCo.Backend
         {
             photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, DisplayedTrigger.Id, localPlayer.NumberInRoom), messageTarget);
             DisplayedTrigger.isCoolingDown = true;
+
+            PlayTriggerSound(DisplayedTrigger);
             ResetActiveInstance();
         }
         protected sealed override void OnTriggerHold(float duration)
@@ -54,6 +56,7 @@ namespace BiReJeJoCo.Backend
                 photonMessageHub.ShoutMessage(new TriggerPointInteractedPhoMsg(triggerId, DisplayedTrigger.Id, localPlayer.NumberInRoom), messageTarget);
                 DisplayedTrigger.isCoolingDown = true;
 
+                PlayTriggerSound(DisplayedTrigger);
                 UpdateTriggerProgress(DisplayedTrigger, 0);
                 ResetActiveInstance();
             }

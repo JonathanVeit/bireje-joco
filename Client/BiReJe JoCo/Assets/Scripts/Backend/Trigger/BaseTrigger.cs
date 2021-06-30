@@ -135,9 +135,10 @@ namespace BiReJeJoCo.Backend
         }
         protected virtual void OnTriggerPressed()
         {
-                OnTriggerInteracted(DisplayedTrigger.Id);
-                StartCoroutine(CoolDown(DisplayedTrigger));
-                ResetActiveInstance();
+            OnTriggerInteracted(DisplayedTrigger.Id);
+            PlayTriggerSound(DisplayedTrigger);
+            StartCoroutine(CoolDown(DisplayedTrigger));
+            ResetActiveInstance();
         }
 
         private void OnTriggerHoldInternal(float duration)
@@ -159,6 +160,7 @@ namespace BiReJeJoCo.Backend
             if (DisplayedTrigger.pressDuration <= duration)
             {
                 OnTriggerInteracted(DisplayedTrigger.Id);
+                PlayTriggerSound(DisplayedTrigger);
                 StartCoroutine(CoolDown(DisplayedTrigger));
                 UpdateTriggerProgress(DisplayedTrigger, 0);
                 ResetActiveInstance();
@@ -319,6 +321,17 @@ namespace BiReJeJoCo.Backend
             initialPressDuration = null;
         }
 
+        protected void PlayTriggerSound(TriggerSetup trigger) 
+        {
+            if (string.IsNullOrEmpty(trigger.soundEffectId))
+                return;
+
+            if (trigger.soundTarget)
+                soundEffectManager.Play(trigger.soundEffectId, trigger.soundTarget);
+            else 
+                soundEffectManager.Play(trigger.soundEffectId, trigger.root);
+        }
+
         [System.Serializable]
         protected class TriggerSetup
         {
@@ -337,6 +350,10 @@ namespace BiReJeJoCo.Backend
             public bool hideInCooldown = true;
             public Transform floatingElementTarget;
             public Vector2 floatingElementOffset;
+
+            [Space(10)]
+            public string soundEffectId;
+            public Transform soundTarget;
 
             [Header("Debugging")]
             public bool isCoolingDown;
