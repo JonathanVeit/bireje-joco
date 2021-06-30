@@ -15,39 +15,45 @@ namespace BiReJeJoCo.Sound
         public void CleanUp() { DIContainer.UnregisterImplementation<SoundEffectManager>(); }
         #endregion
 
-        public void Play(string soundId)
+        public AudioSourceHandler Play(string soundId)
         {
             var audiosource = CreateSoundObject(soundId);
-            audiosource.Play();
+            audiosource.AudioSource.Play();
+
+            return audiosource;
         }
-        public void Play(string soundId, Vector3 position)
+        public AudioSourceHandler Play(string soundId, Vector3 position)
         {
             var audiosource = CreateSoundObject(soundId, position);
-            audiosource.Play();
+            audiosource.AudioSource.Play();
+
+            return audiosource;
         }
-        public void Play(string soundId, Transform parent)
+        public AudioSourceHandler Play(string soundId, Transform parent)
         {
-            var audiosource = CreateSoundObject(soundId, parent);
-            audiosource.Play();
+            var soundHandle = CreateSoundObject(soundId, parent);
+            soundHandle.AudioSource.Play();
+
+            return soundHandle;
         }
 
-        private AudioSource CreateSoundObject(string soundId)
+        private AudioSourceHandler CreateSoundObject(string soundId)
         {
             var clipSetup = SoundEffectMapping.GetMapping().GetElementForKey(soundId);
             var root = poolingManager.PoolInstanceAs<AudioSourceHandler>(clipSetup, Vector3.zero, Quaternion.identity);
-            return root.AudioSource;
+            return root;
         }
-        private AudioSource CreateSoundObject(string soundId, Vector3 position) 
+        private AudioSourceHandler CreateSoundObject(string soundId, Vector3 position) 
         {
             var clipSetup = SoundEffectMapping.GetMapping().GetElementForKey(soundId);
             var root = poolingManager.PoolInstanceAs<AudioSourceHandler>(clipSetup, position, Quaternion.identity);
-            return root.AudioSource;
+            return root;
         }
-        private AudioSource CreateSoundObject(string soundId, Transform parent)
+        private AudioSourceHandler CreateSoundObject(string soundId, Transform parent)
         {
             var clipSetup = SoundEffectMapping.GetMapping().GetElementForKey(soundId);
             var root = poolingManager.PoolInstanceAs<AudioSourceHandler>(clipSetup, parent);
-            return root.AudioSource;
+            return root;
         }
     }
 }

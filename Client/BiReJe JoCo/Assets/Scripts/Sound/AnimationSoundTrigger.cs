@@ -1,15 +1,16 @@
-using BiReJeJoCo.Character;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BiReJeJoCo.Sound
 {
-
     [RequireComponent(typeof(AnimationEventCatcher))]
     public class AnimationSoundTrigger : SystemBehaviour
     {
         [Header("Settings")]
         [SerializeField] List<SoundEffectMapping> effects;
+
+        private Dictionary<string, List<AudioSourceHandler>> observedEffects
+            = new Dictionary<string, List<AudioSourceHandler>>();
 
         protected override void OnSystemsInitialized()
         {
@@ -18,25 +19,62 @@ namespace BiReJeJoCo.Sound
 
         private void OnAnimationEventTriggered(string trigger)
         {
+            Debug.Log("trigger:" + trigger);
+            CheckObservedEffects(trigger);
+
             foreach (SoundEffectMapping mappedEffect in effects.FindAll(x => x.trigger == trigger))
             {
                 if (mappedEffect.target == null)
                 {
-                    soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)]);
+                    var audioSource = soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)]);
+                    ObserveSource(mappedEffect, audioSource);
                     continue;
                 }
 
                 if (mappedEffect.parent)
-                    soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target);
+                {
+                    var audioSource = soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target);
+                    ObserveSource(mappedEffect, audioSource);
+                }
                 else
-                    soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target.position);
+                {
+                    var audioSource = soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target.position);
+                    ObserveSource(mappedEffect, audioSource);
+                }
             }
+        }
+        private void ObserveSource(SoundEffectMapping effect, AudioSourceHandler audioSource)
+        {
+            if (string.IsNullOrEmpty(effect.stopTrigger))
+                return;
+
+            if (!observedEffects.ContainsKey(effect.stopTrigger))
+                observedEffects.Add(effect.stopTrigger, new List<AudioSourceHandler>());
+
+            Debug.Log("Observe shoot");
+            observedEffects[effect.stopTrigger].Add(audioSource);
+        }
+
+        private void CheckObservedEffects(string trigger) 
+        {
+            if (!observedEffects.ContainsKey(trigger))
+                return;
+
+            foreach (var curHandler in observedEffects[trigger])
+            {
+                curHandler.AudioSource.Stop();
+                curHandler.RequestReturnToPool();
+            }
+
+            Debug.Log("stop observe shoot");
+            observedEffects.Remove(trigger);
         }
 
         [System.Serializable]
         private struct SoundEffectMapping 
         {
             public string trigger;
+            public string stopTrigger;
             public Transform target;
             public bool parent;
             public string[] soundEffects;

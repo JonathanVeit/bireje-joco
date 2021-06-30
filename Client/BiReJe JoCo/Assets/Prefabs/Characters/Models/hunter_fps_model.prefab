@@ -229,6 +229,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minAnimationWeight: 0.5
+  overrideAnimationWeight:
+  - eventName: start_shoot
+    weight: 0
+  - eventName: end_shoot
+    weight: 0
 --- !u!114 &1146118180536672680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - trigger: step
+    stopTrigger: 
     target: {fileID: 2105642426687470704}
     parent: 0
     soundEffects:
@@ -269,10 +275,17 @@ MonoBehaviour:
     - hunter_step_2
     - hunter_step_3
   - trigger: jump_end
+    stopTrigger: 
     target: {fileID: 2105642426687470704}
     parent: 0
     soundEffects:
     - hunter_jump_end
+  - trigger: start_shoot
+    stopTrigger: end_shoot
+    target: {fileID: 1910610699396917591}
+    parent: 1
+    soundEffects:
+    - hunter_shoot
 --- !u!1 &2914073855428970828
 GameObject:
   m_ObjectHideFlags: 0
