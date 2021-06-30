@@ -20,11 +20,17 @@ namespace BiReJeJoCo.Sound
         {
             foreach (SoundEffectMapping mappedEffect in effects.FindAll(x => x.trigger == trigger))
             {
+                Debug.Log(trigger);
+                if (mappedEffect.target == null)
+                {
+                    soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)]);
+                    continue;
+                }
+
                 if (mappedEffect.parent)
                     soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target);
                 else
                     soundEffectManager.Play(mappedEffect.soundEffects[Random.Range(0, mappedEffect.soundEffects.Length)], mappedEffect.target.position);
-                Debug.Log(trigger);
             }
         }
 

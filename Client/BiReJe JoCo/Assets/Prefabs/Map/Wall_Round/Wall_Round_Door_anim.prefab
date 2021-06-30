@@ -578,6 +578,8 @@ GameObject:
   - component: {fileID: 8266835713843286603}
   - component: {fileID: 3755509677215920853}
   - component: {fileID: 5252297638745585946}
+  - component: {fileID: 8086486546412818329}
+  - component: {fileID: 4553667128616674776}
   m_Layer: 0
   m_Name: Wall_Round_Door_anim
   m_TagString: Untagged
@@ -671,6 +673,42 @@ MonoBehaviour:
   anim: {fileID: 3755509677215920853}
   coolDownTime: 1.4
   isOpen: 0
+--- !u!114 &8086486546412818329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8787195656651671793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAnimationWeight: 0.5
+--- !u!114 &4553667128616674776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8787195656651671793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5329cb2055623bc43bd0cfc84aa16564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - trigger: open
+    target: {fileID: 8266835713843286603}
+    parent: 0
+    soundEffects:
+    - door_open_1
+  - trigger: close
+    target: {fileID: 8266835713843286603}
+    parent: 0
+    soundEffects:
+    - door_close_1
 --- !u!1 &8836178583973250553
 GameObject:
   m_ObjectHideFlags: 0

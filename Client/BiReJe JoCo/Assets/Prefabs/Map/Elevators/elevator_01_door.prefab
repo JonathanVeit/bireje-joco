@@ -386,6 +386,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8464300869441395609}
   - component: {fileID: 395509566831001961}
+  - component: {fileID: 4100616043192217189}
+  - component: {fileID: 1714079591274951082}
   m_Layer: 0
   m_Name: elevator_01_door
   m_TagString: Untagged
@@ -430,3 +432,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4100616043192217189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9096405274937639203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAnimationWeight: 0.5
+--- !u!114 &1714079591274951082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9096405274937639203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5329cb2055623bc43bd0cfc84aa16564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - trigger: open
+    target: {fileID: 8464300869441395609}
+    parent: 0
+    soundEffects:
+    - door_open_1
+  - trigger: close
+    target: {fileID: 8464300869441395609}
+    parent: 0
+    soundEffects:
+    - door_close_1
