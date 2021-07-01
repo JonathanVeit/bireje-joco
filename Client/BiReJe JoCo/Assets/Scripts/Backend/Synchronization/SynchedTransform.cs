@@ -18,7 +18,6 @@ namespace BiReJeJoCo.Backend
         [SerializeField] float teleportAt;
         [SerializeField] Transform movementTarget;
         [SerializeField] Transform rotationTarget;
-        [SerializeField] Rigidbody rigidBody;
         [SerializeField] [Range(0.1f, 2)]float smoothSyncSpeed = 1f;
 
         [Space(10)]
@@ -37,7 +36,7 @@ namespace BiReJeJoCo.Backend
         [SerializeField] Transform ground;
 
         bool m_firstTake = false;
-        PhotonView photonView;
+        IVelocitySource velocitySource;
 
         private PlayerControlled controller;
         public Player Owner => controller.Player;
@@ -50,7 +49,6 @@ namespace BiReJeJoCo.Backend
             m_NetworkPosition = Vector3.zero;
 
             m_NetworkRotation = Quaternion.identity;
-            photonView = controller.PhotonView;
 
             if (!movementTarget)
                 movementTarget = transform;
@@ -154,9 +152,9 @@ namespace BiReJeJoCo.Backend
                     stream.SendNext(this.m_Direction);
                 }
 
-                if (rigidBody)
+                if (velocitySource != null)
                 {
-                    this.m_NetworkVelocity = rigidBody.velocity;
+                    this.m_NetworkVelocity = velocitySource.GetVelocity();
                     stream.SendNext(m_NetworkVelocity);
                 }
             }
@@ -205,7 +203,7 @@ namespace BiReJeJoCo.Backend
 
             }
 
-            if (rigidBody)
+            if (stream.PeekNext() is Vector3)
             {
                 this.m_NetworkVelocity = (Vector3) stream.ReceiveNext();
             }
@@ -256,9 +254,9 @@ namespace BiReJeJoCo.Backend
         {
             rotationTarget = target;
         }
-        public void SetRigidBody(Rigidbody target)
+        public void SetVelocitySource(IVelocitySource source)
         {
-            rigidBody = target;
+            velocitySource = source;
         }
 
         public void SetGround(Transform ground)
