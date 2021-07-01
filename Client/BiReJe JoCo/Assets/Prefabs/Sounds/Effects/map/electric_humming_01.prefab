@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &985460216649051771
+--- !u!1 &2810034281446387897
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1867301251330987714}
-  - component: {fileID: 6595455769384300462}
+  - component: {fileID: 8220548158357176690}
+  - component: {fileID: 4216908483938309629}
   m_Layer: 0
-  m_Name: amb_snow_high
+  m_Name: electric_humming_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1867301251330987714
+--- !u!4 &8220548158357176690
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985460216649051771}
+  m_GameObject: {fileID: 2810034281446387897}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3720093, y: 2.076561, z: -1.7397537}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &6595455769384300462
+--- !u!82 &4216908483938309629
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985460216649051771}
+  m_GameObject: {fileID: 2810034281446387897}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -6489980211199244015, guid: 3f61df14c01020344812cb0ffd026c98, type: 2}
-  m_audioClip: {fileID: 8300000, guid: e06672f757c7f2e498472780d9a6e9e8, type: 3}
+  OutputAudioMixerGroup: {fileID: -1532852218742568094, guid: 3f61df14c01020344812cb0ffd026c98, type: 2}
+  m_audioClip: {fileID: 8300000, guid: c8317d1a0b0e922419e555bc5ae072a9, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -51,10 +51,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 3.06
+  MaxDistance: 13.521591
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -68,17 +68,26 @@ AudioSource:
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7862342
+      value: 0.6780449
+      inSlope: -1.3248718
+      outSlope: -1.3248718
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12041677
+      outWeight: 0.6354791
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.9329277
+      outSlope: -0.9329277
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      weightedMode: 1
+      inWeight: 0.45565087
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -87,7 +96,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
