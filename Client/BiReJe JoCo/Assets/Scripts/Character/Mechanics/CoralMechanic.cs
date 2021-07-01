@@ -34,7 +34,7 @@ namespace BiReJeJoCo.Character
         {
             ConnectEvents();
             gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
-            Owner.PlayerCharacter.ControllerSetup.AnimationController.onPlaceSporesFinished += OnFinishedPlaceCorals;
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.onAnimationEvent += OnAnimationEvent;
         }
         protected override void OnInitializeRemote()
         {
@@ -223,9 +223,12 @@ namespace BiReJeJoCo.Character
             }
         }
 
-        private void OnFinishedPlaceCorals()
+        private void OnAnimationEvent(string eventName)
         {
-            messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, new UnblockPlayerControlsMsg(InputBlockState.Free));
+            if (eventName == "place_corals_finished")
+            {
+                messageHub.ShoutMessage<UnblockPlayerControlsMsg>(this, new UnblockPlayerControlsMsg(InputBlockState.Free));
+            }
         }
         #endregion
     }

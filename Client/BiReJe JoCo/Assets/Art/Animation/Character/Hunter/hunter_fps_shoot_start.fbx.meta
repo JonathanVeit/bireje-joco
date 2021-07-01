@@ -59,9 +59,57 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
+      transformMask:
+      - path: 
+        weight: 1
+      - path: CharacterFPS_anim_01:FPS_Body_Geo
+        weight: 1
+      - path: CharacterFPS_anim_01:Def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def/CharacterFPS_anim_01:Gun_handle_back_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def/CharacterFPS_anim_01:Gun_handle_back_def/CharacterFPS_anim_01:Gun_front_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def/CharacterFPS_anim_01:Gun_handle_back_def/CharacterFPS_anim_01:Gun_front_def/CharacterFPS_anim_01:Weapon_l_hand_snap
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def/CharacterFPS_anim_01:Gun_handle_back_def/CharacterFPS_anim_01:Weapon_r_hand_snap
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Gun_root_def/CharacterFPS_anim_01:Gun_bullet_defs
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def/CharacterFPS_anim_01:Shoulder_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def/CharacterFPS_anim_01:Shoulder_l_def/CharacterFPS_anim_01:Elbow_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def/CharacterFPS_anim_01:Shoulder_l_def/CharacterFPS_anim_01:Elbow_l_def/CharacterFPS_anim_01:Wrist_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def/CharacterFPS_anim_01:Shoulder_l_def/CharacterFPS_anim_01:Elbow_l_def/CharacterFPS_anim_01:Wrist_l_def/CharacterFPS_anim_01:Fingers_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_l_def/CharacterFPS_anim_01:Shoulder_l_def/CharacterFPS_anim_01:Elbow_l_def/CharacterFPS_anim_01:Wrist_l_def/CharacterFPS_anim_01:Thumb_l_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def/CharacterFPS_anim_01:Shoulder_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def/CharacterFPS_anim_01:Shoulder_r_def/CharacterFPS_anim_01:Elbow_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def/CharacterFPS_anim_01:Shoulder_r_def/CharacterFPS_anim_01:Elbow_r_def/CharacterFPS_anim_01:Wrist_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def/CharacterFPS_anim_01:Shoulder_r_def/CharacterFPS_anim_01:Elbow_r_def/CharacterFPS_anim_01:Wrist_r_def/CharacterFPS_anim_01:Fingers_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Stomach_def/CharacterFPS_anim_01:Clavicle_r_def/CharacterFPS_anim_01:Shoulder_r_def/CharacterFPS_anim_01:Elbow_r_def/CharacterFPS_anim_01:Wrist_r_def/CharacterFPS_anim_01:Thumb_r_def
+        weight: 1
+      - path: CharacterFPS_anim_01:Def/CharacterFPS_anim_01:Character_root_def/CharacterFPS_anim_01:Trap_def
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 04593665a774b4440be5e4afd423398b, type: 2}
       additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:

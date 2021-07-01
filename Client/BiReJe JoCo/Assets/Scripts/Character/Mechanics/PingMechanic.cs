@@ -26,8 +26,7 @@ namespace BiReJeJoCo.Character
         }
         protected override void OnInitializeRemote()
         {
-            if (localPlayer.Role == PlayerRole.Hunter)
-                pingPosition.OnValueReceived += OnPingUpdated;
+            pingPosition.OnValueReceived += OnPingUpdated;
             
             ConnectEvents();
         }
@@ -75,7 +74,8 @@ namespace BiReJeJoCo.Character
             target.GetComponent<Rigidbody>().AddForce((pingSpawnPoint.forward + additionalThrowDirection) * throwStrength, ForceMode.Impulse);
             target.GetComponent<Rigidbody>().AddTorque(throwTorque);
 
-            if (!Owner.IsLocalPlayer)
+            if (!Owner.IsLocalPlayer && 
+                localPlayer.Role == PlayerRole.Hunter)
             {
                 var parent = uiManager.GetInstanceOf<GameUI>().floatingElementGrid;
                 target.transform.position = position;

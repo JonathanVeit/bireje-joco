@@ -18,7 +18,6 @@ namespace BiReJeJoCo
         {
             base.OnSystemsInitialized();
             DontDestroyOnLoad(this);
-            State = MatchState.InLobby;
             
             DIContainer.RegisterImplementation<MatchHandler>(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
@@ -120,11 +119,13 @@ namespace BiReJeJoCo
             {
                 photonMessageHub.UnregisterReceiver(this);
                 photonClient.LeaveLobby();
+                State = MatchState.InLobby;
             }
 
             // needs to be destroyed over photon 
             photonRoomWrapper.Destroy(localPlayer.PlayerCharacter.gameObject);
             StopCoroutine(durationCounter);
+            State = MatchState.None;
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }

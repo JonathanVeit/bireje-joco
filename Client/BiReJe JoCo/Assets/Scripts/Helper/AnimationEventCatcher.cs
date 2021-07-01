@@ -10,6 +10,7 @@ namespace BiReJeJoCo.Character
 
         public void OnAnimationEvent(string args)
         {
+            Debug.Log(args);
             onAnimationEventTriggered?.Invoke(args);
         }
     }

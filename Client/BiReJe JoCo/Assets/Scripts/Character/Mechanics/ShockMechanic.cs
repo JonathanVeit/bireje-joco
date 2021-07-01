@@ -66,7 +66,8 @@ namespace BiReJeJoCo.Character
 
         public void Shoot()
         {
-            if (reloadTimer.State != TimerState.Finished) return;
+            if (reloadTimer.State != TimerState.Finished || 
+                Behaviour.TrapMechanic.IsThrowingTrap) return;
 
             var shootTarget = CalculateShootTarget();
             shootPosition.SetValue(shootTarget);
@@ -105,10 +106,11 @@ namespace BiReJeJoCo.Character
         public void Reload ()
         {
             if (ammoCounter.RelativeProgress == 0 ||
-                reloadTimer.State == TimerState.Counting) return;
+                reloadTimer.State == TimerState.Counting || 
+                Behaviour.TrapMechanic.IsThrowingTrap) return;
 
             Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("reload");
-            Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall", "start_shoot");
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall", "start_shoot", "throw_trap");
             StopShooting(false);
 
             reloadTimer.Start(
@@ -120,7 +122,7 @@ namespace BiReJeJoCo.Character
                 () => 
                 {
                     ammoCounter.SetValue(0);
-                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall", "start_shoot");
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall", "start_shoot", "throw_trap");
                 }); // finish
         }
 

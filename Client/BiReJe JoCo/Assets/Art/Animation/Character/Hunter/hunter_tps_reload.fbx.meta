@@ -59,9 +59,101 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Character_Body_geo
+        weight: 0
+      - path: Def
+        weight: 0
+      - path: Def/Character_root_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_bullet_defs
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def/Gun_front_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def/Gun_front_def/Gun_handle_front_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def/Gun_front_def/Gun_handle_front_def/Hand_l_snap
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def/Gun_front_def/Pipe_05_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Gun_root_def/Gun_handle_back_def/Hand_r_snap
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Pipe_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Pipe_def/Pipe_02_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Pipe_def/Pipe_03_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Pipe_def/Pipe_04_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Backpack_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Backpack_def/Pipe_01_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Backpack_def/Trap_world_point
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def/Shoulder_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def/Shoulder_l_def/Elbow_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def/Shoulder_l_def/Elbow_l_def/Wrist_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def/Shoulder_l_def/Elbow_l_def/Wrist_l_def/Fingers_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_l_def/Shoulder_l_def/Elbow_l_def/Wrist_l_def/Thumb_l_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def/Shoulder_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def/Shoulder_r_def/Elbow_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def/Shoulder_r_def/Elbow_r_def/Wrist_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def/Shoulder_r_def/Elbow_r_def/Wrist_r_def/Fingers_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Clavicle_r_def/Shoulder_r_def/Elbow_r_def/Wrist_r_def/Thumb_r_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Neck_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Stomach_def/Neck_def/Head_def
+        weight: 1
+      - path: Def/Character_root_def/Hip_def/Thigh_l_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_l_def/Knee_l_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_l_def/Knee_l_def/Ankle_l_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_l_def/Knee_l_def/Ankle_l_def/ToeMid_l_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_l_def/Knee_l_def/Ankle_l_def/ToeMid_l_def/Toe_l_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_r_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_r_def/Knee_r_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_r_def/Knee_r_def/Ankle_r_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_r_def/Knee_r_def/Ankle_r_def/ToeMid_r_def
+        weight: 0
+      - path: Def/Character_root_def/Hip_def/Thigh_r_def/Knee_r_def/Ankle_r_def/ToeMid_r_def/Toe_r_def
+        weight: 0
+      - path: Def/Character_root_def/Trap_def
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: d66657e6e8af2dd4a886393b910d82f9, type: 2}
       additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:

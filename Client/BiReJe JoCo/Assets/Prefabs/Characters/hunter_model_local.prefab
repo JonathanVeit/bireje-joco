@@ -370,6 +370,10 @@ MonoBehaviour:
     resetTrigger:
     - land
     - end_shoot
+  - triggerName: throw_trap
+    resetTrigger:
+    - land
+    - end_shoot
   - triggerName: start_shoot
     resetTrigger:
     - end_shoot
