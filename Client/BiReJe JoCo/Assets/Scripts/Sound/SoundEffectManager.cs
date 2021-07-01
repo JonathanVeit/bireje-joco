@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using JoVei.Base;
 
-namespace BiReJeJoCo.Sound
+namespace BiReJeJoCo.Audio
 {
     public class SoundEffectManager : SystemAccessor, IInitializable
     {

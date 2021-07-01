@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine;
 using JoVei.Base;
 
 namespace BiReJeJoCo

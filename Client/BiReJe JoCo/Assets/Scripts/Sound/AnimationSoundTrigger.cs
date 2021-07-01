@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BiReJeJoCo.Sound
+namespace BiReJeJoCo.Audio
 {
     [RequireComponent(typeof(AnimationEventCatcher))]
     public class AnimationSoundTrigger : SystemBehaviour
@@ -19,7 +19,6 @@ namespace BiReJeJoCo.Sound
 
         private void OnAnimationEventTriggered(string trigger)
         {
-            Debug.Log("trigger:" + trigger);
             CheckObservedEffects(trigger);
 
             foreach (SoundEffectMapping mappedEffect in effects.FindAll(x => x.trigger == trigger))
@@ -51,7 +50,6 @@ namespace BiReJeJoCo.Sound
             if (!observedEffects.ContainsKey(effect.stopTrigger))
                 observedEffects.Add(effect.stopTrigger, new List<AudioSourceHandler>());
 
-            Debug.Log("Observe shoot");
             observedEffects[effect.stopTrigger].Add(audioSource);
         }
 
@@ -66,7 +64,6 @@ namespace BiReJeJoCo.Sound
                 curHandler.RequestReturnToPool();
             }
 
-            Debug.Log("stop observe shoot");
             observedEffects.Remove(trigger);
         }
 

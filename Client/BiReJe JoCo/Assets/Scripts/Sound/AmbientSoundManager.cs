@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace BiReJeJoCo.Sound
+namespace BiReJeJoCo.Audio
 {
     public class AmbientSoundManager : TickBehaviour
     {
