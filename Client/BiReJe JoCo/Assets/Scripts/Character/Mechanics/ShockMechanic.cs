@@ -21,10 +21,12 @@ namespace BiReJeJoCo.Character
 
         public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
         public ShockGun Gun => gun;
+        public bool IsShooting { get; private set; }
+        public bool IsReloading => reloadTimer.State == TimerState.Counting;
+
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 
-        private bool isShooting;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -66,7 +68,8 @@ namespace BiReJeJoCo.Character
 
         public void Shoot()
         {
-            if (reloadTimer.State != TimerState.Finished) return;
+            if (reloadTimer.State != TimerState.Finished || 
+                Behaviour.TrapMechanic.IsThrowingTrap) return;
 
             var shootTarget = CalculateShootTarget();
             shootPosition.SetValue(shootTarget);
@@ -78,11 +81,11 @@ namespace BiReJeJoCo.Character
             });
             gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
 
-            if (!isShooting)
+            if (!IsShooting)
             {
                 Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("start_shoot");
                 Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall");
-                isShooting = true;
+                IsShooting = true;
             }
         }
         public void StopShooting(bool callAnimationTrigger = true)
@@ -91,7 +94,7 @@ namespace BiReJeJoCo.Character
             gun.Shoot(null);
             isHitting.SetValue(false);
 
-            if (isShooting)
+            if (IsShooting)
             {
                 if (callAnimationTrigger &&
                     reloadTimer.State != TimerState.Counting)
@@ -99,16 +102,17 @@ namespace BiReJeJoCo.Character
                     Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("end_shoot");
                     Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall");
                 }
-                isShooting = false;
+                IsShooting = false;
             }
         }
         public void Reload ()
         {
             if (ammoCounter.RelativeProgress == 0 ||
-                reloadTimer.State == TimerState.Counting) return;
+                reloadTimer.State == TimerState.Counting || 
+                Behaviour.TrapMechanic.IsThrowingTrap) return;
 
             Owner.PlayerCharacter.ControllerSetup.AnimationController.SetTrigger("reload");
-            Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall", "start_shoot");
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.BlockParameters("jump", "land", "fall", "start_shoot", "throw_trap");
             StopShooting(false);
 
             reloadTimer.Start(
@@ -120,7 +124,7 @@ namespace BiReJeJoCo.Character
                 () => 
                 {
                     ammoCounter.SetValue(0);
-                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall", "start_shoot");
+                    Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "land", "fall", "start_shoot", "throw_trap");
                 }); // finish
         }
 

@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: edb31970090f1a84aa10c8653653a869
+guid: 61909b3219103d0439c8a122f961030e
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: hunter_fps_shoot
+    second: hunter_tps_jump_end
   externalObjects: {}
   materials:
     materialImportMode: 0
@@ -35,18 +35,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: hunter_fps_shoot
+      name: hunter_tps_jump_end
       takeName: Take 001
       internalID: 0
-      firstFrame: 25
-      lastFrame: 45
+      firstFrame: 30
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -58,11 +58,18 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.23039342
+        functionName: OnAnimationEvent
+        data: jump_end
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 15
+      additiveReferencePoseFrame: 30
     isReadable: 0
   meshes:
     lODScreenPercentages: []

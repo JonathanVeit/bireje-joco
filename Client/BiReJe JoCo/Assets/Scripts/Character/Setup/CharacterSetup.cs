@@ -51,11 +51,11 @@ namespace BiReJeJoCo.Character
         {
             if (!Owner.IsLocalPlayer)
             {
-                SpawnModel("hunted_model_remote");
+                CreateModel("hunted_model_remote");
             }
             else
             {
-                SpawnModel("hunted_model_local");
+                CreateModel("hunted_model_local");
                 SetupHuntedPP();
             }
 
@@ -65,18 +65,18 @@ namespace BiReJeJoCo.Character
         {
             if (!Owner.IsLocalPlayer)
             {
-                SpawnModel("hunter_model_remote");
+                CreateModel("hunter_model_remote");
             }
             else
             {
-                SpawnModel("hunter_model_local");
+                CreateModel("hunter_model_local");
                 SetupHunterPP();
             }
 
             SetLayerRecursively(this.gameObject, 6);
         }
 
-        private void SpawnModel(string prefab)
+        private void CreateModel(string prefab)
         {
             var modelPrefab = MatchPrefabMapping.GetMapping().GetElementForKey(prefab);
             var newModel = Instantiate(modelPrefab, transform.position, transform.rotation, transform);
@@ -84,7 +84,7 @@ namespace BiReJeJoCo.Character
 
             syncedTransform.SetMovementTarget(ControllerSetup.CharacterRoot);
             syncedTransform.SetRotationTarget(ControllerSetup.ModelRoot);
-            syncedTransform.SetRigidBody(ControllerSetup.RigidBody);
+            syncedTransform.SetVelocitySource(ControllerSetup.WalkController);
 
             controller.AddObservedGameObject(newModel);
         }

@@ -160,6 +160,18 @@ namespace BiReJeJoCo.Items
         #endregion
  
         #region Trigger Stuff
+        protected override void OnTriggerHold(float duration)
+        {
+            if (DisplayedTrigger.pressDuration <= duration)
+            {
+                OnTriggerInteracted(DisplayedTrigger.Id);
+                ResetActiveInstance();
+            }
+            else
+            {
+                UpdateTriggerProgress(DisplayedTrigger, duration);
+            }
+        }
         protected override void OnTriggerInteracted(byte pointId)
         {
             DisconnectEvents();

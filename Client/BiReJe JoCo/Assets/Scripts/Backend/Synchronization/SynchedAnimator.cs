@@ -20,7 +20,7 @@ namespace BiReJeJoCo.Backend
 		private SyncVar<string> syncedTrigger = new SyncVar<string>(9, true);
 		private SyncVar<string[]> syncedFloat = new SyncVar<string[]>(10, true);
 
-		public event Action onPlaceSporesFinished;
+		public event Action<string> onAnimationEvent;
 
 		private PlayerControlled controller;
 		public Player Owner => controller.Player;
@@ -103,6 +103,7 @@ namespace BiReJeJoCo.Backend
 				return;
 
 			syncedTrigger.SetValue(name);
+			syncedTrigger.ForceSend();
 			OnTriggerReceived(syncedTrigger.GetValue());
 		}
 		private void OnTriggerReceived(string trigger)
@@ -126,6 +127,7 @@ namespace BiReJeJoCo.Backend
 				return;
 
 			syncedFloat.SetValue(new string[2] { name, value.ToString() });
+			syncedFloat.ForceSend();
 			OnFloatReceived(syncedFloat.GetValue());
 		}
 		private void OnFloatReceived(string[] parameters)
@@ -140,12 +142,7 @@ namespace BiReJeJoCo.Backend
 		#region Events
 		private void OnAnimationEventTriggered(string args)
 		{
-			switch (args) 
-			{
-				case "place_corals_finished":
-					onPlaceSporesFinished?.Invoke();
-					break;
-			}
+			onAnimationEvent?.Invoke(args);
 		}
 		#endregion
 
