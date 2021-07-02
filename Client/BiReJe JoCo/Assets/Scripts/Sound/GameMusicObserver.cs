@@ -1,3 +1,4 @@
+using BiReJeJoCo.Backend;
 using BiReJeJoCo.Character;
 using JoVei.Base;
 using JoVei.Base.Helper;
@@ -99,20 +100,32 @@ namespace BiReJeJoCo.Audio
         private void OnLoadedMainScene(LoadedMainSceneMsg msg)
         {
             musicManager.Play(MusicState.MainMenu);
-            tickSystem.Unregister(this);
         }
         private void OnLoadedLobbyScene(LoadedLobbySceneMsg msg)
         {
             musicManager.Play(MusicState.Lobby);
-            tickSystem.Unregister(this);
         }
         private void OnLoadedGameScene(LoadedGameSceneMsg msg)
         {
             musicManager.Play(MusicState.MatchDefault);
-            tickSystem.Register(this);
 
             startChasingCounter = new Counter(musicManager.MusicConfig.StartChaseMusicDelay);
             endChasingCounter = new Counter(musicManager.MusicConfig.EndChaseMusicDelay);
+
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+        }
+
+        private void OnMatchFinished(PhotonMessage msg)
+        {
+            var castedMsg = msg as FinishMatchPhoMsg;
+
+            if (castedMsg.result.winner== PlayerRole.Hunter)
+                musicManager.Play(MusicState.HunterWin);
+            else
+                musicManager.Play(MusicState.HuntedWins);
+
+            photonMessageHub.UnregisterReceiver(this);
+            tickSystem.Unregister(this);
         }
         #endregion
 

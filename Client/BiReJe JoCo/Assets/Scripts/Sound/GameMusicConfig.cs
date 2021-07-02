@@ -38,6 +38,10 @@ namespace BiReJeJoCo.Audio
             public AudioClip clip;
             public float fadeIn;
             public float fadeOut;
+
+            [Space(10)]
+            public bool overridePrevious;
+            public float overrideFadeOut;
         }
     }
 }

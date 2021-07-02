@@ -13,6 +13,8 @@ namespace BiReJeJoCo.Audio
         MatchDefault = 3,
         HunterChasing = 4,
         HuntedChasing = 5,
+        HunterWin = 6,
+        HuntedWins = 7,
     }
 
     public class MusicManager : SystemAccessor, IInitializable
@@ -54,13 +56,18 @@ namespace BiReJeJoCo.Audio
         public void Play(MusicState state)
         {
             CurrentState = state;
+
             if (MusicConfig.GetClip(state, out var clipConfig))
             {
                 if (musicSwitcher != null)
                     CoroutineHelper.Instance.StopCoroutine(musicSwitcher);
 
-                musicSwitcher = CoroutineHelper.Instance.StartCoroutine(SwitchMusicClip(clipConfig.clip, clipConfig.fadeIn, curFadeOut));
+                var fadeout = curFadeOut;
+                if (clipConfig.overridePrevious)
+                    fadeout = clipConfig.overrideFadeOut;
                 curFadeOut = clipConfig.fadeOut;
+
+                musicSwitcher = CoroutineHelper.Instance.StartCoroutine(SwitchMusicClip(clipConfig.clip, clipConfig.fadeIn, fadeout));
             }
         }
 
@@ -94,14 +101,14 @@ namespace BiReJeJoCo.Audio
         #region Helper
         private GameMusicConfig LoadMusicConfig()
         {
-            var configs = Resources.LoadAll<GameMusicConfig>("");
-            if (configs.Length == 0)
+            var config = Resources.Load<GameMusicConfig>("Configs/GameMusicConfig");
+            if (config == null)
             {
                 Debug.LogError("Unable to find GameMusicConfig asset!");
                 return null;
             }
 
-            return configs[0];
+            return config;
         }
         #endregion
     }
