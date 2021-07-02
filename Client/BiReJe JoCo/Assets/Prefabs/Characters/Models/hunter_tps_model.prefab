@@ -1509,6 +1509,7 @@ GameObject:
   - component: {fileID: 661777125974481192}
   - component: {fileID: 6671575994626257978}
   - component: {fileID: 740963035158140762}
+  - component: {fileID: 8197755709636356920}
   m_Layer: 0
   m_Name: hunter_tps_model
   m_TagString: Untagged
@@ -1621,6 +1622,35 @@ MonoBehaviour:
     value: {x: 0, y: 0, z: 0}
   flashLightIsOn:
     value: 1
+--- !u!114 &8197755709636356920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8389895013275731514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e005f65141f214599579c18829d6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorSetups:
+  - renderer: {fileID: 5985711874474201063}
+    materialIndex: 0
+    materials:
+    - {fileID: 2100000, guid: 85812ac24b90d034888920a5d918639f, type: 2}
+    - {fileID: 2100000, guid: 76f10091ba432b448b4a7c1330803bd0, type: 2}
+    - {fileID: 2100000, guid: 28d90a7ad0fb07440ad7f588ae444301, type: 2}
+    - {fileID: 2100000, guid: 80773569da50b2b4d8a4db0bc12c6f76, type: 2}
+    - {fileID: 2100000, guid: d8f445cbd94f1c9458758a6d6a2d93b0, type: 2}
+  - renderer: {fileID: 5985711874474201063}
+    materialIndex: 1
+    materials:
+    - {fileID: 2100000, guid: a02a75ee3a5371840b5590df967f7da5, type: 2}
+    - {fileID: 2100000, guid: 8fbcae3cd9b04ff4eae7cc6972be445a, type: 2}
+    - {fileID: 2100000, guid: a99d5ba1dc8d8704f91e7ff43febbbe6, type: 2}
+    - {fileID: 2100000, guid: 1a7a32792994cd545a9f74206947402e, type: 2}
+    - {fileID: 2100000, guid: 9d373a13b1a9e974781ff922310a7cf7, type: 2}
 --- !u!1001 &721155580107355928
 PrefabInstance:
   m_ObjectHideFlags: 0

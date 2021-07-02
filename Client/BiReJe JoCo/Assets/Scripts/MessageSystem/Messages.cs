@@ -63,6 +63,11 @@ namespace BiReJeJoCo
         public JoinedLobbyMsg(string lobbyId) : base(lobbyId) { }
     }
 
+    public class LoadedMainSceneMsg : BaseMessage
+    {
+
+    }
+
     public class LoadedLobbySceneMsg : BaseMessage
     {
 

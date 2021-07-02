@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3ce4a20f6fd094b84704caaee9af2a, type: 3}
+  m_Name: GameMusicConfig
+  m_EditorClassIdentifier: 
+  musicClips:
+  - name: boot up
+    musicState: 0
+    clip: {fileID: 8300000, guid: f6111e44ef9057948aecc2bfb72373d7, type: 3}
+    fadeIn: 2
+    fadeOut: 0.6
+  - name: main menu
+    musicState: 1
+    clip: {fileID: 8300000, guid: 942acccfab3f1474b908a51100ab4ec8, type: 3}
+    fadeIn: 0.6
+    fadeOut: 1
+  - name: lobby
+    musicState: 2
+    clip: {fileID: 8300000, guid: 44710ff7afc8512468f311ef620251b7, type: 3}
+    fadeIn: 1
+    fadeOut: 0.6
+  - name: match default
+    musicState: 3
+    clip: {fileID: 8300000, guid: 8e1b8ac484596294590912ddfe836734, type: 3}
+    fadeIn: 1
+    fadeOut: 2
+  - name: hunter chasing
+    musicState: 4
+    clip: {fileID: 8300000, guid: 39b0316efa126f14ebc8b484ebbb98b0, type: 3}
+    fadeIn: 2
+    fadeOut: 0.1
+  - name: hunted chasing
+    musicState: 5
+    clip: {fileID: 8300000, guid: 9fd9860a304b7eb408d880ee8298ac51, type: 3}
+    fadeIn: 2
+    fadeOut: 0.1
+  startChaseMusicDelay: 1
+  endChaseMusicDelay: 8
