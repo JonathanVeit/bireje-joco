@@ -235,6 +235,8 @@ MonoBehaviour:
     weight: 0
   - eventName: end_shoot
     weight: 0
+  - eventName: on_throw_trap_finished
+    weight: 0
 --- !u!114 &6685602651029265818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorSetups:
   - renderer: {fileID: 7921728277263557833}
+    renderer2: {fileID: 0}
     materialIndex: 0
     materials:
     - {fileID: 2100000, guid: a02a75ee3a5371840b5590df967f7da5, type: 2}
@@ -309,6 +312,7 @@ MonoBehaviour:
     - {fileID: 2100000, guid: 1a7a32792994cd545a9f74206947402e, type: 2}
     - {fileID: 2100000, guid: 9d373a13b1a9e974781ff922310a7cf7, type: 2}
   - renderer: {fileID: 7921728277263557833}
+    renderer2: {fileID: 0}
     materialIndex: 1
     materials:
     - {fileID: 2100000, guid: a02a75ee3a5371840b5590df967f7da5, type: 2}
