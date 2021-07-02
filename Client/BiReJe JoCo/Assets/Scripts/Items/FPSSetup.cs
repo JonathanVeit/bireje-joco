@@ -21,7 +21,11 @@ namespace BiReJeJoCo.Items
 
             if (!Owner.IsLocalPlayer)
             {
-                flashLightIsOn.OnValueReceived += (x) => flashlight.enabled = x;
+                flashLightIsOn.OnValueReceived += (x) =>
+                {
+                    flashlight.enabled = x;
+                    soundEffectManager.Play("hunter_flashlight_click", flashlight.transform.position);
+                };
             }
             else
             {
