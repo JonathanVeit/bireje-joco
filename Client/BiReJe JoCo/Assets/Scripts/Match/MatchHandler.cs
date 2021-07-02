@@ -3,6 +3,7 @@ using BiReJeJoCo.Backend;
 using UnityEngine;
 using System.Collections;
 using BiReJeJoCo.UI;
+using System;
 
 namespace BiReJeJoCo
 {
@@ -45,17 +46,27 @@ namespace BiReJeJoCo
         #endregion
 
         #region Duration
-        protected virtual IEnumerator DurationCounter(int duration)
+        protected virtual IEnumerator DurationCounter(DateTime startDate, DateTime endDate)
         {
-            var waiter = new WaitForSeconds(1);
+            var waiter = new WaitForEndOfFrame();
 
-            for (int i = duration; i >= 0; i--)
+            while (startDate > DateTime.UtcNow) 
             {
-                uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(i));
+                var seconds = (int) (startDate - DateTime.UtcNow).TotalSeconds;
+                uiManager.GetInstanceOf<GameUI>().UpdateStartCountdown(seconds);
+                yield return waiter;
+            }
+            uiManager.GetInstanceOf<GameUI>().CloseCountdownOverlay();
+            messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
+
+            while (endDate > DateTime.UtcNow)
+            {
+                var seconds = (int)(endDate - DateTime.UtcNow).TotalSeconds;
+                uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(seconds));
                 yield return waiter;
             }
 
-            uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration("");
+            uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(0));
         }
         protected string ConvertSecondsToTimeString(int seconds)
         {
@@ -90,8 +101,13 @@ namespace BiReJeJoCo
         }
         protected virtual void OnStartMatch(PhotonMessage msg) 
         {
+            var castedMsg = msg as StartMatchPhoMsg;
+
             State = MatchState.Running;
-            durationCounter = StartCoroutine(DurationCounter(MatchConfig.duration));
+            uiManager.GetInstanceOf<GameUI>().CloseLoadingOverlay();
+            messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Loading));
+
+            durationCounter = StartCoroutine(DurationCounter(castedMsg.startDate, castedMsg.endDate));
             LogMatchMessage("Match started");
         }
         protected virtual void OnPauseMatch(PhotonMessage msg)

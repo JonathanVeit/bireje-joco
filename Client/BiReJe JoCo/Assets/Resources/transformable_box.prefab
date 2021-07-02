@@ -577,6 +577,7 @@ GameObject:
   - component: {fileID: 5936661133207508890}
   - component: {fileID: 5936661133207508889}
   - component: {fileID: 5936661133207508888}
+  - component: {fileID: 2189476727623033904}
   m_Layer: 10
   m_Name: transformable_box
   m_TagString: Untagged
@@ -698,7 +699,6 @@ MonoBehaviour:
   teleportAt: 100
   movementTarget: {fileID: 6190752553338073213}
   rotationTarget: {fileID: 6190752553338073213}
-  rigidBody: {fileID: 5936661133207508892}
   smoothSyncSpeed: 2
   snapGroundTreshold: 0.2
   m_Distance: 0
@@ -709,6 +709,25 @@ MonoBehaviour:
   m_NetworkVelocity: {x: 0, y: 0, z: 0}
   m_NetworkRotation: {x: 0, y: 0, z: 0, w: 0}
   ground: {fileID: 0}
+--- !u!114 &2189476727623033904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6819056805595753159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7ec7bdec9ce9a42851088865b2dd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - hit_01
+  - hit_02
+  - hit_03
+  minVelocity: 0.1
+  minDelay: 0.05
+  skipFirst: 0
 --- !u!1 &6859276818028719617
 GameObject:
   m_ObjectHideFlags: 0

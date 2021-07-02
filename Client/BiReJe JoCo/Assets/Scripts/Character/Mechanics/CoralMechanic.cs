@@ -1,8 +1,6 @@
 using BiReJeJoCo.Backend;
 using BiReJeJoCo.Items;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BiReJeJoCo.Character
@@ -60,7 +58,7 @@ namespace BiReJeJoCo.Character
                 syncVarHub.UnregisterSyncVar(onSpawnCrystals);
 
             if (photonMessageHub)
-                photonMessageHub.RegisterReceiver<SpawnNewCoralAmmoPhoMsg>(this, OnSpawnNewAmmoReceived);
+                photonMessageHub.UnregisterReceiver(this);
         }
         #endregion
 

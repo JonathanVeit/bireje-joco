@@ -1,9 +1,9 @@
 using BiReJeJoCo.Backend;
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
-using BiReJeJoCo.UI;
 using BiReJeJoCo.Items;
 using BiReJeJoCo.Character;
 
@@ -13,6 +13,8 @@ namespace BiReJeJoCo
     {
         private bool startedMatch = false;
         public int MatchDuration { get; protected set; } = 10 * 60;
+
+        private const int START_MATCH_DELAY = 5;
 
         #region Initialiation
         protected override void ConnectEvents()
@@ -97,11 +99,10 @@ namespace BiReJeJoCo
             {
                 roles = playerRoles,
                 spawnPos = spawnPoints,
-                duration = MatchDuration,
                 matchMode = matchMode,
 
                 collectables = collectableConfigs,
-                collectableSeed = System.DateTime.Now.Second,
+                collectableSeed = DateTime.Now.Second,
             };
 
             if (globalVariables.HasVar("force_hunter") && 
@@ -118,8 +119,8 @@ namespace BiReJeJoCo
         {
             var preferedHunted = playerManager.GetAllPlayer(x => x.PreferedRole == PlayerRole.Hunted || x.PreferedRole == PlayerRole.None);
             if (preferedHunted.Length == 0)
-                return allPlayer[Random.Range(0, allPlayer.Count)];
-            return preferedHunted[Random.Range(0, preferedHunted.Length)];
+                return allPlayer[UnityEngine.Random.Range(0, allPlayer.Count)];
+            return preferedHunted[UnityEngine.Random.Range(0, preferedHunted.Length)];
         }
 
         protected override void OnDefineMatchRules(PhotonMessage msg)
@@ -132,29 +133,21 @@ namespace BiReJeJoCo
         #endregion
 
         #region Duration
-        protected override IEnumerator DurationCounter(int duration)
+        protected override IEnumerator DurationCounter(DateTime startDate, DateTime endDate)
         {
-            var waiter = new WaitForSeconds(1);
-
-            for (int i = duration; i >= 0; i--)
-            {
-                uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(i));
-                yield return waiter;
-            }
-
-            uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration("");
+            yield return base.DurationCounter(startDate, endDate);
 
             var hunterCharacter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter;
-            var totalCrystals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.TotalCorals;
+            var totalCorals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.TotalCorals;
 
             MatchResult result;
-            if (totalCrystals >= MatchConfig.Mode.coralsToWin)
+            if (totalCorals >= MatchConfig.Mode.coralsToWin)
             {
                 result = new MatchResult()
                 {
                     winner = PlayerRole.Hunted,
                     condition = WinCondition.CrystalsCreated,
-                    message = $"Time is over! The monster created {totalCrystals} crystals and won.",
+                    message = $"Time is over! The monster placed {totalCorals} spores and won.",
                 };
             }
             else
@@ -163,7 +156,7 @@ namespace BiReJeJoCo
                 {
                     winner = PlayerRole.Hunted,
                     condition = WinCondition.TimeOver,
-                    message = $"Time is over! The monster only created {totalCrystals} crystals and lost.",
+                    message = $"Time is over! The monster only created {totalCorals} spores and lost.",
                 };
             }
 
@@ -192,7 +185,10 @@ namespace BiReJeJoCo
         {
             if (!startedMatch && AllPlayerReady())
             {
-                photonMessageHub.ShoutMessage(new StartMatchPhoMsg(), PhotonMessageTarget.AllViaServer);
+                var startDate = DateTime.UtcNow.AddSeconds(START_MATCH_DELAY);
+                var endDate = DateTime.UtcNow.AddSeconds(MatchDuration + START_MATCH_DELAY);
+
+                photonMessageHub.ShoutMessage(new StartMatchPhoMsg(startDate, endDate), PhotonMessageTarget.AllViaServer);
                 startedMatch = true;
             }
         }

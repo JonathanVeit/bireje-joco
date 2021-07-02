@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 4554295321473936443}
   - component: {fileID: 4554295321473936440}
   - component: {fileID: 4554295321473936441}
+  - component: {fileID: -7627760497289916340}
   m_Layer: 10
   m_Name: transformable_barrel
   m_TagString: Untagged
@@ -360,6 +361,25 @@ MonoBehaviour:
   m_NetworkVelocity: {x: 0, y: 0, z: 0}
   m_NetworkRotation: {x: 0, y: 0, z: 0, w: 0}
   ground: {fileID: 0}
+--- !u!114 &-7627760497289916340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744024726589165926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7ec7bdec9ce9a42851088865b2dd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - hit_01
+  - hit_02
+  - hit_03
+  minVelocity: 0.1
+  minDelay: 0.05
+  skipFirst: 0
 --- !u!1 &6047354406628684501
 GameObject:
   m_ObjectHideFlags: 0

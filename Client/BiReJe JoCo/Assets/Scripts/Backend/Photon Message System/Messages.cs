@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace BiReJeJoCo.Backend
 {
@@ -37,7 +38,15 @@ namespace BiReJeJoCo.Backend
     /// </summary>
     public class StartMatchPhoMsg : PhotonMessage
     {
-        
+        public DateTime startDate;
+        public DateTime endDate;
+
+        public StartMatchPhoMsg() { }
+        public StartMatchPhoMsg(DateTime startDate, DateTime endDate)
+        {
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
     }
 
     /// <summary>
