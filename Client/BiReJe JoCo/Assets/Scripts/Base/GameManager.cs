@@ -54,6 +54,10 @@ namespace BiReJeJoCo
         #region Events
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            if (scene.name.StartsWith("main_"))
+            {
+                StartCoroutine(ShoutMessageDelayed<LoadedMainSceneMsg>(new LoadedMainSceneMsg(), 5));
+            }
             if (scene.name.StartsWith("game_"))
             {
                 StartCoroutine(ShoutMessageDelayed<LoadedGameSceneMsg>(new LoadedGameSceneMsg(), 5));

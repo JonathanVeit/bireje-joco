@@ -80,7 +80,7 @@ namespace BiReJeJoCo.Character
             {
                 if (hunter.PlayerCharacter == null) continue;
 
-                if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().ShockMechanic.isHitting.GetValue())
+                if (hunter.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().ShockMechanic.IsHittingHunted)
                     hittingHunter++;
             }
 

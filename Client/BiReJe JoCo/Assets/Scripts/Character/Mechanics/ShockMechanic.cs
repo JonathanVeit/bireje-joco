@@ -19,11 +19,13 @@ namespace BiReJeJoCo.Character
         [SerializeField] float coralDestroyRadius;
         [SerializeField] LayerMask coralLayer;
 
-        public SyncVar<bool> isHitting = new SyncVar<bool>(1, false);
         public ShockGun Gun => gun;
+        public bool IsHittingHunted => isHittingHunted.GetValue();
         public bool IsShooting { get; private set; }
         public bool IsReloading => reloadTimer.State == TimerState.Counting;
 
+
+        private SyncVar<bool> isHittingHunted = new SyncVar<bool>(1, false);
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
 
@@ -37,7 +39,7 @@ namespace BiReJeJoCo.Character
         {
             shootPosition.OnValueReceived += (x) =>
             {
-                if (isHitting.GetValue() && x.HasValue)
+                if (isHittingHunted.GetValue() && x.HasValue)
                     gun.Shoot(huntedTransform.position + autoAimOffset);
                 else
                     gun.Shoot(x);
@@ -57,7 +59,7 @@ namespace BiReJeJoCo.Character
         {
             if (syncVarHub)
             {
-                syncVarHub.UnregisterSyncVar(isHitting);
+                syncVarHub.UnregisterSyncVar(isHittingHunted);
                 syncVarHub.UnregisterSyncVar(shootPosition);
             }
 
@@ -92,7 +94,7 @@ namespace BiReJeJoCo.Character
         {
             shootPosition.SetValue(null);
             gun.Shoot(null);
-            isHitting.SetValue(false);
+            isHittingHunted.SetValue(false);
 
             if (IsShooting)
             {
@@ -154,7 +156,7 @@ namespace BiReJeJoCo.Character
             }
 
             var hitPoint =  CastToTarget(ray, out bool isHittingHunted);
-            isHitting.SetValue(isHittingHunted);
+            this.isHittingHunted.SetValue(isHittingHunted);
             if (isHittingHunted)
             {
                 DestroyCorals(hitPoint);
