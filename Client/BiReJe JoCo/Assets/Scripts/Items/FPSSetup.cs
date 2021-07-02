@@ -42,6 +42,7 @@ namespace BiReJeJoCo.Items
         {
             flashlight.enabled = !flashlight.enabled;
             flashLightIsOn.SetValue(flashlight.enabled);
+            soundEffectManager.Play("hunter_flashlight_click", flashlight.transform.position);
         }
 
         protected override void OnBeforeDestroy()
