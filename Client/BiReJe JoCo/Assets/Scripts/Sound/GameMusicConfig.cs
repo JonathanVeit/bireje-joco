@@ -16,7 +16,6 @@ namespace BiReJeJoCo.Audio
         public bool GetClip(MusicState situation, out MusicClipConfig clipInfo)
         {
             var matchingClips = musicClips.FindAll(x => x.musicState == situation);
-
             if (matchingClips.Count > 0)
             {
                 clipInfo = matchingClips[0];

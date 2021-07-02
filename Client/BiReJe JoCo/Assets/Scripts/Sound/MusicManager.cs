@@ -54,7 +54,6 @@ namespace BiReJeJoCo.Audio
         public void Play(MusicState state)
         {
             CurrentState = state;
-         
             if (MusicConfig.GetClip(state, out var clipConfig))
             {
                 if (musicSwitcher != null)
@@ -67,11 +66,13 @@ namespace BiReJeJoCo.Audio
 
         private IEnumerator SwitchMusicClip(AudioClip clip, float fadeInSpeed, float fadeOutSpeed)
         {
+            var waiter = new WaitForEndOfFrame();
             IsTransitioning = true;
+
             while (audioSource.volume > 0)
             {
                 audioSource.volume -= Time.deltaTime * fadeOutSpeed;
-                yield return null;
+                yield return waiter;
             }
             
             audioSource.volume = 0;
@@ -83,8 +84,9 @@ namespace BiReJeJoCo.Audio
             while (audioSource.volume < 1)
             {
                 audioSource.volume += Time.deltaTime * fadeInSpeed;
-                yield return null;
+                yield return waiter;
             }
+
             audioSource.volume = 1;
             IsTransitioning = false;
         }

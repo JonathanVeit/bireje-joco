@@ -2,8 +2,6 @@ using BiReJeJoCo.Character;
 using JoVei.Base;
 using JoVei.Base.Helper;
 using System;
-using System.Collections;
-using UnityEngine;
 
 namespace BiReJeJoCo.Audio
 {
