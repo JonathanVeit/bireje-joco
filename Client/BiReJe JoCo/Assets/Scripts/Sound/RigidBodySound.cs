@@ -6,7 +6,7 @@ namespace BiReJeJoCo.Audio
     {
         [Header("Settings")]
         [SerializeField] string[] clips;
-        [SerializeField] float minVelocity = 0.1f;
+        [SerializeField] float minVelocity = 0.1f; 
         [SerializeField] float minDelay = 0.1f;
         [SerializeField] bool skipFirst;
 
