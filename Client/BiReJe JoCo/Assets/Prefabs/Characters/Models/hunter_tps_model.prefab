@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 1
+  m_Weight: 0.8
   m_Effectors: []
 --- !u!1 &1667557606
 GameObject:
@@ -3293,11 +3293,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c8afc3c9a015dd41ab680c7f872b858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 849386688899039067}
-  speed: 12
+  sourceTransform: {fileID: 0}
+  rootTransform: {fileID: 0}
+  targetIK: {fileID: 1564257235}
+  rotationSpeed: 12
+  maxAngle: 45
   flashlight: {fileID: 8100083427673050426}
   rotation:
-    value: {x: 0, y: 0, z: 0}
+    value: {x: 0, y: 0, z: 0, w: 0}
   flashLightIsOn:
     value: 1
 --- !u!114 &8197755709636356920

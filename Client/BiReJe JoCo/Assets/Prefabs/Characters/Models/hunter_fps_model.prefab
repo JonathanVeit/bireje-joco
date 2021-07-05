@@ -284,11 +284,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c8afc3c9a015dd41ab680c7f872b858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1910610699396917591}
-  speed: 12
+  sourceTransform: {fileID: 0}
+  rootTransform: {fileID: 0}
+  targetIK: {fileID: 0}
+  rotationSpeed: 12
+  maxAngle: 45
   flashlight: {fileID: 6999504257500289846}
   rotation:
-    value: {x: 0, y: 0, z: 0}
+    value: {x: 0, y: 0, z: 0, w: 0}
   flashLightIsOn:
     value: 1
 --- !u!114 &7580067452226112785

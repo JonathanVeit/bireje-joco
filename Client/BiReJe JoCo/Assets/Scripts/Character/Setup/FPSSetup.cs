@@ -6,8 +6,11 @@ namespace BiReJeJoCo.Items
     public class FPSSetup : TickBehaviour, IPlayerObserved
     {
         [Header("Settings")]
-        [SerializeField] Transform target;
-        [SerializeField] float speed;
+        [SerializeField] Transform sourceTransform;
+        [SerializeField] Transform rootTransform;
+        [SerializeField] Transform targetIK;
+        [SerializeField] float rotationSpeed;
+        [SerializeField] float maxAngle;
         [SerializeField] Light flashlight;
         [SerializeField] SyncVar<Vector3> rotation = new SyncVar<Vector3>(5);
         [SerializeField] SyncVar<bool> flashLightIsOn = new SyncVar<bool>(6, true, true);
@@ -38,9 +41,13 @@ namespace BiReJeJoCo.Items
             if (Camera.main == null) return;
 
             if (Owner.IsLocalPlayer)
-                rotation.SetValue(Camera.main.transform.rotation.eulerAngles);
-
-            target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler (rotation.GetValue()), speed * Time.deltaTime);
+            { 
+                rotation.SetValue(sourceTransform.rotation.eulerAngles);
+            } 
+            else
+            {
+                targetIK.rotation = Quaternion.RotateTowards(rootTransform.rotation, Quaternion.Euler (rotation.GetValue()), maxAngle);
+            }
         }
         private void ToggleFlashlight() 
         {
