@@ -21,7 +21,11 @@ namespace BiReJeJoCo.Items
 
             if (!Owner.IsLocalPlayer)
             {
-                flashLightIsOn.OnValueReceived += (x) => flashlight.enabled = x;
+                flashLightIsOn.OnValueReceived += (x) =>
+                {
+                    flashlight.enabled = x;
+                    soundEffectManager.Play("hunter_flashlight_click", flashlight.transform.position);
+                };
             }
             else
             {
@@ -42,6 +46,7 @@ namespace BiReJeJoCo.Items
         {
             flashlight.enabled = !flashlight.enabled;
             flashLightIsOn.SetValue(flashlight.enabled);
+            soundEffectManager.Play("hunter_flashlight_click", flashlight.transform.position);
         }
 
         protected override void OnBeforeDestroy()

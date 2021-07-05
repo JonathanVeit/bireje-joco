@@ -73,6 +73,7 @@ namespace BiReJeJoCo.Character
             var target = Instantiate(prefab, pingSpawnPoint.position, pingSpawnPoint.rotation);
             target.GetComponent<Rigidbody>().AddForce((pingSpawnPoint.forward + additionalThrowDirection) * throwStrength, ForceMode.Impulse);
             target.GetComponent<Rigidbody>().AddTorque(throwTorque);
+            soundEffectManager.Play("hunter_ping", pingSpawnPoint);
 
             if (!Owner.IsLocalPlayer && 
                 localPlayer.Role == PlayerRole.Hunter)

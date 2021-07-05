@@ -37,12 +37,12 @@ namespace BiReJeJoCo
 
         public void OpenMainMenu() 
         {
-            SceneManager.LoadScene("main_menu_scene");
+            SceneManager.LoadSceneAsync("main_menu_scene");
         }
 
         public void OpenLobby()
         {
-            SceneManager.LoadScene("lobby_scene");
+            SceneManager.LoadSceneAsync("lobby_scene");
         }
 
         public void Quit()

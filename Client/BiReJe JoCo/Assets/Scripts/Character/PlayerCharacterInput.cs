@@ -9,7 +9,7 @@ namespace BiReJeJoCo.Character
     public class PlayerCharacterInput : SystemBehaviour
     {
         public InputBlockState BlockState { get; private set; }
-            = InputBlockState.Loading;
+            = InputBlockState.Free;
         public event Action<InputBlockState> onBlockStateChanged;
 
         public PlayerInput playerInput;
@@ -81,7 +81,6 @@ namespace BiReJeJoCo.Character
             messageHub.RegisterReceiver<BlockPlayerControlsMsg>(this, BlockPlayerControls);
             messageHub.RegisterReceiver<UnblockPlayerControlsMsg>(this, UnblockPlayerControls);
 
-            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStarted);
             photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnFinishMatch);
         }
         private void DisconnectEvents()
@@ -334,11 +333,6 @@ namespace BiReJeJoCo.Character
         #endregion
 
         #region Events
-        void OnMatchStarted(PhotonMessage msg)
-        {
-            SetBlockState(InputBlockState.Free);
-        }
-
         void BlockPlayerControls(BlockPlayerControlsMsg msg)
         {
             SetBlockState(msg.blockState);

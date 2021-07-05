@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 714599081900428098}
   - component: {fileID: 891868120702105744}
   - component: {fileID: 8822341374759129535}
+  - component: {fileID: -468772172550224341}
   m_Layer: 12
   m_Name: hunter_ping_marker
   m_TagString: Untagged
@@ -67,6 +68,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-468772172550224341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189455442715251192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7ec7bdec9ce9a42851088865b2dd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - hit_01
+  - hit_02
+  - hit_03
+  minVelocity: 0.1
+  minDelay: 0.05
+  skipFirst: 0
 --- !u!1 &1623931039328581570
 GameObject:
   m_ObjectHideFlags: 0

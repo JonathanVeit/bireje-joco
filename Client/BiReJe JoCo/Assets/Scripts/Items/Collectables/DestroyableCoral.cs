@@ -33,6 +33,7 @@ namespace BiReJeJoCo
             var prefab = MatchPrefabMapping.GetMapping().GetElementForKey("coral_destroy_sfx");
             poolingManager.PoolInstance(prefab, transform.position, transform.rotation);
 
+            soundEffectManager.Play("coral_destroy", transform.position);
             Destroy(transform.parent.gameObject);
         }
     }

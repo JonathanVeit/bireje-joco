@@ -1,14 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using JoVei.Base.UI;
+using UnityEngine.InputSystem;
 
 namespace BiReJeJoCo.UI
 {
     public class LoadingScreenUI : UIElement
     {
+        [Header("Settings")]
         [SerializeField] UIBarHandler loadingBar;
         [SerializeField] Text loadingBarCaption;
         [SerializeField] Text loadingBarProgressCaption;
+        [SerializeField] GameObject loadingPanel;
+        [SerializeField] GameObject titlePanel;
 
         private void Start()
         {
@@ -30,9 +34,20 @@ namespace BiReJeJoCo.UI
             loadingBarCaption.text = "finished...";
             loadingBarProgressCaption.text = "100%";
 
-            gameManager.OpenMainMenu();
+            loadingPanel.gameObject.SetActive(false);
+            titlePanel.gameObject.SetActive(true);
         }
 
+        private void Update()
+        {
+            if (!systemsLoader.Finished)
+                return;
+
+            if (Keyboard.current.anyKey.wasPressedThisFrame) 
+            {
+                gameManager.OpenMainMenu();
+            }
+        }
         protected override void OnBeforeDestroy()
         {
             systemsLoader.OnStartLoadingSystem -= OnSystemLoaded;

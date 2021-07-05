@@ -13,8 +13,9 @@ namespace BiReJeJoCo.UI
         [Header("UI Elements")]
         public Transform floatingElementGrid;
         [SerializeField] GameObject loadingOverlay;
+        [SerializeField] GameObject countDownOverlay;
+        [SerializeField] Text countDownLabel;
         [SerializeField] Text startInformation;
-        [SerializeField] float informationDuration;
         [SerializeField] Text durationLabel;
         [SerializeField] UIBarHandler totalCrystalsBar;
         [SerializeField] RectTransform totalCrystalBarSeperator;
@@ -54,7 +55,6 @@ namespace BiReJeJoCo.UI
 
         private void ConnectEvents()
         {
-            photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnMatchStart);
             photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
             photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
         }
@@ -92,6 +92,29 @@ namespace BiReJeJoCo.UI
         private void InitializeAsHunter()
         {
             huntedHUD.SetActive(false);
+        }
+
+        // match start
+        public void CloseLoadingOverlay()
+        {
+            loadingOverlay.gameObject.SetActive(false);
+
+            if (localPlayer.Role == PlayerRole.Hunted)
+            {
+                startInformation.text = "You are the monster!\nTry to hide and place spores!";
+            }
+            else if (localPlayer.Role == PlayerRole.Hunter)
+            {
+                startInformation.text = "You are a hunter!\nTry to catch the monster and destroy its spores!";
+            }
+        }
+        public void UpdateStartCountdown(int seconds)
+        {
+            countDownLabel.text = seconds.ToString();
+        }
+        public void CloseCountdownOverlay()
+        {
+            countDownOverlay.SetActive(false);
         }
 
         // all player
@@ -220,21 +243,6 @@ namespace BiReJeJoCo.UI
         #endregion
 
         #region Events
-        private void OnMatchStart(PhotonMessage msg)
-        {
-            loadingOverlay.gameObject.SetActive(false);
-
-            if (localPlayer.Role == PlayerRole.Hunted)
-            {
-                startInformation.text = "You are the monster!\nTry to hide and place spores!";
-                StartCoroutine(FadeText(informationDuration, startInformation));
-            }
-            else if (localPlayer.Role == PlayerRole.Hunter)
-            {
-                startInformation.text = "You are the Hunter!\nTry to catch the monster!";
-                StartCoroutine(FadeText(informationDuration, startInformation));
-            }
-        }
         private void OnMatchFinished(PhotonMessage msg)
         {
             var casted = msg as FinishMatchPhoMsg;
