@@ -3248,6 +3248,8 @@ MonoBehaviour:
     weight: 0
   - eventName: on_throw_trap_finished
     weight: 0
+  - eventName: start_reload
+    weight: 0
 --- !u!114 &6671575994626257978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3281,6 +3283,12 @@ MonoBehaviour:
     parent: 1
     soundEffects:
     - hunter_shoot
+  - trigger: start_reload
+    stopTrigger: 
+    target: {fileID: 849386688899039067}
+    parent: 1
+    soundEffects:
+    - hunter_reload
 --- !u!114 &740963035158140762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3300,7 +3308,7 @@ MonoBehaviour:
   maxAngle: 45
   flashlight: {fileID: 8100083427673050426}
   rotation:
-    value: {x: 0, y: 0, z: 0, w: 0}
+    value: {x: 0, y: 0, z: 0}
   flashLightIsOn:
     value: 1
 --- !u!114 &8197755709636356920
