@@ -49,6 +49,8 @@ namespace BiReJeJoCo.Character
             var modification = new SimpleMovementModification(speedUpMultiplier);
             localPlayer.PlayerCharacter.ControllerSetup.WalkController.AddModification(modification);
             Owner.PlayerCharacter.ControllerSetup.AnimationController.SetFloat("animation_speed", speedUpMultiplier);
+            soundEffectManager.Play("hunted_speed_up", transform);
+
 
             speedUpDurationTimer.Start(
                 () => // update 

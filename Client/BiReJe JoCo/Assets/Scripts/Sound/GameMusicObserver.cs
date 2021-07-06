@@ -11,7 +11,13 @@ namespace BiReJeJoCo.Audio
         #region Initialization
         public GameMusicObserver()
         {
-            musicManager.Play(MusicState.BooUp);
+            systemsLoader.OnAllSystemsLoaded += () => 
+            {
+                musicManager.Play(MusicState.BooUp, () =>
+                {
+                    musicManager.Play(MusicState.MainMenu);
+                });
+            };
             ConnectEvents();
         }
 
@@ -35,11 +41,11 @@ namespace BiReJeJoCo.Audio
 
             switch (localPlayer.Role)
             {
-                case Backend.PlayerRole.Hunter:
+                case PlayerRole.Hunter:
                     HandleHunterMatchMusic(controllerSetup);
                     break;
 
-                case Backend.PlayerRole.Hunted:
+                case PlayerRole.Hunted:
                     HandleHuntedMatchMusic(controllerSetup);
                     break;
             }
@@ -99,11 +105,13 @@ namespace BiReJeJoCo.Audio
         #region Events     
         private void OnLoadedMainScene(LoadedMainSceneMsg msg)
         {
-            musicManager.Play(MusicState.MainMenu);
+            if (musicManager.CurrentState != MusicState.Lobby)
+                musicManager.Play(MusicState.Lobby);
         }
         private void OnLoadedLobbyScene(LoadedLobbySceneMsg msg)
         {
-            musicManager.Play(MusicState.Lobby);
+            if (musicManager.CurrentState != MusicState.Lobby)
+                musicManager.Play(MusicState.Lobby);
         }
         private void OnLoadedGameScene(LoadedGameSceneMsg msg)
         {
@@ -119,10 +127,20 @@ namespace BiReJeJoCo.Audio
         {
             var castedMsg = msg as FinishMatchPhoMsg;
 
-            if (castedMsg.result.winner== PlayerRole.Hunter)
-                musicManager.Play(MusicState.HunterWin);
+            if (castedMsg.result.winner == PlayerRole.Hunter)
+            {
+                musicManager.Play(MusicState.HunterWin, () => 
+                {
+                    musicManager.Play(MusicState.ResultScreen);
+                });
+            }
             else
-                musicManager.Play(MusicState.HuntedWins);
+            {
+                musicManager.Play(MusicState.HuntedWins, () =>
+                {
+                    musicManager.Play(MusicState.ResultScreen);
+                });
+            }
 
             photonMessageHub.UnregisterReceiver(this);
             tickSystem.Unregister(this);

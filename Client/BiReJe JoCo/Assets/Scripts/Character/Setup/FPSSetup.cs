@@ -46,7 +46,8 @@ namespace BiReJeJoCo.Items
             } 
             else
             {
-                targetIK.rotation = Quaternion.RotateTowards(rootTransform.rotation, Quaternion.Euler (rotation.GetValue()), maxAngle);
+                var targetRotation = Quaternion.RotateTowards(rootTransform.rotation, Quaternion.Euler(rotation.GetValue()), maxAngle);
+                targetIK.rotation = Quaternion.Lerp(targetIK.rotation , targetRotation, deltaTime * rotationSpeed);
             }
         }
         private void ToggleFlashlight() 
