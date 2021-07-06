@@ -17,21 +17,21 @@ MonoBehaviour:
     musicState: 0
     clip: {fileID: 8300000, guid: f6111e44ef9057948aecc2bfb72373d7, type: 3}
     fadeIn: 2
-    fadeOut: 2
-    overridePrevious: 0
-    overrideFadeOut: 2
+    fadeOut: 100
+    overridePrevious: 1
+    overrideFadeOut: 100
   - name: main menu
     musicState: 1
     clip: {fileID: 8300000, guid: 942acccfab3f1474b908a51100ab4ec8, type: 3}
-    fadeIn: 1
-    fadeOut: 1
+    fadeIn: 100
+    fadeOut: 100
     overridePrevious: 0
     overrideFadeOut: 0
   - name: lobby
     musicState: 2
     clip: {fileID: 8300000, guid: 44710ff7afc8512468f311ef620251b7, type: 3}
-    fadeIn: 1
-    fadeOut: 0.6
+    fadeIn: 100
+    fadeOut: 100
     overridePrevious: 0
     overrideFadeOut: 0
   - name: match default
@@ -44,14 +44,14 @@ MonoBehaviour:
   - name: hunter chasing
     musicState: 4
     clip: {fileID: 8300000, guid: 39b0316efa126f14ebc8b484ebbb98b0, type: 3}
-    fadeIn: 2
+    fadeIn: 10
     fadeOut: 0.1
     overridePrevious: 0
     overrideFadeOut: 0
   - name: hunted chasing
     musicState: 5
     clip: {fileID: 8300000, guid: 9fd9860a304b7eb408d880ee8298ac51, type: 3}
-    fadeIn: 2
+    fadeIn: 4
     fadeOut: 0.1
     overridePrevious: 0
     overrideFadeOut: 0
@@ -59,15 +59,22 @@ MonoBehaviour:
     musicState: 6
     clip: {fileID: 8300000, guid: ad1c6eeb6abed8f48a7922fb298f6294, type: 3}
     fadeIn: 2
-    fadeOut: 1
+    fadeOut: 10
     overridePrevious: 1
     overrideFadeOut: 2
-  - name: hunted winds
+  - name: hunted wins
     musicState: 7
     clip: {fileID: 8300000, guid: ad1c6eeb6abed8f48a7922fb298f6294, type: 3}
     fadeIn: 2
-    fadeOut: 1
+    fadeOut: 10
     overridePrevious: 1
     overrideFadeOut: 2
-  startChaseMusicDelay: 1
+  - name: result_screen
+    musicState: 7
+    clip: {fileID: 8300000, guid: ad1c6eeb6abed8f48a7922fb298f6294, type: 3}
+    fadeIn: 2
+    fadeOut: 10
+    overridePrevious: 1
+    overrideFadeOut: 2
+  startChaseMusicDelay: 0
   endChaseMusicDelay: 8

@@ -24,6 +24,7 @@ namespace BiReJeJoCo.Audio
         }
         public AudioSourceHandler Play(string soundId, Vector3 position)
         {
+            Debug.Log(soundId);
             var audiosource = CreateSoundObject(soundId, position);
             audiosource.AudioSource.Play();
 
@@ -31,6 +32,7 @@ namespace BiReJeJoCo.Audio
         }
         public AudioSourceHandler Play(string soundId, Transform parent)
         {
+            Debug.Log(soundId);
             var soundHandle = CreateSoundObject(soundId, parent);
             soundHandle.AudioSource.Play();
 

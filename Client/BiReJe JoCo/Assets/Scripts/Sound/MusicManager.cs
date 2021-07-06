@@ -1,5 +1,6 @@
 using JoVei.Base;
 using JoVei.Base.Helper;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace BiReJeJoCo.Audio
         HuntedChasing = 5,
         HunterWin = 6,
         HuntedWins = 7,
+        ResultScreen = 9,
     }
 
     public class MusicManager : SystemAccessor, IInitializable
@@ -23,6 +25,7 @@ namespace BiReJeJoCo.Audio
         public IEnumerator Initialize(object[] parameters)
         {
             DIContainer.RegisterImplementation<MusicManager>(this);
+            LoadMusicConfig();
             CreateAudioSource();
             yield return null;
         }
@@ -34,8 +37,8 @@ namespace BiReJeJoCo.Audio
         private void CreateAudioSource()
         {
             var prefab = Resources.Load("music_source");
-            var root = (GameObject) Object.Instantiate(prefab);
-            Object.DontDestroyOnLoad(root);
+            var root = (GameObject) UnityEngine.Object.Instantiate(prefab);
+            UnityEngine.Object.DontDestroyOnLoad(root);
 
             audioSource = root.GetComponent<AudioSource>();
             musicObserver = new GameMusicObserver();
@@ -45,33 +48,47 @@ namespace BiReJeJoCo.Audio
 
         private AudioSource audioSource;
         private Coroutine musicSwitcher;
+        private Coroutine musicFinishedAwaiter;
+
         private GameMusicObserver musicObserver;
 
         public MusicState CurrentState { get; private set; }
         public bool IsTransitioning { get; private set; }
-        public GameMusicConfig MusicConfig => LoadMusicConfig();
+        public GameMusicConfig MusicConfig { get; private set; }
 
         private float curFadeOut = 1;
 
         public void Play(MusicState state)
         {
+            Play(state, null);
+        }
+        public void Play(MusicState state, Action onFinishedPlay)
+        {
             CurrentState = state;
-
+            Debug.Log(Time.realtimeSinceStartup);
             if (MusicConfig.GetClip(state, out var clipConfig))
             {
-                if (musicSwitcher != null)
-                    CoroutineHelper.Instance.StopCoroutine(musicSwitcher);
-
-                var fadeout = curFadeOut;
-                if (clipConfig.overridePrevious)
-                    fadeout = clipConfig.overrideFadeOut;
+                Debug.Log(Time.realtimeSinceStartup);
+                float fadeout = SetupPlay(clipConfig);
                 curFadeOut = clipConfig.fadeOut;
-
-                musicSwitcher = CoroutineHelper.Instance.StartCoroutine(SwitchMusicClip(clipConfig.clip, clipConfig.fadeIn, fadeout));
+                musicSwitcher = CoroutineHelper.Instance.StartCoroutine(SwitchMusicClip(clipConfig.clip, clipConfig.fadeIn, fadeout, onFinishedPlay));
             }
         }
 
-        private IEnumerator SwitchMusicClip(AudioClip clip, float fadeInSpeed, float fadeOutSpeed)
+        private float SetupPlay(GameMusicConfig.MusicClipConfig clipConfig)
+        {
+            if (musicSwitcher != null)
+                CoroutineHelper.Instance.StopCoroutine(musicSwitcher);
+            if (musicFinishedAwaiter != null)
+                CoroutineHelper.Instance.StopCoroutine(musicFinishedAwaiter);
+
+            var fadeout = curFadeOut;
+            if (clipConfig.overridePrevious)
+                fadeout = clipConfig.overrideFadeOut;
+            return fadeout;
+        }
+
+        private IEnumerator SwitchMusicClip(AudioClip clip, float fadeInSpeed, float fadeOutSpeed, Action onFinishedPlay)
         {
             var waiter = new WaitForEndOfFrame();
             IsTransitioning = true;
@@ -84,9 +101,11 @@ namespace BiReJeJoCo.Audio
             
             audioSource.volume = 0;
             audioSource.clip = clip;
-
+            audioSource.loop = onFinishedPlay == null;
             if (!audioSource.isPlaying)
                 audioSource.Play();
+            if (onFinishedPlay != null)
+                musicFinishedAwaiter = CoroutineHelper.Instance.StartCoroutine(AwaitMusicFinished(onFinishedPlay));
 
             while (audioSource.volume < 1)
             {
@@ -97,18 +116,25 @@ namespace BiReJeJoCo.Audio
             audioSource.volume = 1;
             IsTransitioning = false;
         }
-
-        #region Helper
-        private GameMusicConfig LoadMusicConfig()
+        private IEnumerator AwaitMusicFinished(Action callback) 
         {
-            var config = Resources.Load<GameMusicConfig>("Configs/GameMusicConfig");
-            if (config == null)
+            var waiter = new WaitForEndOfFrame();
+            while (audioSource.isPlaying)
             {
-                Debug.LogError("Unable to find GameMusicConfig asset!");
-                return null;
+                yield return waiter;
             }
 
-            return config;
+            callback?.Invoke();
+        }
+
+        #region Helper
+        private void LoadMusicConfig()
+        {
+            MusicConfig = Resources.Load<GameMusicConfig>("Configs/GameMusicConfig");
+            if (MusicConfig == null)
+            {
+                Debug.LogError("Unable to find GameMusicConfig asset!");
+            }
         }
         #endregion
     }
