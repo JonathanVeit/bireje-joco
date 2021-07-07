@@ -18,6 +18,8 @@ namespace BiReJeJoCo.Character
         [SerializeField] Vector3 autoAimOffset;
         [SerializeField] float coralDestroyRadius;
         [SerializeField] LayerMask coralLayer;
+        [SerializeField] SkinnedMeshRenderer ammoRenderer;
+        [SerializeField] int materialIndex;
 
         public ShockGun Gun => gun;
         public bool IsHittingHunted => isHittingHunted.GetValue();
@@ -28,7 +30,6 @@ namespace BiReJeJoCo.Character
         private SyncVar<bool> isHittingHunted = new SyncVar<bool>(1, false);
         private SyncVar<Vector3?> shootPosition = new SyncVar<Vector3?>(2, null);
         private Transform huntedTransform => GetHuntedRoot();
-
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -81,7 +82,7 @@ namespace BiReJeJoCo.Character
             {
                 Reload();
             });
-            gameUI.UpdateAmmoBar(1 - ammoCounter.RelativeProgress);
+            UpdateAmmoAmount(1 - ammoCounter.RelativeProgress);
 
             if (!IsShooting)
             {
@@ -120,7 +121,7 @@ namespace BiReJeJoCo.Character
             reloadTimer.Start(
                 () =>
                 {
-                    gameUI.UpdateAmmoBar(reloadTimer.RelativeProgress);
+                    UpdateAmmoAmount(reloadTimer.RelativeProgress);
 
                 }, // update 
                 () => 
@@ -213,6 +214,12 @@ namespace BiReJeJoCo.Character
                 return false;
 
             return allHunted[0].PlayerCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().TransformationMechanic.IsTransformed;
+        }
+
+        private void UpdateAmmoAmount(float value) 
+        {
+            Debug.Log(ammoRenderer.materials[materialIndex].GetFloat("Amount"));
+            ammoRenderer.materials[materialIndex].SetFloat("Amount", value);
         }
         #endregion
     }

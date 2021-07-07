@@ -467,12 +467,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7921728277263557833, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 85812ac24b90d034888920a5d918639f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
+--- !u!137 &5597146706288884285 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7921728277263557833, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
+  m_PrefabInstance: {fileID: 2324612376628731636}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &627774457747335708 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2951233420874314984, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
+  m_PrefabInstance: {fileID: 2324612376628731636}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6797727750702116966 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9085115031447973522, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
@@ -500,11 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5620ea1e04a133a4f92e88f36bcea9f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &627774457747335708 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2951233420874314984, guid: fce92a830f27ead4da29700e1b50bcb5, type: 3}
-  m_PrefabInstance: {fileID: 2324612376628731636}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3750716240288372200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -600,6 +601,14 @@ PrefabInstance:
       propertyPath: gun
       value: 
       objectReference: {fileID: 4374022084429186786}
+    - target: {fileID: 4767589355019156001, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+      propertyPath: ammoRenderer
+      value: 
+      objectReference: {fileID: 5597146706288884285}
+    - target: {fileID: 4767589355019156001, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+      propertyPath: materialIndex
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7396179318448528176, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
       propertyPath: m_RootOrder
       value: 1

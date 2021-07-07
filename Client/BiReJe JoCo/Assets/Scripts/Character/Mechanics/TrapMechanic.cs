@@ -68,7 +68,7 @@ namespace BiReJeJoCo.Character
             coolDownTimer.Start(
             () =>
             {
-                gameUI.UpdateTrapIcon(coolDownTimer.RelativeProgress);
+                gameUI.UpdateTrapIconCooldown(coolDownTimer.RelativeProgress);
             }, // update
             () =>
             {
@@ -82,6 +82,7 @@ namespace BiReJeJoCo.Character
             var force = (trapTarget - trapSpawnPoint.position) * throwForce + extraThrowForce;
             thrownTrap.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
             thrownTrap.GetComponent<Rigidbody>().AddTorque(thrownTrap.transform.up * trapTorque);
+            gameUI.SetTrapIcon(false);
         }
         private void FinishThrowTrap()
         {
@@ -103,7 +104,8 @@ namespace BiReJeJoCo.Character
         private void OnTrapCollected(PlayerCollectedTrapMsg msg)
         {
             if (thrownTrap == null) return;
-            gameUI.UpdateTrapIcon(1);
+            gameUI.UpdateTrapIconCooldown(1);
+            gameUI.SetTrapIcon(true);
             coolDownTimer.Stop(true);
 
         }

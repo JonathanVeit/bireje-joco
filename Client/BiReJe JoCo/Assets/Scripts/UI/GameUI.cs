@@ -153,14 +153,7 @@ namespace BiReJeJoCo.UI
         }
 
         // hunter
-        public void UpdateAmmoBar(float value)
-        {
-            if (value == 0)
-                ammoBar.OverrideValue(0);
-            else
-                ammoBar.SetValue(value);
-        }
-        public void UpdateTrapIcon(float value)
+        public void UpdateTrapIconCooldown(float value)
         {
             if (value == 0)
                 trapIconFill.OverrideValue(0);
@@ -170,6 +163,11 @@ namespace BiReJeJoCo.UI
             if (value == 1)
                 trapIconRoot.GetComponent<Animator>().SetTrigger("pulsate");
         }
+        public void SetTrapIcon(bool visible) 
+        {
+            trapIconRoot.SetActive(visible);
+        }
+
         public void UpdatePingCooldown(float value)
         {
             if (value == 0f)

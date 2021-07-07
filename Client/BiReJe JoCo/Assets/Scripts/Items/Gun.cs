@@ -46,7 +46,7 @@ namespace BiReJeJoCo.Items
 
         public override void Tick(float deltaTime)
         {
-            uiManager.GetInstanceOf<GameUI>().UpdateAmmoBar(coolDownCounter / coolDown);
+            //uiManager.GetInstanceOf<GameUI>().UpdateAmmoBar(coolDownCounter / coolDown);
             coolDownCounter = Mathf.Clamp(coolDownCounter += Time.deltaTime, 0, coolDown);
         }
 
