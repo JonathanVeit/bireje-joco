@@ -30,7 +30,7 @@ namespace BiReJeJoCo.UI
             var icon = SpriteMapping.GetMapping().GetElementForKey("role_" + player.PreferedRole.ToString());
             preferedRoleIcon.sprite = icon;
 
-            outline.gameObject.SetActive(player.ReadToStart);
+            outline.gameObject.SetActive(player.ReadyToStart);
         }
 
         public void KickPlayer() 

@@ -8,14 +8,11 @@ namespace BiReJeJoCo.UI
 {
     public class LobbyUI : UIElement
     {
-        const string DURATION_KEY = "LastSetDuration";
-        const string PREFERED_ROLE_KEY = "PreferedRole";
-
         [Header("Settings")]
         [SerializeField] UIList<LobbyMemberEntry> memberList;
         [SerializeField] GameObject loadingOverlay;
+        [SerializeField] GameObject loadingOverlay2;
         [SerializeField] Button startButton;
-        [SerializeField] Dropdown durationDropdown;
         [SerializeField] GameObject[] preferedRoleOutlines;
         [SerializeField] string matchMode = "default_match";
 
@@ -25,19 +22,10 @@ namespace BiReJeJoCo.UI
         #region Initialization
         protected override void OnSystemsInitialized()
         {
-            startButton.gameObject.SetActive(localPlayer.IsHost);
+            startButton.interactable = localPlayer.IsHost;
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             Cursor.lockState = CursorLockMode.Confined;
-
-            durationDropdown.interactable = localPlayer.IsHost;
-            if (PlayerPrefs.HasKey(DURATION_KEY))
-            {
-                durationDropdown.value = PlayerPrefs.GetInt(DURATION_KEY);
-            }
-            if (PlayerPrefs.HasKey(PREFERED_ROLE_KEY))
-            {
-                SetPlayerPreferedRole(PlayerPrefs.GetInt(PREFERED_ROLE_KEY));
-            }
+            SetPlayerPreferedRole((int)localPlayer.PreferedRole);
         }
         protected override void OnBeforeDestroy()
         {
@@ -61,6 +49,7 @@ namespace BiReJeJoCo.UI
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
             messageHub.RegisterReceiver<HostSwitchedMsg>(this, OnSwitchedHost);
             photonMessageHub.RegisterReceiver<PrepareMatchStartPhoMsg>(this, OnPrepareMatchStart);
+            photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnMatchRulesDefined);
         }
         private void DisconnectEvents() 
         {
@@ -110,6 +99,11 @@ namespace BiReJeJoCo.UI
         {
             loadingOverlay.SetActive(true);
         }
+        private void OnMatchRulesDefined(PhotonMessage msg)
+        {
+            loadingOverlay.SetActive(false);
+            loadingOverlay2.SetActive(true);
+        }
         #endregion
 
         #region UI Inputs
@@ -142,12 +136,11 @@ namespace BiReJeJoCo.UI
             {
                 preferedRoleOutlines[i].SetActive(i==role);
             }
-            PlayerPrefs.SetInt(PREFERED_ROLE_KEY, role);
         }
 
-        public void SetPlayerReadToStart() 
+        public void SetPlayerReadyToStart() 
         {
-            localPlayer.SetReadyToStart(!localPlayer.ReadToStart);
+            localPlayer.SetReadyToStart(!localPlayer.ReadyToStart);
         }
         #endregion
     }

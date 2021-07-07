@@ -17,10 +17,10 @@ namespace BiReJeJoCo.Backend
         {
             var properties = new PhotonHashTable()
             {
-                { "State", PlayerState.Free },
-                { "Role", PlayerRole.None },
-                { "PreferedRole", (PlayerRole) PlayerPrefs.GetInt("PreferedRole") },
-                { "ReadyToStart", false }
+                { PLAYER_STATE_KEY, PlayerState.Free },
+                { PLAYER_ROLE_KEY, PlayerRole.None },
+                { PREFERED_ROLE_KEY, (PlayerRole) PlayerPrefs.GetInt(PREFERED_ROLE_KEY) },
+                { READY_TO_START_KEY, false }
             };
 
             photonPlayer.SetCustomProperties(properties);
@@ -64,33 +64,34 @@ namespace BiReJeJoCo.Backend
         }
         public void SetRole(PlayerRole role)
         {
-            UpdateProperty("Role", role);
+            UpdateProperty(PLAYER_ROLE_KEY, role);
         }
         public void SetPreferedRole(PlayerRole role)
         {
-            UpdateProperty("PreferedRole", role);
+            UpdateProperty(PREFERED_ROLE_KEY, role);
+            PlayerPrefs.SetInt(PREFERED_ROLE_KEY, (int) role);
         }
 
         public void SetReadyToStart(bool ready)
         {
-            UpdateProperty("ReadyToStart", ready);
+            UpdateProperty(READY_TO_START_KEY, ready);
         }
 
         #region Events
         private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
-            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "ReadyToStart", false);
+            UpdateProperties(PLAYER_STATE_KEY, PlayerState.Lobby, PLAYER_ROLE_KEY, PlayerRole.Spectator, READY_TO_START_KEY, false);
         }
 
         private void OnJoinedPhotonLobby(JoinedPhotonLobbyMsg msg) 
         {
-            UpdateProperties("State", PlayerState.Free, "Role", PlayerRole.None);
+            UpdateProperties(PLAYER_STATE_KEY, PlayerState.Free, PLAYER_ROLE_KEY, PlayerRole.None);
         }
 
         private void OnGameSceneLoaded(LoadedGameSceneMsg msg)
         {
             SpawnPlayerCharacter();
-            UpdateProperty("State", PlayerState.Ready);
+            UpdateProperty(PLAYER_STATE_KEY, PlayerState.Ready);
         }
         #endregion
 

@@ -49,6 +49,7 @@ namespace BiReJeJoCo.Items
             DontDestroyOnLoad(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             DIContainer.RegisterImplementation<CollectablesManager>(this);
+            SetupForMatch(0);
         }
         protected override void OnBeforeDestroy()
         {

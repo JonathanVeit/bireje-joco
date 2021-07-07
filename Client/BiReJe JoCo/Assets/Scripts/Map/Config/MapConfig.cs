@@ -108,6 +108,17 @@ namespace BiReJeJoCo
 
             return floorName;
         }
+        public int GetFloorIndex(Vector3 position)
+        {
+            int index = -1;
+            foreach (var floor in floors)
+            {
+                if (position.y < floor.startsAtHeight)
+                    index++;
+            }
+
+            return index;
+        }
 
         #region Override
         public void OverrideHunterSpawnPoints(Vector3[] points) 
