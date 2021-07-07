@@ -16,7 +16,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] GameObject loadingOverlay;
         [SerializeField] Button startButton;
         [SerializeField] Dropdown durationDropdown;
-        [SerializeField] Dropdown preferedRoleDropdown;
+        [SerializeField] GameObject[] preferedRoleOutlines;
         [SerializeField] string matchMode = "default_match";
 
         private Dictionary<string, LobbyMemberEntry> memberEntries
@@ -33,12 +33,10 @@ namespace BiReJeJoCo.UI
             if (PlayerPrefs.HasKey(DURATION_KEY))
             {
                 durationDropdown.value = PlayerPrefs.GetInt(DURATION_KEY);
-                SetMatchDuration(durationDropdown.value);
             }
             if (PlayerPrefs.HasKey(PREFERED_ROLE_KEY))
             {
-                preferedRoleDropdown.value = PlayerPrefs.GetInt(PREFERED_ROLE_KEY);
-                SetPlayerPreferedRole(preferedRoleDropdown.value);
+                SetPlayerPreferedRole(PlayerPrefs.GetInt(PREFERED_ROLE_KEY));
             }
         }
         protected override void OnBeforeDestroy()
@@ -140,31 +138,16 @@ namespace BiReJeJoCo.UI
                     break;
             }
 
+            for (int i = 0; i < preferedRoleOutlines.Length; i++)
+            {
+                preferedRoleOutlines[i].SetActive(i==role);
+            }
             PlayerPrefs.SetInt(PREFERED_ROLE_KEY, role);
         }
 
-        public void SetMatchDuration(int duration)
+        public void SetPlayerReadToStart() 
         {
-            if (!localPlayer.IsHost)
-                return;
-
-            switch (duration)
-            {
-                case 0:
-                    (matchHandler as HostMatchHandler).SetDuration(5 * 60);
-                    break;
-                case 1:
-                    (matchHandler as HostMatchHandler).SetDuration(10 * 60);
-                    break;
-                case 2:
-                    (matchHandler as HostMatchHandler).SetDuration(15 * 60);
-                    break;
-                case 3:
-                    (matchHandler as HostMatchHandler).SetDuration(20 * 60);
-                    break;
-            }
-
-            PlayerPrefs.SetInt(DURATION_KEY, duration);
+            localPlayer.SetReadyToStart(!localPlayer.ReadToStart);
         }
         #endregion
     }

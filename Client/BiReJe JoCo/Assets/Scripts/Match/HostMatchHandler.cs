@@ -12,7 +12,6 @@ namespace BiReJeJoCo
     public class HostMatchHandler : MatchHandler
     {
         private bool startedMatch = false;
-        public int MatchDuration { get; protected set; } = 10 * 60;
 
         private const int START_MATCH_DELAY = 5;
 
@@ -162,11 +161,6 @@ namespace BiReJeJoCo
 
             photonMessageHub.ShoutMessage(new FinishMatchPhoMsg() { result = result }, PhotonMessageTarget.AllViaServer);
         }
-
-        public void SetDuration(int duration) 
-        {
-            MatchDuration = duration;
-        }
         #endregion
 
         #region Match
@@ -186,7 +180,7 @@ namespace BiReJeJoCo
             if (!startedMatch && AllPlayerReady())
             {
                 var startDate = DateTime.UtcNow.AddSeconds(START_MATCH_DELAY);
-                var endDate = DateTime.UtcNow.AddSeconds(MatchDuration + START_MATCH_DELAY);
+                var endDate = DateTime.UtcNow.AddSeconds((MatchConfig.Mode.duration * 60) + START_MATCH_DELAY);
 
                 photonMessageHub.ShoutMessage(new StartMatchPhoMsg(startDate, endDate), PhotonMessageTarget.AllViaServer);
                 startedMatch = true;

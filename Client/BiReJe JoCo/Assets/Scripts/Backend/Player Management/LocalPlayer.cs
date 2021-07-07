@@ -18,7 +18,9 @@ namespace BiReJeJoCo.Backend
             var properties = new PhotonHashTable()
             {
                 { "State", PlayerState.Free },
-                { "Role", PlayerRole.None}
+                { "Role", PlayerRole.None },
+                { "PreferedRole", (PlayerRole) PlayerPrefs.GetInt("PreferedRole") },
+                { "ReadyToStart", false }
             };
 
             photonPlayer.SetCustomProperties(properties);
@@ -31,7 +33,6 @@ namespace BiReJeJoCo.Backend
             messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnGameSceneLoaded);
         }
         #endregion
-
 
         private void SpawnPlayerCharacter() 
         {
@@ -70,10 +71,15 @@ namespace BiReJeJoCo.Backend
             UpdateProperty("PreferedRole", role);
         }
 
+        public void SetReadyToStart(bool ready)
+        {
+            UpdateProperty("ReadyToStart", ready);
+        }
+
         #region Events
         private void OnJoinedLobby(JoinedLobbyMsg msg)
         {
-            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "PreferedRole", PlayerRole.Hunter);
+            UpdateProperties("State", PlayerState.Lobby, "Role", PlayerRole.Spectator, "ReadyToStart", false);
         }
 
         private void OnJoinedPhotonLobby(JoinedPhotonLobbyMsg msg) 

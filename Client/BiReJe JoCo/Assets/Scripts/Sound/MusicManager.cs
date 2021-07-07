@@ -65,10 +65,9 @@ namespace BiReJeJoCo.Audio
         public void Play(MusicState state, Action onFinishedPlay)
         {
             CurrentState = state;
-            Debug.Log(Time.realtimeSinceStartup);
+
             if (MusicConfig.GetClip(state, out var clipConfig))
             {
-                Debug.Log(Time.realtimeSinceStartup);
                 float fadeout = SetupPlay(clipConfig);
                 curFadeOut = clipConfig.fadeOut;
                 musicSwitcher = CoroutineHelper.Instance.StartCoroutine(SwitchMusicClip(clipConfig.clip, clipConfig.fadeIn, fadeout, onFinishedPlay));

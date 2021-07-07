@@ -13,6 +13,8 @@ namespace BiReJeJoCo.Backend
 
         public PlayerRole Role => LoadPlayerRole();
         public PlayerRole PreferedRole => LoadPreferedPlayerRole();
+        public bool ReadToStart => LoadReadyToStart();
+
         public string NickName => photonPlayer.NickName;
         public string Id => photonPlayer.UserId;
         public int NumberInRoom => photonPlayer.ActorNumber;
@@ -49,6 +51,13 @@ namespace BiReJeJoCo.Backend
             var rawState = photonPlayer.CustomProperties["PreferedRole"].ToString();
             return (PlayerRole)Enum.Parse(typeof(PlayerRole), rawState);
         }
+
+        private bool LoadReadyToStart()
+        {
+            var rawValue = photonPlayer.CustomProperties["ReadyToStart"].ToString();
+            return bool.Parse(rawValue);
+        }
+        
         #endregion
     }
 }

@@ -4,6 +4,7 @@ namespace BiReJeJoCo.Backend
     public class MatchMode
     {
         public string gameScene;
+        public int duration;
         public int huntedCollectables;
         public float minCollectableDistance; 
         public int coralsPerSpawn;
