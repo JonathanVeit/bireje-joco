@@ -25,7 +25,7 @@ namespace BiReJeJoCo
 
             var collection = new CoralGrowConfig()
             {
-                Crystals = new Dictionary<Transform, Vector3>(),
+                Corals = new Dictionary<DestroyableCoral, Vector3>(),
             };
 
             for (int i = 0; i < matchHandler.MatchConfig.Mode.coralsPerSpawn; i++)
@@ -38,7 +38,7 @@ namespace BiReJeJoCo
                 }
 
                 var coral = SpawnCoral(spawnPoint.Value, rnd);
-                collection.Crystals.Add(coral.transform, RandomScale(rnd));
+                collection.Corals.Add(coral, RandomScale(rnd));
 
                 coral.InitializeCollectable(collectablesManager.GetInstanceId(coral.UniqueId), -1);
                 collectablesManager.RegisterCollectableItem(coral);
@@ -117,18 +117,24 @@ namespace BiReJeJoCo
             {
                 bool finished = false;
 
-                foreach (var entry in collection.Crystals.ToArray())
+                foreach (var entry in collection.Corals.ToArray())
                 {
                     if (entry.Key == null)
                     {
-                        collection.Crystals.Remove(entry.Key);
+                        collection.Corals.Remove(entry.Key);
                         continue;
                     }
 
-                    if (entry.Key.localScale == entry.Value)
+                    if (entry.Key.transform.localScale == entry.Value)
+                    {
+                        collection.Corals.Remove(entry.Key);
+                        entry.Key.SetSizeDelta(1);
                         continue;
+                    }
 
-                    entry.Key.localScale = Vector3.MoveTowards(entry.Key.localScale, entry.Value, growSpeed * Time.deltaTime);
+                    entry.Key.transform.localScale = Vector3.MoveTowards(entry.Key.transform.localScale, entry.Value, growSpeed * Time.deltaTime);
+                    entry.Key.SetSizeDelta(Mathf.InverseLerp(0, entry.Value.magnitude, entry.Key.transform.localScale.magnitude));
+
                     finished = false;
                 }
 
@@ -148,7 +154,7 @@ namespace BiReJeJoCo
 
         private struct CoralGrowConfig
         {
-            public Dictionary<Transform, Vector3> Crystals { get; set; }
+            public Dictionary<DestroyableCoral, Vector3> Corals { get; set; }
         }
         #endregion
     }

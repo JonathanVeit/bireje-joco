@@ -137,7 +137,7 @@ namespace BiReJeJoCo
             yield return base.DurationCounter(startDate, endDate);
 
             var hunterCharacter = playerManager.GetAllPlayer(x => x.Role == PlayerRole.Hunted)[0].PlayerCharacter;
-            var totalCorals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.TotalCorals;
+            var totalCorals = hunterCharacter.ControllerSetup.GetBehaviourAs<HuntedBehaviour>().CoralMechanic.CalculateTotalCorals();
 
             MatchResult result;
             if (totalCorals >= MatchConfig.Mode.coralsToWin)

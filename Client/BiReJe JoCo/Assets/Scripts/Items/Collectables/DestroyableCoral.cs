@@ -13,6 +13,7 @@ namespace BiReJeJoCo
 
         public string InstanceId { get; private set; }
         public int SpawnPointIndex { get; private set; }
+        public float SizeDelta { get; private set; }
         public string UniqueId => uniqueId;
 
         public void InitializeCollectable(string instanceId, int spawnPointIndex)
@@ -21,6 +22,10 @@ namespace BiReJeJoCo
             SpawnPointIndex = spawnPointIndex;
         }
 
+        public void SetSizeDelta(float value) 
+        {
+            SizeDelta = value;
+        }
         public void Destroy() 
         {
             if (isCollected) return;

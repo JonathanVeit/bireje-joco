@@ -17,15 +17,14 @@ namespace BiReJeJoCo.Character
 
         [Header("Runtime")]
         [SerializeField] int coralAmmo = 0;
-        [SerializeField] int totalCorals;
 
-        public int TotalCorals => totalCorals;
         public bool AmmoIsFull => coralAmmo == maxCoralAmmo;
         public event Action onSpawnedCorals;
 
         private SyncVar<object[]> onSpawnCrystals = new SyncVar<object[]>(8, true);
 
         private int seed;
+        private bool reachedMax;
 
         #region Initialization
         protected override void OnInitializeLocal()
@@ -46,7 +45,6 @@ namespace BiReJeJoCo.Character
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<CollectableItemCreated>(this, OnItemCreatedCollected);
             messageHub.RegisterReceiver<ItemCollectedByPlayerMsg>(this, OnItemCollected);
 
             photonMessageHub.RegisterReceiver<SpawnNewCoralAmmoPhoMsg>(this, OnSpawnNewAmmoReceived);
@@ -94,6 +92,9 @@ namespace BiReJeJoCo.Character
             if (!Owner.PlayerCharacter.ControllerSetup.WalkController.IsGrounded())
                 return false;
 
+            if (Behaviour.TransformationMechanic.IsTransformed)
+                return false;
+
             foreach (var collectable in collectablesManager.GetAllCollectablesAs<DestroyableCoral>(x => x is DestroyableCoral))
             {
                 if (Vector3.Distance(collectable.transform.position, transform.position) < minShootDistance)
@@ -115,12 +116,6 @@ namespace BiReJeJoCo.Character
             var instance = Instantiate(prefab, pos, Quaternion.identity);
             var coralGrower = instance.GetComponent<CoralGrower>();
             coralGrower.Grow(seed);
-
-            if (TotalCorals == matchHandler.MatchConfig.Mode.maxCorals &&
-                Owner.IsLocalPlayer)
-            {
-                photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
-            }
 
             var sfxPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("hunted_place_corals");
             poolingManager.PoolInstance(sfxPrefab, transform.position, transform.rotation);
@@ -174,6 +169,36 @@ namespace BiReJeJoCo.Character
             return rndIndex;
         }
 
+        private void Update()
+        {
+            if (reachedMax)
+                return;
+
+            var totalCorals = CalculateTotalCorals();
+
+            gameUI.UpdateTotalCoralAmount(totalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
+
+            if (Owner.IsLocalPlayer)
+            {
+                if (totalCorals >= matchHandler.MatchConfig.Mode.maxCorals)
+                {
+                    photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient);
+                    reachedMax = true;
+                }
+            }
+        }
+        public int CalculateTotalCorals()
+        {
+            var totalCorals = collectablesManager.GetAllCollectablesAs<DestroyableCoral>(x => x is DestroyableCoral);
+
+            float coralDelta = 0;
+            foreach (var coral in totalCorals)
+            {
+                coralDelta += 1 * coral.SizeDelta;
+            }
+            return Mathf.CeilToInt (coralDelta);
+        }
+
         #region Events
         private void OnSpawnNewAmmoReceived(PhotonMessage msg) 
         {
@@ -187,24 +212,6 @@ namespace BiReJeJoCo.Character
             collectablesManager.CreateCollectable(spawnConfig);
         }
 
-        private void OnItemCreatedCollected(CollectableItemCreated msg)
-        {
-            switch (msg.itemId)
-            {
-                case "destroyable_coral":
-                    totalCorals++;
-                    gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
-                    break;
-            }
-
-            if (Owner.IsLocalPlayer)
-            {
-                if (TotalCorals == matchHandler.MatchConfig.Mode.maxCorals)
-                {
-                    photonMessageHub.ShoutMessage<HuntedFinishedObjectivePhoMsg>(PhotonMessageTarget.MasterClient); 
-                }
-            }
-        }
         private void OnItemCollected(ItemCollectedByPlayerMsg msg)
         {
             switch (msg.itemId)
@@ -217,11 +224,6 @@ namespace BiReJeJoCo.Character
                     
                     if (Owner.IsLocalPlayer)
                         SpawnRandomCollectable();
-                    break;
-
-                case "destroyable_coral":
-                    totalCorals--;
-                    gameUI.UpdateTotalCoralAmount(TotalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
                     break;
             }
         }

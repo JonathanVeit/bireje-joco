@@ -7,6 +7,7 @@ namespace BiReJeJoCo.UI
     {
         [Header("Settings")]
         [SerializeField] Text target;
+        [SerializeField] Animator anim;
 
         private float maxCount;
         private float Counter;
@@ -18,6 +19,7 @@ namespace BiReJeJoCo.UI
             target.color = color;
             Counter = maxCount = duration;
             count = true;
+            anim.SetTrigger("pulsate");
         }
 
         // Update is called once per frame
