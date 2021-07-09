@@ -13,6 +13,8 @@ namespace BiReJeJoCo
         public MatchConfig MatchConfig { get; protected set; }
 
         protected Coroutine durationCounter;
+        private int lastTimeMessage;
+
 
         #region Initialization
         protected override void OnSystemsInitialized()
@@ -64,10 +66,14 @@ namespace BiReJeJoCo
             {
                 var seconds = (int)(endDate - DateTime.UtcNow).TotalSeconds;
                 uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(seconds));
-                if (seconds == 60 ||
-                    seconds == 30)
+                
+                if (seconds == 60 ||  seconds == 30)
                 {
-                    uiManager.GetInstanceOf<GameUI>().ShowMessage($"{seconds} seconds!", 4, Color.white);
+                    if (seconds != lastTimeMessage)
+                    {
+                        uiManager.GetInstanceOf<GameUI>().ShowMessage($"{seconds} seconds!", 4, Color.white);
+                        lastTimeMessage = seconds;
+                    }
                 }
 
                 yield return waiter;
