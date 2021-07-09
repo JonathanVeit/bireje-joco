@@ -38,7 +38,7 @@ namespace BiReJeJoCo.Items
         private Dictionary<int, List<ICollectable>> spawnPointWorkload;
 
         public Transform Root { get; private set; }
-        private Dictionary<string, System.Random> randoms;
+        private Dictionary<string, int> idPool;
         private int seed;
 
         private const string INSTANCE_ID_FORMAT = "{0}_{1}";
@@ -61,7 +61,7 @@ namespace BiReJeJoCo.Items
             collectables = new Dictionary<string, ICollectable>();
             spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
             Root = null;
-            randoms = new Dictionary<string, System.Random>();
+            idPool = new Dictionary<string, int>();
             this.seed = seed;
         }
 
@@ -206,13 +206,15 @@ namespace BiReJeJoCo.Items
 
         public string GetInstanceId(string itemId) 
         {
-            if (!randoms.ContainsKey(itemId))
-                randoms.Add(itemId, new System.Random(seed));
+            if (!idPool.ContainsKey(itemId))
+                idPool.Add(itemId, 0);
 
-            string result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].Next().ToString());
+            idPool[itemId]++;
+            string result = string.Format(INSTANCE_ID_FORMAT, itemId, idPool[itemId].ToString());
             while (HasCollectable(result)) 
             {
-                result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].Next().ToString());
+                idPool[itemId]++;
+                result = string.Format(INSTANCE_ID_FORMAT, itemId, idPool[itemId].ToString());
             }
 
             return result;

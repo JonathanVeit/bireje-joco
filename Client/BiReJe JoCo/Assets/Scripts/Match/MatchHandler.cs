@@ -64,6 +64,12 @@ namespace BiReJeJoCo
             {
                 var seconds = (int)(endDate - DateTime.UtcNow).TotalSeconds;
                 uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(seconds));
+                if (seconds == 60 ||
+                    seconds == 30)
+                {
+                    uiManager.GetInstanceOf<GameUI>().ShowMessage($"{seconds} seconds!", 4, Color.white);
+                }
+
                 yield return waiter;
             }
 

@@ -65,7 +65,9 @@ namespace BiReJeJoCo.Character
         public void SpawnCorals() 
         {
             if (!CanSpawn())
+            {
                 return;
+            }
 
             var args = new object[2] 
             {
@@ -95,7 +97,10 @@ namespace BiReJeJoCo.Character
             foreach (var collectable in collectablesManager.GetAllCollectablesAs<DestroyableCoral>(x => x is DestroyableCoral))
             {
                 if (Vector3.Distance(collectable.transform.position, transform.position) < minShootDistance)
+                {
+                    gameUI.ShowMessage("There are already spores nearby!", 3, Color.red);
                     return false;
+                }
             }
 
             return true;

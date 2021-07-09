@@ -20,6 +20,8 @@ namespace BiReJeJoCo.UI
         [SerializeField] UIBarHandler totalCrystalsBar;
         [SerializeField] RectTransform totalCrystalBarSeperator;
         [SerializeField] Text floorNameLabel;
+        [SerializeField] Transform messageRoot;
+        [SerializeField] GameUIMessage messagePrefab;
 
         [Header("Hunter")]
         [SerializeField] GameObject hunterHUD;
@@ -115,6 +117,11 @@ namespace BiReJeJoCo.UI
         public void CloseCountdownOverlay()
         {
             countDownOverlay.SetActive(false);
+        }
+        public void ShowMessage(string message, int duration, Color color)
+        {
+            var msg = Instantiate(messagePrefab, messageRoot);
+            msg.Initialize(message, duration, color);
         }
 
         // all player
