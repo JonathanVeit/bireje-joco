@@ -24,5 +24,6 @@ namespace BiReJeJoCo
 
         protected static Audio.SoundEffectManager soundEffectManager => DIContainer.GetImplementationFor<Audio.SoundEffectManager>();
         protected static Audio.MusicManager musicManager => DIContainer.GetImplementationFor<Audio.MusicManager>();
+        protected static OptionManager optionManager => DIContainer.GetImplementationFor<OptionManager>();
     }
 }

@@ -93,6 +93,10 @@ namespace BiReJeJoCo.UI
             localPlayer.SetNickName(name);
             PlayerPrefs.SetString("nickname", name);
         }
+        public void OpenOptions()
+        {
+            gameManager.OpenOptions();
+        }
 
         public void HostLobby()
         {

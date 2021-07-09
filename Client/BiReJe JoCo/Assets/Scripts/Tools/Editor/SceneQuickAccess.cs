@@ -17,6 +17,12 @@ namespace BiReJeJoCo.Tools
             EditorSceneManager.OpenScene("Assets/Scenes/main_menu_scene.unity");
         }
 
+        [MenuItem("Tools/Scenes/Option Menu")]
+        public static void OpenOptionScene()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/option_scene.unity");
+        }
+
         [MenuItem("Tools/Scenes/Lobby")]
         public static void OpenRoomMenu()
         {

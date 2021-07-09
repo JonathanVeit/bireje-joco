@@ -79,6 +79,7 @@ namespace BiReJeJoCo.Character
             else if (transformationCooldownTimer.State == TimerState.Finished! && isGrounded())
             {
                 TransformInto();
+                soundEffectManager.Play("hunted_transformation", transform.position);
             }
         }
 

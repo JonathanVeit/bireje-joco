@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using JoVei.Base;
@@ -38,6 +37,11 @@ namespace BiReJeJoCo
         public void OpenMainMenu() 
         {
             SceneManager.LoadSceneAsync("main_menu_scene");
+        }
+
+        public void OpenOptions()
+        {
+            SceneManager.LoadSceneAsync("option_scene");
         }
 
         public void OpenLobby()

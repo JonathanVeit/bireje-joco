@@ -63,6 +63,7 @@ namespace BiReJeJoCo.Items
 
         public virtual void OnCollect()
         {
+            soundEffectManager.Play("hunted_collect_item", transform.position);
             Destroy(this.gameObject);
         }
 
