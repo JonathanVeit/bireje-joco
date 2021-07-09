@@ -58,6 +58,7 @@ namespace BiReJeJoCo
             }
             uiManager.GetInstanceOf<GameUI>().CloseCountdownOverlay();
             messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
+            State = MatchState.Running;
 
             while (endDate > DateTime.UtcNow)
             {
@@ -103,7 +104,7 @@ namespace BiReJeJoCo
         {
             var castedMsg = msg as StartMatchPhoMsg;
 
-            State = MatchState.Running;
+            State = MatchState.CountDown;
             uiManager.GetInstanceOf<GameUI>().CloseLoadingOverlay();
             messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Loading));
 

@@ -5,8 +5,9 @@ namespace BiReJeJoCo
         None    = 0,
         InLobby = 1,
         WaitingForPlayer = 2,
-        Running = 3,
-        Paused  = 4,
-        Result  = 5,
+        CountDown = 3,
+        Running = 4,
+        Paused  = 5,
+        Result  = 6,
     }
 }

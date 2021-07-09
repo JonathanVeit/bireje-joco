@@ -255,7 +255,8 @@ namespace BiReJeJoCo.UI
         private void ToggleMenu() 
         {
             if (controlsPopup.IsOpen ||
-                resultPopup.IsOpen)
+                resultPopup.IsOpen ||
+                matchHandler.State != MatchState.Running)
                 return;
 
             if (pausePopup.IsOpen)
