@@ -145,7 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Root: {fileID: 7321444574351854512}
   m_UpdateRate: 60
-  m_UpdateMode: 3
+  m_UpdateMode: 0
   m_Damping: 0.9
   m_DampingDistrib:
     serializedVersion: 2
@@ -1290,6 +1290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minAnimationWeight: 0.5
+  overrideAnimationWeight: []
 --- !u!114 &5804421204946636825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,6 +1305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - trigger: step
+    stopTrigger: 
     target: {fileID: 8677691786337614120}
     parent: 0
     soundEffects:
@@ -1311,6 +1313,7 @@ MonoBehaviour:
     - hunted_step_2
     - hunted_step_3
   - trigger: jump_end
+    stopTrigger: 
     target: {fileID: 8677691786337614120}
     parent: 0
     soundEffects:
