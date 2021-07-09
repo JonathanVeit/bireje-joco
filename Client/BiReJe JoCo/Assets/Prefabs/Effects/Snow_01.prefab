@@ -3714,7 +3714,7 @@ ParticleSystem:
   CollisionModule:
     enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -3887,7 +3887,7 @@ ParticleSystem:
     collidesWith:
       serializedVersion: 2
       m_Bits: 2147483647
-    maxCollisionShapes: 512
+    maxCollisionShapes: 1500
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
@@ -4859,7 +4859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5307605546401458970
 Transform:
   m_ObjectHideFlags: 0
