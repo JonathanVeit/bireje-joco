@@ -209,10 +209,10 @@ namespace BiReJeJoCo.Items
             if (!randoms.ContainsKey(itemId))
                 randoms.Add(itemId, new System.Random(seed));
 
-            string result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].NextDouble().ToString());
+            string result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].Next().ToString());
             while (HasCollectable(result)) 
             {
-                result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].NextDouble().ToString());
+                result = string.Format(INSTANCE_ID_FORMAT, itemId, randoms[itemId].Next().ToString());
             }
 
             return result;

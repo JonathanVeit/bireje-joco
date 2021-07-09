@@ -218,7 +218,6 @@ namespace BiReJeJoCo.Character
 
         private void UpdateAmmoAmount(float value) 
         {
-            Debug.Log(ammoRenderer.materials[materialIndex].GetFloat("Amount"));
             ammoRenderer.materials[materialIndex].SetFloat("Amount", value);
         }
         #endregion

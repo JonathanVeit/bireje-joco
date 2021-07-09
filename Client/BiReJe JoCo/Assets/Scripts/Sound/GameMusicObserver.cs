@@ -121,6 +121,7 @@ namespace BiReJeJoCo.Audio
             endChasingCounter = new Counter(musicManager.MusicConfig.EndChaseMusicDelay);
 
             photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+            tickSystem.Register(this);
         }
 
         private void OnMatchFinished(PhotonMessage msg)
