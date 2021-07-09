@@ -26,6 +26,9 @@ namespace BiReJeJoCo.Audio
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (rb == null)
+                return;
+
             hitCount++;
             if (skipFirst && hitCount == 1)
                 return;

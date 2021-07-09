@@ -73,6 +73,7 @@ namespace BiReJeJoCo.Character
             () =>
             {
                 photonRoomWrapper.Destroy(thrownTrap);
+                gameUI.SetTrapIcon(true);
                 thrownTrap = null;
             }); // finish
 

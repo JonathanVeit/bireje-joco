@@ -193,7 +193,7 @@ namespace BiReJeJoCo.Items
             }
             else
             {
-                Debug.Log($"No Collectable with instance id {castedMsg.InstanceId}.");
+                Debug.LogError($"No Collectable with instance id {castedMsg.InstanceId}.");
             }
         }
         #endregion
