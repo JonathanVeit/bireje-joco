@@ -5,7 +5,7 @@ namespace BiReJeJoCo.Backend
         None            = 0,
         CatchedHuned    = 1, 
         TimeOver        = 2,
-        CrystalsCreated = 3,
+        CoralsCreated = 3,
     }
 
     [System.Serializable]

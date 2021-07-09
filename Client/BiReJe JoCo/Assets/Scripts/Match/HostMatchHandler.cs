@@ -145,7 +145,7 @@ namespace BiReJeJoCo
                 result = new MatchResult()
                 {
                     winner = PlayerRole.Hunted,
-                    condition = WinCondition.CrystalsCreated,
+                    condition = WinCondition.TimeOver,
                     message = $"Time is over! The monster placed {totalCorals} spores and won.",
                 };
             }
@@ -231,8 +231,8 @@ namespace BiReJeJoCo
             var result = new MatchResult()
             {
                 winner = PlayerRole.Hunted,
-                condition = WinCondition.CrystalsCreated,
-                message = $"The monster created {MatchConfig.Mode.maxCorals} crystals.",
+                condition = WinCondition.CoralsCreated,
+                message = $"The monster created {MatchConfig.Mode.maxCorals} spores.",
             };
 
             photonMessageHub.ShoutMessage<FinishMatchPhoMsg>(PhotonMessageTarget.AllViaServer, result);

@@ -31,6 +31,7 @@ namespace BiReJeJoCo.UI
 
             hunterResultLabel.text = result.winner == PlayerRole.Hunter ? "VICTORY" : "DEFEAT";
             huntedResultLabel.text = result.winner == PlayerRole.Hunted ? "VICTORY" : "DEFEAT";
+
             SpawnPlayer();
             UpdateCoralDisplay();
 
