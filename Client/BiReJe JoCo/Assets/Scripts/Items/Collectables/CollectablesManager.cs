@@ -157,6 +157,7 @@ namespace BiReJeJoCo.Items
         private void OnLobbySceneLoaded(LoadedLobbySceneMsg msg)
         {
             ConnectEvents();
+            ClearAll();
         }
 
         private void OnMatchRulesDefined(PhotonMessage msg)
