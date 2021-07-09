@@ -45,6 +45,7 @@ namespace BiReJeJoCo
             }
 
             StartCoroutine(GrowCorals(collection));
+            soundEffectManager.Play("corals_grow", transform.position);
         }
 
         private DestroyableCoral SpawnCoral(CoralSpawnPoint spawnPoint, System.Random rnd)
