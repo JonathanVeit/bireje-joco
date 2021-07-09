@@ -1329,16 +1329,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
---- !u!4 &7872576176409664131 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4260336486700980177, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
-  m_PrefabInstance: {fileID: 6223626295522839890}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &4296766676229423353 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7926315153062055339, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
-  m_PrefabInstance: {fileID: 6223626295522839890}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6361574154576357936 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -8208343750708091038, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
@@ -1350,6 +1340,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &4296766676229423353 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7926315153062055339, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
+  m_PrefabInstance: {fileID: 6223626295522839890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7872576176409664131 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4260336486700980177, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
+  m_PrefabInstance: {fileID: 6223626295522839890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8234017406594507196 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2601910775603375342, guid: 85c87c7e1c12e634fb5d2d59b41ee8cc, type: 3}
+  m_PrefabInstance: {fileID: 6223626295522839890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7557390781154319344
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1405,6 +1410,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7489478724873817259, guid: 7f1fb3b2fd18c45428fe1e886e2bfb39, type: 3}
+      propertyPath: ammoRenderer
+      value: 
+      objectReference: {fileID: 8234017406594507196}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f1fb3b2fd18c45428fe1e886e2bfb39, type: 3}
 --- !u!4 &2499563852156931642 stripped

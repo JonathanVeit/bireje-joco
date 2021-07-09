@@ -10,7 +10,6 @@ namespace BiReJeJoCo.Backend
         public Dictionary<int, PlayerRole> roles; // <actor number, role> 
         public Dictionary<int, int> spawnPos; // <actor number, spawn position index> 
 
-        public int collectableSeed; // seed to generate instance Ids
         public List<CollectableSpawnConfig> collectables; // collectables to be spawned
 
         [Newtonsoft.Json.JsonIgnore]

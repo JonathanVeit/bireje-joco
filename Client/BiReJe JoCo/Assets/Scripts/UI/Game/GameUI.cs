@@ -190,10 +190,6 @@ namespace BiReJeJoCo.UI
         }
 
         // hunted
-        public void UpdateCrystalAmmoBar(float value)
-        {
-            crystalAmmoBar.SetValue(value);
-        }
         public void UpdateTransformationDurationBar(float value)
         {
             if (value > 0)

@@ -25,7 +25,6 @@ namespace BiReJeJoCo.Character
         #region Initialization
         protected override void OnBehaviourInitialized()
         {
-            gameUI.UpdateCrystalAmmoBar(1);
             ConnectEvents();
         }
         protected override void OnBeforeDestroy()

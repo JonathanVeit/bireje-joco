@@ -22,6 +22,7 @@ namespace BiReJeJoCo.Character
         #region Initialization
         protected override void OnInitializeLocal()
         {
+            gameUI.UpdatePingCooldown(1);
             ConnectEvents();
         }
         protected override void OnInitializeRemote()

@@ -101,7 +101,6 @@ namespace BiReJeJoCo
                 matchMode = matchMode,
 
                 collectables = collectableConfigs,
-                collectableSeed = DateTime.Now.Second,
             };
 
             if (globalVariables.HasVar("force_hunter") && 

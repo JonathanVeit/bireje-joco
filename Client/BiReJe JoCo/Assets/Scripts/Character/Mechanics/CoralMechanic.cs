@@ -14,6 +14,8 @@ namespace BiReJeJoCo.Character
         [SerializeField] string collectableId = "collectable_coral";
         [SerializeField] float minShootDistance;
         [SerializeField] float minAmmoRespawnDistance;
+        [SerializeField] SkinnedMeshRenderer ammoRenderer;
+        [SerializeField] int materialIndex;
 
         [Header("Runtime")]
         [SerializeField] int coralAmmo = 0;
@@ -30,7 +32,7 @@ namespace BiReJeJoCo.Character
         protected override void OnInitializeLocal()
         {
             ConnectEvents();
-            gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
+            ammoRenderer.materials[materialIndex].SetFloat("AdditionalEmissionIntensity", coralAmmo / (float)maxCoralAmmo);
             Owner.PlayerCharacter.ControllerSetup.AnimationController.onAnimationEvent += OnAnimationEvent;
         }
         protected override void OnInitializeRemote()
@@ -78,7 +80,7 @@ namespace BiReJeJoCo.Character
 
             coralAmmo--;
             seed++;
-            gameUI.UpdateCrystalAmmoBar(coralAmmo / (float)maxCoralAmmo);
+            ammoRenderer.materials[materialIndex].SetFloat("AdditionalEmissionIntensity", coralAmmo / (float)maxCoralAmmo);
             onSpawnedCorals?.Invoke();
 
             messageHub.ShoutMessage<BlockPlayerControlsMsg>(this, new BlockPlayerControlsMsg(InputBlockState.Transformation));
@@ -220,10 +222,12 @@ namespace BiReJeJoCo.Character
                     if (!Owner.IsLocalPlayer)
                         break;
                     coralAmmo = Mathf.Clamp(coralAmmo + coralsPerCollectable, 0, maxCoralAmmo);
-                    gameUI.UpdateCrystalAmmoBar(coralAmmo / (float) maxCoralAmmo);
-                    
+
                     if (Owner.IsLocalPlayer)
+                    {
                         SpawnRandomCollectable();
+                        ammoRenderer.materials[materialIndex].SetFloat("AdditionalEmissionIntensity", coralAmmo / (float)maxCoralAmmo);
+                    }
                     break;
             }
         }

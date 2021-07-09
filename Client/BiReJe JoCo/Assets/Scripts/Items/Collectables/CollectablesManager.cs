@@ -39,7 +39,6 @@ namespace BiReJeJoCo.Items
 
         public Transform Root { get; private set; }
         private Dictionary<string, int> idPool;
-        private int seed;
 
         private const string INSTANCE_ID_FORMAT = "{0}_{1}";
 
@@ -49,26 +48,26 @@ namespace BiReJeJoCo.Items
             DontDestroyOnLoad(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             DIContainer.RegisterImplementation<CollectablesManager>(this);
-            SetupForMatch(0);
+            ClearAll();
         }
         protected override void OnBeforeDestroy()
         {
             DisconnectEvents();
         }
 
-        private void SetupForMatch(int seed)
+        private void ClearAll()
         {
             collectables = new Dictionary<string, ICollectable>();
             spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
             Root = null;
             idPool = new Dictionary<string, int>();
-            this.seed = seed;
         }
 
         void ConnectEvents()
         {
             photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
             photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnMatchRulesDefined);
+            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
             messageHub.UnregisterReceiver(this);
         }
         void DisconnectEvents()
@@ -162,9 +161,6 @@ namespace BiReJeJoCo.Items
 
         private void OnMatchRulesDefined(PhotonMessage msg)
         {
-            var castedMsg = msg as DefinedMatchRulesPhoMsg;
-            SetupForMatch(castedMsg.config.collectableSeed);
-
             var sceneConfig = matchHandler.MatchConfig.mapConfig;
             for (int i = 0; i < sceneConfig.GetCollectableSpawnPointCount(); i++)
             {
@@ -195,6 +191,11 @@ namespace BiReJeJoCo.Items
             {
                 Debug.LogError($"No Collectable with instance id {castedMsg.InstanceId}.");
             }
+        }
+
+        private void OnMatchFinished(PhotonMessage msg) 
+        {
+            ClearAll();
         }
         #endregion
 
