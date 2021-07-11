@@ -57,6 +57,7 @@ namespace BiReJeJoCo.Items
 
         private void ClearAll()
         {
+            Debug.Log("cleared");
             collectables = new Dictionary<string, ICollectable>();
             spawnPointWorkload = new Dictionary<int, List<ICollectable>>();
             Root = null;
@@ -67,13 +68,14 @@ namespace BiReJeJoCo.Items
         {
             photonMessageHub.RegisterReceiver<CollectItemPhoMsg>(this, OnItemCollected);
             photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnMatchRulesDefined);
-            photonMessageHub.RegisterReceiver<FinishMatchPhoMsg>(this, OnMatchFinished);
+            photonMessageHub.RegisterReceiver<CloseMatchPhoMsg>(this, OnMatchClosed);
             messageHub.UnregisterReceiver(this);
         }
         void DisconnectEvents()
         {
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
+            DIContainer.UnregisterImplementation<CollectablesManager>();
         }
         #endregion
 
@@ -150,6 +152,7 @@ namespace BiReJeJoCo.Items
         }
         public void CollectItem(string instanceId)
         {
+            Debug.Log("collected");
             photonMessageHub.ShoutMessage(new CollectItemPhoMsg(instanceId, localPlayer.NumberInRoom), PhotonMessageTarget.AllViaServer);
         }
 
@@ -157,7 +160,6 @@ namespace BiReJeJoCo.Items
         private void OnLobbySceneLoaded(LoadedLobbySceneMsg msg)
         {
             ConnectEvents();
-            ClearAll();
         }
 
         private void OnMatchRulesDefined(PhotonMessage msg)
@@ -182,7 +184,6 @@ namespace BiReJeJoCo.Items
 
                 spawnPointWorkload[collectable.SpawnPointIndex].Remove(collectable);
                 collectables.Remove(collectable.InstanceId);
-
                 messageHub.ShoutMessage<ItemCollectedByPlayerMsg>(this, castedMsg.playerNumber, itemId);
 
                 if (globalVariables.GetVar<bool>("debug_mode"))
@@ -194,7 +195,7 @@ namespace BiReJeJoCo.Items
             }
         }
 
-        private void OnMatchFinished(PhotonMessage msg) 
+        private void OnMatchClosed(PhotonMessage msg) 
         {
             ClearAll();
         }

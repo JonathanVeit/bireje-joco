@@ -25,6 +25,12 @@ namespace BiReJeJoCo
             DIContainer.RegisterImplementation<MatchHandler>(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
         }
+        protected override void OnBeforeDestroy()
+        {
+            base.OnBeforeDestroy();
+            DisconnectEvents();
+            DIContainer.UnregisterImplementation<MatchHandler>();
+        }
 
         protected virtual void OnLoadedLobbyScene(LoadedLobbySceneMsg msg)
         {
@@ -44,6 +50,13 @@ namespace BiReJeJoCo
 
             messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnLoadedGameScene);
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
+        }
+
+        protected virtual void DisconnectEvents() 
+        {
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
+            messageHub.UnregisterReceiver(this);
         }
         #endregion
 

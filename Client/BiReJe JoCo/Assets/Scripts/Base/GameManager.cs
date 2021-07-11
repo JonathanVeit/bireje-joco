@@ -25,6 +25,7 @@ namespace BiReJeJoCo
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
             messageHub.RegisterReceiver<JoinedLobbyMsg> (this, OnJoinedLobby);
+            messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftlobby);
         }
 
         private void DisconnectEvents() 
@@ -81,6 +82,10 @@ namespace BiReJeJoCo
                 matchHandlerPrefab = MatchPrefabMapping.GetMapping().GetElementForKey("match_handler");
 
             Instantiate(matchHandlerPrefab);
+        }
+        private void OnLeftlobby(LeftLobbyMsg msg)
+        {
+            Destroy(matchHandler.gameObject);
         }
         #endregion
 

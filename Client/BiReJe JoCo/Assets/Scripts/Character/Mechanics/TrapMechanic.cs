@@ -23,6 +23,7 @@ namespace BiReJeJoCo.Character
         protected override void OnInitializeLocal()
         {
             ConnectEvents();
+            gameUI.UpdateTrapIconCooldown(1);
         }
         protected override void OnInitializeRemote()
         {

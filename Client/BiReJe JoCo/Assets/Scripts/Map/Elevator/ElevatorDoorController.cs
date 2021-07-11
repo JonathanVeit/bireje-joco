@@ -23,6 +23,7 @@ namespace BiReJeJoCo.Map
         public void Open(ElevatorDoorPoint point, Action onFinishCallback) 
         {
             DoorsAreMoving = true;
+            ResetAllTrigger("Close");
             TriggerAnimators(point, "Open");
             StartCoroutine(AwaitAnimations(() => 
             {
@@ -35,6 +36,7 @@ namespace BiReJeJoCo.Map
         {
             DoorsAreMoving = true;
             DoorsAreOpen = false;
+            ResetAllTrigger("Open");
             TriggerAnimators(point, "Close");
             StartCoroutine(AwaitAnimations(() =>
             {
@@ -64,6 +66,15 @@ namespace BiReJeJoCo.Map
                 curAnim.ResetTrigger(trigger);
                 curAnim.SetTrigger(trigger);
             }
+        }
+        private void ResetAllTrigger(string trigger)
+        {
+            foreach (var curAnim in plattformAnim)
+                curAnim.ResetTrigger(trigger);
+            foreach (var curAnim in upperAnim)
+                curAnim.ResetTrigger(trigger);
+            foreach (var curAnim in lowerAnim)
+                curAnim.ResetTrigger(trigger);
         }
 
         private IEnumerator AwaitAnimations(Action callback)
