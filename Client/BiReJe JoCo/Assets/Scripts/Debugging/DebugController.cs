@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using BiReJeJoCo.Backend;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using BiReJeJoCo.UI;
 
 namespace BiReJeJoCo.Debugging
 {
@@ -318,6 +319,18 @@ namespace BiReJeJoCo.Debugging
 
                 localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
                 localPlayer.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
+            }));
+
+            RegisterCommand(new DebugCommand<bool>("movie_mode", "Hides the character model and UI", "movie_mode <bool>", (visible) =>
+            {
+                if (matchHandler == null)
+                    return;
+
+                if (matchHandler.State != MatchState.Running)
+                    return;
+
+                localPlayer.PlayerCharacter.ControllerSetup.ModelRoot.gameObject.SetActive(!visible);
+                DIContainer.GetImplementationFor<UIManager>().GetInstanceOf<GameUI>().gameObject.SetActive(!visible);
             }));
         }
 
