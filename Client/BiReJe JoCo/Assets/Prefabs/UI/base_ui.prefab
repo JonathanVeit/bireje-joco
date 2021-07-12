@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 57498981454126014}
   - component: {fileID: 7502541029134401164}
   m_Layer: 5
-  m_Name: caption
+  m_Name: title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -913,6 +913,7 @@ GameObject:
   - component: {fileID: 8560967436773615654}
   - component: {fileID: 7956956431420051932}
   - component: {fileID: 8616616721761131341}
+  - component: {fileID: 6072352457599930223}
   m_Layer: 5
   m_Name: background_panel
   m_TagString: Untagged
@@ -989,6 +990,62 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6072352457599930223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6000177864975691336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dc5190d9f9feb4c97fe019ba31b041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layers:
+  - name: snow back
+    target: {fileID: 2888554861356166597}
+    speed: 6
+    range: {x: 10, y: 10}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  - name: snow front
+    target: {fileID: 6763434764292602444}
+    speed: 8
+    range: {x: 10, y: 10}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  - name: fog
+    target: {fileID: 7334560396177305582}
+    speed: 3
+    range: {x: 5, y: 5}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  - name: hunter 1
+    target: {fileID: 4546749040998761359}
+    speed: 4
+    range: {x: 8, y: 8}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  - name: hunter 2
+    target: {fileID: 6993354383983250014}
+    speed: 4
+    range: {x: 8, y: 8}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  - name: title
+    target: {fileID: 7411322656555284392}
+    speed: 2
+    range: {x: 2, y: 2}
+    origin: {x: 0, y: 0, z: 0}
+    curPosition: {x: 0, y: 0, z: 0}
+    curTarget: {x: 0, y: 0}
+  lerpSpeed: 3
 --- !u!1 &6391016719642348434
 GameObject:
   m_ObjectHideFlags: 0
