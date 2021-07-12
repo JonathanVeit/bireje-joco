@@ -85,7 +85,8 @@ namespace BiReJeJoCo
         }
         private void OnLeftlobby(LeftLobbyMsg msg)
         {
-            Destroy(matchHandler.gameObject);
+            if (matchHandler)
+                Destroy(matchHandler.gameObject);
         }
         #endregion
 
