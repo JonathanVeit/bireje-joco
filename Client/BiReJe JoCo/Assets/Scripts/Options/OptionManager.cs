@@ -34,6 +34,7 @@ namespace BiReJeJoCo
         private const string VOLUME_KEY = "volume";
         private const string MUSIC_KEY = "music";
         private const string SOUND_KEY = "sound";
+        private const string SENSITIVITY_KEY = "sensitivity";
         private const string QUALITY_KEY = "quality";
         #endregion
 
@@ -72,6 +73,17 @@ namespace BiReJeJoCo
                 SaveValue(SOUND_KEY, value);
             }
         }
+        public float Sensitivity
+        {
+            get
+            {
+                return float.Parse(LoadValue(SENSITIVITY_KEY));
+            }
+            set
+            {
+                SaveValue(SENSITIVITY_KEY, value);
+            }
+        }
         public int Quality
         {
             get
@@ -83,12 +95,14 @@ namespace BiReJeJoCo
                 SaveValue(QUALITY_KEY, value);
             }
         }
+
         #region Helper
         private void SetDefaultSettings() 
         {
             Volume = 0.8f;
             Music  = 0.8f;
             Sound = 0.8f;
+            Sensitivity = 1f;
             Quality = QualitySettings.GetQualityLevel();
 
             SaveValue(OPTION_CHECK_KEY, true);
@@ -111,13 +125,16 @@ namespace BiReJeJoCo
             QualitySettings.SetQualityLevel(level);
         }
 
-        private void SaveValue(string value, object key)
+        private void SaveValue(string key, object value)
         {
-            PlayerPrefs.SetString(value, key.ToString());
+            PlayerPrefs.SetString(key, value.ToString());
         }
-        private string LoadValue(string value)
+        private string LoadValue(string key)
         {
-            return PlayerPrefs.GetString(value);
+            if (!PlayerPrefs.HasKey(key))
+                SetDefaultSettings();
+
+            return PlayerPrefs.GetString(key);
         }
         #endregion
     }

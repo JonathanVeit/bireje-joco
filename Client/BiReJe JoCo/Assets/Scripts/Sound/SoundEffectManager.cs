@@ -22,17 +22,23 @@ namespace BiReJeJoCo.Audio
 
             return audiosource;
         }
-        public AudioSourceHandler Play(string soundId, Vector3 position)
+        public AudioSourceHandler Play(string soundId, Vector3 position, bool dontDestroyOnLoad = false)
         {
-            var audiosource = CreateSoundObject(soundId, position);
-            audiosource.AudioSource.Play();
+            var soundHandle = CreateSoundObject(soundId, position);
+            soundHandle.AudioSource.Play();
+            
+            if (dontDestroyOnLoad)
+                GameObject.DontDestroyOnLoad(soundHandle.gameObject);
 
-            return audiosource;
+            return soundHandle;
         }
-        public AudioSourceHandler Play(string soundId, Transform parent)
+        public AudioSourceHandler Play(string soundId, Transform parent, bool dontDestroyOnLoad = false)
         {
             var soundHandle = CreateSoundObject(soundId, parent);
             soundHandle.AudioSource.Play();
+
+            if (dontDestroyOnLoad)
+                GameObject.DontDestroyOnLoad(soundHandle.gameObject);
 
             return soundHandle;
         }

@@ -10,6 +10,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] BaseBehaviour behaviour;
         [SerializeField] Transform characterRoot;
         [SerializeField] Transform modelRoot;
+        [SerializeField] Transform model;
         [SerializeField] Rigidbody rigidBody;
         [SerializeField] Collider mainCollider;
         [SerializeField] PlayerInput playerInput;
@@ -31,6 +32,7 @@ namespace BiReJeJoCo.Character
         #region Access 
         public Transform CharacterRoot => characterRoot;
         public Transform ModelRoot => modelRoot;
+        public Transform Model => model;
         public Rigidbody RigidBody => rigidBody;
         public Collider MainCollider => mainCollider;
         public PlayerInput PlayerInput => playerInput;

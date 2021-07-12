@@ -10,6 +10,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] Slider volumeSlider;
         [SerializeField] Slider musicSlider;
         [SerializeField] Slider soundSlider;
+        [SerializeField] Slider sensitivitySlider;
         [SerializeField] AudioMixer mixerAsset;
         [SerializeField] Dropdown qualityDropdown;
 
@@ -19,6 +20,7 @@ namespace BiReJeJoCo.UI
             SetVolume(optionManager.Volume);
             SetMusic(optionManager.Music);
             SetSound(optionManager.Sound);
+            SetSensitivity(optionManager.Sensitivity);
             SetQuality(optionManager.Quality);
         }
 
@@ -45,6 +47,11 @@ namespace BiReJeJoCo.UI
             soundSlider.value = value;
             optionManager.Sound = value;
             optionManager.SetMixerValue("SoundEffectsVolume", value);
+        }
+        public void SetSensitivity(float value)
+        {
+            sensitivitySlider.value = value;
+            optionManager.Sensitivity = value;
         }
         public void SetQuality(int value)
         {

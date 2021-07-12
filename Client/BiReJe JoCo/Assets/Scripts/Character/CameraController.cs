@@ -92,7 +92,7 @@ namespace BiReJeJoCo.Character
 			//Get input values;
 			float _inputHorizontal = cameraInput.GetHorizontalCameraInput();
 			float _inputVertical = cameraInput.GetVerticalCameraInput();
-		
+
 			RotateCamera(_inputHorizontal, _inputVertical);
 		}
 

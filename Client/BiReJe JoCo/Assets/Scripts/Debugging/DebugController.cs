@@ -329,7 +329,7 @@ namespace BiReJeJoCo.Debugging
                 if (matchHandler.State != MatchState.Running)
                     return;
 
-                localPlayer.PlayerCharacter.ControllerSetup.ModelRoot.gameObject.SetActive(!visible);
+                localPlayer.PlayerCharacter.ControllerSetup.Model.gameObject.SetActive(!visible);
                 DIContainer.GetImplementationFor<UIManager>().GetInstanceOf<GameUI>().gameObject.SetActive(!visible);
             }));
         }

@@ -109,7 +109,7 @@ namespace BiReJeJoCo.Character
                 return;
 
             Vector2 inputLook = inputValue.ReadValue<Vector2>();
-            lookInput = inputLook;
+            lookInput = inputLook * optionManager.Sensitivity;
         }
 
         public void SetJumpInput(InputAction.CallbackContext inputValue)

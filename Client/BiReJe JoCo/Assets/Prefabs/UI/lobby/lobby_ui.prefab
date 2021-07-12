@@ -287,6 +287,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6692403864279469746}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.UIOutlineController, Assembly-CSharp
+        m_MethodName: OnPointerClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6692403864279469746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,6 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6699892631300876894}
+  playSounds: 1
 --- !u!1 &852688932550748939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,6 +1579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  playSounds: 1
 --- !u!1 &5241797338617064559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1702,6 +1716,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2381163885167953911}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.UIOutlineController, Assembly-CSharp
+        m_MethodName: OnPointerClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2381163885167953911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1715,6 +1741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3199902727037646511}
+  playSounds: 1
 --- !u!1 &5287460771294029438
 GameObject:
   m_ObjectHideFlags: 0
@@ -2114,6 +2141,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6043528527265381782}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.UIOutlineController, Assembly-CSharp
+        m_MethodName: OnPointerClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6043528527265381782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2127,6 +2166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3640430655009062115}
+  playSounds: 1
 --- !u!1 &6837741400791966855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2481,6 +2521,18 @@ MonoBehaviour:
       - m_Target: {fileID: 888232226250245388}
         m_TargetAssemblyTypeName: BiReJeJoCo.UI.LobbyUI, Assembly-CSharp
         m_MethodName: LeaveLobby
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5653539191672979996}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.UIOutlineController, Assembly-CSharp
+        m_MethodName: OnPointerClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2960,6 +3012,7 @@ MonoBehaviour:
   - {fileID: 1867150916499037559}
   - {fileID: 5287460771294029438}
   matchMode: default_match
+  readyButtonLabel: {fileID: 5798610096172273745}
 --- !u!1 &8783507297221071283
 GameObject:
   m_ObjectHideFlags: 0
@@ -3336,6 +3389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: base_ui
       objectReference: {fileID: 0}
+    - target: {fileID: 4339756847727548778, guid: cdc66b91db63cd94686b727c1d5de3a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5514565140066876687, guid: cdc66b91db63cd94686b727c1d5de3a2, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -3565,36 +3622,40 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5325683684457869098, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: playSounds
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9022406190168396208, guid: 050b25346f7d8024797279827ea926dc, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 888232226250245388}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 888232226250245388}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: StartGame
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: BiReJeJoCo.UI.LobbyUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3738,40 +3799,55 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5325683684457869098, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: playSounds
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9022406190168396208, guid: 050b25346f7d8024797279827ea926dc, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 888232226250245388}
-    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 888232226250245388}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SetPlayerReadyToStart
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: BiReJeJoCo.UI.LobbyUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9205233916763202950, guid: 050b25346f7d8024797279827ea926dc, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+--- !u!114 &5798610096172273745 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 143192409904414535, guid: 050b25346f7d8024797279827ea926dc, type: 3}
+  m_PrefabInstance: {fileID: 5873949092710051606}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6075365201632535235 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 420099076473114069, guid: 050b25346f7d8024797279827ea926dc, type: 3}

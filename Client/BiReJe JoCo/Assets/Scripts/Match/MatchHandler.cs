@@ -29,7 +29,9 @@ namespace BiReJeJoCo
         {
             base.OnBeforeDestroy();
             DisconnectEvents();
-            DIContainer.UnregisterImplementation<MatchHandler>();
+
+            if(matchHandler)
+                DIContainer.UnregisterImplementation<MatchHandler>();
         }
 
         protected virtual void OnLoadedLobbyScene(LoadedLobbySceneMsg msg)
