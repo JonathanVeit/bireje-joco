@@ -9,6 +9,7 @@ namespace BiReJeJoCo.Audio
     {
         [Header("Settings")]
         [SerializeField] List<MusicClipConfig> musicClips;
+        [SerializeField] [Range(0, 1)] float volume;
         [SerializeField] float startChaseMusicDelay;
         [SerializeField] float endChaseMusicDelay;
 
@@ -26,6 +27,7 @@ namespace BiReJeJoCo.Audio
             return false;
         }
 
+        public float Volume => volume;
         public float StartChaseMusicDelay => startChaseMusicDelay;
         public float EndChaseMusicDelay => endChaseMusicDelay;
         #endregion

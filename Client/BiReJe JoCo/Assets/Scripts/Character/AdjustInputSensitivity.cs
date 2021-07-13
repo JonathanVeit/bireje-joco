@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using System;
 
 namespace BiReJeJoCo.Character
 {
@@ -22,53 +23,44 @@ namespace BiReJeJoCo.Character
         PlayerCharacterInput characterInput => localPlayer.PlayerCharacter.ControllerSetup.CharacterInput;
         PlayerInput playerInput => localPlayer.PlayerCharacter.ControllerSetup.PlayerInput;
 
-        string currentControlScheme;
-
         //save active Axis numbers
-        private float xAxisSave;
-        private float yAxisSave;
-        private bool wasBlocked;
+        private float SensitivityX
+        {
+            get
+            {
+                if (playerInput.currentControlScheme == "Keyboard")
+                    return xAxisKeyboard * optionManager.Sensitivity;
+
+                return xAxisController * optionManager.Sensitivity;
+            }
+        }
+        private float SensitivityY 
+        { 
+            get 
+            {
+                if (playerInput.currentControlScheme == "Keyboard")
+                    return yAxisKeyboard * optionManager.Sensitivity;
+
+                return yAxisController * optionManager.Sensitivity;
+            }
+        }
+
+        private bool isBlocked;
 
         #region Initiazation
         protected override void OnSystemsInitialized()
         {
             characterInput.onBlockStateChanged += OnBlockStateChanged;
 
-            //save axis values
-            xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
-            yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
-
-            currentControlScheme = playerInput.currentControlScheme;
+            cinemaFreeLook.m_XAxis.m_MaxSpeed = SensitivityX;
+            cinemaFreeLook.m_YAxis.m_MaxSpeed = SensitivityY;
         }
+
         protected override void OnBeforeDestroy()
         {
             characterInput.onBlockStateChanged -= OnBlockStateChanged;
         }
         #endregion
-
-        
-        private void Update()
-        {
-            if (playerInput.currentControlScheme != currentControlScheme)
-            {
-                OnControlsChanged(playerInput);
-                currentControlScheme = playerInput.currentControlScheme;
-            }
-        }
-
-        public void OnControlsChanged(PlayerInput playerInput)
-        {
-            if (playerInput.currentControlScheme == "Keyboard")
-            {
-                cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisKeyboard;
-                cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisKeyboard;
-            }
-            else if (playerInput.currentControlScheme == "Gamepad")
-            {
-                cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisController;
-                cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisController;
-            }
-        }
 
         private void OnBlockStateChanged(InputBlockState state)
         {
@@ -76,17 +68,15 @@ namespace BiReJeJoCo.Character
             {
                 if (state.HasFlag(InputBlockState.Look))
                 {
-                    xAxisSave = cinemaFreeLook.m_XAxis.m_MaxSpeed;
-                    yAxisSave = cinemaFreeLook.m_YAxis.m_MaxSpeed;
                     cinemaFreeLook.m_XAxis.m_MaxSpeed = 0f;
                     cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
-                    wasBlocked = true;
+                    isBlocked = true;
                 }
-                else if (wasBlocked)
+                else if (isBlocked)
                 {
-                    cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
-                    cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
-                    wasBlocked = false;
+                    cinemaFreeLook.m_XAxis.m_MaxSpeed = SensitivityX;
+                    cinemaFreeLook.m_YAxis.m_MaxSpeed = SensitivityY;
+                    isBlocked = false;
                 }
             }
             else if (cinemaVirtual)
@@ -99,11 +89,11 @@ namespace BiReJeJoCo.Character
                     //cinemaFreeLook.m_YAxis.m_MaxSpeed = 0f;
                     //wasBlocked = true;
                 }
-                else if (wasBlocked)
+                else if (isBlocked)
                 {
-                    cinemaFreeLook.m_XAxis.m_MaxSpeed = xAxisSave;
-                    cinemaFreeLook.m_YAxis.m_MaxSpeed = yAxisSave;
-                    wasBlocked = false;
+                    cinemaFreeLook.m_XAxis.m_MaxSpeed = SensitivityX;
+                    cinemaFreeLook.m_YAxis.m_MaxSpeed = SensitivityY;
+                    isBlocked = false;
                 }
             }
         }

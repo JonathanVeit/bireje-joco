@@ -109,7 +109,7 @@ namespace BiReJeJoCo.Character
                 return;
 
             Vector2 inputLook = inputValue.ReadValue<Vector2>();
-            lookInput = inputLook;
+            lookInput = inputLook * optionManager.Sensitivity;
         }
 
         public void SetJumpInput(InputAction.CallbackContext inputValue)
@@ -294,7 +294,7 @@ namespace BiReJeJoCo.Character
             
             if (playerInput.currentControlScheme == "Keyboard")
             {
-                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>();
+                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>() * optionManager.Sensitivity;
             }
         }
         #endregion

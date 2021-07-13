@@ -1,4 +1,5 @@
 ﻿using JoVei.Base;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -34,8 +35,11 @@ namespace BiReJeJoCo
         private const string VOLUME_KEY = "volume";
         private const string MUSIC_KEY = "music";
         private const string SOUND_KEY = "sound";
+        private const string SENSITIVITY_KEY = "sensitivity";
         private const string QUALITY_KEY = "quality";
         #endregion
+
+        public event Action OnOptionValueChanged;
 
         private AudioMixer mixer;
 
@@ -48,6 +52,7 @@ namespace BiReJeJoCo
             set 
             {
                 SaveValue(VOLUME_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public float Music
@@ -59,6 +64,7 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(MUSIC_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public float Sound
@@ -70,6 +76,19 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(SOUND_KEY, value);
+                OnOptionValueChanged?.Invoke();
+            }
+        }
+        public float Sensitivity
+        {
+            get
+            {
+                return float.Parse(LoadValue(SENSITIVITY_KEY));
+            }
+            set
+            {
+                SaveValue(SENSITIVITY_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public int Quality
@@ -81,14 +100,17 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(QUALITY_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
+
         #region Helper
         private void SetDefaultSettings() 
         {
             Volume = 0.8f;
             Music  = 0.8f;
             Sound = 0.8f;
+            Sensitivity = 1f;
             Quality = QualitySettings.GetQualityLevel();
 
             SaveValue(OPTION_CHECK_KEY, true);
@@ -111,13 +133,16 @@ namespace BiReJeJoCo
             QualitySettings.SetQualityLevel(level);
         }
 
-        private void SaveValue(string value, object key)
+        private void SaveValue(string key, object value)
         {
-            PlayerPrefs.SetString(value, key.ToString());
+            PlayerPrefs.SetString(key, value.ToString());
         }
-        private string LoadValue(string value)
+        private string LoadValue(string key)
         {
-            return PlayerPrefs.GetString(value);
+            if (!PlayerPrefs.HasKey(key))
+                SetDefaultSettings();
+
+            return PlayerPrefs.GetString(key);
         }
         #endregion
     }

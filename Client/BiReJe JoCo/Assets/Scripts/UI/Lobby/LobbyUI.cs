@@ -15,6 +15,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] Button startButton;
         [SerializeField] GameObject[] preferedRoleOutlines;
         [SerializeField] string matchMode = "default_match";
+        [SerializeField] Text readyButtonLabel;
 
         private Dictionary<string, LobbyMemberEntry> memberEntries
             = new Dictionary<string, LobbyMemberEntry>();
@@ -141,6 +142,7 @@ namespace BiReJeJoCo.UI
         public void SetPlayerReadyToStart() 
         {
             localPlayer.SetReadyToStart(!localPlayer.ReadyToStart);
+            readyButtonLabel.text = localPlayer.ReadyToStart ? "READY!" : "READY?";
         }
         #endregion
     }

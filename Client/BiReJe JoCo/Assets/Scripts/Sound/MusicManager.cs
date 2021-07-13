@@ -106,7 +106,7 @@ namespace BiReJeJoCo.Audio
             if (onFinishedPlay != null)
                 musicFinishedAwaiter = CoroutineHelper.Instance.StartCoroutine(AwaitMusicFinished(onFinishedPlay));
 
-            while (audioSource.volume < 1)
+            while (audioSource.volume < MusicConfig.Volume)
             {
                 audioSource.volume += Time.deltaTime * fadeInSpeed;
                 yield return waiter;

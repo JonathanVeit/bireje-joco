@@ -52,6 +52,11 @@ namespace BiReJeJoCo.UI
             Hide();
             uiManager.GetInstanceOf<ControlsPopup>().Show();
         }
+        public void ShowOptions()
+        {
+            Hide();
+            uiManager.GetInstanceOf<OptionsPopup>().Show();
+        }
         public void Quit()
         {
             if (matchHandler is HostMatchHandler asHostHandler)
