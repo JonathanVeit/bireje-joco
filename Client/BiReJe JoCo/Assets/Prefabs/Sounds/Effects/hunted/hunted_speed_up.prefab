@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6601813647547109225}
   - component: {fileID: 6601813647547109226}
   m_Layer: 0
-  m_Name: hunted_speedboost
+  m_Name: hunted_speed_up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSettings:
-    poolId: hunted_speed_up
+    poolId: hunted_spawn_spores
     Type: 3
     poolLimit: 2
   audioSource: {fileID: 6601813647547109225}
