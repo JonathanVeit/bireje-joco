@@ -75,6 +75,7 @@ namespace BiReJeJoCo.Character
             if (isTransformed.GetValue())
             {
                 TransformBack();
+                soundEffectManager.Play("hunted_retransformation", transform.position);
             }
             else if (transformationCooldownTimer.State == TimerState.Finished! && isGrounded())
             {
