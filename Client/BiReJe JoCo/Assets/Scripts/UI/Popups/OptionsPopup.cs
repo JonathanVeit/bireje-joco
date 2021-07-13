@@ -8,17 +8,15 @@ namespace BiReJeJoCo.UI
         public override void Show()
         {
             base.Show();
+            uiManager.GetInstanceOf<BaseOptionsUI>().Initialize();
 
             Cursor.lockState = CursorLockMode.Confined;
             messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
-
-            uiManager.GetInstanceOf<BaseOptionsUI>().Initialize();
         }
 
         public override void Hide()
         {
             base.Hide();
-
             Cursor.lockState = CursorLockMode.Locked;
             messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
         }

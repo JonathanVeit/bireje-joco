@@ -1,4 +1,5 @@
 ﻿using JoVei.Base;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -38,6 +39,8 @@ namespace BiReJeJoCo
         private const string QUALITY_KEY = "quality";
         #endregion
 
+        public event Action OnOptionValueChanged;
+
         private AudioMixer mixer;
 
         public float Volume 
@@ -49,6 +52,7 @@ namespace BiReJeJoCo
             set 
             {
                 SaveValue(VOLUME_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public float Music
@@ -60,6 +64,7 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(MUSIC_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public float Sound
@@ -71,6 +76,7 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(SOUND_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public float Sensitivity
@@ -82,6 +88,7 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(SENSITIVITY_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
         public int Quality
@@ -93,6 +100,7 @@ namespace BiReJeJoCo
             set
             {
                 SaveValue(QUALITY_KEY, value);
+                OnOptionValueChanged?.Invoke();
             }
         }
 
