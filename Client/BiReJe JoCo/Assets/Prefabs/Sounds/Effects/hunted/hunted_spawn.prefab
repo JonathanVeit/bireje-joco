@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6601813647547109225}
   - component: {fileID: 6601813647547109226}
   m_Layer: 0
-  m_Name: hunted_jump_end
+  m_Name: hunted_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,9 +42,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -3050561003163497324, guid: 3f61df14c01020344812cb0ffd026c98, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 1ae115e68b46a614680591053d8530ed, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d7b97524216f1594cadbe9099d9eed60, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -55,7 +55,7 @@ AudioSource:
   MinDistance: 0
   MaxDistance: 25
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -141,9 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSettings:
-    poolId: hunted_jump_end
-    Type: 1
-    poolLimit: 10
+    poolId: hunted_spawn_coral
+    Type: 3
+    poolLimit: 2
   audioSource: {fileID: 6601813647547109225}
   options:
   - name: Return to pool

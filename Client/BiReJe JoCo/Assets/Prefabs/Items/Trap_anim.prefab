@@ -5245,6 +5245,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8844733678763514759}
   - component: {fileID: 9021966890458643560}
+  - component: {fileID: 4414267311437165078}
+  - component: {fileID: 281199505474757872}
   m_Layer: 0
   m_Name: Trap_anim
   m_TagString: Untagged
@@ -5288,6 +5290,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4414267311437165078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8211503338933600573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAnimationWeight: 0
+  overrideAnimationWeight: []
+--- !u!114 &281199505474757872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8211503338933600573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5329cb2055623bc43bd0cfc84aa16564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - trigger: trap_activate
+    stopTrigger: trap_deactivate
+    target: {fileID: 8844733678763514759}
+    parent: 1
+    soundEffects:
+    - trap_activate
 --- !u!1 &8481161926865863642
 GameObject:
   m_ObjectHideFlags: 0

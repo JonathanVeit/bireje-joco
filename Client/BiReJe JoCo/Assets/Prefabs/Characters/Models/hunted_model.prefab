@@ -1290,7 +1290,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minAnimationWeight: 0.5
-  overrideAnimationWeight: []
+  overrideAnimationWeight:
+  - eventName: hunted_spawn_coral
+    weight: 0
 --- !u!114 &5804421204946636825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1318,6 +1320,12 @@ MonoBehaviour:
     parent: 0
     soundEffects:
     - hunted_jump_end
+  - trigger: hunted_spawn_coral
+    stopTrigger: 
+    target: {fileID: 8677691786337614120}
+    parent: 0
+    soundEffects:
+    - hunted_spawn_coral
 --- !u!1 &3516580411059767493
 GameObject:
   m_ObjectHideFlags: 0
