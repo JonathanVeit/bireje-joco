@@ -112,7 +112,7 @@ namespace BiReJeJoCo.Audio
                 yield return waiter;
             }
 
-            audioSource.volume = 1;
+            audioSource.volume = MusicConfig.Volume;
             IsTransitioning = false;
         }
         private IEnumerator AwaitMusicFinished(Action callback) 
