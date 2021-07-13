@@ -644,6 +644,7 @@ GameObject:
   - component: {fileID: 483381701746548185}
   - component: {fileID: 483381701746548186}
   - component: {fileID: 73520426319742776}
+  - component: {fileID: 239766595685788454}
   m_Layer: 5
   m_Name: options_ui
   m_TagString: Untagged
@@ -744,11 +745,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c31ba6f94655c46aaab5a490fbd610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &239766595685788454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483381701746548187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdaddcf65c653ad408688a3f404fd8c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   volumeSlider: {fileID: 6010044424240970363}
   musicSlider: {fileID: 2862449530354462052}
   soundSlider: {fileID: 2862449531412900235}
   sensitivitySlider: {fileID: 4387623406871843435}
-  mixerAsset: {fileID: 24100000, guid: 3f61df14c01020344812cb0ffd026c98, type: 2}
   qualityDropdown: {fileID: 2983563443220416977}
 --- !u!1 &1699144483945478439
 GameObject:
@@ -894,8 +906,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 73520426319742776}
-        m_TargetAssemblyTypeName: BiReJeJoCo.UI.OptionsUI, Assembly-CSharp
+      - m_Target: {fileID: 239766595685788454}
+        m_TargetAssemblyTypeName: BiReJeJoCo.UI.BaseOptionsUI, Assembly-CSharp
         m_MethodName: SetQuality
         m_Mode: 0
         m_Arguments:
@@ -2393,7 +2405,7 @@ PrefabInstance:
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 73520426319742776}
+      objectReference: {fileID: 239766595685788454}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2404,7 +2416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BiReJeJoCo.UI.OptionsUI, Assembly-CSharp
+      value: BiReJeJoCo.UI.BaseOptionsUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -2542,7 +2554,7 @@ PrefabInstance:
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 73520426319742776}
+      objectReference: {fileID: 239766595685788454}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2553,7 +2565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BiReJeJoCo.UI.OptionsUI, Assembly-CSharp
+      value: BiReJeJoCo.UI.BaseOptionsUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3058,7 +3070,7 @@ PrefabInstance:
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 73520426319742776}
+      objectReference: {fileID: 239766595685788454}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3069,7 +3081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BiReJeJoCo.UI.OptionsUI, Assembly-CSharp
+      value: BiReJeJoCo.UI.BaseOptionsUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3219,7 +3231,7 @@ PrefabInstance:
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 73520426319742776}
+      objectReference: {fileID: 239766595685788454}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3230,7 +3242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BiReJeJoCo.UI.OptionsUI, Assembly-CSharp
+      value: BiReJeJoCo.UI.BaseOptionsUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2381321967032026339, guid: 8921afa1862d4a143806b164ca201377, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

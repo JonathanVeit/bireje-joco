@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using JoVei.Base.UI;
 using UnityEngine.InputSystem;
+using JoVei.Base.MessageSystem;
+using System;
 
 namespace BiReJeJoCo.UI
 {
@@ -13,6 +15,7 @@ namespace BiReJeJoCo.UI
         [SerializeField] Text loadingBarProgressCaption;
         [SerializeField] GameObject loadingPanel;
         [SerializeField] GameObject titlePanel;
+        [SerializeField] SimpleErrorPopup errorPopup;
 
         private void Start()
         {
@@ -26,6 +29,23 @@ namespace BiReJeJoCo.UI
             loadingBar.SetValue(systemsLoader.CurrentProgress);
             loadingBarCaption.text = string.Format("{0} loaded...", system.GetType().Name);
             loadingBarProgressCaption.text = string.Format("{0}%", Mathf.RoundToInt(systemsLoader.CurrentProgress * 100));
+
+            if (system is IMessageHub asMessageHub)
+            {
+                asMessageHub.RegisterReceiver<DisconnectedFromPhotonMsg>(this, OnFailedToBuildConnection);
+            }
+        }
+
+        private void OnFailedToBuildConnection(DisconnectedFromPhotonMsg msg)
+        {
+            errorPopup.Show("CONNECTION ERROR",
+                            "Failed to build connection.",
+                            "Retry?",
+                            () => 
+                            { 
+                                photonClient.BuildConnection(); 
+                            }, 
+                            $"\"{ msg.Param1}\"");
         }
 
         private void OnAllSystemsLoaded() 
@@ -36,6 +56,8 @@ namespace BiReJeJoCo.UI
 
             loadingPanel.gameObject.SetActive(false);
             titlePanel.gameObject.SetActive(true);
+
+            messageHub.UnregisterReceiver(this);
         }
 
         private void Update()

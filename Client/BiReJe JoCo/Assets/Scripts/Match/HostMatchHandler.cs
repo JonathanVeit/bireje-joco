@@ -152,7 +152,7 @@ namespace BiReJeJoCo
             {
                 result = new MatchResult()
                 {
-                    winner = PlayerRole.Hunted,
+                    winner = PlayerRole.Hunter,
                     condition = WinCondition.TimeOver,
                     message = $"Time is over! The monster only created {totalCorals} spores and lost.",
                 };

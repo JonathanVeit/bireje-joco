@@ -43,6 +43,7 @@ namespace BiReJeJoCo.UI
 
         private MatchPausePopup pausePopup => uiManager.GetInstanceOf<MatchPausePopup>();
         private ControlsPopup controlsPopup => uiManager.GetInstanceOf<ControlsPopup>();
+        private OptionsPopup optionsPopup => uiManager.GetInstanceOf<OptionsPopup>();
         private MatchResultPopup resultPopup => uiManager.GetInstanceOf<MatchResultPopup>();
 
         #region Inizialization
@@ -259,6 +260,7 @@ namespace BiReJeJoCo.UI
         {
             if (controlsPopup.IsOpen ||
                 resultPopup.IsOpen ||
+                optionsPopup.IsOpen ||
                 matchHandler.State != MatchState.Running)
                 return;
 

@@ -294,7 +294,7 @@ namespace BiReJeJoCo.Character
             
             if (playerInput.currentControlScheme == "Keyboard")
             {
-                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>();
+                lookInput = playerControlsAsset.Player.LookAround.ReadValue<Vector2>() * optionManager.Sensitivity;
             }
         }
         #endregion

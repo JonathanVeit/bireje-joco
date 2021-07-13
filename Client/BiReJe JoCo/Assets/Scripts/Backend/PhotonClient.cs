@@ -56,7 +56,7 @@ namespace BiReJeJoCo.Backend
         }
 
         private void OnDisconnected(DisconnectedFromPhotonMsg msg)
-        {
+        {          
             DebugHelper.PrintFormatted("<color=red>[Photon Client]</color> Disconnected from photon. Reason: {0}.", msg.Param1);
         }
 
