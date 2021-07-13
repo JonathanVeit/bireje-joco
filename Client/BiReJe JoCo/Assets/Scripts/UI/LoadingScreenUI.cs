@@ -40,12 +40,18 @@ namespace BiReJeJoCo.UI
         {
             errorPopup.Show("CONNECTION ERROR",
                             "Failed to build connection.",
+                            "Quit",
+                            () =>
+                            {
+                                Application.Quit();
+                            },
+                            $"\"{ msg.Param1}\"",
                             "Retry?",
-                            () => 
-                            { 
-                                photonClient.BuildConnection(); 
-                            }, 
-                            $"\"{ msg.Param1}\"");
+                            () =>
+                            {
+                                photonClient.BuildConnection();
+                            }
+                           );
         }
 
         private void OnAllSystemsLoaded() 

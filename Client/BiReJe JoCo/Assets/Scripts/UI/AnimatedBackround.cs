@@ -8,25 +8,40 @@ namespace BiReJeJoCo.UI
         [SerializeField] List<Layer> layers;
         [SerializeField] float lerpSpeed;
 
-        private void Start()
+        static List<Layer> cachedLayer = new List<Layer>();
+
+        private void Awake()
         {
-            foreach (var layer in layers)
+            if (cachedLayer.Count == 0)
             {
-                layer.origin = layer.target.anchoredPosition;
-                layer.curPosition = layer.target.anchoredPosition;
-                layer.curTarget = CalculateLaterTarget(layer);
+                foreach (var layer in layers)
+                {
+                    layer.origin = layer.target.anchoredPosition;
+                    layer.curInterpolatedPosition = layer.target.anchoredPosition;
+                    layer.curTargetPosition = CalculateLaterTarget(layer);
+                    cachedLayer.Add(layer);
+                }
+
+                return;
+            }
+
+            for (int i = 0; i < layers.Count; i++)
+            {
+                cachedLayer[i].target = layers[i].target;
+                cachedLayer[i].target.anchoredPosition = cachedLayer[i].cachedTargetPosition;
             }
         }
 
         private void Update()
         {
-            foreach (var layer in layers)
+            foreach (var layer in cachedLayer)
             {
-                layer.curPosition = Vector2.MoveTowards(layer.curPosition, layer.curTarget, layer.speed * Time.deltaTime);
-                layer.target.anchoredPosition = Vector3.Lerp(layer.target.anchoredPosition, layer.curPosition, lerpSpeed * Time.deltaTime);
+                layer.curInterpolatedPosition = Vector2.MoveTowards(layer.curInterpolatedPosition, layer.curTargetPosition, layer.speed * Time.deltaTime);
+                layer.target.anchoredPosition = Vector3.Lerp(layer.target.anchoredPosition, layer.curInterpolatedPosition, lerpSpeed * Time.deltaTime);
+                layer.cachedTargetPosition = layer.target.anchoredPosition;
 
-                if (Vector3.Distance(layer.target.anchoredPosition, layer.curTarget) <= 0.1f)
-                    layer.curTarget = CalculateLaterTarget(layer);
+                if (Vector3.Distance(layer.target.anchoredPosition, layer.curTargetPosition) <= 0.1f)
+                    layer.curTargetPosition = CalculateLaterTarget(layer);
             }
         }
 
@@ -48,8 +63,9 @@ namespace BiReJeJoCo.UI
             public Vector2 range;
 
             [HideInInspector] public Vector3 origin;
-            [HideInInspector] public Vector3 curPosition;
-            [HideInInspector] public Vector2 curTarget;
+            [HideInInspector] public Vector3 cachedTargetPosition;
+            [HideInInspector] public Vector3 curInterpolatedPosition;
+            [HideInInspector] public Vector2 curTargetPosition;
         }
     }
 }
