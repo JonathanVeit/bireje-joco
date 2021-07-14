@@ -173,7 +173,8 @@ namespace BiReJeJoCo.Character
 
         private void Update()
         {
-            if (reachedMax)
+            if (reachedMax || 
+                matchHandler.State == MatchState.Result)
                 return;
 
             var totalCorals = CalculateTotalCorals();

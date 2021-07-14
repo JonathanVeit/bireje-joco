@@ -61,6 +61,7 @@ namespace JoVei.Base.Helper
                 CoroutineHelper.Instance.StopCoroutine(counter);
                 if (fireCallback)
                     onFinishedCallback?.Invoke();
+                State = TimerState.Finished;
             }
         }
 

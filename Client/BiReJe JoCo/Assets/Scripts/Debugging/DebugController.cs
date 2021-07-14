@@ -319,6 +319,7 @@ namespace BiReJeJoCo.Debugging
 
                 localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
                 localPlayer.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
+                localPlayer.PlayerCharacter.ControllerSetup.RigidBody.velocity = Vector3.zero;
             }));
 
             RegisterCommand(new DebugCommand<bool>("movie_mode", "Hides the character model and UI", "movie_mode <bool>", (visible) =>

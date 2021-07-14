@@ -181,7 +181,7 @@ namespace BiReJeJoCo.Items
                     floaty.Value.RequestDestroyFloaty();
             }
 
-            messageHub.ShoutMessage<PlayerCollectedTrapMsg>(this);
+            photonMessageHub.ShoutMessage<HunterCollectedTrapPhoMsg>(PhotonMessageTarget.All, Owner.NumberInRoom);
         }
         protected override void OnFloatySpawned(int pointId, InteractionFloaty floaty)
         {

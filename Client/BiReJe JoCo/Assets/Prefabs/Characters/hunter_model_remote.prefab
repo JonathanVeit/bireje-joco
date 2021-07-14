@@ -150,7 +150,7 @@ MonoBehaviour:
   characterInput: {fileID: 0}
   walkController: {fileID: 0}
   mover: {fileID: 0}
-  animationController: {fileID: 0}
+  animationController: {fileID: 7611703593973573134}
 --- !u!114 &4029729636126392156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +311,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8356551365255270804, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
+      propertyPath: trapBackpackModel
+      value: 
+      objectReference: {fileID: 3664787991855765054}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc9d2265c17a46a4b918ae69140b202e, type: 3}
 --- !u!4 &4664021894866375409 stripped
@@ -434,3 +438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5620ea1e04a133a4f92e88f36bcea9f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3664787991855765054 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1142625989100783867, guid: 828d5c766c0088a4f99f95e98839f63f, type: 3}
+  m_PrefabInstance: {fileID: 4395685904750304965}
+  m_PrefabAsset: {fileID: 0}

@@ -1003,48 +1003,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layers:
+  - name: background
+    target: {fileID: 3928735700598921819}
+    speed: 2
+    range: {x: 2, y: 2}
+    origin: {x: 0, y: 0, z: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: snow back
     target: {fileID: 2888554861356166597}
     speed: 6
     range: {x: 10, y: 10}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: snow front
     target: {fileID: 6763434764292602444}
     speed: 8
     range: {x: 10, y: 10}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: fog
     target: {fileID: 7334560396177305582}
     speed: 3
     range: {x: 5, y: 5}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: hunter 1
     target: {fileID: 4546749040998761359}
     speed: 4
     range: {x: 8, y: 8}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: hunter 2
     target: {fileID: 6993354383983250014}
     speed: 4
     range: {x: 8, y: 8}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   - name: title
     target: {fileID: 7411322656555284392}
     speed: 2
     range: {x: 2, y: 2}
     origin: {x: 0, y: 0, z: 0}
-    curPosition: {x: 0, y: 0, z: 0}
-    curTarget: {x: 0, y: 0}
+    cachedTargetPosition: {x: 0, y: 0, z: 0}
+    curInterpolatedPosition: {x: 0, y: 0, z: 0}
+    curTargetPosition: {x: 0, y: 0}
   lerpSpeed: 3
 --- !u!1 &6391016719642348434
 GameObject:

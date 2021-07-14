@@ -41,7 +41,9 @@ namespace BiReJeJoCo.Backend
                     return JsonConvert.DeserializeObject<HuntedFinishedObjectivePhoMsg>(serializedMessage);
                 case 13:
                     return JsonConvert.DeserializeObject<SpawnNewCoralAmmoPhoMsg>(serializedMessage);
-                    
+                case 14:
+                    return JsonConvert.DeserializeObject<HunterCollectedTrapPhoMsg>(serializedMessage);
+
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing messages of code { code }");
             }
@@ -77,6 +79,8 @@ namespace BiReJeJoCo.Backend
                     return 12;
                 case SpawnNewCoralAmmoPhoMsg casted:
                     return 13;
+                case HunterCollectedTrapPhoMsg casted:
+                    return 14;
 
                 default:
                     throw new System.NotImplementedException($"PhotonMessageFactory is missing implementation for deserializing mesasges of type { msg.GetType().Name }");
