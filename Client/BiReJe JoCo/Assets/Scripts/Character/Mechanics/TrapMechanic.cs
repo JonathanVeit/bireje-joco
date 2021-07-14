@@ -45,6 +45,8 @@ namespace BiReJeJoCo.Character
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+            if (photonMessageHub)
+                photonMessageHub.UnregisterReceiver(this);
             Owner.PlayerCharacter.ControllerSetup.AnimationController.onAnimationEvent -= OnAnimationEvent;
             coolDownTimer.Stop();
         }
