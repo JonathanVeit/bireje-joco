@@ -444,7 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197f892c4c587c445b7640b4596db553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAnimationWeight: 0.5
+  minAnimationWeight: 0
+  overrideAnimationWeight: []
 --- !u!114 &1714079591274951082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,11 +460,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - trigger: open
+    stopTrigger: 
     target: {fileID: 8464300869441395609}
     parent: 0
     soundEffects:
     - door_open_1
   - trigger: close
+    stopTrigger: 
     target: {fileID: 8464300869441395609}
     parent: 0
     soundEffects:
