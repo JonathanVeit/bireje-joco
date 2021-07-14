@@ -183,9 +183,5 @@ namespace BiReJeJoCo
             this.playerNumber = playerNumber;
         }
     }
-
-    public class PlayerCollectedTrapMsg : BaseMessage
-    {
-    }
     #endregion
 }

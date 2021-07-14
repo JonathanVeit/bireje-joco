@@ -41,6 +41,7 @@ namespace BiReJeJoCo.Backend
 			else
 			{
 				velocitySource = Owner.PlayerCharacter.SyncedTransform;
+				eventCatcher.onAnimationEventTriggered += OnAnimationEventTriggered;
 				syncedTrigger.OnValueReceived += OnTriggerReceived;
 				syncedFloat.OnValueReceived += OnFloatReceived;
 			}
@@ -53,6 +54,7 @@ namespace BiReJeJoCo.Backend
 				syncVarHub.UnregisterSyncVar(syncedTrigger);
 				syncVarHub.UnregisterSyncVar(syncedFloat);
 			}
+			eventCatcher.onAnimationEventTriggered -= OnAnimationEventTriggered;
 			tickSystem.Unregister(this);
         }
         #endregion

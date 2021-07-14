@@ -1,3 +1,4 @@
+using BiReJeJoCo.Backend;
 using JoVei.Base.Helper;
 using System;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace BiReJeJoCo.Character
         [SerializeField] Vector3 extraThrowForce;
         [SerializeField] float trapThrowRange;
         [SerializeField] float trapTorque;
+        [SerializeField] GameObject trapBackpackModel;
 
         private GameObject thrownTrap;
         public bool TrapIsThrown => thrownTrap != null;
@@ -27,6 +29,7 @@ namespace BiReJeJoCo.Character
         }
         protected override void OnInitializeRemote()
         {
+            ConnectEvents();
         }
         protected override void OnBeforeDestroy()
         {
@@ -35,13 +38,14 @@ namespace BiReJeJoCo.Character
 
         private void ConnectEvents()
         {
-            messageHub.RegisterReceiver<PlayerCollectedTrapMsg>(this, OnTrapCollected);
+            photonMessageHub.RegisterReceiver<HunterCollectedTrapPhoMsg>(this, OnTrapCollected);
             Owner.PlayerCharacter.ControllerSetup.AnimationController.onAnimationEvent += OnAnimationEvent;
         }
 
         private void DisconnectEvents() 
         {
             messageHub.UnregisterReceiver(this);
+            Owner.PlayerCharacter.ControllerSetup.AnimationController.onAnimationEvent -= OnAnimationEvent;
             coolDownTimer.Stop();
         }
         #endregion
@@ -60,6 +64,12 @@ namespace BiReJeJoCo.Character
         }
         private void ThrowTrapInternal() 
         {
+            if (!Owner.IsLocalPlayer)
+            {
+                trapBackpackModel.SetActive(false);
+                return;
+            }
+
             var ray = new Ray()
             {
                 origin = Camera.main.transform.position,
@@ -73,9 +83,7 @@ namespace BiReJeJoCo.Character
             }, // update
             () =>
             {
-                photonRoomWrapper.Destroy(thrownTrap);
-                gameUI.SetTrapIcon(true);
-                thrownTrap = null;
+                photonMessageHub.ShoutMessage<HunterCollectedTrapPhoMsg>(PhotonMessageTarget.All, Owner.NumberInRoom);
             }); // finish
 
             var trapTarget = CalculateTrapTarget(ray);
@@ -88,6 +96,9 @@ namespace BiReJeJoCo.Character
         }
         private void FinishThrowTrap()
         {
+            if (!Owner.IsLocalPlayer)
+                return;
+
             Owner.PlayerCharacter.ControllerSetup.AnimationController.UnblockParameters("jump", "fall", "start_shoot", "reload");
             IsThrowingTrap = false;
         }
@@ -103,13 +114,24 @@ namespace BiReJeJoCo.Character
         }
         
         #region Events
-        private void OnTrapCollected(PlayerCollectedTrapMsg msg)
+        private void OnTrapCollected(PhotonMessage msg)
         {
+            var castedMsg = msg as HunterCollectedTrapPhoMsg;
+
+            if (!Owner.IsLocalPlayer &&
+                castedMsg.playerNumber == Owner.NumberInRoom)
+            {
+                trapBackpackModel.SetActive(true);
+                return;
+            }
+
             if (thrownTrap == null) return;
+
+            photonRoomWrapper.Destroy(thrownTrap);
             gameUI.UpdateTrapIconCooldown(1);
             gameUI.SetTrapIcon(true);
-            coolDownTimer.Stop(true);
-
+            coolDownTimer.Stop(false);
+            thrownTrap = null;
         }
         private void OnAnimationEvent(string eventName)
         {

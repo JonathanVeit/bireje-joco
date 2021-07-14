@@ -27,6 +27,9 @@ namespace BiReJeJoCo.UI
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
             Cursor.lockState = CursorLockMode.Confined;
             SetPlayerPreferedRole((int)localPlayer.PreferedRole);
+
+            localPlayer.SetReadyToStart(false);
+            readyButtonLabel.text = localPlayer.ReadyToStart ? "READY!" : "READY?";
         }
         protected override void OnBeforeDestroy()
         {

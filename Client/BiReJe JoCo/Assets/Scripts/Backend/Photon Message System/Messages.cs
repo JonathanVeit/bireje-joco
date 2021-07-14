@@ -184,4 +184,22 @@ namespace BiReJeJoCo.Backend
     public class HuntedFinishedObjectivePhoMsg : PhotonMessage
     {
     }
+
+    /// <summary>
+    /// Called by any player when collecting an item
+    /// </summary>
+    public class HunterCollectedTrapPhoMsg : PhotonMessage
+    {
+        [JsonIgnore]
+        public int playerNumber => n;
+
+        public int n; // player id 
+
+        public HunterCollectedTrapPhoMsg() { }
+        public HunterCollectedTrapPhoMsg(int playerNumber)
+        {
+            n = playerNumber;
+        }
+    }
+
 }

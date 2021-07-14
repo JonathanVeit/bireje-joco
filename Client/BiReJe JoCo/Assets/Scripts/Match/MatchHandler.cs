@@ -21,7 +21,7 @@ namespace BiReJeJoCo
         {
             base.OnSystemsInitialized();
             DontDestroyOnLoad(this);
-            
+
             DIContainer.RegisterImplementation<MatchHandler>(this);
             messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLoadedLobbyScene);
         }
@@ -30,7 +30,7 @@ namespace BiReJeJoCo
             base.OnBeforeDestroy();
             DisconnectEvents();
 
-            if(matchHandler)
+            if (matchHandler)
                 DIContainer.UnregisterImplementation<MatchHandler>();
         }
 
@@ -42,7 +42,7 @@ namespace BiReJeJoCo
         }
 
         protected virtual void ConnectEvents()
-        {           
+        {
             photonMessageHub.RegisterReceiver<DefinedMatchRulesPhoMsg>(this, OnDefineMatchRules);
             photonMessageHub.RegisterReceiver<StartMatchPhoMsg>(this, OnStartMatch);
             photonMessageHub.RegisterReceiver<PauseMatchPhoMsg>(this, OnPauseMatch);
@@ -54,7 +54,7 @@ namespace BiReJeJoCo
             messageHub.RegisterReceiver<LeftLobbyMsg>(this, OnLeftLobby);
         }
 
-        protected virtual void DisconnectEvents() 
+        protected virtual void DisconnectEvents()
         {
             if (photonMessageHub)
                 photonMessageHub.UnregisterReceiver(this);
@@ -67,9 +67,9 @@ namespace BiReJeJoCo
         {
             var waiter = new WaitForEndOfFrame();
 
-            while (startDate > DateTime.UtcNow) 
+            while (startDate > DateTime.UtcNow)
             {
-                var seconds = (int) (startDate - DateTime.UtcNow).TotalSeconds;
+                var seconds = (int)(startDate - DateTime.UtcNow).TotalSeconds;
                 uiManager.GetInstanceOf<GameUI>().UpdateStartCountdown(seconds);
                 yield return waiter;
             }
@@ -81,8 +81,8 @@ namespace BiReJeJoCo
             {
                 var seconds = (int)(endDate - DateTime.UtcNow).TotalSeconds;
                 uiManager.GetInstanceOf<GameUI>().UpdateMatchDuration(ConvertSecondsToTimeString(seconds));
-                
-                if (seconds == 60 ||  seconds == 30)
+
+                if (seconds == 60 || seconds == 30)
                 {
                     if (seconds != lastTimeMessage)
                     {
@@ -118,7 +118,7 @@ namespace BiReJeJoCo
             LogMatchMessage("Match rules synchronized");
         }
 
-        protected virtual void OnLoadedGameScene(LoadedGameSceneMsg msg) 
+        protected virtual void OnLoadedGameScene(LoadedGameSceneMsg msg)
         {
             State = MatchState.WaitingForPlayer;
 
@@ -127,7 +127,7 @@ namespace BiReJeJoCo
 
             LogMatchMessage("Spawned collectables");
         }
-        protected virtual void OnStartMatch(PhotonMessage msg) 
+        protected virtual void OnStartMatch(PhotonMessage msg)
         {
             var castedMsg = msg as StartMatchPhoMsg;
 
@@ -173,6 +173,12 @@ namespace BiReJeJoCo
 
             LogMatchMessage($"Match is closed. Mode = {casted.mode}");
         }
+        
+        public void LeaveLobby()
+        {
+            photonMessageHub.ShoutMessage<CloseMatchPhoMsg>(localPlayer, CloseMatchMode.LeaveLobby);
+        }
+
         protected virtual void OnLeftLobby(LeftLobbyMsg msg)
         {
             DIContainer.UnregisterImplementation<MatchHandler>();

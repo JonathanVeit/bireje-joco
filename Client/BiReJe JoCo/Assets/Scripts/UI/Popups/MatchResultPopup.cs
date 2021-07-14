@@ -21,13 +21,17 @@ namespace BiReJeJoCo.UI
         {
             base.OnSystemsInitialized();
         }
+        protected override void OnBeforeDestroy()
+        {
+            base.OnBeforeDestroy();
+            messageHub.UnregisterReceiver(this);
+        }
 
         public void Show(MatchResult result)
         {
             base.Show();
 
             rehostButton.gameObject.SetActive(localPlayer.IsHost);
-            quitButton.gameObject.SetActive(localPlayer.IsHost);
 
             hunterResultLabel.text = result.winner == PlayerRole.Hunter ? "VICTORY" : "DEFEAT";
             huntedResultLabel.text = result.winner == PlayerRole.Hunted ? "VICTORY" : "DEFEAT";
@@ -37,6 +41,7 @@ namespace BiReJeJoCo.UI
 
             Cursor.lockState = CursorLockMode.Confined;
             messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
+            messageHub.RegisterReceiver<PlayerLeftLobbyMsg>(this, OnPlayerLeftLobby);
         }
 
         private void SpawnPlayer() 
@@ -48,11 +53,11 @@ namespace BiReJeJoCo.UI
             {
                 if (curPlayer.Role == PlayerRole.Hunter)
                 {
-                    hunterList.Add().Initialize(curPlayer.NickName);
+                    hunterList.Add().Initialize(curPlayer);
                 }
                 else if (curPlayer.Role == PlayerRole.Hunted)
                 {
-                    huntedList.Add().Initialize(curPlayer.NickName);
+                    huntedList.Add().Initialize(curPlayer);
                 }
             }
         }
@@ -62,7 +67,6 @@ namespace BiReJeJoCo.UI
             var corals = collectablesManager.GetAllCollectablesAs<DestroyableCoral>(x => x is DestroyableCoral);
 
             var coralsPerLevel = new Dictionary<int, int>();
-            int totalcorals = 0;
             foreach (var coral in corals)
             {
                 var level = matchHandler.MatchConfig.mapConfig.GetFloorIndex(coral.transform.position);
@@ -71,14 +75,13 @@ namespace BiReJeJoCo.UI
                     coralsPerLevel.Add(level, 0);
                 
                 coralsPerLevel[level]++;
-                totalcorals++;
             }
 
             foreach (var entry in coralsPerLevel)
             {
                 var level = entry.Key;
                 var amount = entry.Value;
-                var delta = amount / (float)totalcorals;
+                var delta = amount / (float)matchHandler.MatchConfig.Mode.maxCorals;
 
                 if (level - 1 > coralBars.Length)
                 {
@@ -106,7 +109,37 @@ namespace BiReJeJoCo.UI
 
         public void Quit()
         {
-            (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.LeaveLobby);
+            if (localPlayer.IsHost)
+            {
+                (matchHandler as HostMatchHandler).CloseMatch(CloseMatchMode.LeaveLobby);
+            }
+            else
+            {
+                matchHandler.LeaveLobby();
+            }
+        }
+        #endregion
+
+        #region Events
+        private void OnPlayerLeftLobby(PlayerLeftLobbyMsg msg)
+        {
+            for (int i = 0; i < hunterList.Count; i++)
+            {
+                if (hunterList[i].DisplayedPlayer.Id == msg.Param1)
+                {
+                    huntedList[i].SetLeaved();
+                    return;
+                }
+            }
+
+            for (int i = 0; i < huntedList.Count; i++)
+            {
+                if (hunterList[i].DisplayedPlayer.Id == msg.Param1)
+                {
+                    huntedList[i].SetLeaved();
+                    return;
+                }
+            }
         }
         #endregion
     }

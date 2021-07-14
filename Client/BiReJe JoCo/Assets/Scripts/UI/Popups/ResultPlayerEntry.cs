@@ -1,3 +1,4 @@
+using BiReJeJoCo.Backend;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,10 +8,19 @@ namespace BiReJeJoCo.UI
     {
         [Header("Settings")]
         [SerializeField] Text playerName;
+        [SerializeField] GameObject leavedOverlay;
 
-        public void Initialize(string playerName)
+        public Player DisplayedPlayer { get; private set; }
+
+        public void Initialize(Player player)
         {
-            this.playerName.text = playerName;
+            this.DisplayedPlayer = player;
+            this.playerName.text = DisplayedPlayer.NickName;
+        }
+
+        public void SetLeaved() 
+        {
+            leavedOverlay.gameObject.SetActive(true);
         }
     }
 }

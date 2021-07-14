@@ -23,8 +23,11 @@ namespace BiReJeJoCo.UI
 
         public void HideAndReshow()
         {
-            Hide();
-            History[History.Count - 1].Show();
+            Cursor.lockState = CursorLockMode.Locked;
+            messageHub.ShoutMessage(this, new UnblockPlayerControlsMsg(Character.InputBlockState.Free));
+
+            LastClosed.Show();
+            base.Hide();
         }
     }
 }
