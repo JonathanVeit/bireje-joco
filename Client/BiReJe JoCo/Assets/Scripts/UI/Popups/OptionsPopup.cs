@@ -29,5 +29,27 @@ namespace BiReJeJoCo.UI
             LastClosed.Show();
             base.Hide();
         }
+
+        public void AntiStuck() 
+        {
+            Vector3 pos = default;
+            var scene = matchHandler.MatchConfig.matchScene;
+            var config = MapConfigMapping.GetMapping().GetElementForKey(scene);
+
+            switch (localPlayer.Role)
+            {
+                case PlayerRole.Hunted:
+                    pos = config.GetHuntedSpawnPoint(config.GetRandomHuntedSpawnPointIndex());
+                    break;
+
+                case PlayerRole.Hunter:
+                    pos = config.GetHuntedSpawnPoint(config.GetRandomHunterSpawnPointIndex());
+                    break;
+            }
+
+            localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
+            localPlayer.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
+            localPlayer.PlayerCharacter.ControllerSetup.RigidBody.velocity = Vector3.zero;
+        }
     }
 }

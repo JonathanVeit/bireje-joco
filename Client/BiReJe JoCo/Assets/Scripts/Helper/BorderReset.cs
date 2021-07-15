@@ -26,11 +26,14 @@ namespace BiReJeJoCo
 
         private void ResetPlayerCharacter(Player player)
         {
+            if (!player.IsLocalPlayer)
+                return;
+
             Vector3 pos = default;
             var scene = matchHandler.MatchConfig.matchScene;
             var config = MapConfigMapping.GetMapping().GetElementForKey(scene);
 
-            switch (localPlayer.Role)
+            switch (player.Role)
             {
                 case PlayerRole.Hunted:
                     pos = config.GetHuntedSpawnPoint(config.GetRandomHuntedSpawnPointIndex());
@@ -41,9 +44,9 @@ namespace BiReJeJoCo
                     break;
             }
 
-            localPlayer.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
-            localPlayer.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
-            localPlayer.PlayerCharacter.ControllerSetup.RigidBody.velocity = Vector3.zero;
+            player.PlayerCharacter.ControllerSetup.CharacterRoot.transform.position = pos;
+            player.PlayerCharacter.ControllerSetup.Mover.SetVelocity(Vector3.zero);
+            player.PlayerCharacter.ControllerSetup.RigidBody.velocity = Vector3.zero;
         }
     }
 }
