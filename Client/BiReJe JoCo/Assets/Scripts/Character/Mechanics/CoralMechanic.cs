@@ -179,7 +179,7 @@ namespace BiReJeJoCo.Character
 
             var totalCorals = CalculateTotalCorals();
 
-            gameUI.UpdateTotalCoralAmount(totalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals);
+            gameUI.UpdateTotalCoralAmount(totalCorals / (float) matchHandler.MatchConfig.Mode.maxCorals, totalCorals > matchHandler.MatchConfig.Mode.coralsToWin);
 
             if (Owner.IsLocalPlayer)
             {

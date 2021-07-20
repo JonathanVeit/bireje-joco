@@ -17,8 +17,9 @@ namespace BiReJeJoCo.UI
         [SerializeField] Text countDownLabel;
         [SerializeField] Text startInformation;
         [SerializeField] Text durationLabel;
-        [SerializeField] UIBarHandler totalCrystalsBar;
-        [SerializeField] RectTransform totalCrystalBarSeperator;
+        [SerializeField] UIBarHandler totalCoralBar;
+        [SerializeField] RectTransform totalCoralBarSeperator;
+        [SerializeField] Image totalCoralHighlight;
         [SerializeField] Text floorNameLabel;
         [SerializeField] Transform messageRoot;
         [SerializeField] GameUIMessage messagePrefab;
@@ -82,10 +83,10 @@ namespace BiReJeJoCo.UI
 
             UpdateTransformationDurationBar(0);
 
-            var pos = totalCrystalBarSeperator.anchoredPosition;
+            var pos = totalCoralBarSeperator.anchoredPosition;
             var percentage = matchHandler.MatchConfig.Mode.coralsToWin / (float) matchHandler.MatchConfig.Mode.maxCorals;
-            pos.x = totalCrystalsBar.TargetImage.GetComponent<RectTransform>().rect.width * percentage;
-            totalCrystalBarSeperator.anchoredPosition = pos;
+            pos.x = totalCoralBar.TargetImage.GetComponent<RectTransform>().rect.width * percentage;
+            totalCoralBarSeperator.anchoredPosition = pos;
         }
         private void InitializeAsHunted()
         {
@@ -145,12 +146,14 @@ namespace BiReJeJoCo.UI
 
             target.gameObject.SetActive(false);
         }
-        public void UpdateTotalCoralAmount(float value) 
+        public void UpdateTotalCoralAmount(float value, bool highlighticon = false) 
         {
             if (value <= 0.02f)
-                totalCrystalsBar.OverrideValue(value);
+                totalCoralBar.OverrideValue(value);
             else
-                totalCrystalsBar.SetValue(value);
+                totalCoralBar.SetValue(value);
+
+            totalCoralHighlight.gameObject.SetActive(highlighticon);
         }
         public void UpdateFloorName(string name)
         {

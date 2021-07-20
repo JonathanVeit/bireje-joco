@@ -14,16 +14,15 @@ namespace BiReJeJoCo.UI
         protected override void OnSystemsInitialized()
         {
             base.OnSystemsInitialized();
-            rehostButton.gameObject.SetActive(localPlayer.IsHost);
-            quitButton.gameObject.SetActive(localPlayer.IsHost);
+            rehostButton.interactable = localPlayer.IsHost;
+            quitButton.interactable = localPlayer.IsHost;
         }
 
         public override void Show()
         {
             base.Show();
-
-            rehostButton.gameObject.SetActive(localPlayer.IsHost);
-            quitButton.gameObject.SetActive(localPlayer.IsHost);
+            rehostButton.interactable = localPlayer.IsHost;
+            quitButton.interactable = localPlayer.IsHost;
 
             Cursor.lockState = CursorLockMode.Confined;
             messageHub.ShoutMessage(this, new BlockPlayerControlsMsg(Character.InputBlockState.Menu));
