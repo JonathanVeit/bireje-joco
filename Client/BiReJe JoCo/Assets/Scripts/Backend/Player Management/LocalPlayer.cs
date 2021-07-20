@@ -28,9 +28,9 @@ namespace BiReJeJoCo.Backend
         
         private void ConnectToEvents()
         {
-            messageHub.RegisterReceiver<JoinedLobbyMsg>(this, OnJoinedLobby);
             messageHub.RegisterReceiver<JoinedPhotonLobbyMsg>(this, OnJoinedPhotonLobby);
             messageHub.RegisterReceiver<LoadedGameSceneMsg>(this, OnGameSceneLoaded);
+            messageHub.RegisterReceiver<LoadedLobbySceneMsg>(this, OnLobbySceneLoaded);
         }
         #endregion
 
@@ -78,20 +78,18 @@ namespace BiReJeJoCo.Backend
         }
 
         #region Events
-        private void OnJoinedLobby(JoinedLobbyMsg msg)
-        {
-            UpdateProperties(PLAYER_STATE_KEY, PlayerState.Lobby, PLAYER_ROLE_KEY, PlayerRole.Spectator, READY_TO_START_KEY, false);
-        }
-
         private void OnJoinedPhotonLobby(JoinedPhotonLobbyMsg msg) 
         {
             UpdateProperties(PLAYER_STATE_KEY, PlayerState.Free, PLAYER_ROLE_KEY, PlayerRole.None);
         }
-
         private void OnGameSceneLoaded(LoadedGameSceneMsg msg)
         {
             SpawnPlayerCharacter();
             UpdateProperty(PLAYER_STATE_KEY, PlayerState.Ready);
+        }
+        private void OnLobbySceneLoaded(LoadedLobbySceneMsg obj)
+        {
+            UpdateProperties(PLAYER_STATE_KEY, PlayerState.Lobby, PLAYER_ROLE_KEY, PlayerRole.Spectator, READY_TO_START_KEY, false);
         }
         #endregion
 

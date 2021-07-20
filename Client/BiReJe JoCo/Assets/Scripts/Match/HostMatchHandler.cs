@@ -166,7 +166,6 @@ namespace BiReJeJoCo
         protected override void OnLoadedGameScene(LoadedGameSceneMsg msg)
         {
             base.OnLoadedGameScene(msg);
-            startedMatch = false;
         }
 
         public override void Tick(float deltaTime)
@@ -244,6 +243,7 @@ namespace BiReJeJoCo
             // needs to be destroyed over photon 
             localPlayer.DestroyPlayerCharacter();
             StopCoroutine(durationCounter);
+            startedMatch = false;
 
             if (casted.mode == CloseMatchMode.LeaveLobby)
             {
