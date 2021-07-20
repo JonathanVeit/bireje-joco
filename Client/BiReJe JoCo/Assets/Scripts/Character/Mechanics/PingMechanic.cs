@@ -85,6 +85,8 @@ namespace BiReJeJoCo.Character
                 var config = new FloatingElementConfig("hunter_ping", parent, target.transform);
                 pingFloaty = floatingManager.GetElementAs<HunterPingFloaty>(config);
                 pingFloaty.SetClamped();
+
+                soundEffectManager.Play("hunter_ping_highlight", localPlayer.PlayerCharacter.ControllerSetup.GetBehaviourAs<HunterBehaviour>().PingMechanic.transform);
             }
 
             pingDurationTimer.Start(
