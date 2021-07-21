@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Snow_01_mat
+  m_Shader: {fileID: -6465566751694194690, guid: 54bc115eb1b181542955ef6e43619bb3, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - AmbientOcclusion:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - MetallicMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - RenderTexture:
+        m_Texture: {fileID: 8400000, guid: de0b92bf467b5f94c952f03016527daf, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - SnowTexture:
+        m_Texture: {fileID: 2800000, guid: ae5888a2151f90e48adbbb7127e29d77, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_8a5eb5955fd44a68ba48e1e0035f8d0a_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 964f7d6a25b733b4095c80c6cd5ce0d4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_831538ee497141fcbd6951553e5a0490_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_8da37d22d58849f2ae708c5eb9957f4d_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_a94e66495e33402ab3be0c711c01f6cb_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_e87d88fa0d2042bb9e0d7177578bf6f1_Out_0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_fc3b2c0097fb446f8c498ff79d86cb03_Out_0:
+        m_Texture: {fileID: 2800000, guid: c50c4c810a154a047ab0a19465988400, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Metallic: 0
+    - NoiseScale: 200
+    - PatchScale: 90
+    - Smoothness: 0
+    - SnowDensity: 6.4
+    - SnowEdgeMax: 6
+    - SnowEdgeMin: 3.78
+    - SnowIntensity: 0.38
+    - SnowOpacity: 1
+    - SparkleDencity: 11.3
+    - SparkleIntensity: 20
+    - SparkleScale: 6
+    - UseSnow: 1
+    - UseSparkle: 1
+    m_Colors:
+    - MainColor: {r: 0.21649164, g: 0.25101745, b: 0.3301887, a: 1}
+    - SnowColor: {r: 1, g: 1, b: 1, a: 0}
+    - SnowDirection: {r: 0, g: 1, b: 0, a: 0}
+    - SparkleColor: {r: 1, g: 1, b: 1, a: 1}
+    - Tiling: {r: 0.05, g: 0.04, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
