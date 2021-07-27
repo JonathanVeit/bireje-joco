@@ -333,6 +333,17 @@ namespace BiReJeJoCo.Debugging
                 localPlayer.PlayerCharacter.ControllerSetup.Model.gameObject.SetActive(!visible);
                 DIContainer.GetImplementationFor<UIManager>().GetInstanceOf<GameUI>().gameObject.SetActive(!visible);
             }));
+
+            RegisterCommand(new DebugCommand<bool>("hide_ui", "Hides the whole game UI", "hide_ui <bool>", (visible) =>
+            {
+                if (matchHandler == null)
+                    return;
+
+                if (matchHandler.State != MatchState.Running)
+                    return;
+
+                DIContainer.GetImplementationFor<UIManager>().GetInstanceOf<GameUI>().gameObject.SetActive(!visible);
+            }));
         }
 
         private static void SetGlobalVariables()
